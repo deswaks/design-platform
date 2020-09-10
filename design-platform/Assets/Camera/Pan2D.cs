@@ -15,7 +15,7 @@ public class Pan2D : MonoBehaviour
     // Update is called once per frame 
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(2))
         {
             transform.Translate(Vector3.right * -Input.GetAxis("Mouse X") * moveSpeed);
             transform.Translate(transform.up * -Input.GetAxis("Mouse Y") * moveSpeed, Space.World);
