@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+<<<<<<< HEAD
+  - Room
+  - SketchPlan
+=======
+  - MousePointer
+>>>>>>> 0ef1adbfb6087d4e8ada0f7cf0068f99f98f2838
   layers:
   - Default
   - TransparentFX
@@ -13,7 +19,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - SketchPlan
   - 
   - 
   - 

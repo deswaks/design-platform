@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
-public class CubePlacer : MonoBehaviour
+public class RoomPlacer : MonoBehaviour
 {
     private Grid grid;
+    public GameObject objectToPlace;
 
     private void Awake()
     {
@@ -25,8 +26,9 @@ public class CubePlacer : MonoBehaviour
 
     private void PlaceCubeNear(Vector3 clickPoint)
     {
-        var finalPosition = grid.GetNearestPointOnGrid(clickPoint);
-        GameObject.CreatePrimitive(PrimitiveType.Cube).transform.position = finalPosition;
+        var finalPosition = grid.GetNearestPointOnGrid(clickPoint) + new Vector3(0,objectToPlace.transform.localScale.z/2,0);
+        Instantiate(objectToPlace).transform.position = finalPosition;
+        //GameObject.CreatePrimitive(PrimitiveType.Cube).transform.position = finalPosition;
 
         //GameObject.CreatePrimitive(PrimitiveType.Sphere).transform.position = nearPoint;
     }
