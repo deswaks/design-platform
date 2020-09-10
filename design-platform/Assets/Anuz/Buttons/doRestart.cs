@@ -14,6 +14,7 @@ public class doRestart : MonoBehaviour
     public void dorestart()
     {
         Debug.Log("RESTART");
-        Application.LoadLevel(scene.name);
+//        Application.LoadLevel(scene.name);
+        SceneManager.LoadScene(scene.name);
     }
 }
