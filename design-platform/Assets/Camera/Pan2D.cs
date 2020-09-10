@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class panZoomOrbit : MonoBehaviour
+public class Pan2D : MonoBehaviour
 {
     public float moveSpeed;
 
