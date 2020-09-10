@@ -245,6 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   placedObject: {fileID: 266055916}
   gridSize: 20
+  basePlane: {fileID: 2086659050}
 --- !u!4 &810780228
 Transform:
   m_ObjectHideFlags: 0
