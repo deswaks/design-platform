@@ -4,24 +4,28 @@ using UnityEngine;
 
 public class RoomCreator : MonoBehaviour
 {
-    public GameObject meshPrefab;
-    Room activeMesh;
+    public GameObject roomPrefab;
+    Room activeRoom;
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (activeMesh == null)
+            if (activeRoom == null)
             {
-                GameObject meshGameObject = Instantiate(meshPrefab);
-                activeMesh = meshGameObject.GetComponent<Room>();
-                activeMesh.UpdateRoom(mouse_grid_position());
+                GameObject meshGameObject = Instantiate(roomPrefab);
+                activeRoom = meshGameObject.GetComponent<Room>();
+                activeRoom.Begin(mouse_grid_position());
             }
             else
             {
-                activeMesh.UpdateRoom(mouse_grid_position());
-                activeMesh = null;
+                activeRoom.UpdateRoom(mouse_grid_position());
+                activeRoom = null;
             }
+        }
+        else if (activeRoom != null)
+        {
+            activeRoom.UpdateRoom(mouse_grid_position());
         }
     }
 
