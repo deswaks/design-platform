@@ -7,26 +7,30 @@ public class customGrid : MonoBehaviour
 {
     public GameObject placedObject;
     public float gridSize;
-    public GameObject basePlane;
-
+    Plane basePlane = new Plane(Vector3.up, Vector3.zero);
     Vector3 gridPosition;
-    Vector3 worldPosition;
+    Vector3 hitPoint;
 
-    void LateUpdate()
+    void Start()
+    {
+    }
+
+    void Update()
     {
         //create new ray from camera mouse position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         // Check ray plane collision and save distance
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
+        float distance;
+        //if (Physics.Raycast(ray, out hit))
+        if (basePlane.Raycast(ray, out distance))
+            {
             // Find world coordinates of ray plane collision
-            worldPosition = hit.point;
+            hitPoint = ray.GetPoint(distance);
         }
 
-        gridPosition.x = Mathf.Round(worldPosition.x / gridSize) * gridSize;
-        gridPosition.y = Mathf.Round(worldPosition.y / gridSize) * gridSize;
-        gridPosition.z = Mathf.Round(worldPosition.z / gridSize) * gridSize;
+        gridPosition.x = Mathf.Round(hitPoint[0] / gridSize) * gridSize;
+        gridPosition.y = Mathf.Round(hitPoint[1] / gridSize) * gridSize;
+        gridPosition.z = Mathf.Round(hitPoint[2] / gridSize) * gridSize;
 
         placedObject.transform.position = gridPosition;
     }

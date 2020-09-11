@@ -6,7 +6,9 @@ public class Zoom2D : MonoBehaviour
 {
     float scroll;
     float size;
-    public float speed;
+    public float speed = 5f;
+    public float minSize = 5f;
+    public float maxSize = 150f;
     void Update()
     {
         scroll = Input.GetAxis("Mouse ScrollWheel");
@@ -15,12 +17,12 @@ public class Zoom2D : MonoBehaviour
         {
             size = GetComponent<Camera>().orthographicSize;
             
-            if (scroll > 0 && size >= 5.0)
+            if (scroll > 0 && size - speed >= minSize)
             {
                 GetComponent<Camera>().orthographicSize = GetComponent<Camera>().orthographicSize - speed;
             }
             
-            if (scroll < 0 && size <= 200.0)
+            if (scroll < 0 && size + speed <= maxSize)
             {
                 GetComponent<Camera>().orthographicSize = GetComponent<Camera>().orthographicSize + speed;
             }
