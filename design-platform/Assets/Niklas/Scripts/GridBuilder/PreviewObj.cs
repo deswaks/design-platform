@@ -6,8 +6,6 @@ public class PreviewObj : MonoBehaviour
 {
 
     private List<GameObject> obj = new List<GameObject>();//list of all buildings and walls the preview bumped into
-    private List<GroundCube> cubes = new List<GroundCube>();//list of all the ground cubes the preview is sitting ontop of/notice this is a GroundCube type list not a gameobject list 
-
     public Material goodMat;//good material (green)
     public Material badMat;//bad material (red)
     public GameObject prefab;//---actual prefab
