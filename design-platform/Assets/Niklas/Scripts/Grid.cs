@@ -3,7 +3,7 @@
 public class Grid : MonoBehaviour
 {
     [SerializeField]
-    private float size = 1f;
+    private float size = 2f;
 
     public Vector3 GetNearestPointOnGrid(Vector3 position)
     {
