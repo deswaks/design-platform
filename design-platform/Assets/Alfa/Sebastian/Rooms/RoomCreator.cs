@@ -4,35 +4,39 @@ using UnityEngine;
 
 public class RoomCreator : MonoBehaviour
 {
-    public GameObject meshPrefab;
-    Room activeMesh;
+    public GameObject roomPrefab;
+    Room activeRoom;
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (activeMesh == null)
+            if (activeRoom == null)
             {
-                GameObject meshGameObject = Instantiate(meshPrefab);
-                activeMesh = meshGameObject.GetComponent<Room>();
-                activeMesh.UpdateRoom(mouse_grid_position());
+                GameObject meshGameObject = Instantiate(roomPrefab);
+                activeRoom = meshGameObject.GetComponent<Room>();
+                activeRoom.Begin(mouse_grid_position());
             }
             else
             {
-                activeMesh.UpdateRoom(mouse_grid_position());
-                activeMesh = null;
+                activeRoom.UpdateRoom(mouse_grid_position());
+                activeRoom = null;
             }
+        }
+        else if (activeRoom != null)
+        {
+            activeRoom.UpdateRoom(mouse_grid_position());
         }
     }
 
     Vector3 mouse_grid_position()
     {
         Vector3 gridPosition;
-        Vector3 hitPoint = new Vector3(0,0,0);
+        Vector3 hitPoint = new Vector3(0, 0, 0);
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         float distance;
-        Plane basePlane = new Plane(Vector3.up, new Vector3(0,1,0));
+        Plane basePlane = new Plane(Vector3.up, new Vector3(0, 1, 0));
         if (basePlane.Raycast(ray, out distance))
         {
             hitPoint = ray.GetPoint(distance);
