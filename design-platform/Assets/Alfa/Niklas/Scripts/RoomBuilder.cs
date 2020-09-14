@@ -24,6 +24,8 @@ public class RoomBuilder : MonoBehaviour
     private float m_Height = 3f;
     private bool m_FlipNormals = false;
 
+    public GameObject moveHandlePrefab;
+
     private bool isCurrentlyBuilding = false;
 
     private Grid grid;
@@ -69,13 +71,30 @@ public class RoomBuilder : MonoBehaviour
         previewObject.GetComponent<MeshRenderer>().material = defaultMaterial;
         previewObject.layer = 8;
         previewObject.AddComponent(typeof(MeshCollider));
-
+        
+        
         List<Vector3> points = new List<Vector3> {
             new Vector3(0, 0, 0),
             new Vector3(0, 0, 3),
             new Vector3(3, 0, 3),
             new Vector3(3, 0, 0)
         };
+
+
+        //LineRenderer lineRenderer = (LineRenderer)previewObject.AddComponent(typeof(LineRenderer));
+        //lineRenderer.widthMultiplier = 0.5f;
+        //lineRenderer.positionCount = points.Count();
+        //lineRenderer.SetPositions(points.ToArray());
+        //lineRenderer.material = defaultMaterial;
+        //// A simple 2 color gradient with a fixed alpha of 1.0f.
+        //float alpha = 1.0f;
+        //Gradient gradient = new Gradient();
+        //gradient.SetKeys(
+        //    new GradientColorKey[] { new GradientColorKey(Color.black, 0.0f), new GradientColorKey(Color.black, 1.0f) },
+        //    new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0.0f), new GradientAlphaKey(alpha, 1.0f) }
+        //);
+        //lineRenderer.colorGradient = gradient;
+
 
         m_Mesh.CreateShapeFromPolygon(points, m_Height, m_FlipNormals);
 
@@ -155,6 +174,13 @@ public class RoomBuilder : MonoBehaviour
     private void PositionObj(Vector3 _pos)
     {
         var finalPosition = grid.GetNearestPointOnGrid(_pos);// + new Vector3(0, preview.transform.localScale.z / 2, 0);
+
+        //LineRenderer lineRenderer = (LineRenderer)previewObject.GetComponent(typeof(LineRenderer));
+        
+        //Vector3 translation = previewObject.transform.position - finalPosition;
+      
+        //lineRenderer.SetPositions(  + translation);
+
         previewObject.transform.position = finalPosition;
     }
 
@@ -177,7 +203,10 @@ public class RoomBuilder : MonoBehaviour
     }
     public void MoveRoom()
     {
-
+        GameObject moveHandle = Instantiate(moveHandlePrefab);
+        Vector3 handlePosition = currentlySelectedObject.GetComponent<Renderer>().bounds.center;
+        handlePosition.y = m_Height+0.01f;
+        moveHandle.transform.position = handlePosition;
     }
 }
 
