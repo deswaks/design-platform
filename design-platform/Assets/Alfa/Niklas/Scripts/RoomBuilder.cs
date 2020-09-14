@@ -169,11 +169,15 @@ public class RoomBuilder : MonoBehaviour
         allRoomObjects.Remove(currentlySelectedObject);
         Destroy(currentlySelectedObject);
         currentlySelectedObject = null;
-
     }
     public void RotateRoom()
     {
-        currentlySelectedObject.transform.Rotate(0f, 90f, 0f);//spins like a top, in 90 degree turns
+        currentlySelectedObject.transform.RotateAround(grid.GetNearestPointOnGrid(currentlySelectedObject.GetComponent<Renderer>().bounds.center), new Vector3(0, 1, 0), 90f);  //spins like a top, in 90 degree turns
+
+    }
+    public void MoveRoom()
+    {
+
     }
 }
 
