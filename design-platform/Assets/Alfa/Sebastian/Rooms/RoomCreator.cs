@@ -5,6 +5,7 @@ using UnityEngine;
 public class RoomCreator : MonoBehaviour
 {
     public GameObject roomPrefab;
+    public float gridSize = 1;
     Room activeRoom;
 
     void Update()
@@ -36,12 +37,12 @@ public class RoomCreator : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         float distance;
-        Plane basePlane = new Plane(Vector3.up, new Vector3(0, 1, 0));
+        Plane basePlane = new Plane(Vector3.up, new Vector3(0, 0, 0));
         if (basePlane.Raycast(ray, out distance))
         {
             hitPoint = ray.GetPoint(distance);
         }
-        float gridSize = 10;
+        
         gridPosition.x = Mathf.Round(hitPoint[0] / gridSize) * gridSize;
         gridPosition.y = Mathf.Round(hitPoint[1] / gridSize) * gridSize;
         gridPosition.z = Mathf.Round(hitPoint[2] / gridSize) * gridSize;
