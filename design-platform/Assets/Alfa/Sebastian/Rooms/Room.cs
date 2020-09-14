@@ -14,7 +14,7 @@ public class Room : MonoBehaviour
     public void Begin(Vector3 newPoint)
     {
         vertices[0] = newPoint;
-        Debug.Log(vertices.Count.ToString());
+        //Debug.Log(vertices.Count.ToString());
     }
     public void UpdateRoom(Vector3 newPoint)
     {
@@ -32,7 +32,7 @@ public class Room : MonoBehaviour
         mesh = new Mesh();
         mesh.vertices = vertices.ToArray();
         mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
-        Debug.Log(mesh.triangles.Count().ToString());
+        //Debug.Log(mesh.triangles.Count().ToString());
         // add mesh to meshfilter
         meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = mesh;
