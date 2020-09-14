@@ -405,6 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomPrefab: {fileID: 1046992349}
+  gridSize: 1
 --- !u!1 &810780226
 GameObject:
   m_ObjectHideFlags: 0
