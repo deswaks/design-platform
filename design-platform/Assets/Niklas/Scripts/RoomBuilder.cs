@@ -4,19 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
+using System.Linq;
 
 public class RoomBuilder : MonoBehaviour
 {
     public Camera cam;
     private Plane basePlane = new Plane(Vector3.up, Vector3.zero);
 
-    public Material material;
+    public Material defaultMaterial;
     public Material selectionMaterial;
 
-    public BuildSelector selector;
+    //public BuildSelector selector;
 
     private GameObject previewObject; // Object that will be moving around in the scene
     private GameObject currentlySelectedObject; // The currently selected room (that's already placed)
+    private List<GameObject> allRoomObjects; 
     
     private ProBuilderMesh m_Mesh;
     private float m_Height = 3f;
@@ -29,6 +31,7 @@ public class RoomBuilder : MonoBehaviour
     private void Awake()
     {
         grid = FindObjectOfType<Grid>();
+        allRoomObjects = FindObjectsOfType(typeof(GameObject)).Cast<GameObject>().Where(go => go.layer == 8).ToList(); //Finds rooms already placed
     }
 
 
@@ -63,8 +66,9 @@ public class RoomBuilder : MonoBehaviour
 
         // Add a ProBuilderMesh component (ProBuilder mesh data is stored here)
         m_Mesh = previewObject.gameObject.AddComponent<ProBuilderMesh>();
-        previewObject.GetComponent<MeshRenderer>().material = material;
+        previewObject.GetComponent<MeshRenderer>().material = defaultMaterial;
         previewObject.layer = 8;
+        previewObject.AddComponent(typeof(MeshCollider));
 
         List<Vector3> points = new List<Vector3> {
             new Vector3(0, 0, 0),
@@ -84,8 +88,9 @@ public class RoomBuilder : MonoBehaviour
 
         // Add a ProBuilderMesh component (ProBuilder mesh data is stored here)
         m_Mesh = previewObject.gameObject.AddComponent<ProBuilderMesh>();
-        previewObject.GetComponent<MeshRenderer>().material = material;
+        previewObject.GetComponent<MeshRenderer>().material = defaultMaterial;
         previewObject.layer = 8;
+        previewObject.AddComponent(typeof(MeshCollider));
 
         List<Vector3> points = new List<Vector3> {
             new Vector3(0, 0, 0),
@@ -102,15 +107,17 @@ public class RoomBuilder : MonoBehaviour
     
     private void StopBuild()
     {
+        
         Destroy(previewObject);//get rid of the preview
         previewObject = null;//not sure if you need this actually
         isCurrentlyBuilding = false;
-        selector.TogglePanel();//toggle the button panel back on
     }
 
     private void BuildIt()//actually build the thing
     {
-        Instantiate(previewObject);
+        GameObject newObject = Instantiate(previewObject);
+        allRoomObjects.Add(newObject); // Adds room to list of all instantiated ones
+
         StopBuild();
     }
     
@@ -136,7 +143,9 @@ public class RoomBuilder : MonoBehaviour
             UnityEngine.RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, 8) && Input.GetMouseButtonDown(0))
             {
+                allRoomObjects.ForEach(go => go.GetComponent<MeshRenderer>().material = defaultMaterial);
                 currentlySelectedObject = hitInfo.collider.gameObject;
+                Debug.Log(currentlySelectedObject.name);
                 currentlySelectedObject.GetComponent<MeshRenderer>().material = selectionMaterial;
             }
         }
@@ -155,7 +164,17 @@ public class RoomBuilder : MonoBehaviour
         return isCurrentlyBuilding;
     }
     
+    public void DeleteRoom()
+    {
+        allRoomObjects.Remove(currentlySelectedObject);
+        Destroy(currentlySelectedObject);
+        currentlySelectedObject = null;
 
+    }
+    public void RotateRoom()
+    {
+        currentlySelectedObject.transform.Rotate(0f, 90f, 0f);//spins like a top, in 90 degree turns
+    }
 }
 
 
