@@ -80,22 +80,6 @@ public class RoomBuilder : MonoBehaviour
             new Vector3(3, 0, 0)
         };
 
-
-        //LineRenderer lineRenderer = (LineRenderer)previewObject.AddComponent(typeof(LineRenderer));
-        //lineRenderer.widthMultiplier = 0.5f;
-        //lineRenderer.positionCount = points.Count();
-        //lineRenderer.SetPositions(points.ToArray());
-        //lineRenderer.material = defaultMaterial;
-        //// A simple 2 color gradient with a fixed alpha of 1.0f.
-        //float alpha = 1.0f;
-        //Gradient gradient = new Gradient();
-        //gradient.SetKeys(
-        //    new GradientColorKey[] { new GradientColorKey(Color.black, 0.0f), new GradientColorKey(Color.black, 1.0f) },
-        //    new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0.0f), new GradientAlphaKey(alpha, 1.0f) }
-        //);
-        //lineRenderer.colorGradient = gradient;
-
-
         m_Mesh.CreateShapeFromPolygon(points, m_Height, m_FlipNormals);
 
         isCurrentlyBuilding = true;
@@ -143,7 +127,7 @@ public class RoomBuilder : MonoBehaviour
     private void DoRay()//simple ray cast from the main camera. Notice there is no range
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
+        
         // Moves current building with the mouse
         if (isCurrentlyBuilding)
         {
@@ -160,11 +144,10 @@ public class RoomBuilder : MonoBehaviour
         if (!isCurrentlyBuilding)
         {
             UnityEngine.RaycastHit hitInfo;
-            if (Physics.Raycast(ray, out hitInfo, 8) && Input.GetMouseButtonDown(0))
-            {
+            if (Physics.Raycast(ray:ray, hitInfo:out hitInfo,maxDistance:5000f,layerMask:8)){
                 allRoomObjects.ForEach(go => go.GetComponent<MeshRenderer>().material = defaultMaterial);
                 currentlySelectedObject = hitInfo.collider.gameObject;
-                Debug.Log(currentlySelectedObject.name);
+                Debug.Log(currentlySelectedObject.name +" "+currentlySelectedObject.layer);
                 currentlySelectedObject.GetComponent<MeshRenderer>().material = selectionMaterial;
             }
         }
@@ -173,13 +156,7 @@ public class RoomBuilder : MonoBehaviour
     // Changes position of preview object (Room following mouse while building rooms)
     private void PositionObj(Vector3 _pos)
     {
-        var finalPosition = grid.GetNearestPointOnGrid(_pos);// + new Vector3(0, preview.transform.localScale.z / 2, 0);
-
-        //LineRenderer lineRenderer = (LineRenderer)previewObject.GetComponent(typeof(LineRenderer));
-        
-        //Vector3 translation = previewObject.transform.position - finalPosition;
-      
-        //lineRenderer.SetPositions(  + translation);
+        var finalPosition = grid.GetNearestPointOnGrid(_pos);
 
         previewObject.transform.position = finalPosition;
     }
