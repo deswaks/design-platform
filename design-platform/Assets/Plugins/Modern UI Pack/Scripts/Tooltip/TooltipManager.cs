@@ -42,8 +42,7 @@ namespace Michsky.UI.ModernUIPack
             if (allowUpdating == true)
             {
                 cursorPos = Input.mousePosition;
-                cursorPos.z = tooltipZHelper.position.z;
-                //cursorPos.y = tooltipZHelper.position.y;       
+                cursorPos.z = tooltipZHelper.position.z;       
                 uiPos = tooltipRect.anchoredPosition;
                 CheckForBounds();
 
@@ -51,7 +50,6 @@ namespace Michsky.UI.ModernUIPack
                 {
                     tooltipRect.position = Camera.main.ScreenToWorldPoint(cursorPos);
                     tooltipContent.transform.localPosition = Vector3.SmoothDamp(tooltipContent.transform.localPosition, contentPos, ref tooltipVelocity, tooltipSmoothness);
-                    
                 }
 
                 else if (mainCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
@@ -59,7 +57,6 @@ namespace Michsky.UI.ModernUIPack
                     tooltipRect.position = cursorPos;
                     tooltipContent.transform.position = Vector3.SmoothDamp(tooltipContent.transform.position, cursorPos + contentPos, ref tooltipVelocity, tooltipSmoothness);
                 }
-                
             }
         }
 
