@@ -6,7 +6,7 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
 
-public class RoomBuilder : MonoBehaviour
+public class RoomHandler : MonoBehaviour
 {
     public Camera cam;
     private Plane basePlane = new Plane(Vector3.up, Vector3.zero);
