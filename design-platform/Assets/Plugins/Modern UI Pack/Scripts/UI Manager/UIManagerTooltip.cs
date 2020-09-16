@@ -18,18 +18,19 @@ namespace Michsky.UI.ModernUIPack
 
         void OnEnable()
         {
-            if (UIManagerAsset == null)
-            {
-                try
-                {
-                    UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
-                }
+            // UDKOMMENTERET AF NIKLAS - GØR, AT MAN LAVE LAVE CUSTOM TOOLTIPS, SÅ ALT IKKE STYRES AF UIMANAGER 
+            //if (UIManagerAsset == null)
+            //{
+            //    try
+            //    {
+            //        UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
+            //    }
 
-                catch
-                {
-                    Debug.LogWarning("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
-                }
-            }
+            //    catch
+            //    {
+            //        Debug.LogWarning("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
+            //    }
+            //}
         }
 
         void Awake()

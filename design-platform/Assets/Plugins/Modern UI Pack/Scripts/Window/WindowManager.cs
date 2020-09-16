@@ -13,10 +13,10 @@ namespace Michsky.UI.ModernUIPack
         public int currentWindowIndex = 0;
         private int currentButtonIndex = 0;
         private int newWindowIndex;
-        public string windowFadeIn = "Panel In";
-        public string windowFadeOut = "Panel Out";
+        public string windowFadeIn = "Demo Window In";
+        public string windowFadeOut = "Demo Window Out";
         public string buttonFadeIn = "Normal to Pressed";
-        public string buttonFadeOut = "Pressed to Dissolve";
+        public string buttonFadeOut = "Pressed to Normal";//"Pressed to Dissolve";
 
         private GameObject currentWindow;
         private GameObject nextWindow;
@@ -109,7 +109,8 @@ namespace Michsky.UI.ModernUIPack
 
                 currentButtonAnimator = currentButton.GetComponent<Animator>();
                 nextButtonAnimator = nextButton.GetComponent<Animator>();
-
+                Debug.Log("Current button animator:" + currentButtonAnimator.name +". FadeOut anim: "+buttonFadeOut);
+                Debug.Log("Next button animator:" + nextButtonAnimator.name + ". FadeIn anim: " + buttonFadeIn);
                 currentButtonAnimator.Play(buttonFadeOut);
                 nextButtonAnimator.Play(buttonFadeIn);
             }

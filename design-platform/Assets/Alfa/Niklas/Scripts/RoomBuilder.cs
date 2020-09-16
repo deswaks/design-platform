@@ -24,6 +24,8 @@ public class RoomBuilder : MonoBehaviour
     private float m_Height = 3f;
     private bool m_FlipNormals = false;
 
+    public GameObject moveHandlePrefab;
+
     private bool isCurrentlyBuilding = false;
 
     private Grid grid;
@@ -69,7 +71,8 @@ public class RoomBuilder : MonoBehaviour
         previewObject.GetComponent<MeshRenderer>().material = defaultMaterial;
         previewObject.layer = 8;
         previewObject.AddComponent(typeof(MeshCollider));
-
+        
+        
         List<Vector3> points = new List<Vector3> {
             new Vector3(0, 0, 0),
             new Vector3(0, 0, 3),
@@ -124,7 +127,7 @@ public class RoomBuilder : MonoBehaviour
     private void DoRay()//simple ray cast from the main camera. Notice there is no range
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
+        
         // Moves current building with the mouse
         if (isCurrentlyBuilding)
         {
@@ -141,11 +144,10 @@ public class RoomBuilder : MonoBehaviour
         if (!isCurrentlyBuilding)
         {
             UnityEngine.RaycastHit hitInfo;
-            if (Physics.Raycast(ray, out hitInfo, 8) && Input.GetMouseButtonDown(0))
-            {
+            if (Physics.Raycast(ray:ray, hitInfo:out hitInfo,maxDistance:5000f,layerMask:8)){
                 allRoomObjects.ForEach(go => go.GetComponent<MeshRenderer>().material = defaultMaterial);
                 currentlySelectedObject = hitInfo.collider.gameObject;
-                Debug.Log(currentlySelectedObject.name);
+                Debug.Log(currentlySelectedObject.name +" "+currentlySelectedObject.layer);
                 currentlySelectedObject.GetComponent<MeshRenderer>().material = selectionMaterial;
             }
         }
@@ -154,7 +156,8 @@ public class RoomBuilder : MonoBehaviour
     // Changes position of preview object (Room following mouse while building rooms)
     private void PositionObj(Vector3 _pos)
     {
-        var finalPosition = grid.GetNearestPointOnGrid(_pos);// + new Vector3(0, preview.transform.localScale.z / 2, 0);
+        var finalPosition = grid.GetNearestPointOnGrid(_pos);
+
         previewObject.transform.position = finalPosition;
     }
 
@@ -177,7 +180,10 @@ public class RoomBuilder : MonoBehaviour
     }
     public void MoveRoom()
     {
-
+        GameObject moveHandle = Instantiate(moveHandlePrefab);
+        Vector3 handlePosition = currentlySelectedObject.GetComponent<Renderer>().bounds.center;
+        handlePosition.y = m_Height+0.01f;
+        moveHandle.transform.position = handlePosition;
     }
 }
 
