@@ -100,7 +100,7 @@ public class BuildSystem : MonoBehaviour
         preview.transform.position = new Vector3(x, 1f, z);//set the previews transform postion to a new Vector3 made up of the x,y,z that you roundedToInt
         */
 
-        var finalPosition = grid.GetNearestPointOnGrid(_pos);// + new Vector3(0, preview.transform.localScale.z / 2, 0);
+        var finalPosition = grid.GetNearestGridpoint(_pos);// + new Vector3(0, preview.transform.localScale.z / 2, 0);
         preview.transform.position = finalPosition;
 
     }

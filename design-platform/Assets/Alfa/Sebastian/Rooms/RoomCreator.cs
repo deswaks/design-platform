@@ -6,7 +6,7 @@ public class RoomCreator : MonoBehaviour
 {
     public GameObject roomPrefab;
     public float gridSize = 1;
-    Room activeRoom;
+    SebastianRoom activeRoom;
 
     void Update()
     {
@@ -15,7 +15,7 @@ public class RoomCreator : MonoBehaviour
             if (activeRoom == null)
             {
                 GameObject meshGameObject = Instantiate(roomPrefab);
-                activeRoom = meshGameObject.GetComponent<Room>();
+                activeRoom = meshGameObject.GetComponent<SebastianRoom>();
                 activeRoom.Begin(mouse_grid_position());
             }
             else

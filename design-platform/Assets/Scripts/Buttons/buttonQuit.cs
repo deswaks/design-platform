@@ -10,7 +10,7 @@ public class buttonQuit : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(ButtonFunction);
     }
 
-    private void ButtonFunction()
+    public void ButtonFunction()
     {
         Application.Quit();
     }

@@ -159,7 +159,7 @@ public class RoomBuilder : MonoBehaviour
     // Changes position of preview object (Room following mouse while building rooms)
     private void PositionObj(Vector3 _pos)
     {
-        var finalPosition = grid.GetNearestPointOnGrid(_pos);
+        var finalPosition = grid.GetNearestGridpoint(_pos);
 
         previewObject.transform.position = finalPosition;
     }
@@ -178,7 +178,7 @@ public class RoomBuilder : MonoBehaviour
     }
     public void RotateRoom()
     {
-        currentlySelectedObject.transform.RotateAround(grid.GetNearestPointOnGrid(currentlySelectedObject.GetComponent<Renderer>().bounds.center), new Vector3(0, 1, 0), 90f);  //spins like a top, in 90 degree turns
+        currentlySelectedObject.transform.RotateAround(grid.GetNearestGridpoint(currentlySelectedObject.GetComponent<Renderer>().bounds.center), new Vector3(0, 1, 0), 90f);  //spins like a top, in 90 degree turns
 
     }
     public void MoveRoom()

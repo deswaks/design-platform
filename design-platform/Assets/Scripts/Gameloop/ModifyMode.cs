@@ -10,7 +10,7 @@ public class ModifyMode : Mode
 {
     // References to other objects in scene
     public Camera cam;
-    public RoomHandler roomHandler;
+    public Building building;
     public Material defaultRoomMaterial;
     public Material selectedRoomMaterial;
 
@@ -62,12 +62,21 @@ public class ModifyMode : Mode
 
     private void monoColorAllRooms()
     {
-        List<GameObject> allRooms = roomHandler.GetAllRooms();
+        List<Room> allRooms = building.GetAllRooms();
+
         allRooms.ForEach(go => go.GetComponent<MeshRenderer>().material = defaultRoomMaterial);
     }
 
     private void hightlightSelectedRoom()
     {
         selectedObject.GetComponent<MeshRenderer>().material = selectedRoomMaterial;
+    }
+
+    public void MoveHandles()
+    {
+        //GameObject moveHandle = Instantiate(moveHandlePrefab);
+        //Vector3 handlePosition = currentlySelectedObject.GetComponent<Renderer>().bounds.center;
+        //handlePosition.y = height + 0.01f;
+        //moveHandle.transform.position = handlePosition;
     }
 }
