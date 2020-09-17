@@ -46,7 +46,6 @@ public class Building : MonoBehaviour
         GameObject newRoomGameObject = new GameObject(name);
         Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
         newRoom.InitializeRoom(shape: shape, building: this);
-        
 
         if(templateRoom != null)
         {
