@@ -15,8 +15,9 @@ public class Room : MonoBehaviour
     private ProBuilderMesh mesh3D;
 
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
-    public Room(int shape = 0)
+    public void InitializeRoom(int shape = 0, Building building = null)
     {
+        parentBuilding = building;
         mesh3D = gameObject.AddComponent<ProBuilderMesh>();
         gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
         gameObject.layer = 8;
@@ -54,13 +55,13 @@ public class Room : MonoBehaviour
     {
         parentBuilding.RemoveRoom(this);
         Destroy(gameObject);
-        Destroy(this);
+        //Destroy(this);
     }
 
     // Moves the room to the given position
     public void Move(Vector3 exactPosition)
     {
-        var gridPosition = parentBuilding.grid.GetNearestGridpoint(exactPosition);
+        Vector3 gridPosition = parentBuilding.grid.GetNearestGridpoint(exactPosition);
         gameObject.transform.position = gridPosition;
     }
 

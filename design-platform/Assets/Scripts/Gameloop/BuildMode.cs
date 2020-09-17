@@ -7,7 +7,7 @@ public class BuildMode : Mode
     // References to other objects in scene
     public MainLoop mainLoop;
     public Building building;
-    public Camera camera;
+    public Camera camera = Camera.main;
     private int selectedShape { get; set; } //0 is rectangle and 1 is L-shape
 
     // Set at runtime
@@ -31,7 +31,7 @@ public override void Tick()
         }
 
         if (Input.GetKeyDown(KeyCode.R)) {
-            previewRoom.Rotate();
+            previewRoom.Rotate(); //remember to tell this to the user when implementing tooltips
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -43,9 +43,8 @@ public override void Tick()
 
     public override void OnModeResume()
     {
-        camera = Camera.current;
         if (previewRoom == null) {
-            previewRoom = new Room(selectedShape);
+            previewRoom = building.BuildRoom(shape: selectedShape, preview: true);
         }
     }
 
@@ -58,10 +57,7 @@ public override void Tick()
     //actually build the thing
     public void Build()
     {
-        Room newRoom = new Room(selectedShape);
-        newRoom.transform.position = previewRoom.transform.position;
-        newRoom.transform.rotation = previewRoom.transform.rotation;
-        mainLoop.building.AddRoom(newRoom);
+        Room newRoom = building.BuildRoom(shape: selectedShape, templateRoom: previewRoom);
     }
    
     // Moves Preview room with the mouse
@@ -77,5 +73,10 @@ public override void Tick()
             previewRoom.Move(hitPoint);
         }
         //Nyttig funktion: ElementSelection.GetPerimeterEdges()
+    }
+
+    public void SetSelectedShape(int shape = 0)
+    {
+        selectedShape = shape;
     }
 }

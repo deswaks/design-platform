@@ -11,7 +11,7 @@ public class ModifyMode : Mode
     // References to other objects in scene
     public MainLoop mainLoop;
     public Building building;
-    public Camera camera;
+    public Camera camera = Camera.main;
 
     public Material defaultRoomMaterial;
     public Material selectedRoomMaterial;
@@ -29,15 +29,11 @@ public class ModifyMode : Mode
     {
         if (Input.GetMouseButtonDown(0))
         {
-            selectedRoom.SetIsHighlighted(false);
-            deselect();
-            selectedRoom = GetClickedRoom();
-            selectedRoom.SetIsHighlighted(true);
+            selectClickedRoom();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
         {
-            selectedRoom.SetIsHighlighted(false);
             deselect();
         }
 
@@ -45,12 +41,12 @@ public class ModifyMode : Mode
 
     public override void OnModeResume()
     {
-        camera = Camera.current;
+        //camera = Camera.current;
     }
 
     public override void OnModePause()
     {
-        monoColorAllRooms();
+        deselect();
     }
 
     private Room GetClickedRoom()
@@ -72,24 +68,24 @@ public class ModifyMode : Mode
 
     private void deselect()
     {
+        if (selectedRoom != null)
+        {
+            selectedRoom.SetIsHighlighted(false);
+        }
         selectedRoom = null;
     }
 
-    private void monoColorAllRooms()
+    private void selectClickedRoom()
     {
-        List<Room> allRooms = building.GetAllRooms();
-
-        allRooms.ForEach(go => go.GetComponent<MeshRenderer>().material = defaultRoomMaterial);
-    }
-
-    private void highlightSelectedRoom()
-    {
-        if (selectedRoom != null) {
-            selectedRoom.GetComponent<MeshRenderer>().material = selectedRoomMaterial;
+        deselect();
+        selectedRoom = GetClickedRoom();
+        if (selectedRoom != null)
+        {
+            selectedRoom.SetIsHighlighted(true);
         }
     }
 
-    public void MoveHandles()
+    public void MoveHandles() //klar til implementering
     {
         //GameObject moveHandle = Instantiate(moveHandlePrefab);
         //Vector3 handlePosition = currentlySelectedObject.GetComponent<Renderer>().bounds.center;

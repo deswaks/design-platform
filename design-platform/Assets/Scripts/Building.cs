@@ -11,6 +11,7 @@ public class Building : MonoBehaviour
     public Camera cam;
     public GameObject moveHandlePrefab;
     public Grid grid;
+    public GameObject roomPrefab;
 
     private GameObject previewObject; // Object that will be moving around in the scene
     private GameObject currentlySelectedObject; // The currently selected room (that's already placed)
@@ -30,15 +31,25 @@ public class Building : MonoBehaviour
     }
 
     // Removes room from the list of rooms
-    public void AddRoom(Room room)
-    {
-        rooms.Add(room);
-    }
-
-    // Removes room from the list of rooms
     public void RemoveRoom(Room room)
     {
         rooms.Remove(room);
+    }
+
+    public Room BuildRoom(int shape = 0, bool preview = false, Room templateRoom = null)
+    {
+        GameObject newRoomGameObject = new GameObject();
+        Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
+        newRoom.InitializeRoom(shape: shape, building:this);
+
+        if(templateRoom != null)
+        {
+            newRoomGameObject.transform.position = templateRoom.transform.position;
+            newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
+        }
+        
+        rooms.Add(newRoom);
+        return newRoom;
     }
 }
 
