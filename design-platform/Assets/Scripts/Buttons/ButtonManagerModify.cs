@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class ButtonManagerModify : MonoBehaviour
 {
+    public MainLoop mainLoop;
+
     public void Move()
     {
         Debug.Log("Move function is not implemented");
     }
     public void Rotate()
     {
-        Debug.Log("Rotate function is not implemented");
+        mainLoop.modifyMode.selectedRoom.Rotate();
     }
     public void Modify()
     {
@@ -22,6 +24,6 @@ public class ButtonManagerModify : MonoBehaviour
     }
     public void Delete()
     {
-        Debug.Log("Delete function is not implemented");
+        mainLoop.modifyMode.selectedRoom.Delete();
     }
 }
