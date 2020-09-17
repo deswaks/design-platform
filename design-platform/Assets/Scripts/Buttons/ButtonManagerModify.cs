@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
 public class ButtonManagerModify : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class ButtonManagerModify : MonoBehaviour
     }
     public void Modify()
     {
+        //Debug.Log(main.modifyMode.selectedRoom);
+        //ProBuilderMesh pb = (ProBuilderMesh) main.modifyMode.selectedRoom.gameObject.GetComponent(typeof(ProBuilderMesh));
+        //Debug.Log(Math.Normal(pb, pb.faces));
         Debug.Log("Modify function is not implemented");
     }
     public void Properties()
