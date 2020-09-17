@@ -361,7 +361,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 74228109}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1354938933}
+        m_MethodName: Delete
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &74228112
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -521,6 +532,7 @@ GameObject:
   - component: {fileID: 445384268}
   - component: {fileID: 445384270}
   - component: {fileID: 445384269}
+  - component: {fileID: 445384271}
   m_Layer: 0
   m_Name: Panel Main
   m_TagString: Untagged
@@ -587,6 +599,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 445384267}
   m_CullTransparentMesh: 0
+--- !u!114 &445384271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445384267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaab60a21e48a704a913fe4bcce86697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &469591255
 GameObject:
   m_ObjectHideFlags: 0
@@ -1347,7 +1371,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 985991508}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 445384271}
+        m_MethodName: Load
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &985991511
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1653,7 +1688,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1198142236}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1354938933}
+        m_MethodName: Modify
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1198142239
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1772,7 +1818,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1320318239}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1354938933}
+        m_MethodName: Properties
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1320318242
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1792,6 +1849,7 @@ GameObject:
   - component: {fileID: 1354938930}
   - component: {fileID: 1354938932}
   - component: {fileID: 1354938931}
+  - component: {fileID: 1354938933}
   m_Layer: 0
   m_Name: Panel Modify
   m_TagString: Untagged
@@ -1860,6 +1918,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1354938929}
   m_CullTransparentMesh: 0
+--- !u!114 &1354938933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354938929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95df9c4766034dd48bfad0b303b94259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1468846291
 GameObject:
   m_ObjectHideFlags: 0
@@ -1970,7 +2040,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1468846294}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 445384271}
+        m_MethodName: Save
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1468846297
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2238,12 +2319,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: 5992928e864f0b6449e9e6fd65fe8878, type: 3}
-        m_MethodName: 
+      - m_Target: {fileID: 445384271}
+        m_MethodName: QuitApplication
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2753,7 +2834,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1850327922}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1354938933}
+        m_MethodName: Rotate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1850327925
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3126,7 +3218,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2118560392}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1354938933}
+        m_MethodName: Move
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &2118560395
 CanvasRenderer:
   m_ObjectHideFlags: 0
