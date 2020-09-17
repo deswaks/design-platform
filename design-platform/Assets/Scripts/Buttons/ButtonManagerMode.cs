@@ -12,11 +12,11 @@ public class ButtonManagerMode : MonoBehaviour
 
     }
 
+    // Starts building mode with the desired room shape 
     public void StartBuildMode(int buildingShape)
     {
-        mainLoop.setMode(mainLoop.buildMode);
         mainLoop.buildMode.SetSelectedShape(buildingShape);
-
+        mainLoop.setMode(mainLoop.buildMode);
     }
 
 }

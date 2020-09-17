@@ -58,9 +58,9 @@ public class Room : MonoBehaviour
     // Deletes the room
     public void Delete()
     {
-        parentBuilding.RemoveRoom(this);
+        if(parentBuilding.GetAllRooms().Contains(this)  )
+            parentBuilding.RemoveRoom(this);
         Destroy(gameObject);
-        //Destroy(this);
     }
 
     // Moves the room to the given position
@@ -73,11 +73,11 @@ public class Room : MonoBehaviour
     public void SetIsHighlighted(bool highlighted)
     {
         if (highlighted) {
-            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
             isHighlighted = true;
         }
         else {
-            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
             isHighlighted = false;
         }
     }

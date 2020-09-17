@@ -1930,6 +1930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95df9c4766034dd48bfad0b303b94259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainLoop: {fileID: 495696631}
 --- !u!1 &1468846291
 GameObject:
   m_ObjectHideFlags: 0
@@ -2424,7 +2425,7 @@ GameObject:
   - component: {fileID: 1801079240}
   - component: {fileID: 1801079239}
   - component: {fileID: 1801079238}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Grid plane Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2518,7 +2519,6 @@ GameObject:
   - component: {fileID: 1801186174}
   - component: {fileID: 1801186172}
   - component: {fileID: 1801186171}
-  - component: {fileID: 1801186175}
   m_Layer: 5
   m_Name: Modify
   m_TagString: Untagged
@@ -2637,19 +2637,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1801186168}
   m_CullTransparentMesh: 0
---- !u!114 &1801186175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1801186168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78a1b0d3378c8ff4dbe6138929b445cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainLoop: {fileID: 495696631}
 --- !u!1 &1812063913
 GameObject:
   m_ObjectHideFlags: 0
