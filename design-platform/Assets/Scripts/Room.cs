@@ -20,9 +20,8 @@ public class Room : MonoBehaviour
     {
         GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
         prefabRoom = (Room)prefabObject.GetComponent(typeof(Room));
-
-
         parentBuilding = building;
+
         mesh3D = gameObject.AddComponent<ProBuilderMesh>();
         gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
         gameObject.layer = 8;
@@ -58,9 +57,8 @@ public class Room : MonoBehaviour
     // Deletes the room
     public void Delete()
     {
-        parentBuilding.RemoveRoom(this);
+        if (parentBuilding) { parentBuilding.RemoveRoom(this); }
         Destroy(gameObject);
-        //Destroy(this);
     }
 
     // Moves the room to the given position

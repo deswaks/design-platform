@@ -36,10 +36,7 @@ public override void Tick()
             main.setMode(main.modifyMode);
         }
 
-        if (previewRoom != null)
-        {
-            UpdatePreviewLocation();
-        }
+        if (previewRoom) {UpdatePreviewLocation();}
     }
 
     public override void OnModeResume()

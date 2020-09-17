@@ -30,7 +30,7 @@ public class Building : MonoBehaviour
     // Removes room from the list of rooms
     public void RemoveRoom(Room room)
     {
-        rooms.Remove(room);
+        if (rooms.Contains(room)) { rooms.Remove(room); }
     }
 
     public Room BuildRoom(int shape = 0, bool preview = false, Room templateRoom = null)
@@ -45,7 +45,8 @@ public class Building : MonoBehaviour
 
         GameObject newRoomGameObject = new GameObject(name);
         Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
-        newRoom.InitializeRoom(shape: shape, building:this);
+        newRoom.InitializeRoom(shape: shape, building: this);
+        
 
         if(templateRoom != null)
         {
