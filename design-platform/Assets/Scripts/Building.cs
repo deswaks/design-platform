@@ -12,10 +12,7 @@ public class Building : MonoBehaviour
     public GameObject moveHandlePrefab;
     public Grid grid;
     public GameObject roomPrefab;
-
-    private GameObject previewObject; // Object that will be moving around in the scene
-    private GameObject currentlySelectedObject; // The currently selected room (that's already placed)
-    private List<Room> rooms = new List<Room>();
+    private List<Room> rooms;
 
     private void Awake()
     {
@@ -38,7 +35,15 @@ public class Building : MonoBehaviour
 
     public Room BuildRoom(int shape = 0, bool preview = false, Room templateRoom = null)
     {
-        GameObject newRoomGameObject = new GameObject();
+        string name = "Room";
+        if (preview) { name = "Preview room"; }
+        else
+        {
+            if (shape == 0) { name = "Room (Rectangle)"; }
+            if (shape == 1) { name = "Room (L-shape)"; }
+        }
+
+        GameObject newRoomGameObject = new GameObject(name);
         Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
         newRoom.InitializeRoom(shape: shape, building:this);
 
@@ -47,8 +52,9 @@ public class Building : MonoBehaviour
             newRoomGameObject.transform.position = templateRoom.transform.position;
             newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
         }
+
+        if (preview == false) { rooms.Add(newRoom); }
         
-        rooms.Add(newRoom);
         return newRoom;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ButtonManagerModify : MonoBehaviour
 {
-    public MainLoop mainLoop;
+    public Main main;
 
     public void Move()
     {
@@ -12,7 +12,10 @@ public class ButtonManagerModify : MonoBehaviour
     }
     public void Rotate()
     {
-        mainLoop.modifyMode.selectedRoom.Rotate();
+        if (main.modifyMode.selectedRoom != null)
+        {
+            main.modifyMode.selectedRoom.Rotate();
+        }
     }
     public void Modify()
     {
@@ -24,6 +27,9 @@ public class ButtonManagerModify : MonoBehaviour
     }
     public void Delete()
     {
-        mainLoop.modifyMode.selectedRoom.Delete();
+        if (main.modifyMode.selectedRoom != null)
+        {
+            main.modifyMode.selectedRoom.Delete();
+        }
     }
 }

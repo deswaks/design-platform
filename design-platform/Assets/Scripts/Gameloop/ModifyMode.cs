@@ -9,8 +9,7 @@ using System.Linq;
 public class ModifyMode : Mode
 {
     // References to other objects in scene
-    public MainLoop mainLoop;
-    public Building building;
+    public Main main;
     public Camera camera = Camera.main;
 
     public Material defaultRoomMaterial;
@@ -19,10 +18,9 @@ public class ModifyMode : Mode
     // Set at runtime
     public Room selectedRoom;
 
-    public ModifyMode(MainLoop mainLoop, Building building)
+    public ModifyMode(Main main)
     {
-        this.mainLoop = mainLoop;
-        this.building = building;
+        this.main = main;
     }
 
     public override void Tick()
@@ -48,7 +46,15 @@ public class ModifyMode : Mode
     {
         deselect();
     }
-
+    private void selectClickedRoom()
+    {
+        deselect();
+        selectedRoom = GetClickedRoom();
+        if (selectedRoom != null)
+        {
+            selectedRoom.SetIsHighlighted(true);
+        }
+    }
     private Room GetClickedRoom()
     {
         Room clickedRoom = null;
@@ -65,7 +71,6 @@ public class ModifyMode : Mode
         }
         return clickedRoom;
     }
-
     private void deselect()
     {
         if (selectedRoom != null)
@@ -74,17 +79,6 @@ public class ModifyMode : Mode
         }
         selectedRoom = null;
     }
-
-    private void selectClickedRoom()
-    {
-        deselect();
-        selectedRoom = GetClickedRoom();
-        if (selectedRoom != null)
-        {
-            selectedRoom.SetIsHighlighted(true);
-        }
-    }
-
     public void MoveHandles() //klar til implementering
     {
         //GameObject moveHandle = Instantiate(moveHandlePrefab);
