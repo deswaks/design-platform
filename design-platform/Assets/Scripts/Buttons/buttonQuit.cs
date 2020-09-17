@@ -5,10 +5,6 @@ using UnityEngine.UI;
 
 public class buttonQuit : MonoBehaviour
 {
-    void Start()
-    {
-        GetComponent<Button>().onClick.AddListener(ButtonFunction);
-    }
 
     public void ButtonFunction()
     {

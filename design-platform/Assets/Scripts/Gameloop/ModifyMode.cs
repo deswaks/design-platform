@@ -1,64 +1,79 @@
-﻿//using System;
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.ProBuilder;
-//using UnityEngine.ProBuilder.MeshOperations;
-//using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.ProBuilder;
+using UnityEngine.ProBuilder.MeshOperations;
+using System.Linq;
 
 public class ModifyMode : Mode
 {
     // References to other objects in scene
-    public Camera cam;
+    public MainLoop mainLoop;
     public Building building;
+    public Camera camera;
+
     public Material defaultRoomMaterial;
     public Material selectedRoomMaterial;
 
-//    // Set at runtime
-//    public GameObject selectedObject;
+    // Set at runtime
+    public Room selectedRoom;
 
-//    public override void Tick()
-//    {
-//        if (Input.GetMouseButtonDown(0)) {
-//            deselect();
-//            selectedObject = GetClickedRoom();
-//        }
+    public ModifyMode(MainLoop mainLoop, Building building)
+    {
+        this.mainLoop = mainLoop;
+        this.building = building;
+    }
 
-//        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
-//        {
-//            deselect();
-//        }
-//    }
+    public override void Tick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            selectedRoom.SetIsHighlighted(false);
+            deselect();
+            selectedRoom = GetClickedRoom();
+            selectedRoom.SetIsHighlighted(true);
+        }
 
-//    public override void OnModeResume()
-//    {
-//        monoColorAllRooms();
-//        hightlightSelectedRoom();
-//    }
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
+        {
+            selectedRoom.SetIsHighlighted(false);
+            deselect();
+        }
 
-//    public override void OnModePause()
-//    {
-//        monoColorAllRooms();
-//    }
+    }
 
-//    private GameObject GetClickedRoom() {
-//        GameObject clickedRoom = null;
-//        UnityEngine.RaycastHit hitInfo;
-//        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        
-//        if (Physics.Raycast(ray: ray, hitInfo: out hitInfo)) {
-//            // if the hit game object is a room (ie. it is on layer 8)
-//            if (hitInfo.collider.gameObject.layer == 8) {
-//                clickedRoom = hitInfo.collider.gameObject;
-//            }
-//        }
-//        return clickedRoom;
-//    }
+    public override void OnModeResume()
+    {
+        camera = Camera.current;
+    }
 
-//    private void deselect()
-//    {
-//        selectedObject = null;
-//    }
+    public override void OnModePause()
+    {
+        monoColorAllRooms();
+    }
+
+    private Room GetClickedRoom()
+    {
+        Room clickedRoom = null;
+        UnityEngine.RaycastHit hitInfo;
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray: ray, hitInfo: out hitInfo))
+        {
+            // if the hit game object is a room (ie. it is on layer 8)
+            if (hitInfo.collider.gameObject.layer == 8)
+            {
+                clickedRoom = hitInfo.collider.gameObject.GetComponent<Room>();
+            }
+        }
+        return clickedRoom;
+    }
+
+    private void deselect()
+    {
+        selectedRoom = null;
+    }
 
     private void monoColorAllRooms()
     {
@@ -67,9 +82,11 @@ public class ModifyMode : Mode
         allRooms.ForEach(go => go.GetComponent<MeshRenderer>().material = defaultRoomMaterial);
     }
 
-    private void hightlightSelectedRoom()
+    private void highlightSelectedRoom()
     {
-        selectedObject.GetComponent<MeshRenderer>().material = selectedRoomMaterial;
+        if (selectedRoom != null) {
+            selectedRoom.GetComponent<MeshRenderer>().material = selectedRoomMaterial;
+        }
     }
 
     public void MoveHandles()

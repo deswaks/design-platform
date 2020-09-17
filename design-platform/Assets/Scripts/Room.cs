@@ -7,9 +7,11 @@ using UnityEngine.ProBuilder.MeshOperations;
 public class Room : MonoBehaviour
 {
     public Material defaultMaterial;
+    public Material highlightMaterial;
     public Building parentBuilding;
     public float height = 3.0f;
-
+    
+    private bool isHighlighted { set; get; }
     private ProBuilderMesh mesh3D;
 
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
@@ -60,6 +62,18 @@ public class Room : MonoBehaviour
     {
         var gridPosition = parentBuilding.grid.GetNearestGridpoint(exactPosition);
         gameObject.transform.position = gridPosition;
+    }
+
+    public void SetIsHighlighted(bool highlighted)
+    {
+        if (highlighted) {
+            gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
+            isHighlighted = true;
+        }
+        else {
+            gameObject.GetComponent<MeshRenderer>().material = highlightMaterial;
+            isHighlighted = false;
+        }
     }
 
 }

@@ -6,17 +6,21 @@ public class BuildMode : Mode
 {
     // References to other objects in scene
     public MainLoop mainLoop;
-    public Camera cam;
     public Building building;
-    public int selectedShape = 0; //0 is rectangle and 1 is L-shape
+    public Camera camera;
+    private int selectedShape { get; set; } //0 is rectangle and 1 is L-shape
 
     // Set at runtime
     public Room previewRoom;
 
-    // Constants
-    private Plane basePlane = new Plane(Vector3.up, Vector3.zero);
+    public BuildMode(MainLoop mainLoop, Building building)
+    {
+        this.mainLoop = mainLoop;
+        this.building = building;
+        selectedShape = 0;
+}
 
-    public override void Tick()
+public override void Tick()
     {
         if (Input.GetMouseButtonDown(0)) {
             Build();
@@ -33,12 +37,15 @@ public class BuildMode : Mode
         if (Input.GetKeyDown(KeyCode.Escape)) {
             mainLoop.setMode(mainLoop.modifyMode);
         }
+
+        UpdatePreviewLocation();
     }
 
     public override void OnModeResume()
     {
+        camera = Camera.current;
         if (previewRoom == null) {
-            previewRoom = new Room();
+            previewRoom = new Room(selectedShape);
         }
     }
 
@@ -51,14 +58,17 @@ public class BuildMode : Mode
     //actually build the thing
     public void Build()
     {
-        building.AddRoom(previewRoom);
+        Room newRoom = new Room(selectedShape);
+        newRoom.transform.position = previewRoom.transform.position;
+        newRoom.transform.rotation = previewRoom.transform.rotation;
+        mainLoop.building.AddRoom(newRoom);
     }
-
    
     // Moves Preview room with the mouse
-    public void UpdatePreview()
+    public void UpdatePreviewLocation()
     {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);  //simple ray cast from the main camera. Notice there is no range
+        Plane basePlane = new Plane(Vector3.up, Vector3.zero);
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);  //simple ray cast from the main camera. Notice there is no range
 
         float distance;
         if (basePlane.Raycast(ray, out distance))
