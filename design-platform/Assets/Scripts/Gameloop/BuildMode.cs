@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BuildMode : Mode
 {
@@ -21,7 +22,10 @@ public class BuildMode : Mode
 public override void Tick()
     {
         if (Input.GetMouseButtonDown(0)) {
-            Build();
+            if (EventSystem.current.IsPointerOverGameObject() == false)
+            {
+                Build();
+            }
         }
 
         if (Input.GetMouseButtonDown(1)) {

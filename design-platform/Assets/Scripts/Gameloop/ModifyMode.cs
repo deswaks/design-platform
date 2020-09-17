@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 public class ModifyMode : Mode
 {
@@ -27,7 +28,10 @@ public class ModifyMode : Mode
     {
         if (Input.GetMouseButtonDown(0))
         {
-            selectClickedRoom();
+            if (EventSystem.current.IsPointerOverGameObject() == false)
+            {
+                selectClickedRoom();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
