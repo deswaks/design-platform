@@ -13,15 +13,18 @@ public class Room : MonoBehaviour
     
     private bool isHighlighted { set; get; }
     private ProBuilderMesh mesh3D;
-
+    private Room prefabRoom;
 
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
     public void InitializeRoom(int shape = 0, Building building = null)
     {
-        //GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath();
+        GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
+        prefabRoom = (Room)prefabObject.GetComponent(typeof(Room));
+
+
         parentBuilding = building;
         mesh3D = gameObject.AddComponent<ProBuilderMesh>();
-        gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
+        gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
         gameObject.layer = 8;
         gameObject.AddComponent(typeof(MeshCollider));
 
@@ -70,11 +73,11 @@ public class Room : MonoBehaviour
     public void SetIsHighlighted(bool highlighted)
     {
         if (highlighted) {
-            gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
             isHighlighted = true;
         }
         else {
-            gameObject.GetComponent<MeshRenderer>().material = highlightMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
             isHighlighted = false;
         }
     }
