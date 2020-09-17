@@ -34,7 +34,6 @@ public class ModifyMode : Mode
         {
             deselect();
         }
-
     }
 
     public override void OnModeResume()

@@ -17,6 +17,7 @@ public class Building : MonoBehaviour
     private void Awake()
     {
         grid = FindObjectOfType<Grid>();
+        rooms = new List<Room>();
         //Finds rooms already placed
         //rooms = FindObjectsOfType(typeof(GameObject)).Cast<GameObject>().Where(go => go.layer == 8).ToList();
     }
@@ -52,7 +53,7 @@ public class Building : MonoBehaviour
             newRoomGameObject.transform.position = templateRoom.transform.position;
             newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
         }
-
+        
         if (preview == false) { rooms.Add(newRoom); }
         
         return newRoom;
