@@ -14,9 +14,11 @@ public class Room : MonoBehaviour
     private bool isHighlighted { set; get; }
     private ProBuilderMesh mesh3D;
 
+
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
     public void InitializeRoom(int shape = 0, Building building = null)
     {
+        //GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath();
         parentBuilding = building;
         mesh3D = gameObject.AddComponent<ProBuilderMesh>();
         gameObject.GetComponent<MeshRenderer>().material = defaultMaterial;
