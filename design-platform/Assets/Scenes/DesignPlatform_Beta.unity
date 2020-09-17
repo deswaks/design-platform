@@ -521,6 +521,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198736983}
   m_CullTransparentMesh: 0
+--- !u!1 &303938165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1734623765043166924, guid: 53495bc3831125e47848a2aba09141ab,
+    type: 3}
+  m_PrefabInstance: {fileID: 1734623765221831662}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &445384267
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,7 +702,7 @@ GameObject:
   - component: {fileID: 495696632}
   - component: {fileID: 495696631}
   m_Layer: 0
-  m_Name: Main Loop
+  m_Name: Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -711,10 +717,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 495696630}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f2dbc33bf8a4ef4da9c0497f12dc619, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e6d6ea60d0429f4a8e7890169536735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 2119719264}
+  buildingGameObject: {fileID: 2119719263}
+  building: {fileID: 0}
 --- !u!4 &495696632
 Transform:
   m_ObjectHideFlags: 0
@@ -1260,7 +1267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59e362a29885a784bb896cc357c28bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainLoop: {fileID: 495696631}
+  main: {fileID: 495696631}
 --- !u!1 &985991505
 GameObject:
   m_ObjectHideFlags: 0
@@ -1930,7 +1937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95df9c4766034dd48bfad0b303b94259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainLoop: {fileID: 495696631}
+  main: {fileID: 495696631}
 --- !u!1 &1468846291
 GameObject:
   m_ObjectHideFlags: 0
@@ -2425,7 +2432,7 @@ GameObject:
   - component: {fileID: 1801079240}
   - component: {fileID: 1801079239}
   - component: {fileID: 1801079238}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Grid plane Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3236,7 +3243,7 @@ GameObject:
   - component: {fileID: 2119719265}
   - component: {fileID: 2119719264}
   m_Layer: 0
-  m_Name: Building prototype
+  m_Name: Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3256,8 +3263,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 1089319873}
   moveHandlePrefab: {fileID: 0}
-  grid: {fileID: 0}
-  roomPrefab: {fileID: 0}
+  grid: {fileID: 910659875}
+  roomPrefab: {fileID: 303938165}
 --- !u!4 &2119719265
 Transform:
   m_ObjectHideFlags: 0

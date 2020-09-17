@@ -20,9 +20,8 @@ public class Room : MonoBehaviour
     {
         GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
         prefabRoom = (Room)prefabObject.GetComponent(typeof(Room));
-
-
         parentBuilding = building;
+
         mesh3D = gameObject.AddComponent<ProBuilderMesh>();
         gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
         gameObject.layer = 8;
@@ -58,8 +57,7 @@ public class Room : MonoBehaviour
     // Deletes the room
     public void Delete()
     {
-        if(parentBuilding.GetAllRooms().Contains(this)  )
-            parentBuilding.RemoveRoom(this);
+        if (parentBuilding) { parentBuilding.RemoveRoom(this); }
         Destroy(gameObject);
     }
 
@@ -73,11 +71,11 @@ public class Room : MonoBehaviour
     public void SetIsHighlighted(bool highlighted)
     {
         if (highlighted) {
-            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
             isHighlighted = true;
         }
         else {
-            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
             isHighlighted = false;
         }
     }

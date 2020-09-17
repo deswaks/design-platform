@@ -5,25 +5,21 @@ using UnityEngine;
 public class BuildMode : Mode
 {
     // References to other objects in scene
-    public MainLoop mainLoop;
-    public Building building;
+    public Main main;
     public Camera camera = Camera.main;
-    private int selectedShape { get; set; } //0 is  rectangle and 1 is L-shape
+    private int selectedShape { get; set; } //0 is rectangle and 1 is L-shape
 
     // Set at runtime
     public Room previewRoom;
 
-    public BuildMode(MainLoop mainLoop, Building building)
+    public BuildMode(Main main)
     {
-        this.mainLoop = mainLoop;
-        this.building = building;
+        this.main = main;
         selectedShape = 0;
 }
 
 public override void Tick()
     {
-        UpdatePreviewLocation();
-
         if (Input.GetMouseButtonDown(0)) {
             Build();
         }
@@ -37,21 +33,21 @@ public override void Tick()
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            mainLoop.setMode(mainLoop.modifyMode);
+            main.setMode(main.modifyMode);
         }
+
+        if (previewRoom) {UpdatePreviewLocation();}
     }
 
     public override void OnModeResume()
     {
-        Debug.Log("Build mode resumed");
         if (previewRoom == null) {
-            previewRoom = building.BuildRoom(shape: selectedShape, preview: true);
+            previewRoom = main.building.BuildRoom(shape: selectedShape, preview: true);
         }
     }
 
     public override void OnModePause()
     {
-        Debug.Log("Build mode paused");
         previewRoom.Delete();
         previewRoom = null;
     }
@@ -59,14 +55,14 @@ public override void Tick()
     //actually build the thing
     public void Build()
     {
-        Room newRoom = building.BuildRoom(shape: selectedShape, templateRoom: previewRoom);
+        main.building.BuildRoom(shape: selectedShape, templateRoom: previewRoom);
     }
    
     // Moves Preview room with the mouse
     public void UpdatePreviewLocation()
     {
         Plane basePlane = new Plane(Vector3.up, Vector3.zero);
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);  //simple ray cast from the main camera. Notice there is no range
 
         float distance;
         if (basePlane.Raycast(ray, out distance))
@@ -74,7 +70,6 @@ public override void Tick()
             Vector3 hitPoint = ray.GetPoint(distance);
             previewRoom.Move(hitPoint);
         }
-
         //Nyttig funktion: ElementSelection.GetPerimeterEdges()
     }
 

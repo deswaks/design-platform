@@ -4,19 +4,18 @@ using UnityEngine;
 
 public class ButtonManagerMode : MonoBehaviour
 {
-    public MainLoop mainLoop;
+    public Main main;
 
     public void StartModifyMode()
     {
-        mainLoop.setMode(mainLoop.modifyMode);
+        main.setMode(main.modifyMode);
 
     }
 
-    // Starts building mode with the desired room shape 
     public void StartBuildMode(int buildingShape)
     {
-        mainLoop.buildMode.SetSelectedShape(buildingShape);
-        mainLoop.setMode(mainLoop.buildMode);
+        main.buildMode.SetSelectedShape(buildingShape);
+        main.setMode(main.buildMode);
     }
 
 }

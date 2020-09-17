@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainLoop : MonoBehaviour
+public class Main : MonoBehaviour
 {
     public BuildMode buildMode;
     public ModifyMode modifyMode;
     public Mode currentMode;
 
-    public Building building = new Building();
+    public GameObject buildingGameObject;
+    public Building building;
 
     void Start()
     {
-        buildMode = new BuildMode(this, building);
-        modifyMode = new ModifyMode(this, building);
+        building = buildingGameObject.GetComponent<Building>();
+        buildMode = new BuildMode(this);
+        modifyMode = new ModifyMode(this);
         setMode(modifyMode);
     }
 
