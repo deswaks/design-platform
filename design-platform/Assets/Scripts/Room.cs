@@ -71,11 +71,11 @@ public class Room : MonoBehaviour
     public void SetIsHighlighted(bool highlighted)
     {
         if (highlighted) {
-            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
             isHighlighted = true;
         }
         else {
-            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
             isHighlighted = false;
         }
     }
