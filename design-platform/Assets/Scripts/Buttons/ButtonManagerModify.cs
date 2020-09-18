@@ -8,7 +8,7 @@ public class ButtonManagerModify : MonoBehaviour
 
     public void Move()
     {
-        Debug.Log("Move function is not implemented");
+        main.modifyMode.selectedRoom.SetIsInMoveMode(isInMoveMode: true);
     }
     public void Rotate()
     {

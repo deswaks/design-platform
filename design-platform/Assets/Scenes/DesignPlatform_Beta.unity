@@ -1143,7 +1143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 910659876}
   - component: {fileID: 910659875}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Grid Gizmos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2432,7 +2432,7 @@ GameObject:
   - component: {fileID: 1801079240}
   - component: {fileID: 1801079239}
   - component: {fileID: 1801079238}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Grid plane Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2857,7 +2857,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2001411886}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
