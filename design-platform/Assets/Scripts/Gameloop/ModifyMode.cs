@@ -6,6 +6,7 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
 using UnityEngine.EventSystems;
+using System.Drawing;
 
 public class ModifyMode : Mode
 {
@@ -15,7 +16,7 @@ public class ModifyMode : Mode
 
     public Material defaultRoomMaterial;
     public Material selectedRoomMaterial;
-
+    
     // Set at runtime
     public Room selectedRoom;
 
@@ -26,6 +27,7 @@ public class ModifyMode : Mode
 
     public override void Tick()
     {
+
         if (Input.GetMouseButtonDown(0))
         {
             if (EventSystem.current.IsPointerOverGameObject() == false)
@@ -51,11 +53,14 @@ public class ModifyMode : Mode
     }
     private void selectClickedRoom()
     {
-        deselect();
-        selectedRoom = GetClickedRoom();
-        if (selectedRoom != null)
+        if(GetClickedRoom() != selectedRoom) // Ensures that an already selected room is not deselected and then selected again
         {
-            selectedRoom.SetIsHighlighted(true);
+            deselect();
+            selectedRoom = GetClickedRoom();
+            if (selectedRoom != null)
+            {
+                selectedRoom.SetIsHighlighted(true);
+            }
         }
     }
     private Room GetClickedRoom()
@@ -79,14 +84,13 @@ public class ModifyMode : Mode
         if (selectedRoom != null)
         {
             selectedRoom.SetIsHighlighted(false);
+            selectedRoom.SetIsInMoveMode(false);
         }
         selectedRoom = null;
     }
-    public void MoveHandles() //klar til implementering
+
+    internal void Move()
     {
-        //GameObject moveHandle = Instantiate(moveHandlePrefab);
-        //Vector3 handlePosition = currentlySelectedObject.GetComponent<Renderer>().bounds.center;
-        //handlePosition.y = height + 0.01f;
-        //moveHandle.transform.position = handlePosition;
+        selectedRoom.SetIsInMoveMode(true);
     }
 }
