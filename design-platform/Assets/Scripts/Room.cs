@@ -12,7 +12,7 @@ public class Room : MonoBehaviour
     public float height = 3.0f;
     
     private bool isHighlighted { set; get; }
-    private ProBuilderMesh mesh3D;
+    public ProBuilderMesh mesh3D;
     private Room prefabRoom;
 
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
@@ -42,6 +42,7 @@ public class Room : MonoBehaviour
                                         new Vector3(5, 0, 0)};}
 
         mesh3D.CreateShapeFromPolygon(points, height, false);
+
     }
 
     // Rotates the room. Defaults to 90 degree increments
