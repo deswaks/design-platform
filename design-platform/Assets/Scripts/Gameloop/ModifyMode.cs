@@ -20,6 +20,54 @@ public class ModifyMode : Mode
     // Set at runtime
     public Room selectedRoom;
 
+
+
+    ///////////////////////////////////////////////////////////////////// TEST START
+
+    public enum ModifyModeTypes{
+        None,
+        Move,
+        Rotate,
+        Edit,
+        Delete
+    }
+
+    private ModifyModeTypes currentModifyModeType = ModifyModeTypes.None;
+
+
+    public void SetModifyMode(ModifyModeTypes currentMode)
+    {
+        currentModifyModeType = currentMode;
+
+        selectedRoom.SetIsInMoveMode(isInMoveMode: false);
+
+        switch (currentMode)
+        {
+            case ModifyModeTypes.Move:
+                selectedRoom.SetIsInMoveMode(isInMoveMode: true);
+                break;
+
+            case ModifyModeTypes.Rotate:
+                if (selectedRoom != null)
+                {
+                    selectedRoom.Rotate();
+                }
+                break;
+
+            case ModifyModeTypes.Edit:
+                break;
+
+            case ModifyModeTypes.Delete:
+                if (selectedRoom != null)
+                {
+                    selectedRoom.Delete();
+                }
+                break;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////  TEST END
+
     public ModifyMode(Main main)
     {
         this.main = main;
@@ -93,4 +141,8 @@ public class ModifyMode : Mode
     {
         selectedRoom.SetIsInMoveMode(true);
     }
+
+
+
+
 }
