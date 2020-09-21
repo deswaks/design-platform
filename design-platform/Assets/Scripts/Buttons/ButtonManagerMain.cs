@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ButtonManagerMain : MonoBehaviour
 {
+    public PdfExport pdfExport;
+
     public void QuitApplication()
     {
         Application.Quit();
@@ -11,7 +13,10 @@ public class ButtonManagerMain : MonoBehaviour
 
     public void Save()
     {
-        Debug.Log("Save function is not implemented");
+
+        pdfExport.PrintRooms();
+        //drawingExporter.popUpDrawing();
+        //Debug.Log("Save function is not implemented");
     }
 
     public void Load()
