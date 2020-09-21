@@ -59,7 +59,8 @@ public override void Tick()
     //actually build the thing
     public void Build()
     {
-        main.building.BuildRoom(shape: selectedShape, templateRoom: previewRoom);
+        Room builtRoom = main.building.BuildRoom(shape: selectedShape, templateRoom: previewRoom);
+        builtRoom.SetRoomState(Room.RoomStates.Stationary);
     }
    
     // Moves Preview room with the mouse

@@ -39,12 +39,12 @@ public class ModifyMode : Mode
     {
         currentModifyModeType = currentMode;
 
-        selectedRoom.SetIsInMoveMode(isInMoveMode: false);
+        selectedRoom.SetRoomState(Room.RoomStates.Stationary);
 
         switch (currentMode)
         {
             case ModifyModeTypes.Move:
-                selectedRoom.SetIsInMoveMode(isInMoveMode: true);
+                selectedRoom.SetIsInMoveMode(true);
                 break;
 
             case ModifyModeTypes.Rotate:

@@ -19,7 +19,7 @@ public class Building : MonoBehaviour
         grid = FindObjectOfType<Grid>();
         rooms = new List<Room>();
         //Finds rooms already placed
-        //rooms = FindObjectsOfType(typeof(GameObject)).Cast<GameObject>().Where(go => go.layer == 8).ToList();
+        rooms = FindObjectsOfType<GameObject>().ToList().Where(go => go.layer == 8).Select(go => go.GetComponent<Room>()).ToList();
     }
 
     // Returns a list of all the rooms in the building
@@ -34,7 +34,7 @@ public class Building : MonoBehaviour
         if (rooms.Contains(room)) { rooms.Remove(room); }
     }
 
-    public Room BuildRoom(int shape = 0, bool preview = false, Room templateRoom = null)
+    public Room BuildRoom(int shape = 0, bool preview = false, Room templateRoom = null) // templateRoom example: 'previewRoom'
     {
         string name = "Room";
         if (preview) { name = "Preview room"; }

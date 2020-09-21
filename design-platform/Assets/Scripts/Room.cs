@@ -26,7 +26,12 @@ public class Room : MonoBehaviour
     private Vector3 moveModeScreenPoint;
     private Vector3 moveModeOffset;
 
-    public bool isCurrentlyColliding = false;
+    public enum RoomStates {
+        Stationary,
+        Preview,
+        Moving
+    }
+    private RoomStates roomState;
 
     public enum RoomShapeTypes
     {
@@ -35,6 +40,8 @@ public class Room : MonoBehaviour
         U_Shaped
     }
     private RoomShapeTypes roomShapeType;
+
+    public bool isCurrentlyColliding = false;
 
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
     public void InitializeRoom(int shape = 0, Building building = null)
@@ -46,6 +53,7 @@ public class Room : MonoBehaviour
         parentBuilding = building;
 
         gameObject.layer = 8; // Rooom layer 
+        roomState = RoomStates.Preview;
 
         
         PolyShape poly = gameObject.AddComponent<PolyShape>();
@@ -81,7 +89,11 @@ public class Room : MonoBehaviour
         gameObject.AddComponent<MeshCollider>();
 
         RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject,roomShapeType);
+        
+    }
 
+    public void SetRoomState(RoomStates roomState) {
+        this.roomState = roomState;
     }
 
 
@@ -122,9 +134,10 @@ public class Room : MonoBehaviour
         }
     }
 
-    public void SetIsInMoveMode(bool isInMoveMode = false) //klar til implementering
+    public void SetIsInMoveMode(bool isInMoveMode = false) 
     {
-        isRoomInMoveMode = isInMoveMode;
+        //isRoomInMoveMode = isInMoveMode;
+        
 
         // Destroys any prior movehandle
         if (moveHandle != null)
@@ -134,7 +147,7 @@ public class Room : MonoBehaviour
         }
 
         if (isInMoveMode == true){
-
+            roomState = RoomStates.Moving;
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
             Vector3 handlePosition = gameObject.GetComponent<Renderer>().bounds.center;
             handlePosition.y = height + 0.01f;
@@ -142,11 +155,14 @@ public class Room : MonoBehaviour
 
             moveHandle.transform.SetParent(gameObject.transform,true);
         }
+        else {
+            roomState = RoomStates.Stationary;
+        }
     }
 
     void OnMouseDown()
     {
-        if (isRoomInMoveMode)
+        if (roomState == RoomStates.Moving)
         {
             moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
             moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -155,16 +171,32 @@ public class Room : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if (isRoomInMoveMode)
+        if (roomState == RoomStates.Moving)
         {
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
             transform.position = parentBuilding.grid.GetNearestGridpoint(curPosition);
         }
     }
 
-    public bool GetIsMoveHandleVisible() { return isRoomInMoveMode; }
     public Room GetPrefabRoom(){ return prefabRoom; }
 
+    public void SetIsRoomCurrentlyColliding() {
+
+        
+        if(roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
+            List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
+
+            if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
+                isCurrentlyColliding = false;
+                gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+
+            }
+            else { // if there is one or more collision(s)
+                isCurrentlyColliding = true;
+                gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            }
+        }
+    }
 }
 
 
@@ -175,34 +207,33 @@ public class Room : MonoBehaviour
 /// /////////////////////////////////////////////////////////////////////////////////////////////// TEST 
 public class RoomCollider : MonoBehaviour
 {
+    public bool isCurrentlyColliding = false;
+
     // Detects collision with other rooms when placing them
-    void OnCollisionEnter(Collision other)
-    {
+    void OnCollisionEnter(Collision other){
+        CheckCollisionWithRoomColliders(other, isColliding: true);
+    }
+    
+    void OnCollisionStay(Collision other){
+        CheckCollisionWithRoomColliders(other, isColliding: true);
+    }
+
+    void OnCollisionExit(Collision other){
+        CheckCollisionWithRoomColliders(other, isColliding: false);
+    }
+
+    void CheckCollisionWithRoomColliders(Collision other, bool isColliding) {
+
         GameObject parentObject = gameObject.transform.parent.gameObject;
         // Only acts if collision object is other room room object and not a sibling (other colliders in same room)
-        if(other.gameObject.GetComponent<Room>() && other.gameObject != parentObject )
-        {
-            parentObject.GetComponent<MeshRenderer>().material.color = Color.yellow;
-            Debug.Log("Collision enter with " + other.gameObject.name);
+        if (other.gameObject.GetComponent<RoomCollider>() && other.gameObject.transform.parent != parentObject.transform) {
+            isCurrentlyColliding = isColliding;
         }
-
-
-    }
-    // Resets color when collision ends (showing that you are allowed to place the room)
-    void OnCollisionExit(Collision other)
-    {
-        GameObject parentObject = gameObject.transform.parent.gameObject;
-
-        if (other.gameObject.GetComponent<Room>() && other.gameObject != parentObject)
-        {
-            parentObject.GetComponent<MeshRenderer>().material = parentObject.GetComponent<Room>().GetPrefabRoom().defaultMaterial;
-            Debug.Log("Exiting collision with " + other.gameObject.name);
-        }        
+        parentObject.GetComponent<Room>().SetIsRoomCurrentlyColliding();
     }
 
 
     public static void CreateAndAttachCollidersOfRoomShape(GameObject roomGameObject, Room.RoomShapeTypes roomShapeType){
-
 
         PolyShape roomPolyShape    = roomGameObject.GetComponent<PolyShape>();
         List<Vector3> vertices     = roomPolyShape.controlPoints.ToList();
@@ -257,6 +288,7 @@ public class RoomCollider : MonoBehaviour
             rigidBody.constraints = RigidbodyConstraints.FreezeAll;
 
             colliderObject.AddComponent<RoomCollider>();
+            Destroy(colliderObject.GetComponent<MeshRenderer>());
         }
     }
 
