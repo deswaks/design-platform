@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1734623765043166925}
   - component: {fileID: 2252825953515726295}
   m_Layer: 0
-  m_Name: Room Prefab
+  m_Name: RoomPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,3 +47,5 @@ MonoBehaviour:
   highlightMaterial: {fileID: 2100000, guid: 9653968bd09c4034bbe9fcf9161ec7e7, type: 2}
   parentBuilding: {fileID: 0}
   height: 3
+  moveHandlePrefab: {fileID: 1494882183549886461, guid: 4d66908be642fbc48ac9528df7e4c09b,
+    type: 3}

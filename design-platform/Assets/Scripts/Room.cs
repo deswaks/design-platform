@@ -11,17 +11,17 @@ public class Room : MonoBehaviour
     public Material highlightMaterial;
     public Building parentBuilding;
     public float height = 3.0f;
+    public GameObject moveHandlePrefab;
     
     private bool isHighlighted { set; get; }
     private ProBuilderMesh mesh3D;
     private Room prefabRoom;
+    
+    private GameObject moveHandle;
+    private bool isRoomInMoveMode = false;
 
-    public enum RoomShapeTypes {
-        Rectangular,
-        L_Shaped,
-        U_Shaped
-    }
-    private RoomShapeTypes roomShapeType;
+    private Vector3 moveModeScreenPoint;
+    private Vector3 moveModeOffset;
 
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
     public void InitializeRoom(int shape = 0, Building building = null) {
@@ -60,6 +60,8 @@ public class Room : MonoBehaviour
         poly.CreateShapeFromPolygon();
         mesh3D.Refresh();
 
+        mesh3D.CreateShapeFromPolygon(points, height, false);
+        
     }
 
     // Rotates the room. Defaults to 90 degree increments
@@ -98,9 +100,58 @@ public class Room : MonoBehaviour
         }
     }
 
+
     public List<Vector3> ControlPoints() {
         List<Vector3> controlPoints = gameObject.GetComponent<PolyShape>().controlPoints.Select(p=> gameObject.transform.TransformPoint(p)).ToList();
         return controlPoints;
     }
+
+}
+
+    public void SetIsInMoveMode(bool isInMoveMode = false) //klar til implementering
+    {
+        isRoomInMoveMode = isInMoveMode;
+
+        // Destroys any prior movehandle
+        if (moveHandle != null)
+        {
+            Destroy(moveHandle);
+            moveHandle = null;
+        }
+
+        if (isInMoveMode == true){
+
+            moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
+            Vector3 handlePosition = gameObject.GetComponent<Renderer>().bounds.center;
+            handlePosition.y = height + 0.01f;
+            moveHandle.transform.position = handlePosition;
+
+            moveHandle.transform.SetParent(gameObject.transform,true);
+        }
+    }
+
+
+    void OnMouseDown()
+    {
+        if (isRoomInMoveMode)
+        {
+            moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+            moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);// new Vector3(Input.mousePosition.x, Input.mousePosition.y, moveModeScreenPoint.z));
+        }
+    }
+
+    void OnMouseDrag()
+    {
+        //Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, moveModeScreenPoint.z);
+        if (isRoomInMoveMode)
+        {
+            Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
+            transform.position = curPosition;
+        }
+
+    }
+
+    public bool GetIsMoveHandleVisible() { return isRoomInMoveMode; }
+    public Room GetPrefabRoom(){ return prefabRoom; }
 
 }
