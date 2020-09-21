@@ -135,4 +135,24 @@ public class Room : MonoBehaviour
     public bool GetIsMoveHandleVisible() { return isRoomInMoveMode; }
     public Room GetPrefabRoom(){ return prefabRoom; }
 
+    public Vector3 FaceCenter(ProBuilderMesh pb, Face face) {
+               
+        var vertices = pb.positions;
+
+        Vector3 average = Vector3.zero;
+
+        foreach (int index in face.distinctIndexes) {
+            average.x += vertices[index].x;
+            average.y += vertices[index].y;
+            average.z += vertices[index].z;
+        }
+
+        float len = (float)face.distinctIndexes.Count;
+
+        average.x /= len;
+        average.y /= len;
+        average.z /= len;
+
+        return average;
+    }
 }
