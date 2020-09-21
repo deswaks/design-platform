@@ -17,6 +17,9 @@ public class PdfExport : MonoBehaviour {
         {"1:100", 28.346f}
     };
 
+    /// <summary>
+    /// Prints all the rooms of the building to a pdf file
+    /// </summary>
     public void PrintRooms() {
         // Create a new PDF document with an empty page
         PdfDocument document = new PdfDocument();
@@ -36,6 +39,9 @@ public class PdfExport : MonoBehaviour {
         Process.Start("Plan.pdf"); //Start viewer
     }
 
+    /// <summary>
+    /// Draws each room of the building using the given XGraphics object
+    /// </summary>
     private void DrawRooms(XGraphics gfx, float scale) {
         double pageWidth = gfx.PageSize.Width;
         double pageHeight = gfx.PageSize.Height;

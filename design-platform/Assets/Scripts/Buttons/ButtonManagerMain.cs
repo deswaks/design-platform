@@ -11,12 +11,16 @@ public class ButtonManagerMain : MonoBehaviour
         Application.Quit();
     }
 
-    public void Save()
-    {
+    public void ExportPDF() {
 
         pdfExport.PrintRooms();
         //drawingExporter.popUpDrawing();
         //Debug.Log("Save function is not implemented");
+    }
+
+    public void Save()
+    {
+        Debug.Log("Save function is not implemented");
     }
 
     public void Load()
