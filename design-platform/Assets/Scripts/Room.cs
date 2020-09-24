@@ -141,8 +141,16 @@ public class Room : MonoBehaviour
     /// <summary>
     /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
     /// </summary>
-    public List<Vector3> GetConrolPoints() {
+    public List<Vector3> GetControlPoints() {
         return controlPoints;
+    }
+
+    /// <summary>
+    /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
+    /// </summary>
+    public List<Vector3> GetControlPointsWorld() {
+        List<Vector3> controlPointsWorld = controlPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
+        return controlPointsWorld;
     }
 
     /// <summary>

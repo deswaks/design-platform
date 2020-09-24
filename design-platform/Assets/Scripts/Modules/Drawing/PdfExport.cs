@@ -9,10 +9,11 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class PdfExport : MonoBehaviour {
-    public Building building;
+public static class PdfExport {
 
-    Dictionary<string, float> scale = new Dictionary<string, float>() {
+    private static Building building = GameObject.Find("Building").GetComponent<Building>();
+
+    public static Dictionary<string, float> scale = new Dictionary<string, float>() {
         {"1:50", 56.692f},
         {"1:100", 28.346f}
     };
@@ -20,7 +21,7 @@ public class PdfExport : MonoBehaviour {
     /// <summary>
     /// Prints all the rooms of the building to a pdf file
     /// </summary>
-    public void PrintRooms() {
+    public static void PrintRooms() {
         // Create a new PDF document with an empty page
         PdfDocument document = new PdfDocument();
         PdfPage page = document.AddPage();
@@ -42,7 +43,7 @@ public class PdfExport : MonoBehaviour {
     /// <summary>
     /// Draws each room of the building using the given XGraphics object
     /// </summary>
-    private void DrawRooms(XGraphics gfx, float scale) {
+    private static void DrawRooms(XGraphics gfx, float scale) {
         double pageWidth = gfx.PageSize.Width;
         double pageHeight = gfx.PageSize.Height;
 
@@ -55,7 +56,7 @@ public class PdfExport : MonoBehaviour {
             List<XPoint> polylinePoints = new List<XPoint>();
 
             // Add all control points
-            foreach (Vector3 controlPoint in room.GetConrolPoints()) {
+            foreach (Vector3 controlPoint in room.GetControlPointsWorld()) {
                 XPoint newPoint = new XPoint(
                     controlPoint[0] * scale + gfx.PageSize.Width/2,
                     -controlPoint[2] * scale + gfx.PageSize.Height/2);
