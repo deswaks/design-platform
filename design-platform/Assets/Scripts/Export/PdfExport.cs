@@ -55,7 +55,7 @@ public class PdfExport : MonoBehaviour {
             List<XPoint> polylinePoints = new List<XPoint>();
 
             // Add all control points
-            foreach (Vector3 controlPoint in room.ControlPoints()) {
+            foreach (Vector3 controlPoint in room.GetConrolPoints()) {
                 XPoint newPoint = new XPoint(
                     controlPoint[0] * scale + gfx.PageSize.Width/2,
                     -controlPoint[2] * scale + gfx.PageSize.Height/2);

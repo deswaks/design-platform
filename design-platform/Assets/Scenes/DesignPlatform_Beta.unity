@@ -521,12 +521,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198736983}
   m_CullTransparentMesh: 0
---- !u!1 &303938165 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1734623765043166924, guid: 53495bc3831125e47848a2aba09141ab,
-    type: 3}
-  m_PrefabInstance: {fileID: 1734623765221831662}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &412236530
 GameObject:
   m_ObjectHideFlags: 0
@@ -3514,7 +3508,6 @@ MonoBehaviour:
   cam: {fileID: 1089319873}
   moveHandlePrefab: {fileID: 0}
   grid: {fileID: 910659875}
-  roomPrefab: {fileID: 303938165}
 --- !u!4 &2119719265
 Transform:
   m_ObjectHideFlags: 0

@@ -1,67 +1,76 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 public class Room : MonoBehaviour
 {
+    private List<Vector3> controlPoints;
+    private RoomShape shape;
     public Material defaultMaterial;
     public Material highlightMaterial;
     public Building parentBuilding;
     public float height = 3.0f;
-    public GameObject moveHandlePrefab;
-    
+
     private bool isHighlighted { set; get; }
     private ProBuilderMesh mesh3D;
     private Room prefabRoom;
     
+    
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
 
+    public GameObject moveHandlePrefab;
     private Vector3 moveModeScreenPoint;
     private Vector3 moveModeOffset;
 
-    public enum RoomShapeTypes {
-        Rectangular,
-        L_Shaped,
-        U_Shaped
-    }
-    private RoomShapeTypes roomShapeType;
-
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
-    public void InitializeRoom(int shape = 0, Building building = null) {
+    public void InitializeRoom(RoomShape buildShape = RoomShape.RECTANGLE, Building building = null) {
+        // Set constant values
+        parentBuilding = building;
+        gameObject.layer = 8; // Rooom layer
+        
+        shape = buildShape;
+
+        // Get relevant properties from prefab object
         GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
         prefabRoom = (Room)prefabObject.GetComponent(typeof(Room));
-        parentBuilding = building;
-        gameObject.layer = 8; // Rooom layer 
 
-        // Set room mesh geometry
-        PolyShape polyshape = gameObject.AddComponent<PolyShape>();
-        mesh3D = gameObject.AddComponent<ProBuilderMesh>();
-        if (shape == 0) { // Rectangle vertices
-            polyshape.SetControlPoints(new List<Vector3> {new Vector3(0, 0, 0),
-                                                          new Vector3(0, 0, 3),
-                                                          new Vector3(3, 0, 3),
-                                                          new Vector3(3, 0, 0)});
-            roomShapeType = RoomShapeTypes.Rectangular;
-        }
-        else { // L-shape vertices
-            polyshape.SetControlPoints(new List<Vector3> {new Vector3(0, 0, 0),
+        switch (shape) {
+            case RoomShape.RECTANGLE:
+                controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
+                                                   new Vector3(0, 0, 3),
+                                                   new Vector3(3, 0, 3),
+                                                   new Vector3(3, 0, 0)};
+                gameObject.name = "Room(Rectangle)";
+                break;
+            case RoomShape.LSHAPE:
+                controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
                                                           new Vector3(0, 0, 5),
                                                           new Vector3(3, 0, 5),
                                                           new Vector3(3, 0, 3),
                                                           new Vector3(5, 0, 3),
-                                                          new Vector3(5, 0, 0)});
-            roomShapeType = RoomShapeTypes.L_Shaped;
+                                                          new Vector3(5, 0, 0)};
+                gameObject.name = "Room(L-Shape)";
+                break;
         }
+
+        // Set room visualization geometry
+        gameObject.AddComponent<PolyShape>();
+        gameObject.AddComponent<ProBuilderMesh>();
+        gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+        RefreshView();       
+    }
+
+    public void RefreshView() {
+        PolyShape polyshape = gameObject.GetComponent<PolyShape>();
+        polyshape.SetControlPoints(controlPoints);
         polyshape.extrude = height;
         polyshape.CreateShapeFromPolygon();
-        mesh3D.Refresh();
-
-        // Set room mesh material
-        gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+        gameObject.GetComponent<ProBuilderMesh>().Refresh();
     }
 
     /// <summary>
@@ -112,9 +121,20 @@ public class Room : MonoBehaviour
     /// <summary>
     /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
     /// </summary>
-    public List<Vector3> ControlPoints() {
-        List<Vector3> controlPoints = gameObject.GetComponent<PolyShape>().controlPoints.Select(p=> gameObject.transform.TransformPoint(p)).ToList();
+    public List<Vector3> GetConrolPoints() {
         return controlPoints;
+    }
+
+    /// <summary>
+    /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
+    /// </summary>
+    public List<Vector3> GetWallMidpoints() {
+        List<Vector3> midPoints = new List<Vector3>();
+        List <Vector3> circularControlpoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
+        for (int i = 0; i < controlPoints.Count; i++) {
+            midPoints.Add((circularControlpoints[i] + circularControlpoints[i + 1]) / 2);
+        }
+        return midPoints;
     }
 
     /// <summary>
