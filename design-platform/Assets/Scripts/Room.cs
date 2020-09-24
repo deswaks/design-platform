@@ -26,6 +26,8 @@ public class Room : MonoBehaviour
     private Vector3 moveModeScreenPoint;
     private Vector3 moveModeOffset;
 
+    private Vector3 lastLegalPlacementPoint;
+
     public enum RoomStates {
         Stationary,
         Preview,
@@ -33,8 +35,7 @@ public class Room : MonoBehaviour
     }
     private RoomStates roomState;
 
-    public enum RoomShapeTypes
-    {
+    public enum RoomShapeTypes{
         Rectangular,
         L_Shaped,
         U_Shaped
@@ -84,19 +85,14 @@ public class Room : MonoBehaviour
         poly.extrude = height;
         poly.CreateShapeFromPolygon();
         
-        mesh3D.Refresh();
-        
         gameObject.AddComponent<MeshCollider>();
 
         RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject,roomShapeType);
-        
     }
 
     public void SetRoomState(RoomStates roomState) {
         this.roomState = roomState;
     }
-
-
 
     // Rotates the room. Defaults to 90 degree increments
     public void Rotate(bool clockwise = true, float degrees = 90)
@@ -136,9 +132,6 @@ public class Room : MonoBehaviour
 
     public void SetIsInMoveMode(bool isInMoveMode = false) 
     {
-        //isRoomInMoveMode = isInMoveMode;
-        
-
         // Destroys any prior movehandle
         if (moveHandle != null)
         {
@@ -178,11 +171,8 @@ public class Room : MonoBehaviour
         }
     }
 
-    public Room GetPrefabRoom(){ return prefabRoom; }
-
     public void SetIsRoomCurrentlyColliding() {
 
-        
         if(roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
             List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
 
@@ -197,99 +187,6 @@ public class Room : MonoBehaviour
             }
         }
     }
-}
 
-
-
-
-
-
-/// /////////////////////////////////////////////////////////////////////////////////////////////// TEST 
-public class RoomCollider : MonoBehaviour
-{
-    public bool isCurrentlyColliding = false;
-
-    // Detects collision with other rooms when placing them
-    void OnCollisionEnter(Collision other){
-        CheckCollisionWithRoomColliders(other, isColliding: true);
-    }
-    
-    void OnCollisionStay(Collision other){
-        CheckCollisionWithRoomColliders(other, isColliding: true);
-    }
-
-    void OnCollisionExit(Collision other){
-        CheckCollisionWithRoomColliders(other, isColliding: false);
-    }
-
-    void CheckCollisionWithRoomColliders(Collision other, bool isColliding) {
-
-        GameObject parentObject = gameObject.transform.parent.gameObject;
-        // Only acts if collision object is other room room object and not a sibling (other colliders in same room)
-        if (other.gameObject.GetComponent<RoomCollider>() && other.gameObject.transform.parent != parentObject.transform) {
-            isCurrentlyColliding = isColliding;
-        }
-        parentObject.GetComponent<Room>().SetIsRoomCurrentlyColliding();
-    }
-
-
-    public static void CreateAndAttachCollidersOfRoomShape(GameObject roomGameObject, Room.RoomShapeTypes roomShapeType){
-
-        PolyShape roomPolyShape    = roomGameObject.GetComponent<PolyShape>();
-        List<Vector3> vertices     = roomPolyShape.controlPoints.ToList();
-        float height               = roomPolyShape.extrude;
-
-        // Every collider cube is defined by the controlpoints of the room object. Both the x- and y- position of the collider cube is defined by two indices each.
-        // For instance, the location of the collider cube for a rectangular room is defined as follows: 
-        //      The x coordinate of the location is defined by the average value from the [1] and [2] controlpoints (or [0] and [3]).
-        //      The y coordinate of the location is defined by the average value from the [0] and [1] controlpoints (or [2] and [3]).
-        List<List<int>> colliderIndexPairsList = new List<List<int>>();
-
-        switch (roomShapeType)
-        {
-            case Room.RoomShapeTypes.Rectangular:
-                //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
-                colliderIndexPairsList.Add( new List<int> { 1, 2, 0, 1 } ); 
-
-                break;
-            case Room.RoomShapeTypes.L_Shaped:
-                colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
-                colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2
-                break;
-        }
-
-        int counter = 0;
-        foreach(List<int> xyPairs in colliderIndexPairsList)
-        {
-            GameObject colliderObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            colliderObject.name = "RoomCollider_" + counter++.ToString();
-
-
-            Vector3 positionVector =
-                new Vector3(
-                    vertices[xyPairs[0]].x + System.Math.Abs(vertices[xyPairs[0]].x - vertices[xyPairs[1]].x) / 2, // x - location
-                    height / 2 - 0.005f,                                                                           // y - location
-                    vertices[xyPairs[2]].z + System.Math.Abs(vertices[xyPairs[2]].z - vertices[xyPairs[3]].z) / 2  // z - location
-                    );
-            Vector3 scaleVector =
-                new Vector3(
-                    System.Math.Abs(vertices[ xyPairs[0] ].x - vertices[ xyPairs[1] ].x), // x - scale
-                    height - 0.01f,                                                       // y - scale
-                    System.Math.Abs(vertices[ xyPairs[2] ].z - vertices[ xyPairs[3] ].z)  // z - scale
-                    );
-            
-            colliderObject.transform.parent        = roomGameObject.transform;
-            colliderObject.transform.localScale    = scaleVector;
-            colliderObject.transform.localPosition = positionVector;
-
-            colliderObject.GetComponent<BoxCollider>().isTrigger = false;
-            Rigidbody rigidBody = colliderObject.AddComponent<Rigidbody>();
-            rigidBody.isKinematic = false;
-            rigidBody.constraints = RigidbodyConstraints.FreezeAll;
-
-            colliderObject.AddComponent<RoomCollider>();
-            Destroy(colliderObject.GetComponent<MeshRenderer>());
-        }
-    }
-
+    public Room GetPrefabRoom() { return prefabRoom; }
 }
