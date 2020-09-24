@@ -35,7 +35,7 @@ public class RoomCollider : MonoBehaviour
     }
 
 
-    public static void CreateAndAttachCollidersOfRoomShape(GameObject roomGameObject, Room.RoomShapeTypes roomShapeType){
+    public static void CreateAndAttachCollidersOfRoomShape(GameObject roomGameObject, RoomShape roomShapeType){
 
         PolyShape roomPolyShape    = roomGameObject.GetComponent<PolyShape>();
         List<Vector3> vertices     = roomPolyShape.controlPoints.ToList();
@@ -49,12 +49,12 @@ public class RoomCollider : MonoBehaviour
 
         switch (roomShapeType)
         {
-            case Room.RoomShapeTypes.Rectangular:
+            case RoomShape.RECTANGLE:
                 //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
                 colliderIndexPairsList.Add( new List<int> { 1, 2, 0, 1 } ); 
 
                 break;
-            case Room.RoomShapeTypes.L_Shaped:
+            case RoomShape.LSHAPE:
                 colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
                 colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2
                 break;

@@ -20,10 +20,6 @@ public class ModifyMode : Mode
     // Set at runtime
     public Room selectedRoom;
 
-
-
-    ///////////////////////////////////////////////////////////////////// TEST START
-
     public enum ModifyModeTypes{
         None,
         Move,
@@ -65,8 +61,6 @@ public class ModifyMode : Mode
                 break;
         }
     }
-
-    /////////////////////////////////////////////////////////////////////  TEST END
 
     public ModifyMode(Main main)
     {

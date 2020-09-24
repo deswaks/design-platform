@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.ProBuilder;
@@ -40,13 +39,6 @@ public class Room : MonoBehaviour
     }
     private RoomStates roomState;
 
-    public enum RoomShapeTypes{
-        Rectangular,
-        L_Shaped,
-        U_Shaped
-    }
-    private RoomShapeTypes roomShapeType;
-
     public bool isCurrentlyColliding = false;
 
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
@@ -56,6 +48,7 @@ public class Room : MonoBehaviour
         gameObject.layer = 8; // Rooom layer
         
         shape = buildShape;
+        roomState = RoomStates.Preview;
 
         // Get relevant properties from prefab object
         GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
@@ -85,7 +78,11 @@ public class Room : MonoBehaviour
         gameObject.AddComponent<PolyShape>();
         gameObject.AddComponent<ProBuilderMesh>();
         gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
-        RefreshView();       
+        RefreshView();
+
+        // Create and attach collider objects
+        gameObject.AddComponent<MeshCollider>();
+        RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, buildShape);
     }
 
     public void RefreshView() {
@@ -211,8 +208,9 @@ public class Room : MonoBehaviour
     }
 
     public void SetIsRoomCurrentlyColliding() {
-
+        Debug.Log("Is colliding");
         if(roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
+
             List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
 
             if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
@@ -226,6 +224,10 @@ public class Room : MonoBehaviour
             }
         }
     }
+    public void SetRoomState(RoomStates roomState) {
+        this.roomState = roomState;
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -236,5 +238,6 @@ public class Room : MonoBehaviour
     /// </summary>
     public Room GetPrefabRoom(){ return prefabRoom; }
 
-    public Room GetPrefabRoom() { return prefabRoom; }
+
+
 }
