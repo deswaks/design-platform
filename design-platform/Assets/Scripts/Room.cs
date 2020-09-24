@@ -1,10 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
+using UnityEditor.ProBuilder;
 
 public class Room : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class Room : MonoBehaviour
     private RoomShape shape;
     public Material defaultMaterial;
     public Material highlightMaterial;
+
     public Building parentBuilding;
     public float height = 3.0f;
 
@@ -27,6 +30,17 @@ public class Room : MonoBehaviour
     private Vector3 moveModeScreenPoint;
     private Vector3 moveModeOffset;
 
+    private Vector3 lastLegalPlacementPoint;
+
+    public enum RoomStates {
+        Stationary,
+        Preview,
+        Moving
+    }
+    private RoomStates roomState;
+
+    public bool isCurrentlyColliding = false;
+
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
     public void InitializeRoom(RoomShape buildShape = RoomShape.RECTANGLE, Building building = null) {
         // Set constant values
@@ -34,9 +48,11 @@ public class Room : MonoBehaviour
         gameObject.layer = 8; // Rooom layer
         
         shape = buildShape;
+        roomState = RoomStates.Preview;
 
         // Get relevant properties from prefab object
         GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
+        
         prefabRoom = (Room)prefabObject.GetComponent(typeof(Room));
 
         switch (shape) {
@@ -62,7 +78,11 @@ public class Room : MonoBehaviour
         gameObject.AddComponent<PolyShape>();
         gameObject.AddComponent<ProBuilderMesh>();
         gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
-        RefreshView();       
+        RefreshView();
+
+        // Create and attach collider objects
+        gameObject.AddComponent<MeshCollider>();
+        RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, buildShape);
     }
 
     public void RefreshView() {
@@ -142,8 +162,6 @@ public class Room : MonoBehaviour
     /// </summary>
     public void SetIsInMoveMode(bool isInMoveMode = false) //klar til implementering
     {
-        isRoomInMoveMode = isInMoveMode;
-
         // Destroys any prior movehandle
         if (moveHandle != null)
         {
@@ -152,13 +170,16 @@ public class Room : MonoBehaviour
         }
 
         if (isInMoveMode == true){
-
+            roomState = RoomStates.Moving;
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
             Vector3 handlePosition = gameObject.GetComponent<Renderer>().bounds.center;
             handlePosition.y = height + 0.01f;
             moveHandle.transform.position = handlePosition;
 
             moveHandle.transform.SetParent(gameObject.transform,true);
+        }
+        else {
+            roomState = RoomStates.Stationary;
         }
     }
 
@@ -167,10 +188,10 @@ public class Room : MonoBehaviour
     /// </summary>
     void OnMouseDown()
     {
-        if (isRoomInMoveMode)
+        if (roomState == RoomStates.Moving)
         {
             moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
-            moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);// new Vector3(Input.mousePosition.x, Input.mousePosition.y, moveModeScreenPoint.z));
+            moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 
@@ -179,13 +200,32 @@ public class Room : MonoBehaviour
     /// </summary>
     void OnMouseDrag()
     {
-        //Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, moveModeScreenPoint.z);
-        if (isRoomInMoveMode)
+        if (roomState == RoomStates.Moving)
         {
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
-            transform.position = curPosition;
+            transform.position = parentBuilding.grid.GetNearestGridpoint(curPosition);
         }
+    }
 
+    public void SetIsRoomCurrentlyColliding() {
+        Debug.Log("Is colliding");
+        if(roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
+
+            List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
+
+            if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
+                isCurrentlyColliding = false;
+                gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+
+            }
+            else { // if there is one or more collision(s)
+                isCurrentlyColliding = true;
+                gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            }
+        }
+    }
+    public void SetRoomState(RoomStates roomState) {
+        this.roomState = roomState;
     }
 
     /// <summary>
@@ -197,5 +237,7 @@ public class Room : MonoBehaviour
     /// 
     /// </summary>
     public Room GetPrefabRoom(){ return prefabRoom; }
+
+
 
 }
