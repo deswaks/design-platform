@@ -17,7 +17,6 @@ public class ButtonManagerModify : MonoBehaviour {
     //private Room prefabRoom;
 
 
-
     public void Move() {
         main.modifyMode.selectedRoom.SetIsInMoveMode(isInMoveMode: true);
     }
@@ -51,6 +50,7 @@ public class ButtonManagerModify : MonoBehaviour {
         for (int i = 0; i < main.modifyMode.selectedRoom.getAllWalls().Count; i++) {
             Debug.Log(Math.Normal(pb, main.modifyMode.selectedRoom.getAllWalls()[i]));
         }
+        Debug.Log(main.modifyMode.selectedRoom.GetWallNormals());
 
         //pb.positions
         //main.modifyMode.selectedRoom.getAllWalls()[0].distinctIndexesInternal
@@ -97,9 +97,10 @@ public class ButtonManagerModify : MonoBehaviour {
 
         //Vælger de faces i pb.faces der er på indices i listen verticalFaceArry
         //verticalFaceArray.Select(i => pb.faces[i]);
-        Debug.Log(pb.GetWindingOrder(main.modifyMode.selectedRoom.getAllWalls()[1]));
 
-        pb.Extrude(main.modifyMode.selectedRoom.getAllWalls(), ExtrudeMethod.IndividualFaces, 1);
+        List<Face> thatOneFace = new List<Face> { main.modifyMode.selectedRoom.getAllWalls()[0] };
+
+        pb.Extrude(thatOneFace, ExtrudeMethod.IndividualFaces, 1);
         pb.ToMesh();
         pb.Refresh();
 
