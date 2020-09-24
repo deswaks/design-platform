@@ -12,9 +12,9 @@ public class ButtonManagerMode : MonoBehaviour
 
     }
 
-    public void StartBuildMode(int buildingShape)
+    public void StartBuildMode(int buildShape)
     {
-        main.buildMode.SetSelectedShape(buildingShape);
+        main.buildMode.SetSelectedShape((RoomShape)buildShape);
         main.setMode(main.buildMode);
     }
 

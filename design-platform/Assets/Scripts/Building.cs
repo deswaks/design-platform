@@ -11,7 +11,6 @@ public class Building : MonoBehaviour
     public Camera cam;
     public GameObject moveHandlePrefab;
     public Grid grid;
-    public GameObject roomPrefab;
     private List<Room> rooms;
 
     private void Awake()
@@ -34,21 +33,17 @@ public class Building : MonoBehaviour
         if (rooms.Contains(room)) { rooms.Remove(room); }
     }
 
-    public Room BuildRoom(int shape = 0, bool preview = false, Room templateRoom = null)
+    /// <summary>
+    /// Builds a new room
+    /// </summary>
+    public Room BuildRoom(RoomShape buildShape = RoomShape.RECTANGLE, bool preview = false, Room templateRoom = null)
     {
-        string name = "Room";
-        if (preview) { name = "Preview room"; }
-        else
-        {
-            if (shape == 0) { name = "Room (Rectangle)"; }
-            if (shape == 1) { name = "Room (L-shape)"; }
-        }
-
         GameObject newRoomGameObject = new GameObject(name);
         Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
-        newRoom.InitializeRoom(shape: shape, building: this);
+        newRoom.InitializeRoom(buildShape: buildShape, building: this);
+        if (preview) { newRoomGameObject.name = "Preview room"; }
 
-        if(templateRoom != null)
+        if (templateRoom != null)
         {
             newRoomGameObject.transform.position = templateRoom.transform.position;
             newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
@@ -57,6 +52,24 @@ public class Building : MonoBehaviour
         if (preview == false) { rooms.Add(newRoom); }
         
         return newRoom;
+    }
+
+    /// <summary>
+    /// Finds the boundaries of the building in the X and Y axis.
+    /// returns:  { minX, maxX, minY, maxY }
+    /// </summary>
+    public List<float> Bounds() {
+        float minX = 0; float maxX = 0;
+        float minY = 0; float maxY = 0;
+        foreach (Room room in rooms) {
+            foreach (Vector3 controlPoint in room.GetConrolPoints()) {
+                if (controlPoint[0] < minX) { minX = controlPoint[0]; }
+                if (controlPoint[0] > maxX) { minX = controlPoint[0]; }
+                if (controlPoint[2] < minY) { minX = controlPoint[2]; }
+                if (controlPoint[2] > maxY) { minX = controlPoint[2]; }
+            }
+        }
+        return new List<float> { minX, maxX, minY, maxY };
     }
 }
 
