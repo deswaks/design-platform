@@ -16,9 +16,9 @@ public class Building : MonoBehaviour
     private void Awake()
     {
         grid = FindObjectOfType<Grid>();
-        rooms = new List<Room>();
+
         //Finds rooms already placed
-        //rooms = FindObjectsOfType(typeof(GameObject)).Cast<GameObject>().Where(go => go.layer == 8).ToList();
+        rooms = FindObjectsOfType<GameObject>().ToList().Where(go => go.layer == 8).Select(go => go.GetComponent<Room>()).ToList();
     }
 
     // Returns a list of all the rooms in the building
