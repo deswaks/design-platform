@@ -158,13 +158,13 @@ public class Room : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
+    /// Gets a list of normals. The are in same order as controlpoints (clockwise).
     /// </summary>
     public List<Vector3> GetWallNormals() {
         List<Vector3> wallNormals = new List<Vector3>();
         List<Vector3> circularControlpoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
         for (int i = 0; i < controlPoints.Count; i++) {
-            wallNormals.Add(Vector3.Cross(circularControlpoints[i], circularControlpoints[i + 1]).normalized);
+            wallNormals.Add(Vector3.Cross((circularControlpoints[i + 1] - circularControlpoints[i]),Vector3.up).normalized);
         }
         return wallNormals;
     }
