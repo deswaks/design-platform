@@ -35,29 +35,39 @@ public class ButtonManagerModify : MonoBehaviour {
         //-----------------------------------------------------------------------------------------------------------------
         // Two lists of idecies for:  1) Vertical faces 2) The base face
 
-        verticalFace = new List<int>();
-        baseFace = new List<int>();
+        //verticalFace = new List<int>();
+        //baseFace = new List<int>();
 
-        for (int i = 0; i < pb.faces.Count; i++) {
-            if (Math.Normal(pb, pb.faces[i]).y == 0) {
-                verticalFace.Add(i);
-            }
-            else if (Math.Normal(pb, pb.faces[i]).y == -1) {
-                baseFace.Add(i);
-            }
+        //for (int i = 0; i < pb.faces.Count; i++) {
+        //    if (Math.Normal(pb, pb.faces[i]).y == 0) {
+        //        verticalFace.Add(i);
+        //    }
+        //    else if (Math.Normal(pb, pb.faces[i]).y == -1) {
+        //        baseFace.Add(i);
+        //    }
+        //}
+
+
+        for (int i = 0; i < main.modifyMode.selectedRoom.getAllWalls().Count; i++) {
+            Debug.Log(Math.Normal(pb, main.modifyMode.selectedRoom.getAllWalls()[i]));
         }
 
+        //pb.positions
+        //main.modifyMode.selectedRoom.getAllWalls()[0].distinctIndexesInternal
+
+        //Debug.Log(VertexEditing.MergeVertices(pb, main.modifyMode.selectedRoom.getAllWalls()[0].distinctIndexes, false));
+
         // List of vertical faces
-        verticalFace.Select(i => pb.faces[i]);
+        //verticalFace.Select(i => pb.faces[i]);
         // List with base face
-        baseFace.Select(i => pb.faces[i]);
+        //baseFace.Select(i => pb.faces[i]);
 
         //-----------------------------------------------------------------------------------------------------------------
         // Get base face corners
-        baseFaceCorners = new List<Vector3>();
-        foreach (int index in pb.faces[baseFace[0]].distinctIndexes) {
-            baseFaceCorners.Add(pb.positions[index]);
-        }
+        //baseFaceCorners = new List<Vector3>();
+        //foreach (int index in pb.faces[baseFace[0]].distinctIndexes) {
+        //    baseFaceCorners.Add(pb.positions[index]);
+        //}
 
         //Debug.Log(baseFaceCorners.Count);
 
@@ -74,46 +84,6 @@ public class ButtonManagerModify : MonoBehaviour {
         //    moveHandle.transform.SetParent(gameObject.transform, true);
         //}
 
-
-        // Method for the average point of a face
-
-        /**
-     *	Returns the average of each vertex position in a face.
-     *	In local space.
-     */
-        Vector3 FaceCenter(ProBuilderMesh proB, Face face) {
-            var vertices = proB.positions;
-            
-            Vector3 average = Vector3.zero;
-
-            // face holds triangle data.  distinctIndices is a
-            // cached collection of the distinct indices that
-            // make up the triangles. Ex:
-            // tris = {0, 1, 2, 2, 3, 0}
-            // distinct indices = {0, 1, 2, 3}
-            foreach (int index in face.distinctIndexes) {
-                average.x += vertices[index].x;
-                average.y += vertices[index].y;
-                average.z += vertices[index].z;
-            }
-
-            float len = (float)face.distinctIndexes.Count;
-
-            average.x /= len;
-            average.y /= len;
-            average.z /= len;
-
-            return average;
-        }
-
-
-
-        Vector3 faceCenter = FaceCenter(pb, pb.faces[2]);
-
-
-
-
-
         //-----------------------------------------------------------------------------------------------------------------
         // Face to extrude
 
@@ -127,8 +97,9 @@ public class ButtonManagerModify : MonoBehaviour {
 
         //Vælger de faces i pb.faces der er på indices i listen verticalFaceArry
         //verticalFaceArray.Select(i => pb.faces[i]);
+        Debug.Log(pb.GetWindingOrder(main.modifyMode.selectedRoom.getAllWalls()[1]));
 
-        pb.Extrude(verticalFace.Select(i => pb.faces[i]), ExtrudeMethod.IndividualFaces, 1);
+        pb.Extrude(main.modifyMode.selectedRoom.getAllWalls(), ExtrudeMethod.IndividualFaces, 1);
         pb.ToMesh();
         pb.Refresh();
 
