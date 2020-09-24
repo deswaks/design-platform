@@ -62,7 +62,7 @@ public class Building : MonoBehaviour
         float minX = 0; float maxX = 0;
         float minY = 0; float maxY = 0;
         foreach (Room room in rooms) {
-            foreach (Vector3 controlPoint in room.GetConrolPoints()) {
+            foreach (Vector3 controlPoint in room.GetControlPoints()) {
                 if (controlPoint[0] < minX) { minX = controlPoint[0]; }
                 if (controlPoint[0] > maxX) { minX = controlPoint[0]; }
                 if (controlPoint[2] < minY) { minX = controlPoint[2]; }
