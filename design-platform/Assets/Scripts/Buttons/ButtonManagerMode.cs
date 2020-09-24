@@ -9,7 +9,6 @@ public class ButtonManagerMode : MonoBehaviour
     public void StartModifyMode()
     {
         main.setMode(main.modifyMode);
-
     }
 
     public void StartBuildMode(int buildShape)
