@@ -141,24 +141,23 @@ public class Room : MonoBehaviour
     /// <summary>
     /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
     /// </summary>
-    public List<Vector3> GetControlPoints() {
-        return controlPoints;
+    public List<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false) {
+        List<Vector3> returnPoints = controlPoints;
+        if (closed) {
+            returnPoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
+        }
+        if (!localCoordinates) {
+            returnPoints = returnPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
+        }
+        return returnPoints;
     }
 
     /// <summary>
     /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
     /// </summary>
-    public List<Vector3> GetControlPointsWorld() {
-        List<Vector3> controlPointsWorld = controlPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
-        return controlPointsWorld;
-    }
-
-    /// <summary>
-    /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
-    /// </summary>
-    public List<Vector3> GetWallMidpoints() {
+    public List<Vector3> GetWallMidpoints(bool localCoordinates = false) {
         List<Vector3> midPoints = new List<Vector3>();
-        List <Vector3> circularControlpoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
+        List<Vector3> circularControlpoints = GetControlPoints(localCoordinates: localCoordinates, closed: true);
         for (int i = 0; i < controlPoints.Count; i++) {
             midPoints.Add((circularControlpoints[i] + circularControlpoints[i + 1]) / 2);
         }
