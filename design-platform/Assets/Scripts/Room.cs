@@ -32,6 +32,7 @@ public class Room : MonoBehaviour
         // Set constant values
         parentBuilding = building;
         gameObject.layer = 8; // Rooom layer
+        
         shape = buildShape;
 
         // Get relevant properties from prefab object
@@ -44,6 +45,7 @@ public class Room : MonoBehaviour
                                                    new Vector3(0, 0, 3),
                                                    new Vector3(3, 0, 3),
                                                    new Vector3(3, 0, 0)};
+                gameObject.name = "Room(Rectangle)";
                 break;
             case RoomShape.LSHAPE:
                 controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
@@ -52,6 +54,7 @@ public class Room : MonoBehaviour
                                                           new Vector3(3, 0, 3),
                                                           new Vector3(5, 0, 3),
                                                           new Vector3(5, 0, 0)};
+                gameObject.name = "Room(L-Shape)";
                 break;
         }
 
@@ -120,6 +123,18 @@ public class Room : MonoBehaviour
     /// </summary>
     public List<Vector3> GetConrolPoints() {
         return controlPoints;
+    }
+
+    /// <summary>
+    /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
+    /// </summary>
+    public List<Vector3> GetWallMidpoints() {
+        List<Vector3> midPoints = new List<Vector3>();
+        List <Vector3> circularControlpoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
+        for (int i = 0; i < controlPoints.Count; i++) {
+            midPoints.Add((circularControlpoints[i] + circularControlpoints[i + 1]) / 2);
+        }
+        return midPoints;
     }
 
     /// <summary>

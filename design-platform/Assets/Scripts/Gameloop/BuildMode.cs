@@ -8,7 +8,7 @@ public class BuildMode : Mode
     // References to other objects in scene
     public Main main;
     public Camera camera = Camera.main;
-    private int selectedShape { get; set; } //0 is rectangle and 1 is L-shape
+    private RoomShape selectedShape { get; set; } //0 is rectangle and 1 is L-shape
 
     // Set at runtime
     public Room previewRoom;
@@ -46,7 +46,7 @@ public override void Tick()
     public override void OnModeResume()
     {
         if (previewRoom == null) {
-            previewRoom = main.building.BuildRoom(shape: selectedShape, preview: true);
+            previewRoom = main.building.BuildRoom(buildShape: selectedShape, preview: true);
         }
     }
 
@@ -59,7 +59,7 @@ public override void Tick()
     //actually build the thing
     public void Build()
     {
-        main.building.BuildRoom(shape: selectedShape, templateRoom: previewRoom);
+        main.building.BuildRoom(buildShape: selectedShape, templateRoom: previewRoom);
     }
    
     // Moves Preview room with the mouse
@@ -77,7 +77,7 @@ public override void Tick()
         //Nyttig funktion: ElementSelection.GetPerimeterEdges()
     }
 
-    public void SetSelectedShape(int shape = 0)
+    public void SetSelectedShape(RoomShape shape = RoomShape.RECTANGLE)
     {
         selectedShape = shape;
     }
