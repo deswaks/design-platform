@@ -22,7 +22,6 @@ public class Room : MonoBehaviour
     private ProBuilderMesh mesh3D;
     private Room prefabRoom;
     
-    
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
 
@@ -94,6 +93,10 @@ public class Room : MonoBehaviour
         polyshape.extrude = height;
         polyshape.CreateShapeFromPolygon();
         gameObject.GetComponent<ProBuilderMesh>().Refresh();
+    }
+
+    public RoomShape GetRoomShape() {
+        return shape;
     }
 
     /// <summary>
@@ -208,6 +211,19 @@ public class Room : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="axis"></param>
+    /// <returns></returns>
+    public List<List<float>> UniqueCoordinates(bool localCoordinates = false) {
+        List<List<float>> uniqueCoordinates = new List<List<float>>();
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[0]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[1]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[2]).Distinct().ToList());
+        return uniqueCoordinates;
+    }
 
     /// <summary>
     /// 
