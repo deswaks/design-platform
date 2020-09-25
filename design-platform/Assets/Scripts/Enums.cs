@@ -7,3 +7,9 @@ public enum RoomShape {
     LSHAPE,
     USHAPE
 }
+
+public enum Axis {
+    X,
+    Y,
+    Z
+}

@@ -22,7 +22,6 @@ public class Room : MonoBehaviour
     private ProBuilderMesh mesh3D;
     private Room prefabRoom;
     
-    
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
 
@@ -94,6 +93,10 @@ public class Room : MonoBehaviour
         polyshape.extrude = height;
         polyshape.CreateShapeFromPolygon();
         gameObject.GetComponent<ProBuilderMesh>().Refresh();
+    }
+
+    public RoomShape GetRoomShape() {
+        return shape;
     }
 
     /// <summary>
