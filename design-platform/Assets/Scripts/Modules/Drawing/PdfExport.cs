@@ -11,8 +11,6 @@ using System.Linq;
 
 public static class PdfExport {
 
-    private static Building building = GameObject.Find("Building").GetComponent<Building>();
-
     public static Dictionary<string, float> scale = new Dictionary<string, float>() {
         {"1:50", 56.692f},
         {"1:100", 28.346f}
@@ -52,7 +50,7 @@ public static class PdfExport {
         pen.LineCap = XLineCap.Round;
         pen.LineJoin = XLineJoin.Bevel;
 
-        foreach (Room room in building.GetRooms()) {
+        foreach (Room room in Building.Instance.GetRooms()) {
             List<XPoint> polylinePoints = new List<XPoint>();
 
             // Add all control points
