@@ -97,6 +97,10 @@ public class Room : MonoBehaviour {
         gameObject.GetComponent<ProBuilderMesh>().Refresh();
     }
 
+    public RoomShape GetRoomShape() {
+        return shape;
+    }
+
     /// <summary>
     /// Rotates the room. Defaults to 90 degree increments
     /// </summary>
