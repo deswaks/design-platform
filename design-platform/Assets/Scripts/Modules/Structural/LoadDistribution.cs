@@ -31,9 +31,15 @@ namespace Structural {
         /// <returns></returns>
         public Dictionary<int, List<Load>> AreaLoad(Room room) {
             if (room.GetRoomShape() == RoomShape.RECTANGLE) { return AreaLoadRectangle(room); }
+            if (room.GetRoomShape() == RoomShape.LSHAPE) { return AreaLoadLShape(room); }
             else { return new Dictionary<int, List<Load>>(); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="room"></param>
+        /// <returns></returns>
         public Dictionary<int, List<Load>> AreaLoadRectangle(Room room) {
             Dictionary<int, List<Load>> loadAreas = new Dictionary<int, List<Load>>();
             List<Vector3> points = room.GetControlPoints(localCoordinates : true);
@@ -42,14 +48,14 @@ namespace Structural {
             // Distribute loads along first room axis
             if (spans[0] <= spans[2]) {
                 float loadDistance = Vector3.Distance(points[1], points[2]);
-                loadAreas[0].Add(new Load(0, 1, loadDistance / 2));
-                loadAreas[2].Add(new Load(0, 1, loadDistance / 2));
+                loadAreas[0].Add(new Load(loadDistance / 2, 0, 1));
+                loadAreas[2].Add(new Load(loadDistance / 2, 0, 1));
             }
             // Distribute loads along last room axis
             else {
                 float loadDistance = Vector3.Distance(points[0], points[1]);
-                loadAreas[1].Add(new Load(0, 1, loadDistance / 2));
-                loadAreas[3].Add(new Load(0, 1, loadDistance / 2));
+                loadAreas[1].Add(new Load(loadDistance / 2, 0, 1));
+                loadAreas[3].Add(new Load(loadDistance / 2, 0, 1));
             }
 
             return loadAreas;
@@ -60,32 +66,39 @@ namespace Structural {
             List<Vector3> points = room.GetControlPoints(localCoordinates: true);
             List<Vector3> normals = room.GetWallNormals(localCoordinates : true);
 
-
+            // MANGLER
             
             
 
             return WallLoads;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="room"></param>
+        /// <returns></returns>
         public Dictionary<int, List<Load>> WallLoadTables(Room room) {
             Dictionary<int, List<Load>> WallLoads = new Dictionary<int, List<Load>>();
             List<int> loadCarryingWalls = LoadCarryingWalls(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
-            //uniqueAxis1 = room.UniqueCoordinates()[0];
 
             foreach (int wallIndex in loadCarryingWalls) {
 
                 // Find aksen som væggen spænder
                 Vector3 wallVector = (points[wallIndex] - points[wallIndex + 1]);
-                VectorFunctions.IndexLargestComponent(wallVector);
+                int wallAxisIndex = VectorFunctions.IndexLargestComponent(wallVector);
 
-                // find unikke værdier på denne akse
+                // Find unikke værdier på denne akse og reparameteriser disse over væggens længde
+                List<float> uniqueValuesOnWallAxis = room.UniqueCoordinates(localCoordinates: true)[wallAxisIndex];
+                List<float> lengthParameters = rangeUtils.reparametrize(uniqueValuesOnWallAxis);
 
-
-                // Hvis der er mere end 2 unikke værdier oprettes flere laster, en for hver værdi
-
-                //WallLoads[loadCarryingWall].Add(new Load(mag:0.0f, start:0.0f, end:0.0f));
+                // Tilføj en load for denne væg mellem hver unik værdi på væggens akse
+                for (int i = 0; i < (lengthParameters.Count-1); i++) {
+                    WallLoads[wallIndex].Add(new Load(mag: 0.0f,
+                                                      start: lengthParameters[i],
+                                                      end: lengthParameters[i+1]));
+                }
             }
             return WallLoads;
         }

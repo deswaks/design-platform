@@ -217,11 +217,11 @@ public class Room : MonoBehaviour
     /// </summary>
     /// <param name="axis"></param>
     /// <returns></returns>
-    public List<List<float>> UniqueCoordinates(Axis axis, bool localCoordinates = false) {
+    public List<List<float>> UniqueCoordinates(bool localCoordinates = false) {
         List<List<float>> uniqueCoordinates = new List<List<float>>();
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[(int)axis]).Distinct().ToList());
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[(int)axis]).Distinct().ToList());
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[(int)axis]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[0]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[1]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[2]).Distinct().ToList());
         return uniqueCoordinates;
     }
 
