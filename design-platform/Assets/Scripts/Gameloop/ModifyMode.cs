@@ -7,20 +7,20 @@ using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
 using UnityEngine.EventSystems;
 using System.Drawing;
+using UnityEditor;
 
-public class ModifyMode : Mode
-{
+public class ModifyMode : Mode {
     // References to other objects in scene
     public Main main;
     public Camera camera = Camera.main;
 
     public Material defaultRoomMaterial;
     public Material selectedRoomMaterial;
-    
+
     // Set at runtime
     public Room selectedRoom;
 
-    public enum ModifyModeTypes{
+    public enum ModifyModeTypes {
         None,
         Move,
         Rotate,
@@ -31,108 +31,95 @@ public class ModifyMode : Mode
     private ModifyModeTypes currentModifyModeType = ModifyModeTypes.None;
 
 
-    public void SetModifyMode(ModifyModeTypes currentMode)
-    {
+    public void SetModifyMode(ModifyModeTypes currentMode) {
         currentModifyModeType = currentMode;
 
         selectedRoom.SetRoomState(Room.RoomStates.Stationary);
+        selectedRoom.SetIsInMoveMode(false);
 
-        switch (currentMode)
-        {
+        switch (currentMode) {
             case ModifyModeTypes.Move:
                 selectedRoom.SetIsInMoveMode(true);
                 break;
 
             case ModifyModeTypes.Rotate:
-                if (selectedRoom != null)
-                {
+                if (selectedRoom != null) {
                     selectedRoom.Rotate();
                 }
                 break;
 
             case ModifyModeTypes.Edit:
+                if (selectedRoom != null) {
+                    selectedRoom.SetEditHandles();
+                }
+
+
                 break;
 
             case ModifyModeTypes.Delete:
-                if (selectedRoom != null)
-                {
+                if (selectedRoom != null) {
                     selectedRoom.Delete();
                 }
                 break;
         }
     }
 
-    public ModifyMode(Main main)
-    {
+    public ModifyMode(Main main) {
         this.main = main;
     }
 
-    public override void Tick()
-    {
+    public override void Tick() {
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (EventSystem.current.IsPointerOverGameObject() == false)
-            {
+        if (Input.GetMouseButtonDown(0)) {
+            if (EventSystem.current.IsPointerOverGameObject() == false) {
                 selectClickedRoom();
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
-        {
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1)) {
             deselect();
         }
     }
 
-    public override void OnModeResume()
-    {
+    public override void OnModeResume() {
         //camera = Camera.current;
     }
 
-    public override void OnModePause()
-    {
+    public override void OnModePause() {
         deselect();
     }
-    private void selectClickedRoom()
-    {
-        if(GetClickedRoom() != selectedRoom) // Ensures that an already selected room is not deselected and then selected again
+    private void selectClickedRoom() {
+        if (GetClickedRoom() != selectedRoom) // Ensures that an already selected room is not deselected and then selected again
         {
             deselect();
             selectedRoom = GetClickedRoom();
-            if (selectedRoom != null)
-            {
+            if (selectedRoom != null) {
                 selectedRoom.SetIsHighlighted(true);
             }
         }
     }
-    private Room GetClickedRoom()
-    {
+    private Room GetClickedRoom() {
         Room clickedRoom = null;
         UnityEngine.RaycastHit hitInfo;
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray: ray, hitInfo: out hitInfo))
-        {
+        if (Physics.Raycast(ray: ray, hitInfo: out hitInfo)) {
             // if the hit game object is a room (ie. it is on layer 8)
-            if (hitInfo.collider.gameObject.layer == 8)
-            {
+            if (hitInfo.collider.gameObject.layer == 8) {
                 clickedRoom = hitInfo.collider.gameObject.GetComponent<Room>();
             }
         }
         return clickedRoom;
     }
-    private void deselect()
-    {
-        if (selectedRoom != null)
-        {
+    private void deselect() {
+        if (selectedRoom != null) {
             selectedRoom.SetIsHighlighted(false);
             selectedRoom.SetIsInMoveMode(false);
         }
         selectedRoom = null;
     }
 
-    internal void Move()
-    {
+    internal void Move() {
         selectedRoom.SetIsInMoveMode(true);
     }
 
