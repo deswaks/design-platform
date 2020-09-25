@@ -6,23 +6,19 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
 
-public class Building : MonoBehaviour
+public class Building
 {
-    public Camera cam;
-    public GameObject moveHandlePrefab;
-    public Grid grid;
-    private List<Room> rooms;
+    private static Building instance;
+    private List<Room> rooms = new List<Room>();
 
-    private void Awake()
-    {
-        grid = FindObjectOfType<Grid>();
-
-        //Finds rooms already placed
-        rooms = FindObjectsOfType<GameObject>().ToList().Where(go => go.layer == 8).Select(go => go.GetComponent<Room>()).ToList();
+    public static Building Instance {
+        // Use the ?? operator, to return 'instance' if 'instance' does not equal null
+        // otherwise we assign instance to a new component and return that
+        get { return instance ?? (instance = new Building()); }
     }
 
     // Returns a list of all the rooms in the building
-    public List<Room> GetAllRooms()
+    public List<Room> GetRooms()
     {
         return rooms;
     }
@@ -38,7 +34,7 @@ public class Building : MonoBehaviour
     /// </summary>
     public Room BuildRoom(RoomShape buildShape = RoomShape.RECTANGLE, bool preview = false, Room templateRoom = null)
     {
-        GameObject newRoomGameObject = new GameObject(name);
+        GameObject newRoomGameObject = new GameObject("Room");
         Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
         newRoom.InitializeRoom(buildShape: buildShape, building: this);
         if (preview) { newRoomGameObject.name = "Preview room"; }

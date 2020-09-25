@@ -52,7 +52,7 @@ public static class PdfExport {
         pen.LineCap = XLineCap.Round;
         pen.LineJoin = XLineJoin.Bevel;
 
-        foreach (Room room in building.GetAllRooms()) {
+        foreach (Room room in building.GetRooms()) {
             List<XPoint> polylinePoints = new List<XPoint>();
 
             // Add all control points

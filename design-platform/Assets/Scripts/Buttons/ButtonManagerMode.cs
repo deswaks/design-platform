@@ -8,13 +8,13 @@ public class ButtonManagerMode : MonoBehaviour
 
     public void StartModifyMode()
     {
-        main.setMode(main.modifyMode);
+        Main.Instance.setMode(ModifyMode.Instance);
     }
 
     public void StartBuildMode(int buildShape)
     {
-        main.buildMode.SetSelectedShape((RoomShape)buildShape);
-        main.setMode(main.buildMode);
+        BuildMode.Instance.SetSelectedShape((RoomShape)buildShape);
+        Main.Instance.setMode(BuildMode.Instance);
     }
 
 }
