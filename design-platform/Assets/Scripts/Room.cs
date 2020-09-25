@@ -26,6 +26,9 @@ public class Room : MonoBehaviour
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
 
+    private GameObject editHandle;
+    public GameObject editHandlePrefab;
+
     public GameObject moveHandlePrefab;
     private Vector3 moveModeScreenPoint;
     private Vector3 moveModeOffset;
@@ -165,15 +168,44 @@ public class Room : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets a list of normals. The are in same order as controlpoints (clockwise).
+    /// Gets a list of normals. They are in same order as controlpoints (clockwise). localCoordinates : true (for local coordinates, Sherlock)
     /// </summary>
-    public List<Vector3> GetWallNormals() {
+    public List<Vector3> GetWallNormals(bool localCoordinates = false) {
         List<Vector3> wallNormals = new List<Vector3>();
-        List<Vector3> circularControlpoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
-        for (int i = 0; i < controlPoints.Count; i++) {
+        List<Vector3> circularControlpoints = GetControlPoints(localCoordinates: localCoordinates, closed: true);
+        for (int i = 0 ; i < controlPoints.Count ; i++) {
             wallNormals.Add(Vector3.Cross((circularControlpoints[i + 1] - circularControlpoints[i]),Vector3.up).normalized);
         }
         return wallNormals;
+    }
+
+    public void SetEditHandles() {
+
+        //if (editHandle != null) {
+        //    Destroy(editHandle);
+        //    editHandle = null;
+        //}
+
+        List<GameObject> activeEditHandles = new List<GameObject>();
+
+        for (int i = 0; i < controlPoints.Count; i++) {
+            editHandle = Instantiate(prefabRoom.editHandlePrefab);
+            activeEditHandles.Add(editHandle);
+            editHandle.name = "edit handle : Corner " + i + " and " + (i+1);
+            editHandle.transform.position = GetWallMidpoints()[i] + new Vector3(0,height + 0.01f,0);
+
+            editHandle.transform.RotateAround(
+            point: GetWallMidpoints()[i],
+            axis: new Vector3(0, 1, 0),
+            angle: Vector3.SignedAngle(new Vector3(1,0,0), GetWallNormals()[i] , new Vector3(0,1,0) ) 
+            );
+
+            editHandle.transform.SetParent(gameObject.transform, true);
+        }
+
+        //activeEditHandles.Remove(editHandle);
+        //Destroy(editHandle);
+
     }
 
 
@@ -227,7 +259,7 @@ public class Room : MonoBehaviour
     }
 
     public void SetIsRoomCurrentlyColliding() {
-        Debug.Log("Is colliding");
+        //Debug.Log("Is colliding");
         if(roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
 
             List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding

@@ -32,9 +32,6 @@ public class ButtonManagerModify : MonoBehaviour {
     public void Modify()
     {
         main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Edit);
-        for (int i = 0; i< main.modifyMode.selectedRoom.GetWallNormals().Count; i++) {
-            Debug.Log(main.modifyMode.selectedRoom.GetWallNormals()[i]);
-        }
 
         Debug.Log("Modify function is not implemented");
     }
