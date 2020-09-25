@@ -25,6 +25,9 @@ public class Room : MonoBehaviour
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
 
+    private GameObject editHandle;
+    public GameObject editHandlePrefab;
+
     public GameObject moveHandlePrefab;
     private Vector3 moveModeScreenPoint;
     private Vector3 moveModeOffset;
@@ -103,9 +106,9 @@ public class Room : MonoBehaviour
     {
         if (!clockwise) { degrees = -degrees; }
         gameObject.transform.RotateAround(
-            point : parentBuilding.grid.GetNearestGridpoint(gameObject.GetComponent<Renderer>().bounds.center),
-            axis : new Vector3(0, 1, 0),
-            angle : degrees);
+            point: parentBuilding.grid.GetNearestGridpoint(gameObject.GetComponent<Renderer>().bounds.center),
+            axis: new Vector3(0, 1, 0),
+            angle: degrees);
     }
 
     /// <summary>
@@ -142,7 +145,7 @@ public class Room : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets a list of controlpoints. The controlpoints are the vertices of the underlying polyshape of the building.
+    /// Gets a list of controlpoints - in local coordinates. The controlpoints are the vertices of the underlying polyshape of the building.
     /// </summary>
     public List<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false) {
         List<Vector3> returnPoints = controlPoints;
@@ -168,6 +171,48 @@ public class Room : MonoBehaviour
     }
 
     /// <summary>
+    /// Gets a list of normals. They are in same order as controlpoints (clockwise). localCoordinates : true (for local coordinates, Sherlock)
+    /// </summary>
+    public List<Vector3> GetWallNormals(bool localCoordinates = false) {
+        List<Vector3> wallNormals = new List<Vector3>();
+        List<Vector3> circularControlpoints = GetControlPoints(localCoordinates: localCoordinates, closed: true);
+        for (int i = 0 ; i < controlPoints.Count ; i++) {
+            wallNormals.Add(Vector3.Cross((circularControlpoints[i + 1] - circularControlpoints[i]),Vector3.up).normalized);
+        }
+        return wallNormals;
+    }
+
+    public void SetEditHandles() {
+
+        //if (editHandle != null) {
+        //    Destroy(editHandle);
+        //    editHandle = null;
+        //}
+
+        List<GameObject> activeEditHandles = new List<GameObject>();
+
+        for (int i = 0; i < controlPoints.Count; i++) {
+            editHandle = Instantiate(prefabRoom.editHandlePrefab);
+            activeEditHandles.Add(editHandle);
+            editHandle.name = "edit handle : Corner " + i + " and " + (i+1);
+            editHandle.transform.position = GetWallMidpoints()[i] + new Vector3(0,height + 0.01f,0);
+
+            editHandle.transform.RotateAround(
+            point: GetWallMidpoints()[i],
+            axis: new Vector3(0, 1, 0),
+            angle: Vector3.SignedAngle(new Vector3(1,0,0), GetWallNormals()[i] , new Vector3(0,1,0) ) 
+            );
+
+            editHandle.transform.SetParent(gameObject.transform, true);
+        }
+
+        //activeEditHandles.Remove(editHandle);
+        //Destroy(editHandle);
+
+    }
+
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="axis"></param>
@@ -183,8 +228,7 @@ public class Room : MonoBehaviour
     public void SetIsInMoveMode(bool isInMoveMode = false) //klar til implementering
     {
         // Destroys any prior movehandle
-        if (moveHandle != null)
-        {
+        if (moveHandle != null) {
             Destroy(moveHandle);
             moveHandle = null;
         }
@@ -196,7 +240,7 @@ public class Room : MonoBehaviour
             handlePosition.y = height + 0.01f;
             moveHandle.transform.position = handlePosition;
 
-            moveHandle.transform.SetParent(gameObject.transform,true);
+            moveHandle.transform.SetParent(gameObject.transform, true);
         }
         else {
             roomState = RoomStates.Stationary;
@@ -228,7 +272,7 @@ public class Room : MonoBehaviour
     }
 
     public void SetIsRoomCurrentlyColliding() {
-        Debug.Log("Is colliding");
+        //Debug.Log("Is colliding");
         if(roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
 
             List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
