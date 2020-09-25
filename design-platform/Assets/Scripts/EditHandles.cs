@@ -15,13 +15,11 @@ public class EditHandles : MonoBehaviour {
     }
 
     public void OnMouseDown() {
-        
 
         //Index of the selected handle
         selectedIndex = parentRoom.activeEditHandles.IndexOf(gameObject);
         //Normal of the selected handles wall
         wallNormalDirection = parentRoom.GetWallNormals()[selectedIndex];
-
     }
 
     public void OnMouseDrag() {
@@ -29,7 +27,7 @@ public class EditHandles : MonoBehaviour {
         Vector3 diffPosition = Grid.GetNearestGridpoint(
            Camera.main.ScreenToWorldPoint(Input.mousePosition) - handleStartPosition);
         Vector3 Distance = Vector3.Project(diffPosition, wallNormalDirection);
-        
+
         //transform.position = handleStartPosition + Distance;
         parentRoom.ExtrudeWall(selectedIndex, Distance);
         //Debug.Log(selectedIndex);
@@ -38,8 +36,7 @@ public class EditHandles : MonoBehaviour {
         foreach (EditHandles handle in parentRoom.GetComponentsInChildren<EditHandles>()) {
             handle.UpdateTransform();
         }
-        
-        }
+    }
 
     public void UpdateTransform(bool updatePosition = true, bool updateRotation = false) {
         if (updatePosition) {
