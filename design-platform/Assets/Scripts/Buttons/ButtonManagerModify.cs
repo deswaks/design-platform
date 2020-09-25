@@ -18,12 +18,12 @@ public class ButtonManagerModify : MonoBehaviour {
 
     public void Move()
     {
-        main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Move);
+        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Move);
         //main.modifyMode.selectedRoom.SetIsInMoveMode(isInMoveMode: true);
     }
     public void Rotate()
     {
-        main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Rotate);
+        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Rotate);
         //if (main.modifyMode.selectedRoom != null)
         //{
         //    main.modifyMode.selectedRoom.Rotate();
@@ -31,7 +31,7 @@ public class ButtonManagerModify : MonoBehaviour {
     }
     public void Modify()
     {
-        main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Edit);
+        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Edit);
 
         Debug.Log("Modify function is not implemented");
     }
@@ -40,7 +40,7 @@ public class ButtonManagerModify : MonoBehaviour {
     }
     public void Delete()
     {
-        main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Delete);
+        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Delete);
         //if (main.modifyMode.selectedRoom != null)
         //{
         //    main.modifyMode.selectedRoom.Delete();

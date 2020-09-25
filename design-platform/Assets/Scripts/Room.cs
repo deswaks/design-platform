@@ -106,7 +106,7 @@ public class Room : MonoBehaviour
     {
         if (!clockwise) { degrees = -degrees; }
         gameObject.transform.RotateAround(
-            point: parentBuilding.grid.GetNearestGridpoint(gameObject.GetComponent<Renderer>().bounds.center),
+            point: Grid.GetNearestGridpoint(gameObject.GetComponent<Renderer>().bounds.center),
             axis: new Vector3(0, 1, 0),
             angle: degrees);
     }
@@ -116,7 +116,7 @@ public class Room : MonoBehaviour
     /// </summary>
     public void Delete()
     {
-        if (parentBuilding) { parentBuilding.RemoveRoom(this); }
+        if (Building.Instance.GetRooms().Contains(this)) { parentBuilding.RemoveRoom(this); }
         Destroy(gameObject);
     }
 
@@ -125,7 +125,7 @@ public class Room : MonoBehaviour
     /// </summary>
     public void Move(Vector3 exactPosition)
     {
-        Vector3 gridPosition = parentBuilding.grid.GetNearestGridpoint(exactPosition);
+        Vector3 gridPosition = Grid.GetNearestGridpoint(exactPosition);
         gameObject.transform.position = gridPosition;
     }
 
@@ -270,7 +270,7 @@ public class Room : MonoBehaviour
         if (roomState == RoomStates.Moving)
         {
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
-            transform.position = parentBuilding.grid.GetNearestGridpoint(curPosition);
+            transform.position = Grid.GetNearestGridpoint(curPosition);
         }
     }
 
@@ -304,7 +304,5 @@ public class Room : MonoBehaviour
     /// 
     /// </summary>
     public Room GetPrefabRoom(){ return prefabRoom; }
-
-
 
 }

@@ -28,11 +28,8 @@ public class RoomBuilder : MonoBehaviour
 
     private bool isCurrentlyBuilding = false;
 
-    private Grid grid;
-
     private void Awake()
     {
-        grid = FindObjectOfType<Grid>();
         allRoomObjects = FindObjectsOfType(typeof(GameObject)).Cast<GameObject>().Where(go => go.layer == 8).ToList(); //Finds rooms already placed
     }
 
@@ -159,7 +156,7 @@ public class RoomBuilder : MonoBehaviour
     // Changes position of preview object (Room following mouse while building rooms)
     private void PositionObj(Vector3 _pos)
     {
-        var finalPosition = grid.GetNearestGridpoint(_pos);
+        var finalPosition = Grid.GetNearestGridpoint(_pos);
 
         previewObject.transform.position = finalPosition;
     }
@@ -178,7 +175,7 @@ public class RoomBuilder : MonoBehaviour
     }
     public void RotateRoom()
     {
-        currentlySelectedObject.transform.RotateAround(grid.GetNearestGridpoint(currentlySelectedObject.GetComponent<Renderer>().bounds.center), new Vector3(0, 1, 0), 90f);  //spins like a top, in 90 degree turns
+        currentlySelectedObject.transform.RotateAround(Grid.GetNearestGridpoint(currentlySelectedObject.GetComponent<Renderer>().bounds.center), new Vector3(0, 1, 0), 90f);  //spins like a top, in 90 degree turns
 
     }
     public void MoveRoom()

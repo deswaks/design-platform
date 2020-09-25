@@ -10,10 +10,8 @@ using System.Drawing;
 using UnityEditor;
 
 public class ModifyMode : Mode {
-    // References to other objects in scene
-    public Main main;
-    public Camera camera = Camera.main;
 
+    private static ModifyMode instance;
     public Material defaultRoomMaterial;
     public Material selectedRoomMaterial;
 
@@ -27,9 +25,13 @@ public class ModifyMode : Mode {
         Edit,
         Delete
     }
-
     private ModifyModeTypes currentModifyModeType = ModifyModeTypes.None;
 
+    public static ModifyMode Instance {
+        // Use the ?? operator, to return 'instance' if 'instance' does not equal null
+        // otherwise we assign instance to a new component and return that
+        get { return instance ?? (instance = new ModifyMode()); }
+    }
 
     public void SetModifyMode(ModifyModeTypes currentMode) {
         currentModifyModeType = currentMode;
@@ -62,10 +64,6 @@ public class ModifyMode : Mode {
                 }
                 break;
         }
-    }
-
-    public ModifyMode(Main main) {
-        this.main = main;
     }
 
     public override void Tick() {
@@ -101,7 +99,7 @@ public class ModifyMode : Mode {
     private Room GetClickedRoom() {
         Room clickedRoom = null;
         UnityEngine.RaycastHit hitInfo;
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray: ray, hitInfo: out hitInfo)) {
             // if the hit game object is a room (ie. it is on layer 8)
