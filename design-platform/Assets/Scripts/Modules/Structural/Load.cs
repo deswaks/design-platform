@@ -8,7 +8,7 @@ namespace Structural {
         public float pEnd;
         public float magnitude;
 
-        public Load(float start = 0.0f, float end = 0.0f, float mag = 0.0f) {
+        public Load(float mag = 0.0f, float start = 0.0f, float end = 1.0f) {
             pStart = start;
             pEnd = end;
             magnitude = mag;

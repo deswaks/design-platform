@@ -12,14 +12,14 @@ namespace Structural {
         /// </summary>
         /// <param name="room">The room to analyze</param>
         /// <returns>The cumulative spans in each direction</returns>
-        public Dictionary<Axis, float> Spans(Room room) {
+        public List<float> Spans(Room room) {
             List<Vector3> controlPoints = room.GetControlPoints(localCoordinates: true, closed: true);
-            Dictionary<Axis, float> spans = new Dictionary<Axis, float>() { { Axis.X, 0.0f }, { Axis.Y , 0.0f}, {Axis.Z , 0.0f}  };
+            List<float> spans = new List<float>() { 0.0f, 0.0f, 0.0f};
             for (int i = 0; i < controlPoints.Count - 1; i++) {
                 Vector3 wallVector = (controlPoints[i] - controlPoints[i + 1]);
-                spans[Axis.X] += Mathf.Abs(wallVector[0]);
-                spans[Axis.Y] += Mathf.Abs(wallVector[1]);
-                spans[Axis.Z] += Mathf.Abs(wallVector[2]);
+                spans[0] += Mathf.Abs(wallVector[0]);
+                spans[1] += Mathf.Abs(wallVector[1]);
+                spans[2] += Mathf.Abs(wallVector[2]);
             }
             return spans;
         }
@@ -36,16 +36,16 @@ namespace Structural {
 
         public Dictionary<int, List<Load>> AreaLoadRectangle(Room room) {
             Dictionary<int, List<Load>> loadAreas = new Dictionary<int, List<Load>>();
-            List<Vector3> points = room.GetControlPoints();
+            List<Vector3> points = room.GetControlPoints(localCoordinates : true);
 
-            Dictionary<Axis, float> spans = Spans(room);
-            // Distribute loads along X-axis
-            if (spans[Axis.X] <= spans[Axis.Z]) {
+            List<float> spans = Spans(room);
+            // Distribute loads along first room axis
+            if (spans[0] <= spans[2]) {
                 float loadDistance = Vector3.Distance(points[1], points[2]);
                 loadAreas[0].Add(new Load(0, 1, loadDistance / 2));
                 loadAreas[2].Add(new Load(0, 1, loadDistance / 2));
             }
-            // Distribute loads along Z-axis
+            // Distribute loads along last room axis
             else {
                 float loadDistance = Vector3.Distance(points[0], points[1]);
                 loadAreas[1].Add(new Load(0, 1, loadDistance / 2));
@@ -56,23 +56,57 @@ namespace Structural {
         }
 
         public Dictionary<int, List<Load>> AreaLoadLShape(Room room) {
-            Dictionary<int, List<Load>> loadAreas = new Dictionary<int, List<Load>>();
-            List<Vector3> points = room.GetControlPoints();
+            Dictionary<int, List<Load>> WallLoads = new Dictionary<int, List<Load>>();
+            List<Vector3> points = room.GetControlPoints(localCoordinates: true);
+            List<Vector3> normals = room.GetWallNormals(localCoordinates : true);
 
-            // Classify walls according to span
+
+            
+            
+
+            return WallLoads;
+        }
+
+
+        public Dictionary<int, List<Load>> WallLoadTables(Room room) {
+            Dictionary<int, List<Load>> WallLoads = new Dictionary<int, List<Load>>();
+            List<int> loadCarryingWalls = LoadCarryingWalls(room);
+            List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
+            //uniqueAxis1 = room.UniqueCoordinates()[0];
+
+            foreach (int wallIndex in loadCarryingWalls) {
+
+                // Find aksen som væggen spænder
+                Vector3 wallVector = (points[wallIndex] - points[wallIndex + 1]);
+                VectorFunctions.IndexLargestComponent(wallVector);
+
+                // find unikke værdier på denne akse
+
+
+                // Hvis der er mere end 2 unikke værdier oprettes flere laster, en for hver værdi
+
+                //WallLoads[loadCarryingWall].Add(new Load(mag:0.0f, start:0.0f, end:0.0f));
+            }
+            return WallLoads;
+        }
+
+        /// <summary>
+        /// Identifies the load carrying walls of a room as the walls that will carry the room area using the shortest span.
+        /// </summary>
+        /// <param name="room">Room to analyze</param>
+        /// <returns>List of indices of the load carrying walls of the room</returns>
+        public List<int> LoadCarryingWalls(Room room) {
             List<int> loadCarryingWalls = new List<int>();
-            Dictionary<Axis, float> spans = Spans(room);
+            List<float> spans = Spans(room);
+
+            // Go through all wall indices
             for (int i = 0; i < room.GetControlPoints().Count; i++) {
-                if (spans[Axis.X] > spans[Axis.Z] && i%2 == 0) { loadCarryingWalls.Add(i); }
-                if (spans[Axis.X] < spans[Axis.Z] && i%2 == 1) { loadCarryingWalls.Add(i); }
+                // Distribute loads along first room axis
+                if (spans[0] > spans[2] && i % 2 == 0) { loadCarryingWalls.Add(i); }
+                // Distribute loads along last room axis
+                if (spans[0] < spans[2] && i % 2 == 1) { loadCarryingWalls.Add(i); }
             }
-
-            List<Vector3> normals = room.GetNormals();
-            foreach (int indexWall in loadCarryingWalls) {
-
-            }
-
-            return loadAreas;
+            return loadCarryingWalls;
         }
     }
 }
