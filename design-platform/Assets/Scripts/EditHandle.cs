@@ -2,38 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EditHandles : MonoBehaviour {
-
-    private Vector3 wallNormalDirection;
-    public int selectedIndex;
+public class EditHandle : MonoBehaviour {
     public Room parentRoom;
     public int wallIndex;
+
+    public Vector3 wallNormal;
 
     public void InitializeHandle(int wall) {
         parentRoom = gameObject.transform.parent.gameObject.GetComponent<Room>();
         wallIndex = wall;
+        wallNormal = parentRoom.GetWallNormals()[wallIndex];
     }
 
     public void OnMouseDown() {
-
-        //Index of the selected handle
-        selectedIndex = parentRoom.activeEditHandles.IndexOf(gameObject);
-        //Normal of the selected handles wall
-        wallNormalDirection = parentRoom.GetWallNormals()[selectedIndex];
+        Debug.Log("Extruding wall:"+wallIndex.ToString()+" in direction:" + wallNormal.ToString());
     }
 
     public void OnMouseDrag() {
-        Vector3 handleStartPosition = gameObject.transform.position;
-        Vector3 diffPosition = Grid.GetNearestGridpoint(
-           Camera.main.ScreenToWorldPoint(Input.mousePosition) - handleStartPosition);
-        Vector3 Distance = Vector3.Project(diffPosition, wallNormalDirection);
+        Vector3 handleStartPosition = transform.position;
+        Vector3 mouseGridPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        Vector3 diffPosition = Grid.GetNearestGridpoint(mouseGridPosition - handleStartPosition);
+        
+        Vector3 extrusion = Vector3.Project(diffPosition, wallNormal);
 
         //transform.position = handleStartPosition + Distance;
-        parentRoom.ExtrudeWall(selectedIndex, Distance);
-        //Debug.Log(selectedIndex);
-        UpdateTransform();
+        parentRoom.ExtrudeWall(wallIndex, extrusion);
 
-        foreach (EditHandles handle in parentRoom.GetComponentsInChildren<EditHandles>()) {
+        foreach (EditHandle handle in parentRoom.GetComponentsInChildren<EditHandle>()) {
             handle.UpdateTransform();
         }
     }

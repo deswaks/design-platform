@@ -23,4 +23,8 @@ public static class VectorFunctions
         return vectorList;
     }
 
+    public static Vector3 AddConstant(Vector3 v, float addition) {
+        return new Vector3 ( v[0] + addition, v[1] + addition, v[2] + addition );
+    }
+
 }

@@ -95,6 +95,8 @@ public class Room : MonoBehaviour {
         polyshape.extrude = height;
         polyshape.CreateShapeFromPolygon();
         gameObject.GetComponent<ProBuilderMesh>().Refresh();
+
+        //RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, shape);
     }
 
     public RoomShape GetRoomShape() {
@@ -185,48 +187,59 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// Takes the index of the wall to extrude and the distance to extrude     
     /// </summary>
-    public void ExtrudeWall(int wallToExtrude, Vector3 distance) {
-        //controlPoints[wallToExtrude] = GetControlPoints()[wallToExtrude] + distance;
-        controlPoints[wallToExtrude] += distance;
+    public void ExtrudeWall(int wallToExtrude, Vector3 extrusion) {
+        controlPoints[wallToExtrude] += extrusion;
 
         if (wallToExtrude == GetControlPoints().Count-1) {
-            controlPoints[0] += distance;
-            //controlPoints[0] = GetControlPoints()[0] + distance;
+            controlPoints[0] += extrusion;
         }
         else {
-            controlPoints[wallToExtrude+1] += distance;
-            //controlPoints[wallToExtrude+1] = GetControlPoints()[wallToExtrude+1] + distance;
+            controlPoints[wallToExtrude+1] += extrusion;
         }
         RefreshView();
-
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public void SetEditHandles() {
 
-        //if (editHandle != null) {
-        //    Destroy(editHandle);
-        //    editHandle = null;
-        //}
-
-        activeEditHandles = new List<GameObject>();
-
         for (int i = 0; i < controlPoints.Count; i++) {
-            Debug.Log(i.ToString());
             editHandle = Instantiate(prefabRoom.editHandlePrefab);
             editHandle.transform.SetParent(gameObject.transform, true);
-            editHandle.GetComponent<EditHandles>().InitializeHandle(i);
-            activeEditHandles.Add(editHandle);
+            editHandle.GetComponent<EditHandle>().InitializeHandle(i);
             editHandle.name = "edit handle : Corner " + i + " and " + (i+1);
-            editHandle.GetComponent<EditHandles>().UpdateTransform(updateRotation: true);
+            editHandle.GetComponent<EditHandle>().UpdateTransform(updateRotation: true);
+
             editHandle.AddComponent<BoxCollider>();
         }
-
-        //activeEditHandles.Remove(editHandle);
-        //Destroy(editHandle);
-
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public void RemoveEditHandles() {
+        EditHandle[] editHandles = GetComponentsInChildren<EditHandle>();
+        if (editHandles != null) {
+            Debug.Log("REMOVING" + editHandles.ToString());
+            foreach (EditHandle editHandle in editHandles) {
+                Destroy(editHandle.gameObject);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="axis"></param>
+    /// <returns></returns>
+    public List<List<float>> UniqueCoordinates(bool localCoordinates = false) {
+        List<List<float>> uniqueCoordinates = new List<List<float>>();
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[0]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[1]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[2]).Distinct().ToList());
+        return uniqueCoordinates;
+    }
 
     /// <summary>
     /// 
