@@ -12,10 +12,13 @@ public class EditHandle : MonoBehaviour {
         parentRoom = gameObject.transform.parent.gameObject.GetComponent<Room>();
         wallIndex = wall;
         wallNormal = parentRoom.GetWallNormals()[wallIndex];
+        gameObject.name = "edit handle";
+        UpdateTransform(updateRotation: true);
+        gameObject.AddComponent<BoxCollider>();
     }
 
     public void OnMouseDown() {
-        Debug.Log("Extruding wall:"+wallIndex.ToString()+" in direction:" + wallNormal.ToString());
+        //Debug.Log("Extruding wall:" + wallIndex.ToString() + " in direction:" + wallNormal.ToString());
     }
 
     public void OnMouseDrag() {
@@ -24,7 +27,8 @@ public class EditHandle : MonoBehaviour {
 
         Vector3 diffPosition = Grid.GetNearestGridpoint(mouseGridPosition - handleStartPosition);
         
-        Vector3 extrusion = Vector3.Project(diffPosition, wallNormal);
+        Vector3 extrusionVector = Vector3.Scale(Vector3.Project(diffPosition, wallNormal),wallNormal);
+        float extrusion = extrusionVector[VectorFunctions.IndexAbsLargestComponent(extrusionVector)];
 
         //transform.position = handleStartPosition + Distance;
         parentRoom.ExtrudeWall(wallIndex, extrusion);

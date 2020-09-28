@@ -111,6 +111,9 @@ public class ModifyMode : Mode {
             if (hitInfo.collider.gameObject.layer == 8) {
                 clickedRoom = hitInfo.collider.gameObject.GetComponent<Room>();
             }
+            else {
+                clickedRoom = hitInfo.collider.gameObject.GetComponentInParent<Room>();
+            }
         }
         return clickedRoom;
     }

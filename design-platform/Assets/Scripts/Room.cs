@@ -78,6 +78,10 @@ public class Room : MonoBehaviour {
                 break;
         }
 
+        // Create and attach collider objects
+        gameObject.AddComponent<MeshCollider>();
+        
+
         // Set room visualization geometry
         gameObject.AddComponent<PolyShape>();
         gameObject.AddComponent<ProBuilderMesh>();
@@ -85,8 +89,7 @@ public class Room : MonoBehaviour {
         RefreshView();
 
         // Create and attach collider objects
-        gameObject.AddComponent<MeshCollider>();
-        RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, buildShape);
+        RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject);
     }
 
     public void RefreshView() {
@@ -95,6 +98,7 @@ public class Room : MonoBehaviour {
         polyshape.extrude = height;
         polyshape.CreateShapeFromPolygon();
         gameObject.GetComponent<ProBuilderMesh>().Refresh();
+        gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().mesh;
 
         //RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, shape);
     }
@@ -187,15 +191,17 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// Takes the index of the wall to extrude and the distance to extrude     
     /// </summary>
-    public void ExtrudeWall(int wallToExtrude, Vector3 extrusion) {
-        controlPoints[wallToExtrude] += extrusion;
+    public void ExtrudeWall(int wallToExtrude, float extrusion) {
+        Vector3 localExtrusion = GetWallNormals(localCoordinates: true)[wallToExtrude] *extrusion;
+        controlPoints[wallToExtrude] += localExtrusion;
 
         if (wallToExtrude == GetControlPoints().Count-1) {
-            controlPoints[0] += extrusion;
+            controlPoints[0] += localExtrusion;
         }
         else {
-            controlPoints[wallToExtrude+1] += extrusion;
+            controlPoints[wallToExtrude+1] += localExtrusion;
         }
+
         RefreshView();
     }
 
@@ -208,10 +214,6 @@ public class Room : MonoBehaviour {
             editHandle = Instantiate(prefabRoom.editHandlePrefab);
             editHandle.transform.SetParent(gameObject.transform, true);
             editHandle.GetComponent<EditHandle>().InitializeHandle(i);
-            editHandle.name = "edit handle : Corner " + i + " and " + (i+1);
-            editHandle.GetComponent<EditHandle>().UpdateTransform(updateRotation: true);
-
-            editHandle.AddComponent<BoxCollider>();
         }
     }
 
@@ -255,6 +257,7 @@ public class Room : MonoBehaviour {
         if (isInMoveMode == true){
             roomState = RoomStates.Moving;
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
+
             Vector3 handlePosition = gameObject.GetComponent<Renderer>().bounds.center;
             handlePosition.y = height + 0.01f;
             moveHandle.transform.position = handlePosition;
