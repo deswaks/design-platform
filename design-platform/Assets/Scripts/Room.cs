@@ -8,8 +8,7 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using UnityEditor.ProBuilder;
 
-public class Room : MonoBehaviour
-{
+public class Room : MonoBehaviour {
     private List<Vector3> controlPoints;
     private RoomShape shape;
     public Material defaultMaterial;
@@ -21,12 +20,15 @@ public class Room : MonoBehaviour
     private bool isHighlighted { set; get; }
     private ProBuilderMesh mesh3D;
     private Room prefabRoom;
-    
+
+
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
 
     private GameObject editHandle;
     public GameObject editHandlePrefab;
+    public List<GameObject> activeEditHandles;
+
 
     public GameObject moveHandlePrefab;
     private Vector3 moveModeScreenPoint;
@@ -48,13 +50,13 @@ public class Room : MonoBehaviour
         // Set constant values
         parentBuilding = building;
         gameObject.layer = 8; // Rooom layer
-        
+
         shape = buildShape;
         roomState = RoomStates.Preview;
 
         // Get relevant properties from prefab object
         GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
-        
+
         prefabRoom = (Room)prefabObject.GetComponent(typeof(Room));
 
         switch (shape) {
@@ -76,6 +78,10 @@ public class Room : MonoBehaviour
                 break;
         }
 
+        // Create and attach collider objects
+        gameObject.AddComponent<MeshCollider>();
+        
+
         // Set room visualization geometry
         gameObject.AddComponent<PolyShape>();
         gameObject.AddComponent<ProBuilderMesh>();
@@ -83,8 +89,7 @@ public class Room : MonoBehaviour
         RefreshView();
 
         // Create and attach collider objects
-        gameObject.AddComponent<MeshCollider>();
-        RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, buildShape);
+        RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject);
     }
 
     public void RefreshView() {
@@ -93,6 +98,9 @@ public class Room : MonoBehaviour
         polyshape.extrude = height;
         polyshape.CreateShapeFromPolygon();
         gameObject.GetComponent<ProBuilderMesh>().Refresh();
+        gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().mesh;
+
+        //RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, shape);
     }
 
     public RoomShape GetRoomShape() {
@@ -102,8 +110,7 @@ public class Room : MonoBehaviour
     /// <summary>
     /// Rotates the room. Defaults to 90 degree increments
     /// </summary>
-    public void Rotate(bool clockwise = true, float degrees = 90)
-    {
+    public void Rotate(bool clockwise = true, float degrees = 90) {
         if (!clockwise) { degrees = -degrees; }
         gameObject.transform.RotateAround(
             point: Grid.GetNearestGridpoint(gameObject.GetComponent<Renderer>().bounds.center),
@@ -132,8 +139,7 @@ public class Room : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    public void SetIsHighlighted(bool highlighted)
-    {
+    public void SetIsHighlighted(bool highlighted) {
         if (highlighted) {
             gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
             isHighlighted = true;
@@ -176,41 +182,73 @@ public class Room : MonoBehaviour
     public List<Vector3> GetWallNormals(bool localCoordinates = false) {
         List<Vector3> wallNormals = new List<Vector3>();
         List<Vector3> circularControlpoints = GetControlPoints(localCoordinates: localCoordinates, closed: true);
-        for (int i = 0 ; i < controlPoints.Count ; i++) {
-            wallNormals.Add(Vector3.Cross((circularControlpoints[i + 1] - circularControlpoints[i]),Vector3.up).normalized);
+        for (int i = 0; i < controlPoints.Count; i++) {
+            wallNormals.Add(Vector3.Cross((circularControlpoints[i + 1] - circularControlpoints[i]), Vector3.up).normalized);
         }
         return wallNormals;
     }
 
+    /// <summary>
+    /// Takes the index of the wall to extrude and the distance to extrude     
+    /// </summary>
+    public void ExtrudeWall(int wallToExtrude, float extrusion) {
+        List<Vector3> extrudePoints = new List<Vector3>();
+        foreach (Vector3 v in GetControlPoints(localCoordinates: true)) {
+            extrudePoints.Add(new Vector3(v.x, v.y, v.z));
+        }
+
+        Vector3 localExtrusion = GetWallNormals(localCoordinates: true)[wallToExtrude] * extrusion;
+        extrudePoints[wallToExtrude] += localExtrusion;
+
+        if (wallToExtrude == GetControlPoints().Count - 1) {
+            extrudePoints[0] += localExtrusion;
+        }
+        else {
+            extrudePoints[wallToExtrude + 1] += localExtrusion;
+        }
+
+        List<Vector3> extrudeEdgeNormals = PolygonUtils.PolygonNormals(extrudePoints);
+
+        bool controlPointUpdate = false;
+        for (int i = 0; i < extrudeEdgeNormals.Count; i++) {
+            if (extrudeEdgeNormals[i] != GetWallNormals(localCoordinates: true)[i]) {
+                controlPointUpdate = false;
+                break;
+            }
+            else {
+                controlPointUpdate = true;
+            }
+        }
+        if (controlPointUpdate) {
+            controlPoints = extrudePoints;
+            RefreshView();
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public void SetEditHandles() {
-
-        //if (editHandle != null) {
-        //    Destroy(editHandle);
-        //    editHandle = null;
-        //}
-
-        List<GameObject> activeEditHandles = new List<GameObject>();
 
         for (int i = 0; i < controlPoints.Count; i++) {
             editHandle = Instantiate(prefabRoom.editHandlePrefab);
-            activeEditHandles.Add(editHandle);
-            editHandle.name = "edit handle : Corner " + i + " and " + (i+1);
-            editHandle.transform.position = GetWallMidpoints()[i] + new Vector3(0,height + 0.01f,0);
-
-            editHandle.transform.RotateAround(
-            point: GetWallMidpoints()[i],
-            axis: new Vector3(0, 1, 0),
-            angle: Vector3.SignedAngle(new Vector3(1,0,0), GetWallNormals()[i] , new Vector3(0,1,0) ) 
-            );
-
             editHandle.transform.SetParent(gameObject.transform, true);
+            editHandle.GetComponent<EditHandle>().InitializeHandle(i);
         }
-
-        //activeEditHandles.Remove(editHandle);
-        //Destroy(editHandle);
-
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public void RemoveEditHandles() {
+        EditHandle[] editHandles = GetComponentsInChildren<EditHandle>();
+        if (editHandles != null) {
+            Debug.Log("REMOVING" + editHandles.ToString());
+            foreach (EditHandle editHandle in editHandles) {
+                Destroy(editHandle.gameObject);
+            }
+        }
+    }
 
     /// <summary>
     /// 
@@ -239,6 +277,7 @@ public class Room : MonoBehaviour
         if (isInMoveMode == true){
             roomState = RoomStates.Moving;
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
+
             Vector3 handlePosition = gameObject.GetComponent<Renderer>().bounds.center;
             handlePosition.y = height + 0.01f;
             moveHandle.transform.position = handlePosition;

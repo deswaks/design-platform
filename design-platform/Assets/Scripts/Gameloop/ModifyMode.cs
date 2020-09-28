@@ -18,14 +18,14 @@ public class ModifyMode : Mode {
     // Set at runtime
     public Room selectedRoom;
 
-    public enum ModifyModeTypes {
+    public enum ModifyModeType {
         None,
         Move,
         Rotate,
         Edit,
         Delete
     }
-    private ModifyModeTypes currentModifyModeType = ModifyModeTypes.None;
+    private ModifyModeType currentModifyModeType = ModifyModeType.None;
 
     public static ModifyMode Instance {
         // Use the ?? operator, to return 'instance' if 'instance' does not equal null
@@ -33,35 +33,37 @@ public class ModifyMode : Mode {
         get { return instance ?? (instance = new ModifyMode()); }
     }
 
-    public void SetModifyMode(ModifyModeTypes currentMode) {
+    public void SetModifyMode(ModifyModeType currentMode) {
         currentModifyModeType = currentMode;
 
         selectedRoom.SetRoomState(Room.RoomStates.Stationary);
         selectedRoom.SetIsInMoveMode(false);
+        selectedRoom.RemoveEditHandles();
 
         switch (currentMode) {
-            case ModifyModeTypes.Move:
+            case ModifyModeType.Move:
                 selectedRoom.SetIsInMoveMode(true);
                 break;
 
-            case ModifyModeTypes.Rotate:
+            case ModifyModeType.Rotate:
                 if (selectedRoom != null) {
                     selectedRoom.Rotate();
                 }
                 break;
 
-            case ModifyModeTypes.Edit:
+            case ModifyModeType.Edit:
                 if (selectedRoom != null) {
                     selectedRoom.SetEditHandles();
                 }
-
-
                 break;
 
-            case ModifyModeTypes.Delete:
+            case ModifyModeType.Delete:
                 if (selectedRoom != null) {
                     selectedRoom.Delete();
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -74,7 +76,7 @@ public class ModifyMode : Mode {
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1)) {
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(2)) {
             deselect();
         }
     }
@@ -84,6 +86,9 @@ public class ModifyMode : Mode {
     }
 
     public override void OnModePause() {
+        if (selectedRoom != null) {
+            selectedRoom.RemoveEditHandles();
+        }
         deselect();
     }
     private void selectClickedRoom() {
@@ -106,13 +111,19 @@ public class ModifyMode : Mode {
             if (hitInfo.collider.gameObject.layer == 8) {
                 clickedRoom = hitInfo.collider.gameObject.GetComponent<Room>();
             }
+            else {
+                clickedRoom = hitInfo.collider.gameObject.GetComponentInParent<Room>();
+            }
         }
         return clickedRoom;
     }
     private void deselect() {
+        
         if (selectedRoom != null) {
+            //selectedRoom.RemoveEditHandles();
             selectedRoom.SetIsHighlighted(false);
             selectedRoom.SetIsInMoveMode(false);
+            selectedRoom.RemoveEditHandles();
         }
         selectedRoom = null;
     }
