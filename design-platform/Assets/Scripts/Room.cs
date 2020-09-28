@@ -192,17 +192,37 @@ public class Room : MonoBehaviour {
     /// Takes the index of the wall to extrude and the distance to extrude     
     /// </summary>
     public void ExtrudeWall(int wallToExtrude, float extrusion) {
-        Vector3 localExtrusion = GetWallNormals(localCoordinates: true)[wallToExtrude] *extrusion;
-        controlPoints[wallToExtrude] += localExtrusion;
+        List<Vector3> extrudePoints = new List<Vector3>();
+        foreach (Vector3 v in GetControlPoints(localCoordinates: true)) {
+            extrudePoints.Add(new Vector3(v.x, v.y, v.z));
+        }
 
-        if (wallToExtrude == GetControlPoints().Count-1) {
-            controlPoints[0] += localExtrusion;
+        Vector3 localExtrusion = GetWallNormals(localCoordinates: true)[wallToExtrude] * extrusion;
+        extrudePoints[wallToExtrude] += localExtrusion;
+
+        if (wallToExtrude == GetControlPoints().Count - 1) {
+            extrudePoints[0] += localExtrusion;
         }
         else {
-            controlPoints[wallToExtrude+1] += localExtrusion;
+            extrudePoints[wallToExtrude + 1] += localExtrusion;
         }
 
-        RefreshView();
+        List<Vector3> extrudeEdgeNormals = PolygonUtils.PolygonNormals(extrudePoints);
+
+        bool controlPointUpdate = false;
+        for (int i = 0; i < extrudeEdgeNormals.Count; i++) {
+            if (extrudeEdgeNormals[i] != GetWallNormals(localCoordinates: true)[i]) {
+                controlPointUpdate = false;
+                break;
+            }
+            else {
+                controlPointUpdate = true;
+            }
+        }
+        if (controlPointUpdate) {
+            controlPoints = extrudePoints;
+            RefreshView();
+        }
     }
 
     /// <summary>

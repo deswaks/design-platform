@@ -123,6 +123,7 @@ public class ModifyMode : Mode {
             //selectedRoom.RemoveEditHandles();
             selectedRoom.SetIsHighlighted(false);
             selectedRoom.SetIsInMoveMode(false);
+            selectedRoom.RemoveEditHandles();
         }
         selectedRoom = null;
     }
