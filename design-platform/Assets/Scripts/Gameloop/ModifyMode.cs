@@ -36,6 +36,7 @@ public class ModifyMode : Mode
         currentModifyModeType = currentMode;
 
         selectedRoom.SetRoomState(Room.RoomStates.Stationary);
+        selectedRoom.SetIsInMoveMode(false);
 
         switch (currentMode)
         {

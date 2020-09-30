@@ -9,20 +9,14 @@ public class ButtonManagerModify : MonoBehaviour
     public void Move()
     {
         main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Move);
-        //main.modifyMode.selectedRoom.SetIsInMoveMode(isInMoveMode: true);
     }
     public void Rotate()
     {
         main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Rotate);
-        //if (main.modifyMode.selectedRoom != null)
-        //{
-        //    main.modifyMode.selectedRoom.Rotate();
-        //}
     }
     public void Modify()
     {
         main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Edit);
-        Debug.Log("Modify function is not implemented");
     }
     public void Properties()
     {
@@ -31,9 +25,11 @@ public class ButtonManagerModify : MonoBehaviour
     public void Delete()
     {
         main.modifyMode.SetModifyMode(ModifyMode.ModifyModeTypes.Delete);
-        //if (main.modifyMode.selectedRoom != null)
-        //{
-        //    main.modifyMode.selectedRoom.Delete();
-        //}
+    }
+    public void Neo4jStuff() {
+        //Neo4jClientSample.Program prog = new Neo4jClientSample.Program();
+        Neo4jClientSample.Program.Muhmuh();
+        //Vector3 a = new Vector3(1, 2, 3);
+
     }
 }

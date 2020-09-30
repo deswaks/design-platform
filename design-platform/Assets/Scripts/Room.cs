@@ -208,14 +208,14 @@ public class Room : MonoBehaviour
     }
 
     public void SetIsRoomCurrentlyColliding() {
-        Debug.Log("Is colliding");
         if(roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
 
             List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
 
             if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
                 isCurrentlyColliding = false;
-                gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+                // Resets color to that previous to collision
+                SetIsHighlighted(isHighlighted);
 
             }
             else { // if there is one or more collision(s)
