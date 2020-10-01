@@ -26,7 +26,7 @@ namespace Structural {
 
         public static Dictionary<int, List<Load>> AreaLoad(Room room) {
             Dictionary<int, List<Load>> loadTables = WallLoadTables(room);
-            List<Vector3> points = room.GetControlPoints(localCoordinates: true);
+            List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
             List<Vector3> normals = room.GetWallNormals(localCoordinates : true);
 
             for (int iWall = 0; iWall < normals.Count; iWall++) {
@@ -36,19 +36,25 @@ namespace Structural {
                 else {
                     // Dette er en load giving wall
                     // Hvis naboer har modsat-rettede normaler
-                    if (normals[iWall-1] != normals[iWall + 1]) {
+                    int indexWall1 = IndexingUtils.WrapIndex(iWall - 1, normals.Count);
+                    int indexWall2 = IndexingUtils.WrapIndex(iWall + 1, normals.Count);
+
+                    if (normals[indexWall1] != normals[indexWall2]) {
                         float loadLength = Vector3.Distance(points[iWall], points[iWall+1]);
-                        Load load1 = loadTables[iWall - 1][-1];
+
+                        int indexLoad1 = IndexingUtils.WrapIndex(-1, loadTables[indexWall1].Count);
+                        Load load1 = loadTables[indexWall1][indexLoad1];
                         if (load1.magnitude <= 0.0f) {
                             load1.magnitude = loadLength / 2;
-                            loadTables[iWall - 1][-1] = load1;
-                        }
-                        Load load2 = loadTables[iWall + 1][0];
-                        if (load2.magnitude <= 0.0f) {
-                            load2.magnitude = loadLength / 2;
-                            loadTables[iWall + 1][0] = load2;
+                            loadTables[indexWall1][indexLoad1] = load1;
                         }
 
+                        int indexLoad2 = IndexingUtils.WrapIndex(0, loadTables[indexWall2].Count);
+                        Load load2 = loadTables[indexWall2][indexLoad2];
+                        if (load2.magnitude <= 0.0f) {
+                            load2.magnitude = loadLength / 2;
+                            loadTables[indexWall2][indexLoad2] = load2;
+                        }
                     }
                 }
             }
@@ -64,22 +70,30 @@ namespace Structural {
             Dictionary<int, List<Load>> WallLoads = new Dictionary<int, List<Load>>();
             List<int> loadCarryingWalls = LoadCarryingWalls(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
+            List<List<float>> uniqueValuesOnWallAxes = room.UniqueCoordinates(localCoordinates: true);
 
             foreach (int wallIndex in loadCarryingWalls) {
+                Vector3 startPoint = points[wallIndex];
+                Vector3 endPoint = points[wallIndex + 1];
 
                 // Find aksen som væggen spænder
-                Vector3 wallVector = (points[wallIndex] - points[wallIndex + 1]);
-                int wallAxisIndex = VectorFunctions.IndexLargestComponent(wallVector);
+                Vector3 wallVector = (startPoint - endPoint);
+                int wallAxis = VectorFunctions.IndexNumLargestComponent(wallVector);
 
                 // Find unikke værdier på denne akse og reparameteriser disse over væggens længde
-                List<float> uniqueValuesOnWallAxis = room.UniqueCoordinates(localCoordinates: true)[wallAxisIndex];
-                List<float> lengthParameters = rangeUtils.reparametrize(uniqueValuesOnWallAxis);
+                List<float> lengthParameters = rangeUtils.reparametrize(uniqueValuesOnWallAxes[wallAxis],
+                                                                        startPoint[wallAxis],
+                                                                        endPoint[wallAxis]);
+                lengthParameters = lengthParameters.OrderBy(o => o).ToList();
 
                 // Tilføj en load for denne væg mellem hver unik værdi på væggens akse
+                WallLoads.Add(wallIndex, new List<Load>());
                 for (int i = 0; i < (lengthParameters.Count-1); i++) {
-                    WallLoads[wallIndex].Add(new Load(mag: 0.0f,
-                                                      start: lengthParameters[i],
-                                                      end: lengthParameters[i+1]));
+                    float startParam = lengthParameters[i];
+                    float endParam = lengthParameters[i+1];
+                    if (startParam >= 0.0f && endParam <= 1.0f) {
+                        WallLoads[wallIndex].Add(new Load(mag: 0.0f, start: startParam, end: endParam));
+                    }
                 }
             }
             return WallLoads;
@@ -96,8 +110,8 @@ namespace Structural {
 
             // Go through all wall indices
             for (int i = 0; i < room.GetControlPoints().Count; i++) {
-                // Distribute loads along first room axis
-                if (spans[0] > spans[2] && i % 2 == 0) { loadCarryingWalls.Add(i); }
+                // Distribute loads along first room axis (will do if they are equal)
+                if (spans[0] >= spans[2] && i % 2 == 0) { loadCarryingWalls.Add(i); }
                 // Distribute loads along last room axis
                 if (spans[0] < spans[2] && i % 2 == 1) { loadCarryingWalls.Add(i); }
             }

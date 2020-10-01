@@ -34,12 +34,12 @@ public class ButtonManagerModify : MonoBehaviour {
         ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Edit);
     }
     public void Properties() {
+        // (Midlertidigt Sebastian) Test af structural modul
         foreach (Room room in Building.Instance.GetRooms()) {
             Dictionary<int, List<Structural.Load>> loadTable = Structural.LoadDistribution.AreaLoad(room);
-            for (int i = 0; i < loadTable.Count; i++) {
-                for (int j = 0; j < loadTable[i].Count; j++) {
-                    Structural.Load load = loadTable[i][j];
-                    Debug.Log("Load on wall: "+i+"  Start: "+load.pStart+"  End: "+load.pEnd+"  Magnitude: "+load.magnitude);
+            foreach (int indexWall in loadTable.Keys) {
+                foreach (Structural.Load load in loadTable[indexWall]) {
+                    Debug.Log("Load on wall: " + indexWall + "  Start: " + load.pStart + "  End: " + load.pEnd + "  Magnitude: " + load.magnitude);
                 }
             }
          }
