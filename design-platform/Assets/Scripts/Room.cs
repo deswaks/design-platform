@@ -11,8 +11,14 @@ using UnityEditor.ProBuilder;
 public class Room : MonoBehaviour {
     private List<Vector3> controlPoints;
     private RoomShape shape;
+    private Material currentMaterial;
     public Material defaultMaterial;
     public Material highlightMaterial;
+    public Material singleRoomMaterial;
+    public Material doubleRoomMaterial;
+    public Material livingroomMaterial;
+    public Material kitchenMaterial;
+    public Material bathroomMaterial;
 
     public Building parentBuilding;
     public float height = 3.0f;
@@ -85,7 +91,7 @@ public class Room : MonoBehaviour {
         // Set room visualization geometry
         gameObject.AddComponent<PolyShape>();
         gameObject.AddComponent<ProBuilderMesh>();
-        gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+        SetRoomType(RoomType.DEFAULT); 
         RefreshView();
 
         // Create and attach collider objects
@@ -145,7 +151,7 @@ public class Room : MonoBehaviour {
             isHighlighted = true;
         }
         else {
-            gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+            gameObject.GetComponent<MeshRenderer>().material = this.currentMaterial;
             isHighlighted = false;
         }
     }
@@ -343,5 +349,39 @@ public class Room : MonoBehaviour {
     /// 
     /// </summary>
     public Room GetPrefabRoom(){ return prefabRoom; }
+
+
+    public void SetRoomType(RoomType type) {
+        switch (type) {
+            case RoomType.PREVIEW:
+                currentMaterial = prefabRoom.highlightMaterial;
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                break;
+            case RoomType.DEFAULT:
+                currentMaterial = prefabRoom.defaultMaterial;
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                break;
+            case RoomType.SINGLEROOM:
+                currentMaterial = prefabRoom.singleRoomMaterial;
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                break;
+            case RoomType.DOUBLEROOM:
+                currentMaterial = prefabRoom.doubleRoomMaterial;
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                break;
+            case RoomType.LIVINGROOM:
+                currentMaterial = prefabRoom.livingroomMaterial;
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                break;
+            case RoomType.KITCHEN:
+                currentMaterial = prefabRoom.kitchenMaterial;
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                break;
+            case RoomType.BATHROOM:
+                currentMaterial = prefabRoom.bathroomMaterial;
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                break;
+        }
+    }
 
 }

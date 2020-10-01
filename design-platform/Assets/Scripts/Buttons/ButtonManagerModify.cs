@@ -7,11 +7,6 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class ButtonManagerModify : MonoBehaviour {
     public Main main;
-    // Tilføjet ABC
-    private List<int> verticalFace;
-    private List<int> baseFace;
-    private List<Vector3> baseFaceCorners;
-    private Vector3 facePos;
     //public GameObject moveHandlePrefab;
     //private GameObject moveHandle;
     //private Room prefabRoom;
@@ -44,4 +39,10 @@ public class ButtonManagerModify : MonoBehaviour {
         //    main.modifyMode.selectedRoom.Delete();
         //}
     }
+
+    public void SetRoomType(int buildType) {
+        ModifyMode.Instance.selectedRoom.SetRoomType((RoomType)buildType);
+    }
+
+
 }

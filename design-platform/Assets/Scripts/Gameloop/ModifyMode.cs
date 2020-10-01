@@ -67,7 +67,7 @@ public class ModifyMode : Mode {
                 break;
         }
     }
-
+    
     public override void Tick() {
 
         if (Input.GetMouseButtonDown(0)) {
