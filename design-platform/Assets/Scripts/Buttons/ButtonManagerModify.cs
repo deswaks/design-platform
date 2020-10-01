@@ -18,12 +18,12 @@ public class ButtonManagerModify : MonoBehaviour {
 
     public void Move()
     {
-        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Move);
+        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Move);
         //main.modifyMode.selectedRoom.SetIsInMoveMode(isInMoveMode: true);
     }
     public void Rotate()
     {
-        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Rotate);
+        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Rotate);
         //if (main.modifyMode.selectedRoom != null)
         //{
         //    main.modifyMode.selectedRoom.Rotate();
@@ -31,7 +31,7 @@ public class ButtonManagerModify : MonoBehaviour {
     }
     public void Modify()
     {
-        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Edit);
+        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Edit);
     }
     public void Properties() {
         // (Midlertidigt Sebastian) Test af structural modul
@@ -47,7 +47,7 @@ public class ButtonManagerModify : MonoBehaviour {
     }
     public void Delete()
     {
-        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Delete);
+        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Delete);
         //if (main.modifyMode.selectedRoom != null)
         //{
         //    main.modifyMode.selectedRoom.Delete();
