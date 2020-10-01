@@ -32,11 +32,18 @@ public class ButtonManagerModify : MonoBehaviour {
     public void Modify()
     {
         ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeTypes.Edit);
-
-        Debug.Log("Modify function is not implemented");
     }
     public void Properties() {
-        Debug.Log("Properties function is not implemented");
+        foreach (Room room in Building.Instance.GetRooms()) {
+            Dictionary<int, List<Structural.Load>> loadTable = Structural.LoadDistribution.AreaLoad(room);
+            for (int i = 0; i < loadTable.Count; i++) {
+                for (int j = 0; j < loadTable[i].Count; j++) {
+                    Structural.Load load = loadTable[i][j];
+                    Debug.Log("Load on wall: "+i+"  Start: "+load.pStart+"  End: "+load.pEnd+"  Magnitude: "+load.magnitude);
+                }
+            }
+         }
+        
     }
     public void Delete()
     {

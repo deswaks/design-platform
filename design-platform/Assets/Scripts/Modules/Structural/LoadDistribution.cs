@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace Structural {
 
-    public class LoadDistribution {
+    public static class LoadDistribution {
 
         /// <summary>
         /// Used to find out which direction the loads form above the room should be distributed in
         /// </summary>
         /// <param name="room">The room to analyze</param>
         /// <returns>The cumulative spans in each direction</returns>
-        public List<float> Spans(Room room) {
+        public static List<float> Spans(Room room) {
             List<Vector3> controlPoints = room.GetControlPoints(localCoordinates: true, closed: true);
             List<float> spans = new List<float>() { 0.0f, 0.0f, 0.0f};
             for (int i = 0; i < controlPoints.Count - 1; i++) {
@@ -24,61 +24,43 @@ namespace Structural {
             return spans;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="room"></param>
-        /// <returns></returns>
-        public Dictionary<int, List<Load>> AreaLoad(Room room) {
-            if (room.GetRoomShape() == RoomShape.RECTANGLE) { return AreaLoadRectangle(room); }
-            if (room.GetRoomShape() == RoomShape.LSHAPE) { return AreaLoadLShape(room); }
-            else { return new Dictionary<int, List<Load>>(); }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="room"></param>
-        /// <returns></returns>
-        public Dictionary<int, List<Load>> AreaLoadRectangle(Room room) {
-            Dictionary<int, List<Load>> loadAreas = new Dictionary<int, List<Load>>();
-            List<Vector3> points = room.GetControlPoints(localCoordinates : true);
-
-            List<float> spans = Spans(room);
-            // Distribute loads along first room axis
-            if (spans[0] <= spans[2]) {
-                float loadDistance = Vector3.Distance(points[1], points[2]);
-                loadAreas[0].Add(new Load(loadDistance / 2, 0, 1));
-                loadAreas[2].Add(new Load(loadDistance / 2, 0, 1));
-            }
-            // Distribute loads along last room axis
-            else {
-                float loadDistance = Vector3.Distance(points[0], points[1]);
-                loadAreas[1].Add(new Load(loadDistance / 2, 0, 1));
-                loadAreas[3].Add(new Load(loadDistance / 2, 0, 1));
-            }
-
-            return loadAreas;
-        }
-
-        public Dictionary<int, List<Load>> AreaLoadLShape(Room room) {
-            Dictionary<int, List<Load>> WallLoads = new Dictionary<int, List<Load>>();
+        public static Dictionary<int, List<Load>> AreaLoad(Room room) {
+            Dictionary<int, List<Load>> loadTables = WallLoadTables(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true);
             List<Vector3> normals = room.GetWallNormals(localCoordinates : true);
 
-            // MANGLER
-            
-            
+            for (int iWall = 0; iWall < normals.Count; iWall++) {
+                if (loadTables.Keys.Contains(iWall)) {
+                    // Dette er en load bearing wall
+                }
+                else {
+                    // Dette er en load giving wall
+                    // Hvis naboer har modsat-rettede normaler
+                    if (normals[iWall-1] != normals[iWall + 1]) {
+                        float loadLength = Vector3.Distance(points[iWall], points[iWall+1]);
+                        Load load1 = loadTables[iWall - 1][-1];
+                        if (load1.magnitude <= 0.0f) {
+                            load1.magnitude = loadLength / 2;
+                            loadTables[iWall - 1][-1] = load1;
+                        }
+                        Load load2 = loadTables[iWall + 1][0];
+                        if (load2.magnitude <= 0.0f) {
+                            load2.magnitude = loadLength / 2;
+                            loadTables[iWall + 1][0] = load2;
+                        }
 
-            return WallLoads;
+                    }
+                }
+            }
+            return loadTables;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="room"></param>
+        /// <param name="room">Room to analyze</param>
         /// <returns></returns>
-        public Dictionary<int, List<Load>> WallLoadTables(Room room) {
+        public static Dictionary<int, List<Load>> WallLoadTables(Room room) {
             Dictionary<int, List<Load>> WallLoads = new Dictionary<int, List<Load>>();
             List<int> loadCarryingWalls = LoadCarryingWalls(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
@@ -108,7 +90,7 @@ namespace Structural {
         /// </summary>
         /// <param name="room">Room to analyze</param>
         /// <returns>List of indices of the load carrying walls of the room</returns>
-        public List<int> LoadCarryingWalls(Room room) {
+        public static List<int> LoadCarryingWalls(Room room) {
             List<int> loadCarryingWalls = new List<int>();
             List<float> spans = Spans(room);
 
