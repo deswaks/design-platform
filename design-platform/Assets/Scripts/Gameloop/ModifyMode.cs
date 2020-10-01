@@ -36,13 +36,17 @@ public class ModifyMode : Mode {
     public void SetModifyMode(ModifyModeType currentMode) {
         currentModifyModeType = currentMode;
 
-        selectedRoom.SetRoomState(Room.RoomStates.Stationary);
-        selectedRoom.SetIsInMoveMode(false);
-        selectedRoom.RemoveEditHandles();
-
+        if (selectedRoom != null) {
+            selectedRoom.SetRoomState(Room.RoomStates.Stationary);
+            selectedRoom.SetIsInMoveMode(false);
+            selectedRoom.RemoveEditHandles();
+        }
+        
         switch (currentMode) {
             case ModifyModeType.Move:
-                selectedRoom.SetIsInMoveMode(true);
+                if (selectedRoom != null) {
+                    selectedRoom.SetIsInMoveMode(true);
+                }
                 break;
 
             case ModifyModeType.Rotate:

@@ -78,7 +78,7 @@ namespace Structural {
 
                 // Find aksen som væggen spænder
                 Vector3 wallVector = (startPoint - endPoint);
-                int wallAxis = VectorFunctions.IndexNumLargestComponent(wallVector);
+                int wallAxis = VectorFunctions.IndexAbsLargestComponent(wallVector);
 
                 // Find unikke værdier på denne akse og reparameteriser disse over væggens længde
                 List<float> lengthParameters = rangeUtils.reparametrize(uniqueValuesOnWallAxes[wallAxis],
@@ -111,9 +111,9 @@ namespace Structural {
             // Go through all wall indices
             for (int i = 0; i < room.GetControlPoints().Count; i++) {
                 // Distribute loads along first room axis (will do if they are equal)
-                if (spans[0] >= spans[2] && i % 2 == 0) { loadCarryingWalls.Add(i); }
+                if (spans[0] <= spans[2] && i % 2 == 0) { loadCarryingWalls.Add(i); }
                 // Distribute loads along last room axis
-                if (spans[0] < spans[2] && i % 2 == 1) { loadCarryingWalls.Add(i); }
+                if (spans[0] > spans[2] && i % 2 == 1) { loadCarryingWalls.Add(i); }
             }
             return loadCarryingWalls;
         }
