@@ -116,8 +116,13 @@ public class Room : MonoBehaviour {
     /// </summary>
     public void Rotate(bool clockwise = true, float degrees = 90) {
         if (!clockwise) { degrees = -degrees; }
+        List<float> bounds = Bounds();
+        Vector3 rotateOrigin = new Vector3(
+                        (bounds[0] + bounds[1]) / 2,
+                        0,
+                        (bounds[2] + bounds[3]) / 2);
         gameObject.transform.RotateAround(
-            point: gameObject.GetComponent<Renderer>().bounds.center,
+            point: transform.TransformPoint(rotateOrigin),
             axis: new Vector3(0, 1, 0),
             angle: degrees);
     }
@@ -397,6 +402,22 @@ public class Room : MonoBehaviour {
         if (!string.IsNullOrEmpty(value)) {
             customProperty = value;
         }
+    }
+
+    /// <summary>
+    /// Finds the boundaries of the room in the X and Y axis.
+    /// returns:  { minX, maxX, minY, maxY }
+    /// </summary>
+    public List<float> Bounds(bool localCoordinates = false) {
+        float minX = 0; float maxX = 0;
+        float minZ = 0; float maxZ = 0;
+        foreach (Vector3 controlPoint in GetControlPoints(localCoordinates:true)) {
+            if (controlPoint.x < minX) { minX = controlPoint.x; }
+            if (controlPoint.x > maxX) { maxX = controlPoint.x; }
+            if (controlPoint.z < minZ) { minX = controlPoint.z; }
+            if (controlPoint.z > maxZ) { maxX = controlPoint.z; }
+        }
+        return new List<float> { minX, maxX, minZ, maxZ };
     }
 
 }
