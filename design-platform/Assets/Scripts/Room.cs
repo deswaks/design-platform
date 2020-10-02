@@ -107,7 +107,7 @@ public class Room : MonoBehaviour {
     public void Rotate(bool clockwise = true, float degrees = 90) {
         if (!clockwise) { degrees = -degrees; }
         gameObject.transform.RotateAround(
-            point: Grid.GetNearestGridpoint(gameObject.GetComponent<Renderer>().bounds.center),
+            point: gameObject.GetComponent<Renderer>().bounds.center,
             axis: new Vector3(0, 1, 0),
             angle: degrees);
     }
