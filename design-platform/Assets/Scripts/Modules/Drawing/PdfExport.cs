@@ -51,6 +51,8 @@ public static class PdfExport {
 
         foreach (Room room in Building.Instance.GetRooms()) {
             drawRoomPolygon(gfx, roomBrush, room);
+        }
+        foreach (Room room in Building.Instance.GetRooms()) {
             drawWallLines(gfx, wallPen1, wallPen2, room);
         }
     }
