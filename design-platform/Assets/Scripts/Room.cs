@@ -21,14 +21,12 @@ public class Room : MonoBehaviour {
     private ProBuilderMesh mesh3D;
     private Room prefabRoom;
 
-
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
 
     private GameObject editHandle;
     public GameObject editHandlePrefab;
     public List<GameObject> activeEditHandles;
-
 
     public GameObject moveHandlePrefab;
     private Vector3 moveModeScreenPoint;
@@ -192,35 +190,32 @@ public class Room : MonoBehaviour {
     /// Takes the index of the wall to extrude and the distance to extrude     
     /// </summary>
     public void ExtrudeWall(int wallToExtrude, float extrusion) {
-        List<Vector3> extrudePoints = new List<Vector3>();
-        foreach (Vector3 v in GetControlPoints(localCoordinates: true)) {
-            extrudePoints.Add(new Vector3(v.x, v.y, v.z));
-        }
-
+        // Create move vector for extrusion
         Vector3 localExtrusion = GetWallNormals(localCoordinates: true)[wallToExtrude] * extrusion;
-        extrudePoints[wallToExtrude] += localExtrusion;
 
-        if (wallToExtrude == GetControlPoints().Count - 1) {
-            extrudePoints[0] += localExtrusion;
-        }
-        else {
-            extrudePoints[wallToExtrude + 1] += localExtrusion;
-        }
+        // Clone points
+        List<Vector3> controlPointsClone = GetControlPoints(localCoordinates: true).Select(
+            v => new Vector3(v.x, v.y, v.z)).ToList();
 
-        List<Vector3> extrudeEdgeNormals = PolygonUtils.PolygonNormals(extrudePoints);
+        // Extrude the cloned points
+        int point1Index = IndexingUtils.WrapIndex(wallToExtrude, controlPoints.Count);
+        int point2Index = IndexingUtils.WrapIndex(wallToExtrude+1, controlPoints.Count);
+        controlPointsClone[point1Index] += localExtrusion;
+        controlPointsClone[point2Index] += localExtrusion;
 
-        bool controlPointUpdate = false;
-        for (int i = 0; i < extrudeEdgeNormals.Count; i++) {
-            if (extrudeEdgeNormals[i] != GetWallNormals(localCoordinates: true)[i]) {
-                controlPointUpdate = false;
-                break;
+        // Compare normals before and after extrusion element-wise 
+        List<Vector3> normals = GetWallNormals(localCoordinates: true);
+        List<Vector3> extrudedNormals = PolygonUtils.PolygonNormals(controlPointsClone);
+        bool normalsAreIdentical = true;
+        for (int i = 0; i < normals.Count; i++) {
+            if (normals[i] != extrudedNormals[i]) {
+                normalsAreIdentical = false;
             }
-            else {
-                controlPointUpdate = true;
-            }
         }
-        if (controlPointUpdate) {
-            controlPoints = extrudePoints;
+
+        // If normals did not change: Make extruded points the real control points 
+        if (normalsAreIdentical) {
+            controlPoints = controlPointsClone;
             RefreshView();
         }
     }
@@ -253,13 +248,17 @@ public class Room : MonoBehaviour {
     /// 
     /// </summary>
     /// <returns></returns>
-    public Vector3 TagLocation(bool localCoordinates = false) {
+    public Vector3 TagLocation(bool localCoordinates = false, float weighting = 0.5f) {
+        Dictionary<RoomShape, float> weight = new Dictionary<RoomShape, float>() {
+            { RoomShape.RECTANGLE, 0.5f },
+            { RoomShape.LSHAPE, 0.7f }
+        };
         Vector3 tagLocation = new Vector3();
-        List<List<float>> unique = UniqueCoordinates();
+        List<List<float>> unique = UniqueCoordinates(localCoordinates: localCoordinates);
 
-        tagLocation.x = unique[0][1] - unique[0][0]; // Der skal vælges en placering på halvvejen
-        tagLocation.y = unique[1][1] - unique[1][0]; // Der skal vælges en placering på halvvejen
-        tagLocation.z = unique[2][0]; // Denne skal være sidste index
+        tagLocation.x = unique[0][0] + (unique[0][1] - unique[0][0]) * weight[shape];
+        tagLocation.y = height + 0.01f;
+        tagLocation.z = unique[2][0] + (unique[2][1] - unique[2][0]) * weight[shape];
 
         return tagLocation;
     }
@@ -280,7 +279,7 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    public void SetIsInMoveMode(bool isInMoveMode = false) //klar til implementering
+    public void SetIsInMoveMode(bool setMoveMode = false) //klar til implementering
     {
         // Destroys any prior movehandle
         if (moveHandle != null) {
@@ -288,15 +287,12 @@ public class Room : MonoBehaviour {
             moveHandle = null;
         }
 
-        if (isInMoveMode == true){
+        if (setMoveMode == true){
             roomState = RoomStates.Moving;
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
-
-            Vector3 handlePosition = gameObject.GetComponent<Renderer>().bounds.center;
-            handlePosition.y = height + 0.01f;
-            moveHandle.transform.position = handlePosition;
-
-            moveHandle.transform.SetParent(gameObject.transform, true);
+            moveHandle.transform.position = TagLocation(localCoordinates: true);
+            moveHandle.transform.SetParent(gameObject.transform, false);
+            
         }
         else {
             roomState = RoomStates.Stationary;

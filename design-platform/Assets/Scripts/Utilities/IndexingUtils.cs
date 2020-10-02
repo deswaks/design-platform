@@ -2,8 +2,16 @@
 
 public static class IndexingUtils
 {
-    public static int WrapIndex(int i, int n) {
-        return ((i % n) + n) % n;
+    /// <summary>
+    /// Wrap an index such that it will always be within the length of the list.
+    /// Negative values will be from the end of the list.
+    /// Values above the list length will wrap circularly.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="listLength">Length of the list that the index should be wrapped to</param>
+    /// <returns>wrapped index</returns>
+    public static int WrapIndex(int index, int listLength) {
+        return ((index % listLength) + listLength) % listLength;
     }
 
     public static void Main() {
