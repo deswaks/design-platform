@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using UnityEditor.ProBuilder;
+using UnityEditorInternal;
 
 public class Room : MonoBehaviour {
     private List<Vector3> controlPoints;
@@ -22,10 +23,12 @@ public class Room : MonoBehaviour {
 
     public Building parentBuilding;
     public float height = 3.0f;
+    public string customProperty;
 
     private bool isHighlighted { set; get; }
     private ProBuilderMesh mesh3D;
     private Room prefabRoom;
+
 
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
@@ -33,6 +36,7 @@ public class Room : MonoBehaviour {
     private GameObject editHandle;
     public GameObject editHandlePrefab;
     public List<GameObject> activeEditHandles;
+
 
     public GameObject moveHandlePrefab;
     private Vector3 moveModeScreenPoint;
@@ -91,6 +95,9 @@ public class Room : MonoBehaviour {
         gameObject.AddComponent<ProBuilderMesh>();
         SetRoomType(RoomType.DEFAULT); 
         RefreshView();
+
+        // Create and attach collider objects
+        RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject);
     }
 
     public void RefreshView() {
@@ -100,7 +107,8 @@ public class Room : MonoBehaviour {
         polyshape.CreateShapeFromPolygon();
         gameObject.GetComponent<ProBuilderMesh>().Refresh();
         gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().mesh;
-        RoomCollider.GiveCollider(this);
+
+        //RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, shape);
     }
 
     public RoomShape GetRoomShape() {
@@ -192,32 +200,35 @@ public class Room : MonoBehaviour {
     /// Takes the index of the wall to extrude and the distance to extrude     
     /// </summary>
     public void ExtrudeWall(int wallToExtrude, float extrusion) {
-        // Create move vector for extrusion
-        Vector3 localExtrusion = GetWallNormals(localCoordinates: true)[wallToExtrude] * extrusion;
-
-        // Clone points
-        List<Vector3> controlPointsClone = GetControlPoints(localCoordinates: true).Select(
-            v => new Vector3(v.x, v.y, v.z)).ToList();
-
-        // Extrude the cloned points
-        int point1Index = IndexingUtils.WrapIndex(wallToExtrude, controlPoints.Count);
-        int point2Index = IndexingUtils.WrapIndex(wallToExtrude+1, controlPoints.Count);
-        controlPointsClone[point1Index] += localExtrusion;
-        controlPointsClone[point2Index] += localExtrusion;
-
-        // Compare normals before and after extrusion element-wise 
-        List<Vector3> normals = GetWallNormals(localCoordinates: true);
-        List<Vector3> extrudedNormals = PolygonUtils.PolygonNormals(controlPointsClone);
-        bool normalsAreIdentical = true;
-        for (int i = 0; i < normals.Count; i++) {
-            if (normals[i] != extrudedNormals[i]) {
-                normalsAreIdentical = false;
-            }
+        List<Vector3> extrudePoints = new List<Vector3>();
+        foreach (Vector3 v in GetControlPoints(localCoordinates: true)) {
+            extrudePoints.Add(new Vector3(v.x, v.y, v.z));
         }
 
-        // If normals did not change: Make extruded points the real control points 
-        if (normalsAreIdentical) {
-            controlPoints = controlPointsClone;
+        Vector3 localExtrusion = GetWallNormals(localCoordinates: true)[wallToExtrude] * extrusion;
+        extrudePoints[wallToExtrude] += localExtrusion;
+
+        if (wallToExtrude == GetControlPoints().Count - 1) {
+            extrudePoints[0] += localExtrusion;
+        }
+        else {
+            extrudePoints[wallToExtrude + 1] += localExtrusion;
+        }
+
+        List<Vector3> extrudeEdgeNormals = PolygonUtils.PolygonNormals(extrudePoints);
+
+        bool controlPointUpdate = false;
+        for (int i = 0; i < extrudeEdgeNormals.Count; i++) {
+            if (extrudeEdgeNormals[i] != GetWallNormals(localCoordinates: true)[i]) {
+                controlPointUpdate = false;
+                break;
+            }
+            else {
+                controlPointUpdate = true;
+            }
+        }
+        if (controlPointUpdate) {
+            controlPoints = extrudePoints;
             RefreshView();
         }
     }
@@ -240,6 +251,7 @@ public class Room : MonoBehaviour {
     public void RemoveEditHandles() {
         EditHandle[] editHandles = GetComponentsInChildren<EditHandle>();
         if (editHandles != null) {
+            Debug.Log("REMOVING" + editHandles.ToString());
             foreach (EditHandle editHandle in editHandles) {
                 Destroy(editHandle.gameObject);
             }
@@ -249,39 +261,20 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    /// <returns></returns>
-    public Vector3 TagLocation(bool localCoordinates = false, float weighting = 0.5f) {
-        Dictionary<RoomShape, float> weight = new Dictionary<RoomShape, float>() {
-            { RoomShape.RECTANGLE, 0.5f },
-            { RoomShape.LSHAPE, 0.7f }
-        };
-        Vector3 tagLocation = new Vector3();
-        List<List<float>> unique = UniqueCoordinates(localCoordinates: localCoordinates);
-
-        tagLocation.x = unique[0][0] + (unique[0][1] - unique[0][0]) * weight[shape];
-        tagLocation.y = height + 0.01f;
-        tagLocation.z = unique[2][0] + (unique[2][1] - unique[2][0]) * weight[shape];
-
-        return tagLocation;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="axis"></param>
     /// <returns></returns>
     public List<List<float>> UniqueCoordinates(bool localCoordinates = false) {
         List<List<float>> uniqueCoordinates = new List<List<float>>();
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[0]).Distinct().OrderBy(n => n).ToList());
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[1]).Distinct().OrderBy(n => n).ToList());
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[2]).Distinct().OrderBy(n => n).ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[0]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[1]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[2]).Distinct().ToList());
         return uniqueCoordinates;
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public void SetIsInMoveMode(bool setMoveMode = false) //klar til implementering
+    public void SetIsInMoveMode(bool isInMoveMode = false) //klar til implementering
     {
         // Destroys any prior movehandle
         if (moveHandle != null) {
@@ -289,12 +282,15 @@ public class Room : MonoBehaviour {
             moveHandle = null;
         }
 
-        if (setMoveMode == true){
+        if (isInMoveMode == true){
             roomState = RoomStates.Moving;
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
-            moveHandle.transform.position = TagLocation(localCoordinates: true);
-            moveHandle.transform.SetParent(gameObject.transform, false);
-            
+
+            Vector3 handlePosition = gameObject.GetComponent<Renderer>().bounds.center;
+            handlePosition.y = height + 0.01f;
+            moveHandle.transform.position = handlePosition;
+
+            moveHandle.transform.SetParent(gameObject.transform, true);
         }
         else {
             roomState = RoomStates.Stationary;
@@ -387,6 +383,11 @@ public class Room : MonoBehaviour {
                 currentMaterial = prefabRoom.bathroomMaterial;
                 gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                 break;
+        }
+    }
+    public void SetRoomNote(string value) {
+        if (!string.IsNullOrEmpty(value)) {
+            customProperty = value;
         }
     }
 
