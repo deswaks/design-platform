@@ -243,7 +243,6 @@ public class Room : MonoBehaviour {
     public void RemoveEditHandles() {
         EditHandle[] editHandles = GetComponentsInChildren<EditHandle>();
         if (editHandles != null) {
-            Debug.Log("REMOVING" + editHandles.ToString());
             foreach (EditHandle editHandle in editHandles) {
                 Destroy(editHandle.gameObject);
             }

@@ -1174,6 +1174,7 @@ MonoBehaviour:
   highlightMaterial: {fileID: 2100000, guid: 48b9876d0170fe6488f67c2881521802, type: 2}
   height: 3
   editHandlePrefab: {fileID: 0}
+  activeEditHandles: []
   moveHandlePrefab: {fileID: 0}
   isCurrentlyColliding: 0
 --- !u!1 &796147447
@@ -1979,7 +1980,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95df9c4766034dd48bfad0b303b94259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  main: {fileID: 0}
 --- !u!1 &1468846291
 GameObject:
   m_ObjectHideFlags: 0
