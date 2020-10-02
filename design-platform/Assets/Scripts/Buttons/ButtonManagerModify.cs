@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using JetBrains.Annotations;
 
 public class ButtonManagerModify : MonoBehaviour {
 
@@ -30,7 +28,7 @@ public class ButtonManagerModify : MonoBehaviour {
     }
 
     public void Properties() {
-        Debug.Log("You just turned on the properties dropdown menu, dope!");
+        Debug.Log("Properties function is not implemented");
     }
 
     public void StructuralAnalysis() {
@@ -53,15 +51,9 @@ public class ButtonManagerModify : MonoBehaviour {
         //}
     }
 
-    public void PublishRoomType(int buildType) {
+    public void SetRoomType(int buildType) {
         ModifyMode.Instance.selectedRoom.SetRoomType((RoomType)buildType);
     }
 
-    public void PublishRoomNote() {
-        GameObject myInputGO = GameObject.Find("InputField Room Note");
-        InputField myInputIF = myInputGO.GetComponent<InputField>();
-        ModifyMode.Instance.selectedRoom.SetRoomNote(myInputIF.text);
-        myInputIF.text = "";
-    }
 
 }
