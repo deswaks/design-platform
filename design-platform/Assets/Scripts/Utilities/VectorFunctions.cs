@@ -7,7 +7,7 @@ public static class VectorFunctions
 {
     public static int IndexLargestComponent(Vector3 v) {
         int indexLargestComponent = 0;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i <= 2; i++) {
             if (v[i] > v[indexLargestComponent]) {
                 indexLargestComponent = i;
             }
@@ -27,7 +27,7 @@ public static class VectorFunctions
 
     public static List<float> ListFromVector(Vector3 v) {
         List<float> vectorList = new List<float>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i <= 2; i++) {
             vectorList.Add(v[i]);
         }
         return vectorList;
