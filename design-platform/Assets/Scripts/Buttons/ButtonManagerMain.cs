@@ -10,7 +10,7 @@ public class ButtonManagerMain : MonoBehaviour
     }
 
     public void ExportPDF() {
-        PdfExport.PrintRooms();
+        PdfExport.ExportPlan();
         //drawingExporter.popUpDrawing();
         //Debug.Log("Save function is not implemented");
     }
