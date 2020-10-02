@@ -85,9 +85,6 @@ public class Room : MonoBehaviour {
         gameObject.AddComponent<ProBuilderMesh>();
         gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
         RefreshView();
-
-        // Create and attach collider objects
-        RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject);
     }
 
     public void RefreshView() {
@@ -97,8 +94,7 @@ public class Room : MonoBehaviour {
         polyshape.CreateShapeFromPolygon();
         gameObject.GetComponent<ProBuilderMesh>().Refresh();
         gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().mesh;
-
-        //RoomCollider.CreateAndAttachCollidersOfRoomShape(gameObject, shape);
+        RoomCollider.GiveCollider(this);
     }
 
     public RoomShape GetRoomShape() {

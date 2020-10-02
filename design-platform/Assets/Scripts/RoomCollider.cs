@@ -35,11 +35,12 @@ public class RoomCollider : MonoBehaviour
     }
 
 
-    public static void CreateAndAttachCollidersOfRoomShape(GameObject roomGameObject){
+    public static void GiveCollider(Room room){
 
-        PolyShape roomPolyShape    = roomGameObject.GetComponent<PolyShape>();
-        List<Vector3> vertices     = roomPolyShape.controlPoints.ToList();
-        float height               = roomPolyShape.extrude;
+        // Remove existing colliders
+        foreach (RoomCollider roomCollider in room.GetComponentsInChildren<RoomCollider>()) {
+            Destroy(roomCollider.gameObject);
+        }
 
         // Every collider cube is defined by the controlpoints of the room object. Both the x- and y- position of the collider cube is defined by two indices each.
         // For instance, the location of the collider cube for a rectangular room is defined as follows: 
@@ -47,7 +48,7 @@ public class RoomCollider : MonoBehaviour
         //      The y coordinate of the location is defined by the average value from the [0] and [1] controlpoints (or [2] and [3]).
         List<List<int>> colliderIndexPairsList = new List<List<int>>();
 
-        switch (roomGameObject.GetComponent<Room>().GetRoomShape())
+        switch (room.GetRoomShape())
         {
             case RoomShape.RECTANGLE:
                 //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
@@ -61,26 +62,26 @@ public class RoomCollider : MonoBehaviour
         }
 
         int counter = 0;
-        foreach(List<int> xyPairs in colliderIndexPairsList)
+        List<Vector3> vertices = room.GetControlPoints(localCoordinates: true);
+        foreach (List<int> xyPairs in colliderIndexPairsList)
         {
             GameObject colliderObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
             colliderObject.name = "RoomCollider_" + counter++.ToString();
 
-
             Vector3 positionVector =
                 new Vector3(
                     vertices[xyPairs[0]].x + System.Math.Abs(vertices[xyPairs[0]].x - vertices[xyPairs[1]].x) / 2, // x - location
-                    height / 2,                                                                                    // y - location
+                    room.height / 2,                                                                                    // y - location
                     vertices[xyPairs[2]].z + System.Math.Abs(vertices[xyPairs[2]].z - vertices[xyPairs[3]].z) / 2  // z - location
                     );
             Vector3 scaleVector =
                 new Vector3(
                     System.Math.Abs(vertices[ xyPairs[0] ].x - vertices[ xyPairs[1] ].x), // x - scale
-                    height,                                                       // y - scale
+                    room.height,                                                       // y - scale
                     System.Math.Abs(vertices[ xyPairs[2] ].z - vertices[ xyPairs[3] ].z)  // z - scale
                     );
             
-            colliderObject.transform.parent        = roomGameObject.transform;
+            colliderObject.transform.parent        = room.gameObject.transform;
             colliderObject.transform.localScale    = scaleVector*0.99f;
             colliderObject.transform.localPosition = positionVector;
 
@@ -94,43 +95,45 @@ public class RoomCollider : MonoBehaviour
         }
     }
 
-    public static void UpdateCollider(Room room) {
-        RoomCollider[] roomColliders = room.GetComponentsInChildren<RoomCollider>();
-        GameObject[] colliderObjects = roomColliders.Select(p => p.gameObject).ToArray();
-        List<Vector3> vertices = room.GetControlPoints(localCoordinates: true);
-        List<List<int>> colliderIndexPairsList = new List<List<int>>();
+    // THIS FUNCTION DOES NOT WORK
+    //
+    //public static void UpdateCollider(Room room) {
+    //    RoomCollider[] roomColliders = room.GetComponentsInChildren<RoomCollider>();
+    //    GameObject[] colliderObjects = roomColliders.Select(p => p.gameObject).ToArray();
+    //    List<Vector3> vertices = room.GetControlPoints(localCoordinates: true);
+    //    List<List<int>> colliderIndexPairsList = new List<List<int>>();
 
-        switch (room.GetRoomShape()) {
-            case RoomShape.RECTANGLE:
-                //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
-                colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 });
+    //    switch (room.GetRoomShape()) {
+    //        case RoomShape.RECTANGLE:
+    //            //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
+    //            colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 });
 
-                break;
-            case RoomShape.LSHAPE:
-                colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
-                colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2
-                break;
-        }
+    //            break;
+    //        case RoomShape.LSHAPE:
+    //            colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
+    //            colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2
+    //            break;
+    //    }
 
-        int i = 0;
-        foreach (List<int> xyPairs in colliderIndexPairsList) {
-            Vector3 positionVector =
-                new Vector3(
-                    vertices[xyPairs[0]].x + System.Math.Abs(vertices[xyPairs[0]].x - vertices[xyPairs[1]].x) / 2, // x - location
-                    room.height / 2,                                                                                    // y - location
-                    vertices[xyPairs[2]].z + System.Math.Abs(vertices[xyPairs[2]].z - vertices[xyPairs[3]].z) / 2  // z - location
-                    );
-            Vector3 scaleVector =
-                new Vector3(
-                    System.Math.Abs(vertices[xyPairs[0]].x - vertices[xyPairs[1]].x), // x - scale
-                    room.height,                                                       // y - scale
-                    System.Math.Abs(vertices[xyPairs[2]].z - vertices[xyPairs[3]].z)  // z - scale
-                    );
+    //    int i = 0;
+    //    foreach (List<int> xyPairs in colliderIndexPairsList) {
+    //        Vector3 positionVector =
+    //            new Vector3(
+    //                vertices[xyPairs[0]].x + System.Math.Abs(vertices[xyPairs[0]].x - vertices[xyPairs[1]].x) / 2, // x - location
+    //                room.height / 2,                                                                                    // y - location
+    //                vertices[xyPairs[2]].z + System.Math.Abs(vertices[xyPairs[2]].z - vertices[xyPairs[3]].z) / 2  // z - location
+    //                );
+    //        Vector3 scaleVector =
+    //            new Vector3(
+    //                System.Math.Abs(vertices[xyPairs[0]].x - vertices[xyPairs[1]].x), // x - scale
+    //                room.height,                                                       // y - scale
+    //                System.Math.Abs(vertices[xyPairs[2]].z - vertices[xyPairs[3]].z)  // z - scale
+    //                );
             
-            colliderObjects[i].transform.localScale = scaleVector * 0.99f;
-            colliderObjects[i].transform.localPosition = positionVector;
-            i++;
-        }
-    }
+    //        colliderObjects[i].transform.localScale = scaleVector * 0.99f;
+    //        colliderObjects[i].transform.localPosition = positionVector;
+    //        i++;
+    //    }
+    //}
 
 }
