@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
+using JetBrains.Annotations;
 
 public class ButtonManagerModify : MonoBehaviour {
     public Main main;
@@ -29,7 +31,7 @@ public class ButtonManagerModify : MonoBehaviour {
         ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Edit);
     }
     public void Properties() {
-        Debug.Log("Properties function is not implemented");
+        Debug.Log("You just turned on the properties dropdown menu, dope!");
     }
     public void Delete()
     {
@@ -40,9 +42,15 @@ public class ButtonManagerModify : MonoBehaviour {
         //}
     }
 
-    public void SetRoomType(int buildType) {
+    public void PublishRoomType(int buildType) {
         ModifyMode.Instance.selectedRoom.SetRoomType((RoomType)buildType);
     }
 
+    public void PublishRoomNote() {
+        GameObject myInputGO = GameObject.Find("InputField Room Note");
+        InputField myInputIF = myInputGO.GetComponent<InputField>();
+        ModifyMode.Instance.selectedRoom.SetRoomNote(myInputIF.text);
+        myInputIF.text = "";
+    }
 
 }

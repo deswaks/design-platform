@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using UnityEditor.ProBuilder;
+using UnityEditorInternal;
 
 public class Room : MonoBehaviour {
     private List<Vector3> controlPoints;
@@ -22,6 +23,7 @@ public class Room : MonoBehaviour {
 
     public Building parentBuilding;
     public float height = 3.0f;
+    public string customProperty;
 
     private bool isHighlighted { set; get; }
     private ProBuilderMesh mesh3D;
@@ -381,6 +383,11 @@ public class Room : MonoBehaviour {
                 currentMaterial = prefabRoom.bathroomMaterial;
                 gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                 break;
+        }
+    }
+    public void SetRoomNote(string value) {
+        if (!string.IsNullOrEmpty(value)) {
+            customProperty = value;
         }
     }
 
