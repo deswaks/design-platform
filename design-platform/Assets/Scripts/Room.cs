@@ -253,13 +253,28 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
+    /// <returns></returns>
+    public Vector3 TagLocation(bool localCoordinates = false) {
+        Vector3 tagLocation = new Vector3();
+        List<List<float>> unique = UniqueCoordinates();
+
+        tagLocation.x = unique[0][1] - unique[0][0]; // Der skal vælges en placering på halvvejen
+        tagLocation.y = unique[1][1] - unique[1][0]; // Der skal vælges en placering på halvvejen
+        tagLocation.z = unique[2][0]; // Denne skal være sidste index
+
+        return tagLocation;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="axis"></param>
     /// <returns></returns>
     public List<List<float>> UniqueCoordinates(bool localCoordinates = false) {
         List<List<float>> uniqueCoordinates = new List<List<float>>();
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[0]).Distinct().ToList());
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[1]).Distinct().ToList());
-        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[2]).Distinct().ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[0]).Distinct().OrderBy(n => n).ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[1]).Distinct().OrderBy(n => n).ToList());
+        uniqueCoordinates.Add(GetControlPoints(localCoordinates: localCoordinates).Select(p => p[2]).Distinct().OrderBy(n => n).ToList());
         return uniqueCoordinates;
     }
 
