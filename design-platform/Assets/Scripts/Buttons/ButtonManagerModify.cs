@@ -32,17 +32,6 @@ public class ButtonManagerModify : MonoBehaviour {
         
     }
 
-    public void StructuralAnalysis() {
-        foreach (Room room in Building.Instance.GetRooms()) {
-            Dictionary<int, List<Structural.Load>> loadTable = Structural.LoadDistribution.AreaLoad(room);
-            foreach (int indexWall in loadTable.Keys) {
-                foreach (Structural.Load load in loadTable[indexWall]) {
-                    Debug.Log("Load on wall: " + indexWall + "  Start: " + load.pStart + "  End: " + load.pEnd + "  Magnitude: " + load.magnitude);
-                }
-            }
-        }
-    }
-
     public void Delete()
     {
         ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Delete);
