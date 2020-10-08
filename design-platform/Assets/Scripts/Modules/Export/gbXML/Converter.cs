@@ -28,6 +28,7 @@ namespace gbXML {
             gbs.ShellGeometry shellGeometry = new gbs.ShellGeometry();
             shellGeometry.unit = gbs.lengthUnitEnum.Meters;
             shellGeometry.id = "sg" + space.Name;
+            space.ShellGeo = shellGeometry;
 
             // Closed shell
             gbs.ClosedShell closedShell = new gbs.ClosedShell();
@@ -37,12 +38,12 @@ namespace gbXML {
 
             // Make polyloop arrays
             closedShell.PolyLoops = gbs.prod.makePolyLoopArray(surfacesVertices.Count);
-            for (int i = 0; i < closedShell.PolyLoops.GetLength(0) - 1; i++) {
+            for (int i = 0; i < closedShell.PolyLoops.GetLength(0); i++) {
 
                 // Make polyloop points
                 closedShell.PolyLoops[i].Points = gbs.BasicSerialization.makeCartesianPtArray(surfacesVertices[i].Count);
 
-                for (int j = 0; j < closedShell.PolyLoops[i].Points.GetLength(0) - 1; j++) {
+                for (int j = 0; j < closedShell.PolyLoops[i].Points.GetLength(0); j++) {
                     List<string> coordinates = new List<string>();
                     coordinates.Add(string.Format("{0:N3}", surfacesVertices[i][j].x));
                     coordinates.Add(string.Format("{0:N3}", surfacesVertices[i][j].y));

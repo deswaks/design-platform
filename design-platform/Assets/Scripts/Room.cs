@@ -151,7 +151,7 @@ public class Room : MonoBehaviour {
 
         // Add wall surfaces
         int j = controlPoints.Count-1;
-        for (int i = 0; i < surfacesVertices.Count-1; i++) {
+        for (int i = 0; i < controlPoints.Count; i++) {
             vertices = new List<Vector3>();
             vertices.Add(controlPoints[i]);
             vertices.Add(controlPoints[i] + new Vector3(0, height, 0));
