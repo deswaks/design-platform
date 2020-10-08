@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gbXML xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" temperatureUnit="F" lengthUnit="Kilometers" areaUnit="SqaureKilometers" volumeUnit="CubicKilometers" version="OhThreeFive" xmlns="http://www.gbxml.org/schema">
   <Campus>
-    <Building buildingType="AutomotiveFacility">
+    <Building id="CLT House" buildingType="SingleFamily">
       <Area>0</Area>
     </Building>
   </Campus>

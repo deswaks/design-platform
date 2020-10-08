@@ -141,16 +141,31 @@ public class Room : MonoBehaviour {
     /// 
     /// </summary>
     /// <returns></returns>
-    public Vector3[,] GetWallVertices() {
-        Vector3[,] surfacesVertices = new Vector3[controlPoints.Count,4];
+    public List<List<Vector3>> GetSurfaceVertices() {
+        List<List<Vector3>> surfacesVertices = new List<List<Vector3>>();
+        List<Vector3> vertices;
+
+        // Add Floor surface
+        vertices = GetControlPoints().Select(p => new Vector3(p.x, p.y, p.z)).ToList();
+        surfacesVertices.Add(vertices);
+
+        // Add wall surfaces
         int j = controlPoints.Count-1;
-        for (int i = 0; i < surfacesVertices.Length-1; i++) {
-            surfacesVertices[j, 0] = controlPoints[i];
-            surfacesVertices[j, 1] = controlPoints[i] + new Vector3(0, height, 0);
-            surfacesVertices[j, 2] = controlPoints[j] + new Vector3(0, height, 0);
-            surfacesVertices[j, 3] = controlPoints[j];
-            j++;
+        for (int i = 0; i < surfacesVertices.Count-1; i++) {
+            vertices = new List<Vector3>();
+            vertices.Add(controlPoints[i]);
+            vertices.Add(controlPoints[i] + new Vector3(0, height, 0));
+            vertices.Add(controlPoints[j] + new Vector3(0, height, 0));
+            vertices.Add(controlPoints[j]);
+            
+            surfacesVertices.Add(vertices);
+            j = i;
         }
+
+        // Add Ceiling vertices
+        vertices = GetControlPoints().Select(p => new Vector3(p.x, p.y+height, p.z)).ToList();
+        surfacesVertices.Add(vertices);
+
         return surfacesVertices;
     }
 
