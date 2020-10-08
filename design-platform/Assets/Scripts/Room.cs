@@ -128,6 +128,41 @@ public class Room : MonoBehaviour {
     }
 
     /// <summary>
+    /// Calculates the (brutto) floor area of the room including half the walls.
+    /// </summary>
+    /// <returns>float area</returns>
+    public float GetFloorArea() {
+        Vector2[] vertices = GetControlPoints(localCoordinates: true).Select(p => new Vector2(p.x, p.z)).ToArray();
+        Polygon2D roomPolygon = new Polygon2D(vertices);
+        return roomPolygon.Area();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public Vector3[,] GetWallVertices() {
+        Vector3[,] surfacesVertices = new Vector3[controlPoints.Count,4];
+        int j = controlPoints.Count-1;
+        for (int i = 0; i < surfacesVertices.Length-1; i++) {
+            surfacesVertices[j, 0] = controlPoints[i];
+            surfacesVertices[j, 1] = controlPoints[i] + new Vector3(0, height, 0);
+            surfacesVertices[j, 2] = controlPoints[j] + new Vector3(0, height, 0);
+            surfacesVertices[j, 3] = controlPoints[j];
+            j++;
+        }
+        return surfacesVertices;
+    }
+
+    /// <summary>
+    /// Calculates the (brutto) floor area of the room including half the walls.
+    /// </summary>
+    /// <returns>float area</returns>
+    public float GetVolume() {
+        return GetFloorArea()*height;
+    }
+
+    /// <summary>
     /// Deletes the room
     /// </summary>
     public void Delete()

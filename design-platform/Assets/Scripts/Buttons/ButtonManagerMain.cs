@@ -17,6 +17,8 @@ public class ButtonManagerMain : MonoBehaviour
 
     public void Save()
     {
+        // Test section to export gbXML
+        gbXML.gbXMLExporter.Export();
         Debug.Log("Save function is not implemented");
     }
 
