@@ -128,6 +128,56 @@ public class Room : MonoBehaviour {
     }
 
     /// <summary>
+    /// Calculates the (brutto) floor area of the room including half the walls.
+    /// </summary>
+    /// <returns>float area</returns>
+    public float GetFloorArea() {
+        Vector2[] vertices = GetControlPoints(localCoordinates: true).Select(p => new Vector2(p.x, p.z)).ToArray();
+        Polygon2D roomPolygon = new Polygon2D(vertices);
+        return roomPolygon.Area();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public List<List<Vector3>> GetSurfaceVertices() {
+        List<List<Vector3>> surfacesVertices = new List<List<Vector3>>();
+        List<Vector3> vertices;
+
+        // Add Floor surface
+        vertices = GetControlPoints().Select(p => new Vector3(p.x, p.y, p.z)).ToList();
+        surfacesVertices.Add(vertices);
+
+        // Add wall surfaces
+        int j = controlPoints.Count-1;
+        for (int i = 0; i < controlPoints.Count; i++) {
+            vertices = new List<Vector3>();
+            vertices.Add(controlPoints[i]);
+            vertices.Add(controlPoints[i] + new Vector3(0, height, 0));
+            vertices.Add(controlPoints[j] + new Vector3(0, height, 0));
+            vertices.Add(controlPoints[j]);
+            
+            surfacesVertices.Add(vertices);
+            j = i;
+        }
+
+        // Add Ceiling vertices
+        vertices = GetControlPoints().Select(p => new Vector3(p.x, p.y+height, p.z)).ToList();
+        surfacesVertices.Add(vertices);
+
+        return surfacesVertices;
+    }
+
+    /// <summary>
+    /// Calculates the (brutto) floor area of the room including half the walls.
+    /// </summary>
+    /// <returns>float area</returns>
+    public float GetVolume() {
+        return GetFloorArea()*height;
+    }
+
+    /// <summary>
     /// Deletes the room
     /// </summary>
     public void Delete()
