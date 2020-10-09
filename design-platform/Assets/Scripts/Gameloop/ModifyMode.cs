@@ -138,6 +138,7 @@ public class ModifyMode : Mode {
             case ModeType.Edit:
                 if (selectedRoom != null) {
                     selectedRoom.RemoveEditHandles();
+                    selectedRoom.ResetOrigin();
                 }
                 break;
 

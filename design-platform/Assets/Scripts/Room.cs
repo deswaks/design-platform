@@ -116,10 +116,28 @@ public class Room : MonoBehaviour {
     /// </summary>
     public void Rotate(bool clockwise = true, float degrees = 90) {
         if (!clockwise) { degrees = -degrees; }
+        
+        List<float> bounds = Bounds();
+        float width = bounds[1] - bounds[0];
+        float height = bounds[3] - bounds[2];
+
+        Vector3 centerPoint = new Vector3(bounds[0] + width / 2,
+                                          0,
+                                          bounds[2] + height / 2);
+        centerPoint = gameObject.transform.TransformPoint(centerPoint);
+
+        // if width and height are not BOTH divisible or undivisible by double grid
+        if (width % (Grid.size*2) == 0 && height % (Grid.size*2) != 0
+         || width % (Grid.size*2) != 0 && height % (Grid.size*2) == 0) {
+            centerPoint = Grid.GetNearestGridpoint(centerPoint);
+        }
+
+        // Rotation
         gameObject.transform.RotateAround(
-            point: Grid.GetNearestGridpoint(gameObject.GetComponent<Renderer>().bounds.center),
+            point: centerPoint,
             axis: new Vector3(0, 1, 0),
             angle: degrees);
+
         RefreshView();
     }
 
@@ -146,20 +164,20 @@ public class Room : MonoBehaviour {
         surfacesVertices.Add(vertices);
 
         // Add wall surfaces
-        int j = controlPoints.Count-1;
+        int j = controlPoints.Count - 1;
         for (int i = 0; i < controlPoints.Count; i++) {
             vertices = new List<Vector3>();
             vertices.Add(controlPoints[i]);
             vertices.Add(controlPoints[i] + new Vector3(0, height, 0));
             vertices.Add(controlPoints[j] + new Vector3(0, height, 0));
             vertices.Add(controlPoints[j]);
-            
+
             surfacesVertices.Add(vertices);
             j = i;
         }
 
         // Add Ceiling vertices
-        vertices = GetControlPoints().Select(p => new Vector3(p.x, p.y+height, p.z)).ToList();
+        vertices = GetControlPoints().Select(p => new Vector3(p.x, p.y + height, p.z)).ToList();
         surfacesVertices.Add(vertices);
 
         return surfacesVertices;
@@ -170,14 +188,13 @@ public class Room : MonoBehaviour {
     /// </summary>
     /// <returns>float area</returns>
     public float GetVolume() {
-        return GetFloorArea()*height;
+        return GetFloorArea() * height;
     }
 
     /// <summary>
     /// Deletes the room
     /// </summary>
-    public void Delete()
-    {
+    public void Delete() {
         if (Building.Instance.GetRooms().Contains(this)) { parentBuilding.RemoveRoom(this); }
         Destroy(gameObject);
     }
@@ -185,8 +202,7 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// Moves the room to the given position
     /// </summary>
-    public void Move(Vector3 exactPosition)
-    {
+    public void Move(Vector3 exactPosition) {
         Vector3 gridPosition = Grid.GetNearestGridpoint(exactPosition);
         gameObject.transform.position = gridPosition;
     }
@@ -275,6 +291,24 @@ public class Room : MonoBehaviour {
             controlPoints = controlPointsClone;
             RefreshView();
         }
+
+    }
+
+    /// <summary>
+    /// Resets the origin of the gameObject such that it is at the first controlpoint.
+    /// </summary>
+    public void ResetOrigin() {
+        if (GetControlPoints()[0] != gameObject.transform.position) {
+            Vector3 oCP = GetControlPoints(localCoordinates: true)[0];
+            Vector3 oGO = gameObject.transform.position;
+            Vector3 difference = new Vector3(oCP.x - oGO.x, 0, oCP.z - oGO.z);
+            
+            gameObject.transform.Translate(difference);
+            for (int i = 0; i < controlPoints.Count; i++) {
+                controlPoints[i] -= difference;
+            }
+            RefreshView();
+        }
     }
 
     /// <summary>
@@ -361,10 +395,8 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    void OnMouseDown()
-    {
-        if (roomState == RoomStates.Moving)
-        {
+    void OnMouseDown() {
+        if (roomState == RoomStates.Moving) {
             moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
             moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
@@ -373,10 +405,8 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    void OnMouseDrag()
-    {
-        if (roomState == RoomStates.Moving)
-        {
+    void OnMouseDrag() {
+        if (roomState == RoomStates.Moving) {
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
             transform.position = Grid.GetNearestGridpoint(curPosition);
         }
@@ -384,7 +414,7 @@ public class Room : MonoBehaviour {
 
     public void SetIsRoomCurrentlyColliding() {
         //Debug.Log("Is colliding");
-        if(roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
+        if (roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
 
             List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
 
@@ -411,7 +441,7 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    public Room GetPrefabRoom(){ return prefabRoom; }
+    public Room GetPrefabRoom() { return prefabRoom; }
 
 
     public void SetRoomType(RoomType type) {
@@ -459,11 +489,11 @@ public class Room : MonoBehaviour {
     public List<float> Bounds(bool localCoordinates = false) {
         float minX = 0; float maxX = 0;
         float minZ = 0; float maxZ = 0;
-        foreach (Vector3 controlPoint in GetControlPoints(localCoordinates:true)) {
+        foreach (Vector3 controlPoint in GetControlPoints(localCoordinates: true)) {
             if (controlPoint.x < minX) { minX = controlPoint.x; }
             if (controlPoint.x > maxX) { maxX = controlPoint.x; }
-            if (controlPoint.z < minZ) { minX = controlPoint.z; }
-            if (controlPoint.z > maxZ) { maxX = controlPoint.z; }
+            if (controlPoint.z < minZ) { minZ = controlPoint.z; }
+            if (controlPoint.z > maxZ) { maxZ = controlPoint.z; }
         }
         return new List<float> { minX, maxX, minZ, maxZ };
     }
