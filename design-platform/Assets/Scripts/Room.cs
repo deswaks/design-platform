@@ -120,6 +120,7 @@ public class Room : MonoBehaviour {
             point: Grid.GetNearestGridpoint(gameObject.GetComponent<Renderer>().bounds.center),
             axis: new Vector3(0, 1, 0),
             angle: degrees);
+        RefreshView();
     }
 
     /// <summary>
@@ -345,6 +346,8 @@ public class Room : MonoBehaviour {
 
         if (setMoveMode == true) {
             roomState = RoomStates.Moving;
+
+            // Create and attach move handle
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
             moveHandle.transform.position = TagLocation(localCoordinates: true);
             moveHandle.transform.SetParent(gameObject.transform, false);
