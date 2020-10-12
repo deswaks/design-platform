@@ -7,6 +7,7 @@ public class Main : MonoBehaviour {
     private static Main instance;
     private Mode currentMode;
 
+
     public static Main Instance {
         // Use the ?? operator, to return 'instance' if 'instance' does not equal null
         // otherwise we assign instance to a new component and return that
@@ -17,6 +18,7 @@ public class Main : MonoBehaviour {
         instance = Instance;
         Grid.size = 1.0f;
         setMode(ModifyMode.Instance);
+
     }
 
     void Update() {
