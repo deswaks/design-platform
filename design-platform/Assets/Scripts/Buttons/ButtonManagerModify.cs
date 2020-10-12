@@ -38,4 +38,8 @@ public class ButtonManagerModify : MonoBehaviour {
         myInputIF.text = "";
     }
 
+    public void DoGraphStuff() {
+        GraphStuff.GraphProgram.WorkIt();
+    }
+
 }
