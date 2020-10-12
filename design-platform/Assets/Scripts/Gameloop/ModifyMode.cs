@@ -45,8 +45,9 @@ public class ModifyMode : Mode {
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(2)) {
-            currentModeType = ModeType.None;
             Deselect();
+            currentModeType = ModeType.None;
+            
         }
     }
     public override void OnModeResume() {
@@ -56,6 +57,7 @@ public class ModifyMode : Mode {
         if (selectedRoom != null) {
             selectedRoom.RemoveEditHandles();
         }
+        currentModeType = ModeType.None;
         Deselect();
     }
 
@@ -100,6 +102,8 @@ public class ModifyMode : Mode {
         }
     }
     public void OnModeTypeResume() {
+        //Debug.Log(currentModeType.ToString());
+
         switch (currentModeType) {
             case ModeType.Move:
                 if (selectedRoom != null) {
@@ -118,17 +122,25 @@ public class ModifyMode : Mode {
 
             case ModeType.Delete:
                 break;
-
+            case ModeType.None:
+                //selectedRoom.RemoveEditHandles();
+                selectedRoom.SetIsHighlighted(false);
+                selectedRoom.SetIsInMoveMode(false);
+                selectedRoom.RemoveEditHandles();
+                break;
             default:
                 break;
         }
     }
     public void OnModeTypePause() {
+        //Debug.Log(currentModeType.ToString());
+
         switch (currentModeType) {
             case ModeType.Move:
                 if (selectedRoom != null) {
                     selectedRoom.SetRoomState(Room.RoomStates.Stationary);
                     selectedRoom.SetIsInMoveMode(false);
+                    selectedRoom.SetIsHighlighted(true);
                 }
                 break;
 
@@ -169,21 +181,25 @@ public class ModifyMode : Mode {
     private Room GetClickedRoom() {
         Room clickedRoom = null;
         Ray ray = Camera.main.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-
+    
         if (Physics.Raycast(ray: ray, hitInfo: out RaycastHit hitInfo)) {
             // if the hit game object is a room (ie. it is on layer 8)
             if (hitInfo.collider.gameObject.layer == 8) {
                 clickedRoom = hitInfo.collider.gameObject.GetComponent<Room>();
             }
             else {
+                //SetModeType(ModeType.None);
                 clickedRoom = hitInfo.collider.gameObject.GetComponentInParent<Room>();
+                //if (!clickedRoom) {
+                //    SetModeType(ModeType.None);
+                //}
             }
         }
         return clickedRoom;
     }
 
     private void Deselect() {
-        
+        //SetModeType(ModeType.None);
         if (selectedRoom != null) {
             //selectedRoom.RemoveEditHandles();
             selectedRoom.SetIsHighlighted(false);

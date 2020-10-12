@@ -386,6 +386,7 @@ public class Room : MonoBehaviour {
             moveHandle.transform.position = TagLocation(localCoordinates: true);
             moveHandle.transform.SetParent(gameObject.transform, false);
 
+            
         }
         else {
             roomState = RoomStates.Stationary;
@@ -410,10 +411,9 @@ public class Room : MonoBehaviour {
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
             transform.position = Grid.GetNearestGridpoint(curPosition);
         }
-    }
+    }   
 
     public void SetIsRoomCurrentlyColliding() {
-        //Debug.Log("Is colliding");
         if (roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
 
             List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
@@ -424,6 +424,8 @@ public class Room : MonoBehaviour {
 
             }
             else { // if there is one or more collision(s)
+                Debug.Log("Is colliding");
+
                 isCurrentlyColliding = true;
                 gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
             }
