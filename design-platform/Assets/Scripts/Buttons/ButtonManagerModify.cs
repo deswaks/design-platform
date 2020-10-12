@@ -9,39 +9,22 @@ using JetBrains.Annotations;
 
 public class ButtonManagerModify : MonoBehaviour {
     public Main main;
-    //public GameObject moveHandlePrefab;
-    //private GameObject moveHandle;
-    //private Room prefabRoom;
 
-    public void Move()
-    {
-        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Move);
-        //main.modifyMode.selectedRoom.SetIsInMoveMode(isInMoveMode: true);
+    public void Move() {
+        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Move);
     }
-    public void Rotate()
-    {
-        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Rotate);
-        //if (main.modifyMode.selectedRoom != null)
-        //{
-        //    main.modifyMode.selectedRoom.Rotate();
-        //}
+    public void Rotate() {
+        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Rotate);
     }
-    public void Modify()
-    {
-        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Edit);
+    public void Modify() {
+        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Edit);
     }
     public void Properties() {
-
-        
+        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.None);
     }
 
-    public void Delete()
-    {
-        ModifyMode.Instance.SetModifyMode(ModifyMode.ModifyModeType.Delete);
-        //if (main.modifyMode.selectedRoom != null)
-        //{
-        //    main.modifyMode.selectedRoom.Delete();
-        //}
+    public void Delete() {
+        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Delete);
     }
 
     public void PublishRoomType(int buildType) {
