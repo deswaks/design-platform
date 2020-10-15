@@ -29,7 +29,7 @@ public class RoomCollider : MonoBehaviour {
         // Only acts if collision object is other room room object and not a sibling (other colliders in same room)
         if (other.gameObject.GetComponent<RoomCollider>() && other.gameObject.transform.parent != parentObject.transform) {
             isCurrentlyColliding = isColliding;
-            Debug.Log("Is colliding with "+other.gameObject.name);
+            //Debug.Log("Is colliding with "+other.gameObject.name);
 
         }
         parentObject.GetComponent<Room>().SetIsRoomCurrentlyColliding();
