@@ -33,6 +33,7 @@ public static class PdfExport {
 
         // Draw
         DrawRooms(gfx);
+        TagRooms(gfx);
 
         // Save the document
         document.Save("Plan.pdf");
@@ -57,6 +58,35 @@ public static class PdfExport {
         }
     }
 
+    private static void TagRooms(XGraphics gfx) {
+        // Font definitions
+        const string facename = "Times New Roman";
+        XPdfFontOptions options = new XPdfFontOptions(PdfFontEncoding.Unicode);
+        XFont nameFont = new XFont(facename, 12, XFontStyle.Bold, options);
+        XFont areaFont = new XFont(facename, 10, XFontStyle.Regular, options);
+
+        XStringFormat tagFormat = new XStringFormat();
+        tagFormat.Alignment = XStringAlignment.Center;
+
+        foreach (Room room in Building.Instance.GetRooms()) {
+            WriteRoomName(gfx, nameFont, room, tagFormat);
+            WriteRoomArea(gfx, areaFont, room, tagFormat);
+        }
+    }
+
+    private static void WriteRoomName(XGraphics gfx, XFont tagFont, Room room, XStringFormat tagFormat) {
+        XPoint tagLocation = WorldToPaper(gfx, room.GetTagLocation());
+        string roomText = room.gameObject.GetComponent<MeshRenderer>().material.ToString().Split(' ')[0].Split('_')[1];
+        string tagText = roomText.Substring(4, roomText.Length-4);
+        gfx.DrawString(tagText, tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y - tagFont.Size / 2 - 2, tagFormat);
+    }
+
+    private static void WriteRoomArea(XGraphics gfx, XFont tagFont, Room room, XStringFormat tagFormat) {
+        XPoint tagLocation = WorldToPaper(gfx, room.GetTagLocation());
+        string tagText = room.GetFloorArea().ToString()+ "m²";
+        gfx.DrawString(tagText, tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y + tagFont.Size/2 + 2, tagFormat);
+    }
+
     private static void drawRoomPolygon(XGraphics gfx, XSolidBrush roomBrush, Room room) {
         double centerX = gfx.PageSize.Width / 2;
         double centerY = gfx.PageSize.Height / 2;
@@ -65,12 +95,11 @@ public static class PdfExport {
     }
 
     private static void drawWallLines(XGraphics gfx, XPen penArchitectural, XPen penStructural, Room room) {
-        double centerX = gfx.PageSize.Width / 2;
-        double centerY = gfx.PageSize.Height / 2;
+
         
         Dictionary<int, List<Structural.Load>> loadTable = Structural.LoadDistribution.AreaLoad(room);
         List<int> structuralWalls = loadTable.Keys.ToList();
-        List<XPoint> drawPoints = room.GetControlPoints(closed: true).Select(p => new XPoint(p.x * scale + centerX, -p.z * scale + centerY)).ToList();
+        List<XPoint> drawPoints = room.GetControlPoints(closed: true).Select(p => WorldToPaper(gfx, p)).ToList();
 
         // Draw each wall using architectural or structural brush according to whether the wall is in load list
         for (int iWall = 0; iWall < drawPoints.Count-1; iWall++) {
@@ -81,5 +110,11 @@ public static class PdfExport {
                 gfx.DrawLine(penArchitectural, drawPoints[iWall], drawPoints[iWall + 1]);
             }
         }
+    }
+
+    private static XPoint WorldToPaper(XGraphics gfx, Vector3 point) {
+        double centerX = gfx.PageSize.Width / 2;
+        double centerY = gfx.PageSize.Height / 2;
+        return new XPoint(point.x * scale + centerX, -point.z * scale + centerY);
     }
 }
