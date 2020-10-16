@@ -1,0 +1,3 @@
+-r:System.ComponentModel.DataAnnotations.dll
+-r:Microsoft.VisualBasic.dll
+-r:System.Diagnostics.dll
