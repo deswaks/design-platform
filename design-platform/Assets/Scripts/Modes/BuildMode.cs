@@ -37,7 +37,7 @@ public class BuildMode : Mode {
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            Main.Instance.setMode(ModifyMode.Instance);
+            Main.Instance.SetMode(SelectMode.Instance);
         }
 
         if (previewRoom) { UpdatePreviewLocation(); }

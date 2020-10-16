@@ -370,7 +370,7 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    public void SetIsInMoveMode(bool setMoveMode = false) //klar til implementering
+    public void SetIsInMoveMode(bool setMoveMode = false)
     {
         // Destroys any prior movehandle
         if (moveHandle != null) {
@@ -385,8 +385,6 @@ public class Room : MonoBehaviour {
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
             moveHandle.transform.position = TagLocation(localCoordinates: true);
             moveHandle.transform.SetParent(gameObject.transform, false);
-
-            
         }
         else {
             roomState = RoomStates.Stationary;
@@ -420,11 +418,13 @@ public class Room : MonoBehaviour {
 
             if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
                 isCurrentlyColliding = false;
-                gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+                Material meshRenderMaterial = gameObject.GetComponent<MeshRenderer>().material;
+                if (isHighlighted) meshRenderMaterial = highlightMaterial;
+                else meshRenderMaterial = currentMaterial;
 
             }
             else { // if there is one or more collision(s)
-                Debug.Log("Is colliding");
+                //Debug.Log("Is colliding");
 
                 isCurrentlyColliding = true;
                 gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
