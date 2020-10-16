@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
-using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using UnityEditor.ProBuilder;
-using UnityEditorInternal;
 
 public class Room : MonoBehaviour {
     private List<Vector3> controlPoints;
@@ -346,19 +341,28 @@ public class Room : MonoBehaviour {
     /// 
     /// </summary>
     /// <returns></returns>
-    public Vector3 TagLocation(bool localCoordinates = false, float weighting = 0.5f) {
-        Dictionary<RoomShape, float> weight = new Dictionary<RoomShape, float>() {
-            { RoomShape.RECTANGLE, 0.5f },
-            { RoomShape.LSHAPE, 0.7f }
-        };
-        Vector3 tagLocation = new Vector3();
-        List<List<float>> unique = UniqueCoordinates(localCoordinates: localCoordinates);
+    public Vector3 GetTagLocation(bool localCoordinates = false) {
+        Vector3 tagPoint = new Vector3();
+        List<Vector3> cp = GetControlPoints(localCoordinates: localCoordinates);
 
-        tagLocation.x = unique[0][0] + (unique[0][1] - unique[0][0]) * weight[shape];
-        tagLocation.y = height + 0.01f;
-        tagLocation.z = unique[2][0] + (unique[2][1] - unique[2][0]) * weight[shape];
+        switch (shape) {
+            case RoomShape.RECTANGLE:
+                tagPoint = new Vector3(cp[0].x + (cp[2].x - cp[0].x) * 0.5f,
+                                       height + 0.01f,
+                                       cp[0].z + (cp[2].z - cp[0].z) * 0.5f);
+                break;
+            case RoomShape.LSHAPE:
+                tagPoint = new Vector3(cp[0].x + (cp[3].x - cp[0].x) * 0.65f,
+                                       height + 0.01f,
+                                       cp[0].z + (cp[3].z - cp[0].z) * 0.65f);
+                break;
+            case RoomShape.USHAPE:
+                break;
+            default:
+                break;
+        }
 
-        return tagLocation;
+        return tagPoint;
     }
 
     /// <summary>
@@ -377,7 +381,7 @@ public class Room : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    public void SetIsInMoveMode(bool setMoveMode = false) //klar til implementering
+    public void SetIsInMoveMode(bool setMoveMode = false)
     {
         // Destroys any prior movehandle
         if (moveHandle != null) {
@@ -390,9 +394,8 @@ public class Room : MonoBehaviour {
 
             // Create and attach move handle
             moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
-            moveHandle.transform.position = TagLocation(localCoordinates: true);
+            moveHandle.transform.position = GetTagLocation(localCoordinates: true);
             moveHandle.transform.SetParent(gameObject.transform, false);
-
         }
         else {
             roomState = RoomStates.Stationary;
@@ -417,20 +420,23 @@ public class Room : MonoBehaviour {
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
             transform.position = Grid.GetNearestGridpoint(curPosition);
         }
-    }
+    }   
 
     public void SetIsRoomCurrentlyColliding() {
-        //Debug.Log("Is colliding");
         if (roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
 
             List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
 
             if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
                 isCurrentlyColliding = false;
-                gameObject.GetComponent<MeshRenderer>().material = prefabRoom.defaultMaterial;
+                Material meshRenderMaterial = gameObject.GetComponent<MeshRenderer>().material;
+                if (isHighlighted) meshRenderMaterial = highlightMaterial;
+                else meshRenderMaterial = currentMaterial;
 
             }
             else { // if there is one or more collision(s)
+                //Debug.Log("Is colliding");
+
                 isCurrentlyColliding = true;
                 gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
             }

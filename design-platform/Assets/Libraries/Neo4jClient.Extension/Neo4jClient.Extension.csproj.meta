@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:design-platform/Assets/Libraries/Neo4jClient.Extension/Neo4jClient.Extension.csproj.meta
 guid: 69218f29f03f0354aa34cae3c383f5e8
+=======
+guid: 138cb1ff7940ca849804bf5d0cae4779
+>>>>>>> master:design-platform/Assets/Conifers [BOTD]/Conifers [BOTD] Documentation.pdf.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
