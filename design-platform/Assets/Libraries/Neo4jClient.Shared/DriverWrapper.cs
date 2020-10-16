@@ -71,8 +71,8 @@ private class ListAddressResolver : IServerAddressResolver
 
             var authToken = GetAuthToken(username, pass, realm);
             this.driver = addressResolver == null
-                ? GraphDatabase.Driver(uri, authToken) 
-                : GraphDatabase.Driver(uri, authToken, new Config { Resolver = addressResolver });
+                ? Neo4j.Driver.V1.GraphDatabase.Driver(uri, authToken) 
+                : Neo4j.Driver.V1.GraphDatabase.Driver(uri, authToken, new Config { Resolver = addressResolver });
         }
         
         public ISession Session()

@@ -39,7 +39,7 @@ public class ButtonManagerModify : MonoBehaviour {
     }
 
     public void DoGraphStuff() {
-        GraphStuff.GraphProgram.WorkIt();
+        GraphDatabase.GraphProgram.WorkIt();
     }
 
 }

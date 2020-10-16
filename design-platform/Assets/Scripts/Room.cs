@@ -44,6 +44,8 @@ public class Room : MonoBehaviour {
 
     private Vector3 lastLegalPlacementPoint;
 
+    public RoomType RoomType { get; private set; }
+
     public enum RoomStates {
         Stationary,
         Preview,
@@ -94,6 +96,11 @@ public class Room : MonoBehaviour {
         gameObject.AddComponent<PolyShape>();
         gameObject.AddComponent<ProBuilderMesh>();
         SetRoomType(RoomType.DEFAULT);
+        RefreshView();
+    }
+
+    public void SetControlPoints(List<Vector3> newControlPoints) {
+        controlPoints = newControlPoints;
         RefreshView();
     }
 
@@ -445,6 +452,8 @@ public class Room : MonoBehaviour {
 
 
     public void SetRoomType(RoomType type) {
+        RoomType = type;
+
         switch (type) {
             case RoomType.PREVIEW:
                 currentMaterial = prefabRoom.highlightMaterial;
