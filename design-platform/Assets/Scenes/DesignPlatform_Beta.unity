@@ -893,7 +893,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 6967
+    m_Bits: 15159
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -929,6 +929,9 @@ MonoBehaviour:
   roomMask:
     serializedVersion: 2
     m_Bits: 256
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!1 &141787804
 GameObject:
   m_ObjectHideFlags: 0
@@ -2236,7 +2239,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 567243121}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -6547525849180606122, guid: 5b31c90b01e3a0e44b821768a287c8bd,
+          type: 3}
+        m_MethodName: test
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &567243121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2500,7 +2515,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 259727473}
-        m_MethodName: StartModifyMode
+        m_MethodName: StartSelectMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

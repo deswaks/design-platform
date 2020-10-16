@@ -76,6 +76,8 @@ public class Building
         GameObject newWallGameObject = new GameObject("Wall");
         Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
         newWall.InitializeWall(startEndPoints, normal, room);
+
+        walls.Add(newWall);
      
         return newWall;
     }
@@ -90,6 +92,15 @@ public class Building
     /// </summary>
     public void RemoveWall(Wall wall) {
         if (walls.Contains(wall)) { walls.Remove(wall); }
+    }
+    /// <summary>
+    /// Removes ALL walls
+    /// </summary>
+    public void DeleteAllWalls() {
+        int amount = GetWalls().Count;
+        for(int i = 0; i < amount; i++) {
+            GetWalls()[0].DeleteWall();
+        }
     }
 }
 

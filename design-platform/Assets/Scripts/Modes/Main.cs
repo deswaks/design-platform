@@ -22,7 +22,7 @@ public class Main : MonoBehaviour {
     }
 
     void Update() {
-        Debug.Log(currentMode.ToString());
+        //Debug.Log(currentMode.ToString());
         currentMode.Tick();
     }
 

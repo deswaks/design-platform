@@ -19,6 +19,7 @@ public class ButtonManagerModify : MonoBehaviour {
         SelectMode.Instance.SetMode(MoveMode.Instance);
     }
     public void Rotate() {
+        SelectMode.Instance.SetMode(null);
         if (SelectMode.Instance.selection != null) {
             SelectMode.Instance.selection.Rotate();
         }
@@ -31,6 +32,7 @@ public class ButtonManagerModify : MonoBehaviour {
     }
 
     public void Delete() {
+        SelectMode.Instance.SetMode(null);
         if (SelectMode.Instance.selection != null) {
             SelectMode.Instance.selection.Delete();
         }
@@ -48,11 +50,11 @@ public class ButtonManagerModify : MonoBehaviour {
     }
     //public void TestWallBuilder() {
         //wallControlPoints = new List<Vector3> {
-        //    ModifyMode.Instance.selectedRoom.GetControlPoints(localCoordinates: true)[0],
-        //    ModifyMode.Instance.selectedRoom.GetControlPoints(localCoordinates: true)[1]
+        //    SelectMode.Instance.selection.GetControlPoints(localCoordinates: true)[0],
+        //    SelectMode.Instance.selection.GetControlPoints(localCoordinates: true)[1]
         //};
-        //normal = ModifyMode.Instance.selectedRoom.GetWallNormals(localCoordinates: true)[0];
-        //room = ModifyMode.Instance.selectedRoom;
+        //normal = SelectMode.Instance.selection.GetWallNormals(localCoordinates: true)[0];
+        //room = SelectMode.Instance.selection;
 
         //Wall wall = new Wall();
 

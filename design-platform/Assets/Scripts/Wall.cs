@@ -18,13 +18,18 @@ public class Wall : MonoBehaviour
     private Wall prefabWall;
     private List<Vector3> wallControlPoints;
 
-
     private List<Vector3> testwallControlPoints;
     private Vector3 testnormal;
     private Room testroom;
 
-
+    /// <summary>
+    /// Construct walls.
+    /// </summary>
     public void InitializeWall(List<Vector3> startEndPoints, Vector3 normal, Room room = null) {
+        // lav en swich til hhv. bærende og ikke bærende vægge (fra Enum (opret Enum))
+        // Vægge er pt baseret på room faces - skal ændres så de inddeles i room interfaces
+            // Fjern duplicates
+            // Opdel i subsections
         parentRoom = room;
         gameObject.layer = 13; // Wall layer
 
@@ -54,26 +59,37 @@ public class Wall : MonoBehaviour
         gameObject.GetComponent<MeshRenderer>().material = prefabWall.wallMaterial;
 
     }
+    /// <summary>
+    /// test to test Build and delete walls
+    /// </summary>
     public void test() {
-
-
-        for (int i = 0; i < ModifyMode.Instance.selectedRoom.GetControlPoints(localCoordinates: false, closed: true).Count; i++) {
-            Debug.Log(ModifyMode.Instance.selectedRoom.GetControlPoints(localCoordinates: false, closed: true)[i]);
-
-
-
-            testwallControlPoints = new List<Vector3> {
-            ModifyMode.Instance.selectedRoom.GetControlPoints(localCoordinates: false, closed: true)[i],
-            ModifyMode.Instance.selectedRoom.GetControlPoints(localCoordinates: false, closed: true)[i+1]
-            };
-            testnormal = ModifyMode.Instance.selectedRoom.GetWallNormals(localCoordinates: false)[i];
-            testroom = ModifyMode.Instance.selectedRoom;
-
-
-            prefabWall = Building.Instance.BuildWall(testwallControlPoints, testnormal, testroom);
+       
+        if(Building.Instance.GetWalls().Count > 0) {
+            Building.Instance.DeleteAllWalls();
         }
         
+        foreach (Room r in Building.Instance.GetRooms()){
+            for (int i = 0; i < r.GetControlPoints(localCoordinates: false, closed: true).Count - 1; i++) {
+                testwallControlPoints = new List<Vector3> {
+                    r.GetControlPoints(localCoordinates: false, closed: true)[i],
+                    r.GetControlPoints(localCoordinates: false, closed: true)[i+1]
+            };
+                testnormal = r.GetWallNormals(localCoordinates: false)[i];
+                testroom = r;
 
+
+                prefabWall = Building.Instance.BuildWall(testwallControlPoints, testnormal, testroom);
+            }
+        }
+        
     }
-
+    /// <summary>
+    /// Deletes a wall and removes it from the wall list.
+    /// </summary>
+    public void DeleteWall() {
+        if (Building.Instance.GetWalls().Contains(this)) {
+            parentRoom.parentBuilding.RemoveWall(this);
+        }
+        Destroy(gameObject);
+    }
 }

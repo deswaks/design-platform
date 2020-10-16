@@ -195,7 +195,9 @@ public class Room : MonoBehaviour {
     /// Deletes the room
     /// </summary>
     public void Delete() {
-        if (Building.Instance.GetRooms().Contains(this)) { parentBuilding.RemoveRoom(this); }
+        if (Building.Instance.GetRooms().Contains(this)) { 
+            parentBuilding.RemoveRoom(this); 
+        }
         Destroy(gameObject);
     }
 
