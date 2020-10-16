@@ -11,30 +11,34 @@ public class ButtonManagerModify : MonoBehaviour {
     public Main main;
 
     public void Move() {
-        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Move);
+        SelectMode.Instance.SetMode(MoveMode.Instance);
     }
     public void Rotate() {
-        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Rotate);
+        if (SelectMode.Instance.selection != null) {
+            SelectMode.Instance.selection.Rotate();
+        }
     }
     public void Modify() {
-        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Edit);
+        SelectMode.Instance.SetMode(ExtrudeMode.Instance);
     }
     public void Properties() {
-        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.None);
+        SelectMode.Instance.SetMode(null);
     }
 
     public void Delete() {
-        ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Delete);
+        if (SelectMode.Instance.selection != null) {
+            SelectMode.Instance.selection.Delete();
+        }
     }
 
     public void PublishRoomType(int buildType) {
-        ModifyMode.Instance.selectedRoom.SetRoomType((RoomType)buildType);
+        SelectMode.Instance.selection.SetRoomType((RoomType)buildType);
     }
 
     public void PublishRoomNote() {
         GameObject myInputGO = GameObject.Find("InputField Room Note");
         InputField myInputIF = myInputGO.GetComponent<InputField>();
-        ModifyMode.Instance.selectedRoom.SetRoomNote(myInputIF.text);
+        SelectMode.Instance.selection.SetRoomNote(myInputIF.text);
         myInputIF.text = "";
     }
 
