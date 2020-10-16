@@ -75,14 +75,14 @@ public static class PdfExport {
     }
 
     private static void WriteRoomName(XGraphics gfx, XFont tagFont, Room room, XStringFormat tagFormat) {
-        XPoint tagLocation = WorldToPaper(gfx, room.TagLocation());
+        XPoint tagLocation = WorldToPaper(gfx, room.GetTagLocation());
         string roomText = room.gameObject.GetComponent<MeshRenderer>().material.ToString().Split(' ')[0].Split('_')[1];
         string tagText = roomText.Substring(4, roomText.Length-4);
         gfx.DrawString(tagText, tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y - tagFont.Size / 2 - 2, tagFormat);
     }
 
     private static void WriteRoomArea(XGraphics gfx, XFont tagFont, Room room, XStringFormat tagFormat) {
-        XPoint tagLocation = WorldToPaper(gfx, room.TagLocation());
+        XPoint tagLocation = WorldToPaper(gfx, room.GetTagLocation());
         string tagText = room.GetFloorArea().ToString()+ "m²";
         gfx.DrawString(tagText, tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y + tagFont.Size/2 + 2, tagFormat);
     }
