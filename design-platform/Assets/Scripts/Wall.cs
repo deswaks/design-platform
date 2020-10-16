@@ -30,6 +30,8 @@ public class Wall : MonoBehaviour
         // Vægge er pt baseret på room faces - skal ændres så de inddeles i room interfaces
             // Fjern duplicates
             // Opdel i subsections
+        // Fix hjørnesamlinger
+
         parentRoom = room;
         gameObject.layer = 13; // Wall layer
 
