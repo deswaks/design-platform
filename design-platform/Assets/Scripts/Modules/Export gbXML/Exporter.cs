@@ -8,7 +8,6 @@ using gs = gbXMLSerializer;
 namespace gbXML {
     public static class Exporter {
         public static gs.gbXML gbx = new gs.gbXML();
-        public static string fileName = "test.xml";
 
         public static void ClearXML() {
             gbx = new gs.gbXML();
@@ -38,8 +37,8 @@ namespace gbXML {
             building.Spaces = spaces.ToArray();
 
             // Save and open file
-            string result = gs.BasicSerialization.CreateXML(fileName, gbx);
-            Process.Start(fileName); //Start viewer
+            string result = gs.BasicSerialization.CreateXML("Exports/building.gbxml", gbx);
+            Process.Start("Exports\\building.gbxml"); //Start viewer
         }
 
         

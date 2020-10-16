@@ -36,8 +36,8 @@ public static class PdfExport {
         TagRooms(gfx);
 
         // Save the document
-        document.Save("Plan.pdf");
-        Process.Start("Plan.pdf"); //Start viewer
+        document.Save("Exports/Plan.pdf");
+        Process.Start("Exports\\Plan.pdf"); //Start viewer
     }
 
     /// <summary>
