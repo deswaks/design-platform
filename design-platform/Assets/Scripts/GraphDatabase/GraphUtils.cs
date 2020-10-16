@@ -14,16 +14,7 @@ using UnityEngine;
 
 
 namespace GraphDatabase {
-    public static class Utils {
-
-        public static void CreateRoomFromGraph(RoomNode RoomNode) {
-            // Builds room
-            Room newRoom = Building.Instance.BuildRoom(RoomNode.shape, preview: false, templateRoom: null);
-            //Gets control points from graph data
-            List<Vector3> controlPoints = StringListToVector3List(RoomNode.vertices);
-            newRoom.SetControlPoints(controlPoints);
-            newRoom.SetRoomType(RoomNode.type);
-        }
+    public static class GraphUtils {
 
         /// <summary>
         /// Converts a single string signifying a point (e.g. "(1;2;3)") to Vector3 format
@@ -72,7 +63,7 @@ namespace GraphDatabase {
         public static List<Vector3> StringListToVector3List(IEnumerable<string> pointStrings) {
             List<Vector3> points = new List<Vector3>();
             if (pointStrings != null) {
-                points = pointStrings.ToList().Select(p => Utils.StringToVector3(p)).ToList();
+                points = pointStrings.ToList().Select(p => GraphUtils.StringToVector3(p)).ToList();
             }
             return points;
         }

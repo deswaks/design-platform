@@ -29,11 +29,11 @@ namespace GraphDatabase {
         public RoomNode() {}
 
         public override string ToString() {
-            return string.Format("Id: {0}, Name: {1}, Type: {2}", id, name, type.ToString("g"));
+            return string.Format("Id: {0}, Name: {1}, Type: {2}, Shape: {3}", id, name, type.ToString("g"),shape.ToString());
         }
 
         public List<Vector3> GetVerticesAsVector3() {
-            return Utils.StringListToVector3List(vertices);
+            return GraphUtils.StringListToVector3List(vertices);
         }
     }
 
