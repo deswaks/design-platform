@@ -6,12 +6,11 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
 
-public class Building
-{
+public class Building {
     private static Building instance;
     private List<Room> rooms = new List<Room>();
-    
     private List<Wall> walls = new List<Wall>();
+    private List<Interface> interfaces = new List<Interface>();
 
     public static Building Instance {
         // Use the ?? operator, to return 'instance' if 'instance' does not equal null
@@ -20,35 +19,31 @@ public class Building
     }
 
     // Returns a list of all the rooms in the building
-    public List<Room> GetRooms()
-    {
+    public List<Room> GetRooms() {
         return rooms;
     }
 
     // Removes room from the list of rooms
-    public void RemoveRoom(Room room)
-    {
+    public void RemoveRoom(Room room) {
         if (rooms.Contains(room)) { rooms.Remove(room); }
     }
 
     /// <summary>
     /// Builds a new room
     /// </summary>
-    public Room BuildRoom(RoomShape buildShape = RoomShape.RECTANGLE, bool preview = false, Room templateRoom = null)
-    {
+    public Room BuildRoom(RoomShape buildShape = RoomShape.RECTANGLE, bool preview = false, Room templateRoom = null) {
         GameObject newRoomGameObject = new GameObject("Room");
         Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
         newRoom.InitializeRoom(buildShape: buildShape, building: this);
         if (preview) { newRoomGameObject.name = "Preview room"; }
 
-        if (templateRoom != null)
-        {
+        if (templateRoom != null) {
             newRoomGameObject.transform.position = templateRoom.transform.position;
             newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
         }
-        
+
         if (preview == false) { rooms.Add(newRoom); }
-        
+
         return newRoom;
     }
 
@@ -69,6 +64,7 @@ public class Building
         }
         return new List<float> { minX, maxX, minY, maxY };
     }
+
     /// <summary>
     /// Builds a new wall
     /// </summary>
@@ -78,29 +74,41 @@ public class Building
         newWall.InitializeWall(startEndPoints, normal, room);
 
         walls.Add(newWall);
-     
+
         return newWall;
     }
+
     /// <summary>
     /// Get a list of builded walls
     /// </summary>
     public List<Wall> GetWalls() {
         return walls;
     }
+
     /// <summary>
     /// Removes wall from the list of walls
     /// </summary>
     public void RemoveWall(Wall wall) {
         if (walls.Contains(wall)) { walls.Remove(wall); }
     }
+
     /// <summary>
     /// Removes ALL walls
     /// </summary>
     public void DeleteAllWalls() {
         int amount = GetWalls().Count;
-        for(int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i++) {
             GetWalls()[0].DeleteWall();
         }
+    }
+
+    public void CreateInterfaces() {
+        // for hvert face
+            // Check om endepunkter findes i controlpoints for et andet rum
+            // Check om der findes et controlpoint for et andet rum mellem endepunkter
+        
+            // hvis der deles begge endepunkter
+            // Hvis der deles ingen endepunkter
     }
 }
 

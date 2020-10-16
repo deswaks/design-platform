@@ -24,6 +24,7 @@ namespace Structural {
             return spans;
         }
 
+
         public static Dictionary<int, List<Load>> AreaLoad(Room room) {
             Dictionary<int, List<Load>> loadTables = WallLoadTables(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);

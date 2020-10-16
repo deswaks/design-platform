@@ -11,6 +11,8 @@ using UnityEditorInternal;
 
 public class Room : MonoBehaviour {
     private List<Vector3> controlPoints;
+    private List<Face> faces = new List<Face>();
+
     private RoomShape shape;
     private Material currentMaterial;
     public Material defaultMaterial;
@@ -85,6 +87,9 @@ public class Room : MonoBehaviour {
                 gameObject.name = "Room(L-Shape)";
                 break;
         }
+        for (int i = 0; i < controlPoints.Count+2; i++) {
+            faces.Add(new Face(this, i));
+        }
 
         // Create and attach collider objects
         gameObject.AddComponent<MeshCollider>();
@@ -148,7 +153,7 @@ public class Room : MonoBehaviour {
     public float GetFloorArea() {
         Vector2[] vertices = GetControlPoints(localCoordinates: true).Select(p => new Vector2(p.x, p.z)).ToArray();
         Polygon2D roomPolygon = new Polygon2D(vertices);
-        return roomPolygon.Area();
+        return roomPolygon.GetArea();
     }
 
     /// <summary>
