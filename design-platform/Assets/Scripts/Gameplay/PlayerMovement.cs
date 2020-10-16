@@ -14,17 +14,20 @@ public class PlayerMovement : MonoBehaviour {
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
     public LayerMask roomMask;
+    public LayerMask wallMask;
 
     Vector3 velocity;
     bool isGrounded;
     bool isRoomed;
+    bool isWalled;
 
     // Update is called once per frame
     void Update() {
         isGrounded = Physics.CheckSphere(groundChech.position, groundDistance, groundMask);
         isRoomed = Physics.CheckSphere(groundChech.position, groundDistance, roomMask);
+        isWalled = Physics.CheckSphere(groundChech.position, groundDistance, wallMask);
 
-        if (isGrounded && velocity.y < 0 || isRoomed && velocity.y < 0) {
+        if (isGrounded && velocity.y < 0 || isRoomed && velocity.y < 0 || isWalled && velocity.y < 0) {
             velocity.y = -2f;
         }
 
@@ -36,7 +39,7 @@ public class PlayerMovement : MonoBehaviour {
 
         controller.Move(move * speed * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && isGrounded || Input.GetButtonDown("Jump") && isRoomed) {
+        if (Input.GetButtonDown("Jump") && isGrounded || Input.GetButtonDown("Jump") && isRoomed || Input.GetButtonDown("Jump") && isWalled) {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         velocity.y += gravity * Time.deltaTime;

@@ -10,6 +10,8 @@ public class Building
 {
     private static Building instance;
     private List<Room> rooms = new List<Room>();
+    
+    private List<Wall> walls = new List<Wall>();
 
     public static Building Instance {
         // Use the ?? operator, to return 'instance' if 'instance' does not equal null
@@ -66,6 +68,28 @@ public class Building
             }
         }
         return new List<float> { minX, maxX, minY, maxY };
+    }
+    /// <summary>
+    /// Builds a new wall
+    /// </summary>
+    public Wall BuildWall(List<Vector3> startEndPoints, Vector3 normal, Room room = null) {
+        GameObject newWallGameObject = new GameObject("Wall");
+        Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
+        newWall.InitializeWall(startEndPoints, normal, room);
+     
+        return newWall;
+    }
+    /// <summary>
+    /// Get a list of builded walls
+    /// </summary>
+    public List<Wall> GetWalls() {
+        return walls;
+    }
+    /// <summary>
+    /// Removes wall from the list of walls
+    /// </summary>
+    public void RemoveWall(Wall wall) {
+        if (walls.Contains(wall)) { walls.Remove(wall); }
     }
 }
 

@@ -10,6 +10,11 @@ using JetBrains.Annotations;
 public class ButtonManagerModify : MonoBehaviour {
     public Main main;
 
+    //SLET
+    //private List<Vector3> wallControlPoints;
+    //private Vector3 normal;
+    //private Room room;
+    //SLET
     public void Move() {
         ModifyMode.Instance.SetModeType(ModifyMode.ModeType.Move);
     }
@@ -37,5 +42,16 @@ public class ButtonManagerModify : MonoBehaviour {
         ModifyMode.Instance.selectedRoom.SetRoomNote(myInputIF.text);
         myInputIF.text = "";
     }
+    //public void TestWallBuilder() {
+        //wallControlPoints = new List<Vector3> {
+        //    ModifyMode.Instance.selectedRoom.GetControlPoints(localCoordinates: true)[0],
+        //    ModifyMode.Instance.selectedRoom.GetControlPoints(localCoordinates: true)[1]
+        //};
+        //normal = ModifyMode.Instance.selectedRoom.GetWallNormals(localCoordinates: true)[0];
+        //room = ModifyMode.Instance.selectedRoom;
 
+        //Wall wall = new Wall();
+
+        //wall.InitializeWall(wallControlPoints, normal, room);
+    //}
 }
