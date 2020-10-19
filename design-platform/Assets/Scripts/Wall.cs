@@ -21,9 +21,6 @@ public class Wall : MonoBehaviour {
     /// </summary>
     public void InitializeWall(Interface interFace) {
         // lav swich wall types (fra Enum - WallType)
-        // Vægge er pt baseret på room faces - skal ændres så de inddeles i room interfaces
-        // Fjern duplicates
-        // Opdel i subsections
         // Fix hjørnesamlinger
 
         this.interFace = interFace;

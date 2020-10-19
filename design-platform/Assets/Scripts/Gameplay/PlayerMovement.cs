@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using gbXMLSerializer;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ public class PlayerMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        //Physics.IgnoreLayerCollision(controller.gameObject.layer,);
+
         isGrounded = Physics.CheckSphere(groundChech.position, groundDistance, groundMask);
         isRoomed = Physics.CheckSphere(groundChech.position, groundDistance, roomMask);
         isWalled = Physics.CheckSphere(groundChech.position, groundDistance, wallMask);
