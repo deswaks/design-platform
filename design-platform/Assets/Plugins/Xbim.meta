@@ -1,6 +1,15 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 6c1f9f85644e541449d760952a2ac853
 folderAsset: yes
+=======
+<<<<<<< HEAD:design-platform/Assets/Plugins/Xbim/xbim.essentials.5.1.297.nupkg.meta
+guid: 83b8445c5c8121f4abca5650348147a5
+=======
+guid: 6c1f9f85644e541449d760952a2ac853
+folderAsset: yes
+>>>>>>> master:design-platform/Assets/Plugins/Xbim.meta
+>>>>>>> master
 DefaultImporter:
   externalObjects: {}
   userData: 
