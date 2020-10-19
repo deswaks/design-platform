@@ -9,7 +9,7 @@ public class Interface {
     public Vector3 GetStartPoint(bool localCoordinates = false) {
         float[] parameters = attachedFaces[0].paramerters[this];
         (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-        Vector3 startPoint = (fEndPoint - fStartPoint).normalized * parameters[0];
+        Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];
 
         return startPoint;
     }
@@ -17,7 +17,7 @@ public class Interface {
     public Vector3 GetEndPoint(bool localCoordinates = false) {
         float[] parameters = attachedFaces[0].paramerters[this];
         (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-        Vector3 startPoint = (fEndPoint - fStartPoint).normalized * parameters[1];
+        Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[1];
 
         return startPoint;
     }

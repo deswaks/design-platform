@@ -162,8 +162,8 @@ public class Building {
                     Vector3 ifEndPoint = splitPoints[i+1];
                     Interface existingInterface = null;
                     foreach (Interface interFace in interfaces) {
-                        if (interFace.GetStartPoint() == ifStartPoint || interFace.GetEndPoint() == ifEndPoint
-                            && interFace.GetStartPoint() == ifStartPoint || interFace.GetEndPoint() == ifEndPoint) {
+                        if ((interFace.GetStartPoint() == ifStartPoint && interFace.GetEndPoint() == ifEndPoint)
+                         || (interFace.GetStartPoint() == ifEndPoint   && interFace.GetEndPoint() == ifStartPoint)) {
                             existingInterface = interFace;
                         }
                     }
@@ -176,10 +176,10 @@ public class Building {
 
                     // Create new interface
                     else {
-                        Interface interfac = new Interface();
-                        interfac.attachedFaces[0] = face;
-                        interfaces.Add(interfac);
-                        face.AddInterface(interfac, splitParameters[i], splitParameters[i + 1]);
+                        Interface interFace = new Interface();
+                        interFace.attachedFaces[0] = face;
+                        interfaces.Add(interFace);
+                        face.AddInterface(interFace, splitParameters[i], splitParameters[i + 1]);
                     }
                 }
                 

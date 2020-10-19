@@ -102,8 +102,8 @@ public class Face
             // Compare y
             else
                 return dyl > 0 ?
-                  startPoint.y <= point.y && point.y <= endPoint.y :
-                  endPoint.y <= point.y && point.y <= startPoint.y;
+                  startPoint.z <= point.z && point.z <= endPoint.z :
+                  endPoint.z <= point.z && point.z <= startPoint.z;
         }
         else return false;
     }
@@ -113,13 +113,13 @@ public class Face
         
         // The line is along y
         if ( startPoint.x == point.x && endPoint.x == point.x) {
-            if (Mathf.Min(startPoint.y,endPoint.y) < point.y
-                && Mathf.Max(startPoint.y, endPoint.y) > point.y) {
+            if (Mathf.Min(startPoint.z,endPoint.z) < point.z
+                && Mathf.Max(startPoint.z, endPoint.z) > point.z) {
                 return true;
             }
         }
         // The line is along x
-        if (startPoint.y == point.y && endPoint.y == point.y) {
+        if (startPoint.z == point.z && endPoint.z == point.z) {
             if (Mathf.Min(startPoint.x, endPoint.x) < point.x
                 && Mathf.Max(startPoint.x, endPoint.x) > point.x) {
                 return true;
