@@ -47,107 +47,107 @@ namespace Ifc {
         /// <param name="width">Width of the rectangular footprint (width of the wall)</param>
         /// <param name="height">Height to extrude the wall, extrusion is vertical</param>
         /// <returns></returns>
-        public static IfcWallStandardCase CreateWall(IfcStore model, double length, double width, double height) {
-            //
+        public static IfcWallStandardCase CreateWall(IfcStore model, Interface interFace) {
+
+            Vector3 startPoint = interFace.GetStartPoint();
+            Vector3 endPoint = interFace.GetEndPoint();
+            Vector3 wallVector = endPoint - startPoint;
+            float height = interFace.attachedFaces[0].parentRoom.height;
+
             //begin a transaction
-            using (var txn = model.BeginTransaction("Create Wall")) {
-                var wall = model.Instances.New<IfcWallStandardCase>();
-                wall.Name = "A Standard rectangular wall";
+            using var transaction = model.BeginTransaction("Create Wall");
+            var wall = model.Instances.New<IfcWallStandardCase>();
+            wall.Name = "Wall name";
 
-                //represent wall as a rectangular profile
-                var rectProf = model.Instances.New<IfcRectangleProfileDef>();
-                rectProf.ProfileType = IfcProfileTypeEnum.AREA;
-                rectProf.XDim = width;
-                rectProf.YDim = length;
+            //represent wall as a rectangular profile
+            var rectProf = model.Instances.New<IfcRectangleProfileDef>();
+            rectProf.ProfileType = IfcProfileTypeEnum.AREA;
+            rectProf.XDim = interFace.wall.wallThickness;
+            rectProf.YDim = wallVector.magnitude;
 
-                var insertPoint = model.Instances.New<IfcCartesianPoint>();
-                insertPoint.SetXY(0, 400); //insert at arbitrary position
-                rectProf.Position = model.Instances.New<IfcAxis2Placement2D>();
-                rectProf.Position.Location = insertPoint;
+            var insertPoint = model.Instances.New<IfcCartesianPoint>();
+            insertPoint.SetXY(0, 0);
+            rectProf.Position = model.Instances.New<IfcAxis2Placement2D>();
+            rectProf.Position.Location = insertPoint;
 
-                //model as a swept area solid
-                var body = model.Instances.New<IfcExtrudedAreaSolid>();
-                body.Depth = height;
-                body.SweptArea = rectProf;
-                body.ExtrudedDirection = model.Instances.New<IfcDirection>();
-                body.ExtrudedDirection.SetXYZ(0, 0, 1);
+            //model as a swept area solid
+            var body = model.Instances.New<IfcExtrudedAreaSolid>();
+            body.Depth = height;
+            body.SweptArea = rectProf;
+            body.ExtrudedDirection = model.Instances.New<IfcDirection>();
+            body.ExtrudedDirection.SetXYZ(0, 0, 1);
 
-                //parameters to insert the geometry in the model
-                var origin = model.Instances.New<IfcCartesianPoint>();
-                origin.SetXYZ(0, 0, 0);
-                body.Position = model.Instances.New<IfcAxis2Placement3D>();
-                body.Position.Location = origin;
+            //parameters to insert the geometry in the model
+            var origin = model.Instances.New<IfcCartesianPoint>();
+            origin.SetXYZ(startPoint.x, startPoint.z, startPoint.y);
+            body.Position = model.Instances.New<IfcAxis2Placement3D>();
+            body.Position.Location = origin;
 
-                //Create a Definition shape to hold the geometry
-                var shape = model.Instances.New<IfcShapeRepresentation>();
-                var modelContext = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-                shape.ContextOfItems = modelContext;
-                shape.RepresentationType = "SweptSolid";
-                shape.RepresentationIdentifier = "Body";
-                shape.Items.Add(body);
+            //Create a Definition shape to hold the geometry
+            var shape = model.Instances.New<IfcShapeRepresentation>();
+            var modelContext = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
+            shape.ContextOfItems = modelContext;
+            shape.RepresentationType = "SweptSolid";
+            shape.RepresentationIdentifier = "Body";
+            shape.Items.Add(body);
 
-                //Create a Product Definition and add the model geometry to the wall
-                var rep = model.Instances.New<IfcProductDefinitionShape>();
-                rep.Representations.Add(shape);
-                wall.Representation = rep;
+            //Create a Product Definition and add the model geometry to the wall
+            var rep = model.Instances.New<IfcProductDefinitionShape>();
+            rep.Representations.Add(shape);
+            wall.Representation = rep;
 
-                //now place the wall into the model
-                var lp = model.Instances.New<IfcLocalPlacement>();
-                var ax3D = model.Instances.New<IfcAxis2Placement3D>();
-                ax3D.Location = origin;
-                ax3D.RefDirection = model.Instances.New<IfcDirection>();
-                ax3D.RefDirection.SetXYZ(0, 1, 0);
-                ax3D.Axis = model.Instances.New<IfcDirection>();
-                ax3D.Axis.SetXYZ(0, 0, 1);
-                lp.RelativePlacement = ax3D;
-                wall.ObjectPlacement = lp;
+            //now place the wall into the model
+            var lp = model.Instances.New<IfcLocalPlacement>();
+            var ax3D = model.Instances.New<IfcAxis2Placement3D>();
+            ax3D.Location = origin;
+            ax3D.RefDirection = model.Instances.New<IfcDirection>();
+            ax3D.RefDirection.SetXYZ(wallVector.x, wallVector.z, wallVector.y);
+            ax3D.Axis = model.Instances.New<IfcDirection>();
+            ax3D.Axis.SetXYZ(0, 0, 1);
+            lp.RelativePlacement = ax3D;
+            wall.ObjectPlacement = lp;
 
+            // Where Clause: The IfcWallStandard relies on the provision of an IfcMaterialLayerSetUsage 
+            var ifcMaterialLayerSetUsage = model.Instances.New<IfcMaterialLayerSetUsage>();
+            var ifcMaterialLayerSet = model.Instances.New<IfcMaterialLayerSet>();
+            var ifcMaterialLayer = model.Instances.New<IfcMaterialLayer>();
+            ifcMaterialLayer.LayerThickness = 10;
+            ifcMaterialLayerSet.MaterialLayers.Add(ifcMaterialLayer);
+            ifcMaterialLayerSetUsage.ForLayerSet = ifcMaterialLayerSet;
+            ifcMaterialLayerSetUsage.LayerSetDirection = IfcLayerSetDirectionEnum.AXIS2;
+            ifcMaterialLayerSetUsage.DirectionSense = IfcDirectionSenseEnum.NEGATIVE;
+            ifcMaterialLayerSetUsage.OffsetFromReferenceLine = 150;
 
-                // Where Clause: The IfcWallStandard relies on the provision of an IfcMaterialLayerSetUsage 
-                var ifcMaterialLayerSetUsage = model.Instances.New<IfcMaterialLayerSetUsage>();
-                var ifcMaterialLayerSet = model.Instances.New<IfcMaterialLayerSet>();
-                var ifcMaterialLayer = model.Instances.New<IfcMaterialLayer>();
-                ifcMaterialLayer.LayerThickness = 10;
-                ifcMaterialLayerSet.MaterialLayers.Add(ifcMaterialLayer);
-                ifcMaterialLayerSetUsage.ForLayerSet = ifcMaterialLayerSet;
-                ifcMaterialLayerSetUsage.LayerSetDirection = IfcLayerSetDirectionEnum.AXIS2;
-                ifcMaterialLayerSetUsage.DirectionSense = IfcDirectionSenseEnum.NEGATIVE;
-                ifcMaterialLayerSetUsage.OffsetFromReferenceLine = 150;
+            // Add material to wall
+            var material = model.Instances.New<IfcMaterial>();
+            material.Name = "some material";
+            var ifcRelAssociatesMaterial = model.Instances.New<IfcRelAssociatesMaterial>();
+            ifcRelAssociatesMaterial.RelatingMaterial = material;
+            ifcRelAssociatesMaterial.RelatedObjects.Add(wall);
+            ifcRelAssociatesMaterial.RelatingMaterial = ifcMaterialLayerSetUsage;
 
-                // Add material to wall
-                var material = model.Instances.New<IfcMaterial>();
-                material.Name = "some material";
-                var ifcRelAssociatesMaterial = model.Instances.New<IfcRelAssociatesMaterial>();
-                ifcRelAssociatesMaterial.RelatingMaterial = material;
-                ifcRelAssociatesMaterial.RelatedObjects.Add(wall);
+            // IfcPresentationLayerAssignment is required for CAD presentation in IfcWall or IfcWallStandardCase
+            var ifcPresentationLayerAssignment = model.Instances.New<IfcPresentationLayerAssignment>();
+            ifcPresentationLayerAssignment.Name = "some ifcPresentationLayerAssignment";
+            ifcPresentationLayerAssignment.AssignedItems.Add(shape);
 
-                ifcRelAssociatesMaterial.RelatingMaterial = ifcMaterialLayerSetUsage;
+            // linear segment as IfcPolyline with two points is required for IfcWall
+            var ifcPolyline = model.Instances.New<IfcPolyline>();
+            var ifcStartPoint = model.Instances.New<IfcCartesianPoint>();
+            ifcStartPoint.SetXY(startPoint.x, startPoint.z);
+            var ifcEndPoint = model.Instances.New<IfcCartesianPoint>();
+            ifcEndPoint.SetXY(endPoint.x, endPoint.z);
+            ifcPolyline.Points.Add(ifcStartPoint);
+            ifcPolyline.Points.Add(ifcEndPoint);
 
-                // IfcPresentationLayerAssignment is required for CAD presentation in IfcWall or IfcWallStandardCase
-                var ifcPresentationLayerAssignment = model.Instances.New<IfcPresentationLayerAssignment>();
-                ifcPresentationLayerAssignment.Name = "some ifcPresentationLayerAssignment";
-                ifcPresentationLayerAssignment.AssignedItems.Add(shape);
-
-
-                // linear segment as IfcPolyline with two points is required for IfcWall
-                var ifcPolyline = model.Instances.New<IfcPolyline>();
-                var startPoint = model.Instances.New<IfcCartesianPoint>();
-                startPoint.SetXY(0, 0);
-                var endPoint = model.Instances.New<IfcCartesianPoint>();
-                endPoint.SetXY(4000, 0);
-                ifcPolyline.Points.Add(startPoint);
-                ifcPolyline.Points.Add(endPoint);
-
-                var shape2D = model.Instances.New<IfcShapeRepresentation>();
-                shape2D.ContextOfItems = modelContext;
-                shape2D.RepresentationIdentifier = "Axis";
-                shape2D.RepresentationType = "Curve2D";
-                shape2D.Items.Add(ifcPolyline);
-                rep.Representations.Add(shape2D);
-                txn.Commit();
-                return wall;
-            }
-
+            var shape2D = model.Instances.New<IfcShapeRepresentation>();
+            shape2D.ContextOfItems = modelContext;
+            shape2D.RepresentationIdentifier = "Axis";
+            shape2D.RepresentationType = "Curve2D";
+            shape2D.Items.Add(ifcPolyline);
+            rep.Representations.Add(shape2D);
+            transaction.Commit();
+            return wall;
         }
 
         /// <summary>
@@ -225,8 +225,6 @@ namespace Ifc {
                     cd.UnitType = IfcUnitEnum.FREQUENCYUNIT;
                     cd.Name = "dB";
                 });
-
-
             });
 
             var listValues = new List<IfcLabel> { new IfcLabel("Red"), new IfcLabel("Green"), new IfcLabel("Blue"), new IfcLabel("Pink"), new IfcLabel("White"), new IfcLabel("Black"), };
@@ -245,13 +243,11 @@ namespace Ifc {
                 prv.PropertyReference = ifcMaterial;
             });
 
-
             var ifcMaterialList = model.Instances.New<IfcMaterialList>(ml => {
                 ml.Materials.Add(ifcMaterial);
                 ml.Materials.Add(model.Instances.New<IfcMaterial>(m => { m.Name = "Cavity"; }));
                 ml.Materials.Add(model.Instances.New<IfcMaterial>(m => { m.Name = "Block"; }));
             });
-
 
             var ifcMaterialLayer = model.Instances.New<IfcMaterialLayer>(ml => {
                 ml.Material = ifcMaterial;
@@ -304,8 +300,6 @@ namespace Ifc {
                 prv.Name = "IfcPropertyReferenceValue:Telecom";
                 prv.PropertyReference = ifcTelecomAddress;
             });
-
-
 
             //lets create the IfcElementQuantity
             var ifcPropertySet = model.Instances.New<IfcPropertySet>(ps => {

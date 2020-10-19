@@ -55,15 +55,16 @@ namespace Ifc {
         }
 
         private static void CreateWalls() {
+
             foreach (Interface interFace in Building.Instance.interfaces) {
+                IfcWallStandardCase wall = Converter.CreateWall(model, interFace);
+                if (wall != null) Converter.AddPropertiesToWall(model, wall);
 
-            }
-            IfcWallStandardCase wall = Converter.CreateWall(model, 4000, 300, 2400);
-            if (wall != null) Converter.AddPropertiesToWall(model, wall);
-
-            using (var transaction = model.BeginTransaction("Add Wall")) {
-                building.AddElement(wall);
-                transaction.Commit();
+                // Add to model
+                using (var transaction = model.BeginTransaction("Add Wall")) {
+                    building.AddElement(wall);
+                    transaction.Commit();
+                }
             }
         }
 
