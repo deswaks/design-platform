@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum Orientation {
+    HORIZONTAL,
+    VERTICAL
+}
+
 public enum RoomShape {
     RECTANGLE,
     LSHAPE,
@@ -26,4 +32,9 @@ public enum RoomType {
     LIVINGROOM  =   12,
     KITCHEN     =   13,
     BATHROOM    =   14
+}
+
+public enum WallType {
+    STANDARD = 0,
+    LOADCARRYING = 1
 }
