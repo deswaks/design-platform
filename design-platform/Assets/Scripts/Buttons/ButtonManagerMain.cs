@@ -19,6 +19,10 @@ public class ButtonManagerMain : MonoBehaviour
         gbXML.Exporter.Export();
     }
 
+    public void ExportIfc() {
+        Ifc.Exporter.Export();
+    }
+
     public void Save()
     {
         Debug.Log("Save function is not implemented");
