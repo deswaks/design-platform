@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:design-platform/Assets/Libraries/Neo4j.Driver.Signed.1.7.0/lib.meta
+guid: 16ae0f3aea3036d469ff20cafd2aea3c
+=======
 guid: a9e8d98bb3778f74fa5ab48a325ca3a3
+>>>>>>> master:design-platform/Assets/Grass And Flowers Pack 1/Bush.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

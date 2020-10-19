@@ -1,0 +1,6 @@
+-r:System.ComponentModel.DataAnnotations.dll
+-r:Microsoft.VisualBasic.dll
+<<<<<<< HEAD
+=======
+-r:System.Diagnostics.dll
+>>>>>>> master
