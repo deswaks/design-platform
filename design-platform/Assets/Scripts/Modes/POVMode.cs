@@ -42,6 +42,7 @@ public class POVMode : Mode {
         //}
 
         TickModeType();
+
         if (Input.GetKeyDown(KeyCode.Escape)) {
             SetModeType(ModeType.MENU);
             Main.Instance.SetMode(SelectMode.Instance);
