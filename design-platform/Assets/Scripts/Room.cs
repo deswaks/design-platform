@@ -11,7 +11,8 @@ using UnityEditorInternal;
 
 public class Room : MonoBehaviour {
     private List<Vector3> controlPoints;
-    private List<Face> faces = new List<Face>();
+
+    public List<Face> faces { get; private set; }
 
     private RoomShape shape;
     private Material currentMaterial;
@@ -87,6 +88,7 @@ public class Room : MonoBehaviour {
                 gameObject.name = "Room(L-Shape)";
                 break;
         }
+        faces = new List<Face>();
         for (int i = 0; i < controlPoints.Count+2; i++) {
             faces.Add(new Face(this, i));
         }
@@ -200,7 +202,7 @@ public class Room : MonoBehaviour {
     /// Deletes the room
     /// </summary>
     public void Delete() {
-        if (Building.Instance.GetRooms().Contains(this)) { 
+        if (Building.Instance.rooms.Contains(this)) { 
             parentBuilding.RemoveRoom(this); 
         }
         Destroy(gameObject);

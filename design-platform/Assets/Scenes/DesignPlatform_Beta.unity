@@ -2240,9 +2240,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: -6547525849180606122, guid: 5b31c90b01e3a0e44b821768a287c8bd,
-          type: 3}
-        m_MethodName: test
+      - m_Target: {fileID: 1354938933}
+        m_MethodName: TestWalls
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

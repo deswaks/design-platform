@@ -82,7 +82,7 @@ namespace Structural {
                 int wallAxis = VectorFunctions.IndexAbsLargestComponent(wallVector);
 
                 // Find unikke værdier på denne akse og reparameteriser disse over væggens længde
-                List<float> lengthParameters = rangeUtils.reparametrize(uniqueValuesOnWallAxes[wallAxis],
+                List<float> lengthParameters = RangeUtils.Reparametrize(uniqueValuesOnWallAxes[wallAxis],
                                                                         startPoint[wallAxis],
                                                                         endPoint[wallAxis]);
                 lengthParameters = lengthParameters.OrderBy(o => o).ToList();
