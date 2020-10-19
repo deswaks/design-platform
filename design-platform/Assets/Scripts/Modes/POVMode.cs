@@ -10,6 +10,7 @@ public class POVMode : Mode {
     public float mouseSensitivity = 50f;
 
     public static GameObject player;
+    private GameObject notificationObject = null;
     public Camera PlanCamera;
     public Camera POVCamera;
 
@@ -19,6 +20,7 @@ public class POVMode : Mode {
         POV,
         MENU
     }
+
     private ModeType currentModeType = ModeType.POV;
 
     public static POVMode Instance {
@@ -49,12 +51,18 @@ public class POVMode : Mode {
         POVCamera.gameObject.SetActive(true);
         PlanCamera.gameObject.SetActive(false);
 
+        notificationObject = NotificationHandler.GenerateNotification(new Vector3(10, -10, 0));
+
         currentModeType = ModeType.POV;
         OnModeTypeResume();
     }
     public override void OnModePause() {
         POVCamera.gameObject.SetActive(false);
         PlanCamera.gameObject.SetActive(true);
+
+        NotificationHandler.DestroyNotification(notificationObject);
+        notificationObject = null;
+
     }
 
     /// <summary>
