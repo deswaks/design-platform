@@ -6,13 +6,12 @@ using UnityEngine;
 
 public static class NotificationHandler
 {
-    public static GameObject GenerateNotification(Vector3 location, float timer = 0) {
+    public static GameObject GenerateNotification(Vector3 location, GameObject parent, float timer = 0) {
         Object notificationPrefab = AssetDatabase.LoadAssetAtPath < GameObject >("Assets/Prefabs/notification.prefab");
 
-        GameObject UIPanel = (( UIMain ) SceneAsset.FindObjectOfType<UIMain>()).gameObject;
+        GameObject notificationObject = (GameObject)GameObject.Instantiate(notificationPrefab, parent.transform);
+        //notificationObject.transform.localPosition = location;
 
-        GameObject notificationObject = (GameObject)GameObject.Instantiate(notificationPrefab,UIPanel.transform);
-        
         NotificationManager notificationManager = notificationObject.GetComponent<NotificationManager>();
         notificationManager.Initialize();
 
