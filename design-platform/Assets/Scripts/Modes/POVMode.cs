@@ -10,6 +10,7 @@ public class POVMode : Mode {
     public float mouseSensitivity = 50f;
 
     public static GameObject player;
+    private GameObject notificationObject = null;
     public Camera PlanCamera;
     public Camera POVCamera;
 
@@ -19,6 +20,7 @@ public class POVMode : Mode {
         POV,
         MENU
     }
+
     private ModeType currentModeType = ModeType.POV;
 
     public static POVMode Instance {
@@ -29,17 +31,23 @@ public class POVMode : Mode {
 
     public override void Tick() {
 
-        switch (currentModeType) {
-            case ModeType.POV:
-                if (Input.GetKeyDown(KeyCode.Escape)) { SetModeType(ModeType.MENU); }
-                break;
+        //switch (currentModeType) {
+        //    case ModeType.POV:
+        //        if (Input.GetKeyDown(KeyCode.Escape)) { SetModeType(ModeType.MENU); }
+        //        break;
 
-            case ModeType.MENU:
-                if (Input.GetKeyDown(KeyCode.Escape)) { SetModeType(ModeType.POV); }
-                break;
-        }
+        //    case ModeType.MENU:
+        //        if (Input.GetKeyDown(KeyCode.Escape)) { SetModeType(ModeType.POV); }
+        //        break;
+        //}
 
         TickModeType();
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            SetModeType(ModeType.MENU);
+            Main.Instance.SetMode(SelectMode.Instance);
+        }
+        
     }
     public override void OnModeResume() {
         player = GameObject.Find("First person player");
@@ -49,12 +57,22 @@ public class POVMode : Mode {
         POVCamera.gameObject.SetActive(true);
         PlanCamera.gameObject.SetActive(false);
 
+
+        // Generates notification in corner of screen
+        GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "Canvas3D").First().gameObject;
+        notificationObject = NotificationHandler.GenerateNotification(new Vector3(10, -10, 0), notificationParent);
+
         currentModeType = ModeType.POV;
+        SetModeType(ModeType.POV);
         OnModeTypeResume();
     }
     public override void OnModePause() {
         POVCamera.gameObject.SetActive(false);
         PlanCamera.gameObject.SetActive(true);
+
+        NotificationHandler.DestroyNotification(notificationObject);
+        notificationObject = null;
+
     }
 
     /// <summary>

@@ -13,11 +13,7 @@ public class ButtonManagerMode : MonoBehaviour {
         BuildMode.Instance.SetSelectedShape((RoomShape)buildShape);
         Main.Instance.SetMode(BuildMode.Instance);
     }
-
     public void StartPOVMode() {
         Main.Instance.SetMode(POVMode.Instance);
     }
-
-
-
 }

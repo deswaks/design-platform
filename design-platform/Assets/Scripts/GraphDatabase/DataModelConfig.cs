@@ -1,6 +1,6 @@
 ﻿using Neo4jClient.Extension.Cypher;
 
-namespace GraphDatabase {
+namespace Database {
     public class NeoConfig {
 
         // Sets up the data model, defining how the C# classes should be handled as Nodes in the graph
