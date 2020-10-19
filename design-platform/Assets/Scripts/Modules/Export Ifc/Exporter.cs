@@ -28,38 +28,42 @@ using Xbim.Ifc4.SharedBldgElements;
 
 namespace Ifc {
     public static class Exporter {
+        private static IfcStore model;
+        private static IfcBuilding building;
 
         public static void Export() {
 
-            // Create and initialise a model called Building
-            using (var model = CreateandInitModel("CLT House")) {
+            // Create model
+            model = CreateandInitModel("CLT House");
+            if (model == null) return;
 
-                if (model != null) {
-                    IfcBuilding building = CreateBuilding(model, "Default Building");
-                    IfcWallStandardCase wall = Converter.CreateWall(model, 4000, 300, 2400);
+            // Create building
+            building = CreateBuilding(model, "Default Building");
 
-                    if (wall != null) Converter.AddPropertiesToWall(model, wall);
-                    
-                    using (var txn = model.BeginTransaction("Add Wall")) {
-                        building.AddElement(wall);
-                        txn.Commit();
-                    }
+            // Create all elements
+            CreateWalls();
 
-                    if (wall != null) {
-                        try {
-                            UnityEngine.Debug.Log("Standard Wall successfully created....");
-                            //write the Ifc File
-                            model.SaveAs("Exports/Building.ifc", StorageType.Ifc);
-                            UnityEngine.Debug.Log("Building.ifc has been successfully written");
-                        }
-                        catch (Exception e) {
-                            UnityEngine.Debug.Log("Failed to save HelloWall.ifc");
-                            UnityEngine.Debug.Log(e.Message);
-                        }
-                    }
-                }
-                else {
-                }
+            // Save file
+            try {
+                model.SaveAs("Exports/Building.ifc", StorageType.Ifc);
+                UnityEngine.Debug.Log("Building.ifc has been successfully written");
+            }
+            catch (Exception e) {
+                UnityEngine.Debug.Log("Failed to save HelloWall.ifc");
+                UnityEngine.Debug.Log(e.Message);
+            }
+        }
+
+        private static void CreateWalls() {
+            foreach (Interface interFace in Building.Instance.interfaces) {
+
+            }
+            IfcWallStandardCase wall = Converter.CreateWall(model, 4000, 300, 2400);
+            if (wall != null) Converter.AddPropertiesToWall(model, wall);
+
+            using (var transaction = model.BeginTransaction("Add Wall")) {
+                building.AddElement(wall);
+                transaction.Commit();
             }
         }
 
