@@ -24,6 +24,7 @@ namespace Structural {
             return spans;
         }
 
+
         public static Dictionary<int, List<Load>> AreaLoad(Room room) {
             Dictionary<int, List<Load>> loadTables = WallLoadTables(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
@@ -81,7 +82,7 @@ namespace Structural {
                 int wallAxis = VectorFunctions.IndexAbsLargestComponent(wallVector);
 
                 // Find unikke værdier på denne akse og reparameteriser disse over væggens længde
-                List<float> lengthParameters = rangeUtils.reparametrize(uniqueValuesOnWallAxes[wallAxis],
+                List<float> lengthParameters = RangeUtils.Reparametrize(uniqueValuesOnWallAxes[wallAxis],
                                                                         startPoint[wallAxis],
                                                                         endPoint[wallAxis]);
                 lengthParameters = lengthParameters.OrderBy(o => o).ToList();

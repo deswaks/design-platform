@@ -18,7 +18,7 @@ public class Polygon2D
     /// Calculate the area of the polygon.
     /// </summary>
     /// <returns>float area</returns>
-    public float Area() {
+    public float GetArea() {
         float area = 0;
 
         int j = Vertices.Length - 1; // j starts as the last vertex
@@ -34,7 +34,7 @@ public class Polygon2D
     /// 
     /// </summary>
     /// <returns>Vector2[] midPoints</returns>
-    public Vector2[] Midpoints() {
+    public Vector2[] GetEdgeMidpoints() {
         Vector2[] midPoints = new Vector2[Vertices.Length];
 
         int j = Vertices.Length - 1; // j starts as the last vertex
@@ -48,7 +48,7 @@ public class Polygon2D
     /// <summary>
     /// Gets a list of normals. They are in same order as controlpoints (clockwise). localCoordinates : true (for local coordinates, Sherlock)
     /// </summary>
-    public Vector2[] GetWallNormals(bool localCoordinates = false) {
+    public Vector2[] GetEdgeNormals(bool localCoordinates = false) {
         Vector2[] normals = new Vector2[Vertices.Length];
 
         int j = Vertices.Length - 1; // j starts as the last vertex
@@ -63,7 +63,7 @@ public class Polygon2D
     /// Finds the euclidean maximum and minimum corrdinates in both axes
     /// </summary>
     /// <returns>float[] bounds = {minX, maxX, minY, maxY}</returns>
-    public float[] Bounds() {
+    public float[] GetBounds() {
         float minX = 0; float maxX = 0;
         float minY = 0; float maxY = 0;
         foreach (Vector2 point in Vertices) {

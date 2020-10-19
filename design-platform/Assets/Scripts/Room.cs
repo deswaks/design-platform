@@ -6,6 +6,9 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class Room : MonoBehaviour {
     private List<Vector3> controlPoints;
+
+    public List<Face> faces { get; private set; }
+
     private RoomShape shape;
     private Material currentMaterial;
     public Material defaultMaterial;
@@ -82,6 +85,10 @@ public class Room : MonoBehaviour {
                 gameObject.name = "Room(L-Shape)";
                 break;
         }
+        faces = new List<Face>();
+        for (int i = 0; i < controlPoints.Count+2; i++) {
+            faces.Add(new Face(this, i));
+        }
 
         // Create and attach collider objects
         gameObject.AddComponent<MeshCollider>();
@@ -150,7 +157,7 @@ public class Room : MonoBehaviour {
     public float GetFloorArea() {
         Vector2[] vertices = GetControlPoints(localCoordinates: true).Select(p => new Vector2(p.x, p.z)).ToArray();
         Polygon2D roomPolygon = new Polygon2D(vertices);
-        return roomPolygon.Area();
+        return roomPolygon.GetArea();
     }
 
     /// <summary>
@@ -197,7 +204,9 @@ public class Room : MonoBehaviour {
     /// Deletes the room
     /// </summary>
     public void Delete() {
-        if (Building.Instance.GetRooms().Contains(this)) { parentBuilding.RemoveRoom(this); }
+        if (Building.Instance.rooms.Contains(this)) { 
+            parentBuilding.RemoveRoom(this); 
+        }
         Destroy(gameObject);
     }
 
