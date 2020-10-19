@@ -145,15 +145,20 @@ public class Building {
                     }
                 }
 
-                // Sort splitpoints between startpoint and endpoint
+                // Create and sort parameters along face line
                 (Vector3 startPoint, Vector3 endPoint) = face.Get2DEndPoints(localCoordinates: false);
                 splitPoints.Add(startPoint);
                 splitPoints.Add(endPoint);
+                splitPoints = splitPoints.Distinct().ToList();
                 splitPoints = splitPoints.OrderBy(p => (p - startPoint).magnitude).ToList();
+
                 List<float> splitParameters = splitPoints.Select(p => (p - startPoint).magnitude).ToList();
                 splitParameters = RangeUtils.Reparametrize(splitParameters, splitParameters[0], splitParameters[splitParameters.Count-1]);
-
                 
+                if (r == 2) {
+                    var a = new Vector3();
+                }
+
                 // Hvert interface-sted
                 for (int i = 0; i < splitParameters.Count-1; i++) {
 
@@ -162,8 +167,10 @@ public class Building {
                     Vector3 ifEndPoint = splitPoints[i+1];
                     Interface existingInterface = null;
                     foreach (Interface interFace in interfaces) {
-                        if ((interFace.GetStartPoint() == ifStartPoint && interFace.GetEndPoint() == ifEndPoint)
-                         || (interFace.GetStartPoint() == ifEndPoint   && interFace.GetEndPoint() == ifStartPoint)) {
+                        if (((interFace.GetStartPoint() - ifStartPoint).magnitude < 0.01f
+                          && (interFace.GetEndPoint() - ifEndPoint).magnitude < 0.01f)
+                         || ((interFace.GetStartPoint() - ifEndPoint).magnitude < 0.01f
+                          && (interFace.GetEndPoint() - ifStartPoint).magnitude < 0.01f )) {
                             existingInterface = interFace;
                         }
                     }
