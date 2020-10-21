@@ -9,24 +9,4 @@ public class ButtonManagerMain : MonoBehaviour
         Application.Quit();
     }
 
-    public void ExportPDF() {
-        PdfExport.ExportPlan();
-        //drawingExporter.popUpDrawing();
-        //Debug.Log("Save function is not implemented");
-    }
-
-    public void ExportGbXML() {
-        gbXML.Exporter.Export();
-    }
-
-    public void Save()
-    {
-        Debug.Log("Save function is not implemented");
-    }
-
-    public void Load()
-    {
-        Debug.Log("Load function is not implemented");
-    }
-
 }
