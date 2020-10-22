@@ -6,6 +6,13 @@ public class Interface {
     public Face[] attachedFaces = new Face[2];
     public Wall wall;
 
+    public override string ToString() {
+        string textString = "Interface attached to: ";
+        if (attachedFaces[0] != null) textString += "[0] "+attachedFaces[0].ToString();
+        if (attachedFaces[1] != null) textString += "[1] " + attachedFaces[1].ToString();
+        return textString;
+    }
+
     public Vector3 GetStartPoint(bool localCoordinates = false) {
         float[] parameters = attachedFaces[0].paramerters[this];
         (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
