@@ -40,14 +40,20 @@ namespace Neo4jClient
 
         public static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver();
 
+        #pragma warning disable CS0649
         private ITransactionManager<HttpResponseMessage> transactionManager;
+        #pragma warning restore CS0649
+
         private readonly IExecutionPolicyFactory policyFactory;
 
         public ExecutionConfiguration ExecutionConfiguration { get; private set; }
 
         internal readonly Uri RootUri;
         internal RootApiResponse RootApiResponse;
+
+        #pragma warning disable CS0618
         private RootNode rootNode;
+        #pragma warning restore CS0618
 
         private CypherCapabilities cypherCapabilities = CypherCapabilities.Default;
 

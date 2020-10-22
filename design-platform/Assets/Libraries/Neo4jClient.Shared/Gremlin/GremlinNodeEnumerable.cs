@@ -27,10 +27,12 @@ namespace Neo4jClient.Gremlin
 
         IEnumerator<Node<TNode>> IEnumerable<Node<TNode>>.GetEnumerator()
         {
+            #pragma warning disable CS0618
             if (client == null) throw new DetachedNodeException();
             return new GremlinPagedEnumerator<Node<TNode>>(
                 client.ExecuteGetAllNodesGremlin<TNode>,
                 new GremlinQuery(client, queryText, queryParameters, queryDeclarations));
+            #pragma warning restore CS0618
         }
 
         IEnumerator IEnumerable.GetEnumerator()
