@@ -81,7 +81,7 @@ public class Face
         //interfaces.Add(interFace);
         //paramerters.Add(interFace, new float[] { startParameter, endParameter });
 
-        Debug.Log(interFace.ToString());
+        //Debug.Log(interFace.ToString());
 
         if (interFace != null) {
             interfaces.Add(interFace);

@@ -153,24 +153,24 @@ public class Building {
                 splitPoints = splitPoints.OrderBy(p => (p - startPoint).magnitude).ToList();
 
                 List<float> splitParameters = splitPoints.Select(p => (p - startPoint).magnitude).ToList();
-                splitParameters = RangeUtils.Reparametrize(splitParameters, splitParameters[0], splitParameters[splitParameters.Count-1]);
-                
+                splitParameters = RangeUtils.Reparametrize(splitParameters, splitParameters[0], splitParameters[splitParameters.Count - 1]);
+
                 if (r == 2) {
                     var a = new Vector3();
                 }
 
                 // Hvert interface-sted
-                for (int i = 0; i < splitParameters.Count-1; i++) {
+                for (int i = 0; i < splitParameters.Count - 1; i++) {
 
                     // Check if an interface exists with the same points
                     Vector3 ifStartPoint = splitPoints[i];
-                    Vector3 ifEndPoint = splitPoints[i+1];
+                    Vector3 ifEndPoint = splitPoints[i + 1];
                     Interface existingInterface = null;
                     foreach (Interface interFace in interfaces) {
                         if (((interFace.GetStartPoint() - ifStartPoint).magnitude < 0.01f
                           && (interFace.GetEndPoint() - ifEndPoint).magnitude < 0.01f)
                          || ((interFace.GetStartPoint() - ifEndPoint).magnitude < 0.01f
-                          && (interFace.GetEndPoint() - ifStartPoint).magnitude < 0.01f )) {
+                          && (interFace.GetEndPoint() - ifStartPoint).magnitude < 0.01f)) {
                             existingInterface = interFace;
                         }
                     }
@@ -189,9 +189,21 @@ public class Building {
                         face.AddInterface(interFace, splitParameters[i], splitParameters[i + 1]);
                     }
                 }
-                
+
 
             }
+        }
+    }
+    public void UpdatePOVElements() {
+
+        // Delete preexisting	
+        if (walls.Count > 0) DeleteAllWalls();
+        if (interfaces.Count > 0) DeleteAllInterfaces();
+
+        CreateInterfaces();
+
+        foreach (Interface interFace in interfaces) {
+            BuildWall(interFace);
         }
     }
 }
