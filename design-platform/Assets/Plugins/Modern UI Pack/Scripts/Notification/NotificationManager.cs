@@ -12,6 +12,8 @@ namespace Michsky.UI.ModernUIPack
         public Sprite icon;
         public string title = "Notification Title";
         [TextArea] public string description = "Notification description";
+        public float timer = 3.0f;
+
 
         // Resources
         public Animator notificationAnimator;
@@ -21,7 +23,6 @@ namespace Michsky.UI.ModernUIPack
 
         // Settings
         public bool enableTimer = true;
-        public float timer = 3f;
         public bool useCustomContent = false;
         public bool useStacking = false;
         public NotificationStyle notificationStyle;
@@ -66,6 +67,33 @@ namespace Michsky.UI.ModernUIPack
                 catch { }
             }
         }
+        public void Initialize() {
+            try {
+                if (notificationAnimator == null)
+                    notificationAnimator = gameObject.GetComponent<Animator>();
+
+                if (useCustomContent == false) {
+                    iconObj.sprite = icon;
+                    titleObj.text = title;
+                    descriptionObj.text = description;
+                }
+            }
+
+            catch {
+                Debug.LogError("Notification - Cannot initalize the object due to missing components.", this);
+            }
+
+            if (useStacking == true) {
+                try {
+                    var stacking = (NotificationStacking)GameObject.FindObjectsOfType(typeof(NotificationStacking))[0];
+                    stacking.notifications.Add(this);
+                    stacking.enableUpdating = true;
+                    gameObject.SetActive(false);
+                }
+
+                catch { }
+            }
+        }
 
         IEnumerator StartTimer()
         {
@@ -80,6 +108,10 @@ namespace Michsky.UI.ModernUIPack
 
             if (enableTimer == true)
                 StartCoroutine("StartTimer");
+        }
+
+        public void OpenNotificationWithoutTimer() {
+            notificationAnimator.Play("In");
         }
 
         public void CloseNotification()
@@ -102,4 +134,5 @@ namespace Michsky.UI.ModernUIPack
             }
         }
     }
+
 }

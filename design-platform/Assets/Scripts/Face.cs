@@ -12,6 +12,10 @@ public class Face
 
     public float wallThickness = 0.2f;
 
+    public override string ToString() {
+        return parentRoom.ToString()+" Face#"+ faceIndex.ToString();
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -73,8 +77,17 @@ public class Face
     /// Add a interface to a face
     /// </summary>
     public void AddInterface(Interface interFace, float startParameter = 0.0f, float endParameter = 1.0f) {
-        interfaces.Add(interFace);
-        paramerters.Add(interFace, new float[] { startParameter, endParameter });
+        //if (interFace.attachedFaces[0] != null) Debug.Log(interFace.attachedFaces[0].parentRoom.ToString() + interFace.attachedFaces[0].paramerters[interFace].ToString());
+        //else Debug.Log(interFace);
+        //interfaces.Add(interFace);
+        //paramerters.Add(interFace, new float[] { startParameter, endParameter });
+
+        //Debug.Log(interFace.ToString());
+
+        if (interFace != null) {
+            interfaces.Add(interFace);
+            paramerters.Add(interFace, new float[] { startParameter, endParameter });
+        }
     }
 
     /// <summary>

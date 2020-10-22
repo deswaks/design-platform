@@ -13,7 +13,7 @@ using UnityEngine;
 //using System.Numerics;
 
 
-namespace GraphDatabase {
+namespace Database {
     public static class GraphUtils {
 
         /// <summary>

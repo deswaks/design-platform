@@ -10,11 +10,6 @@ using JetBrains.Annotations;
 public class ButtonManagerModify : MonoBehaviour {
     public Main main;
 
-    //SLET
-    //private List<Vector3> wallControlPoints;
-    //private Vector3 normal;
-    //private Room room;
-    //SLET
     public void Move() {
         SelectMode.Instance.SetMode(MoveMode.Instance);
     }
@@ -39,59 +34,15 @@ public class ButtonManagerModify : MonoBehaviour {
     }
 
     public void PublishRoomType(int buildType) {
+        SelectMode.Instance.SetMode(null);
         SelectMode.Instance.selection.SetRoomType((RoomType)buildType);
     }
 
     public void PublishRoomNote() {
+        SelectMode.Instance.SetMode(null);
         GameObject myInputGO = GameObject.Find("InputField Room Note");
         InputField myInputIF = myInputGO.GetComponent<InputField>();
         SelectMode.Instance.selection.SetRoomNote(myInputIF.text);
         myInputIF.text = "";
     }
-
-    /// <summary>
-    /// test to test Build and delete walls
-    /// </summary>
-    public void TestWalls() {
-
-        // Delete preexisting
-        if (Building.Instance.walls.Count > 0) Building.Instance.DeleteAllWalls();
-        if (Building.Instance.interfaces.Count > 0) Building.Instance.DeleteAllInterfaces();
-
-        Building.Instance.CreateInterfaces();
-
-        foreach (Interface interFace in Building.Instance.interfaces) {
-            Building.Instance.BuildWall(interFace);
-        }
-
-        //foreach (Room r in Building.Instance.GetRooms()) {
-        //    for (int i = 0; i < r.GetControlPoints(localCoordinates: false, closed: true).Count - 1; i++) {
-        //        testwallControlPoints = new List<Vector3> {
-        //            r.GetControlPoints(localCoordinates: false, closed: true)[i],
-        //            r.GetControlPoints(localCoordinates: false, closed: true)[i+1]
-        //    };
-        //        testnormal = r.GetWallNormals(localCoordinates: false)[i];
-        //        testroom = r;
-
-
-        //        Wall wall = Building.Instance.BuildWall(testwallControlPoints, testnormal, testroom);
-        //    }
-        //}
-
-    }
-
-
-
-    //public void TestWallBuilder() {
-    //wallControlPoints = new List<Vector3> {
-    //    SelectMode.Instance.selection.GetControlPoints(localCoordinates: true)[0],
-    //    SelectMode.Instance.selection.GetControlPoints(localCoordinates: true)[1]
-    //};
-    //normal = SelectMode.Instance.selection.GetWallNormals(localCoordinates: true)[0];
-    //room = SelectMode.Instance.selection;
-
-    //Wall wall = new Wall();
-
-    //wall.InitializeWall(wallControlPoints, normal, room);
-    //}
 }
