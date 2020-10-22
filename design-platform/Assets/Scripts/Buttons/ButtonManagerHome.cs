@@ -26,8 +26,6 @@ public class ButtonManagerHome : MonoBehaviour
 
     public void ExportPDF() {
         PdfExport.ExportPlan();
-        //drawingExporter.popUpDrawing();
-        //Debug.Log("Save function is not implemented");
     }
 
     public void ExportGbXML() {
