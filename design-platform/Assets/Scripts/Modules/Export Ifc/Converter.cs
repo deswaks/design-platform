@@ -52,6 +52,7 @@ namespace Ifc {
             string wallName = interFace.ToString() ;
             Vector3 startPoint = interFace.GetStartPoint() * 1000;
             Vector3 endPoint = interFace.GetEndPoint() * 1000;
+            Vector3 midPoint = (endPoint - startPoint)/2;
             Vector3 wallVector = (endPoint - startPoint).normalized;
             float length = (endPoint - startPoint).magnitude;
             float height = interFace.attachedFaces[0].parentRoom.height * 1000;
@@ -69,7 +70,7 @@ namespace Ifc {
             rectProf.XDim = length;
 
             var insertPoint = model.Instances.New<IfcCartesianPoint>();
-            insertPoint.SetXY(0, 0);
+            insertPoint.SetXY(length / 2, 0);
             rectProf.Position = model.Instances.New<IfcAxis2Placement2D>();
             rectProf.Position.Location = insertPoint;
 
@@ -81,10 +82,10 @@ namespace Ifc {
             body.ExtrudedDirection.SetXYZ(0, 0, 1);
 
             //parameters to insert the geometry in the model
-            var origin = model.Instances.New<IfcCartesianPoint>();
-            origin.SetXYZ(startPoint.x, startPoint.z, startPoint.y);
+            var bodyOrigin = model.Instances.New<IfcCartesianPoint>();
+            bodyOrigin.SetXYZ(0, 0, 0);
             body.Position = model.Instances.New<IfcAxis2Placement3D>();
-            body.Position.Location = origin;
+            body.Position.Location = bodyOrigin;
 
             //Create a Definition shape to hold the geometry
             var shape = model.Instances.New<IfcShapeRepresentation>();
@@ -100,15 +101,20 @@ namespace Ifc {
             wall.Representation = rep;
 
             //now place the wall into the model
-            var lp = model.Instances.New<IfcLocalPlacement>();
-            var ax3D = model.Instances.New<IfcAxis2Placement3D>();
-            ax3D.Location = origin;
-            ax3D.RefDirection = model.Instances.New<IfcDirection>();
-            ax3D.RefDirection.SetXYZ(wallVector.x, wallVector.z, wallVector.y);
-            ax3D.Axis = model.Instances.New<IfcDirection>();
-            ax3D.Axis.SetXYZ(0, 0, 1);
-            lp.RelativePlacement = ax3D;
-            wall.ObjectPlacement = lp;
+            var placementLocation = model.Instances.New<IfcCartesianPoint>();
+            placementLocation.SetXYZ(startPoint.x, startPoint.z, startPoint.y);
+
+            var placementAxis = model.Instances.New<IfcAxis2Placement3D>();
+            placementAxis.Location = placementLocation;
+
+            var localPlacement = model.Instances.New<IfcLocalPlacement>();
+            placementAxis.RefDirection = model.Instances.New<IfcDirection>();
+            placementAxis.RefDirection.SetXYZ(wallVector.x, wallVector.z, wallVector.y);
+            placementAxis.Axis = model.Instances.New<IfcDirection>();
+            placementAxis.Axis.SetXYZ(0, 0, 1);
+            localPlacement.RelativePlacement = placementAxis;
+            
+            wall.ObjectPlacement = localPlacement;
 
             // Where Clause: The IfcWallStandard relies on the provision of an IfcMaterialLayerSetUsage 
             var ifcMaterialLayerSetUsage = model.Instances.New<IfcMaterialLayerSetUsage>();
