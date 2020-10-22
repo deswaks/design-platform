@@ -72,7 +72,10 @@ public class Face
     /// </summary>
     public void AddInterface(Interface interFace, float startParameter = 0.0f, float endParameter = 1.0f) {
         interfaces.Add(interFace);
-        paramerters.Add(interFace, new float[] { startParameter, endParameter });
+        if(orientation == Orientation.VERTICAL) {
+            paramerters.Add(interFace, new float[] { startParameter, endParameter });
+        }
+        
     }
 
     /// <summary>

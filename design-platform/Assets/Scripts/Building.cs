@@ -124,7 +124,7 @@ public class Building {
         }
     }
 
-    public void CreateInterfaces() {
+    public void CreateVerticalInterfaces() {
         // For all faces
         for (int r = 0; r < rooms.Count; r++) {
             for (int f = 0; f < rooms[r].faces.Count; f++) {
@@ -187,15 +187,34 @@ public class Building {
             }
         }
     }
+    public void CreateHorizontalInterfaces() {
+        // For all faces
+        for (int r = 0; r < rooms.Count; r++) {
+            for (int f = 0; f < rooms[r].faces.Count; f++) {
+
+                Face face = rooms[r].faces[f];
+
+                // Skip if face is not a slab
+                if (face.orientation != Orientation.HORIZONTAL) continue;
+
+                // Create new interface
+                Interface interFace = new Interface();
+                interFace.attachedFaces[0] = face;      //Add face to interface
+                interfaces.Add(interFace);              //Add interface to building
+                face.AddInterface(interFace);           //Add interface to face
+            }
+        }
+    }
     public void UpdatePOVElements() {
 
         // Delete preexisting	
         if (walls.Count > 0) DeleteAllWalls();
         if (interfaces.Count > 0) DeleteAllInterfaces();
 
-        CreateInterfaces();
+        CreateVerticalInterfaces();
 
         foreach (Interface interFace in interfaces) {
+            if(interFace.Get)
             BuildWall(interFace);
         }
     }

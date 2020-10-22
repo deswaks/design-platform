@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Interface {
@@ -21,6 +22,14 @@ public class Interface {
 
         return startPoint;
     }
+
+    public List <Vector3> GetSlabControlPoints(bool localCoordinates = false) {
+        List <Vector3> cp = attachedFaces[0].GetOGControlPoints(localCoordinates: localCoordinates).ToList();
+         
+        return cp;
+    }
+
+
 
     /// <summary>
     /// Deletes the room
