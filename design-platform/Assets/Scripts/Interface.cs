@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Interface {
@@ -7,9 +8,9 @@ public class Interface {
     public Wall wall;
 
     public override string ToString() {
-        string textString = "Interface attached to: ";
-        if (attachedFaces[0] != null) textString += "[0] "+attachedFaces[0].ToString();
-        if (attachedFaces[1] != null) textString += "[1] " + attachedFaces[1].ToString();
+        string textString = "Interface: ";
+        if (attachedFaces[0] != null) textString += attachedFaces[0].ToString();
+        if (attachedFaces[1] != null) textString += " and " + attachedFaces[1].ToString();
         return textString;
     }
 
@@ -37,4 +38,13 @@ public class Interface {
             Building.Instance.RemoveInterface(this);
         }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public float GetWallThickness() {
+        float[] thicknesses = attachedFaces.Where(f => f != null).Select(f => f.wallThickness).ToArray();
+        return thicknesses.Max();
+    }
+
 }

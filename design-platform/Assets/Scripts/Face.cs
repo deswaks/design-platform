@@ -10,6 +10,7 @@ public class Face
     public Dictionary<Interface, float[]> paramerters { get; private set; }
     public Orientation orientation { get; private set; }
 
+    public float wallThickness = 0.2f;
 
     public override string ToString() {
         return parentRoom.ToString()+" Face#"+ faceIndex.ToString();
