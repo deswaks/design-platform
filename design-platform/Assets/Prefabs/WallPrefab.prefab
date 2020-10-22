@@ -50,9 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a437d4abd5d624d85806794441c265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallMaterial: {fileID: 2100000, guid: be732c24d8851314f9e67c3e6d3d3873, type: 2}
-  parentRoom: {fileID: 0}
   wallThickness: 10
+  wallMaterial: {fileID: 2100000, guid: be732c24d8851314f9e67c3e6d3d3873, type: 2}
 --- !u!114 &8193709700841667738
 MonoBehaviour:
   m_ObjectHideFlags: 0

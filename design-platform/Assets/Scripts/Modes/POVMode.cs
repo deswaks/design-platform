@@ -57,6 +57,8 @@ public class POVMode : Mode {
         POVCamera.gameObject.SetActive(true);
         PlanCamera.gameObject.SetActive(false);
 
+        // Dele preexisting interfaces and walls build new ones
+        Building.Instance.UpdatePOVElements();
 
         // Generates notification in corner of screen
         GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "UIPanel3D").First().gameObject;
