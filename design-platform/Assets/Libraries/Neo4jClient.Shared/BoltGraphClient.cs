@@ -43,7 +43,9 @@ namespace Neo4jClient
         private readonly string password;
         private readonly string realm;
 
+        #pragma warning disable CS0649
         private readonly ITransactionManager<BoltResponse> transactionManager;
+        #pragma warning restore CS0649
         private readonly IServerAddressResolver addressResolver;
         private readonly string username;
         private readonly Uri uri;
@@ -64,11 +66,13 @@ namespace Neo4jClient
             : this(new Uri(uri), username, password, realm)
         { }
 
+        #pragma warning disable CS0618
         public BoltGraphClient(IDriver driver)
             : this(driver.Uri, null, null, null)
         {
             Driver = driver;
         }
+        #pragma warning restore CS0618
 
         internal IDriver Driver { get; set; }
         internal IServerAddressResolver AddressResolver => addressResolver;
@@ -590,6 +594,7 @@ namespace Neo4jClient
             task.Wait();
         }
 
+        #pragma warning disable CS1066
         /// <inheritdoc />
         [Obsolete]
         void IRawGraphClient.ExecuteMultipleCypherQueriesInTransaction(IEnumerable<CypherQuery> queries, NameValueCollection customHeaders = null)
@@ -605,9 +610,10 @@ namespace Neo4jClient
                 tx.Commit();
             }
         }
+        #pragma warning restore CS1066
 
         /// <inheritdoc />
-       Task IRawGraphClient.ExecuteCypherAsync(CypherQuery query)
+        Task IRawGraphClient.ExecuteCypherAsync(CypherQuery query)
         {
            var tx = ExecutionContext.Begin(this);
 
