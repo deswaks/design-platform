@@ -38,8 +38,10 @@ namespace Neo4jClient.Gremlin
 
         IEnumerator<RelationshipInstance<TData>> GetEnumeratorInternal()
         {
+            #pragma warning disable CS0618
             if (client == null) throw new DetachedNodeException();
             var results = client.ExecuteGetAllRelationshipsGremlin<TData>(queryText, queryParameters);
+            #pragma warning restore CS0618
             return results.GetEnumerator();
         }
 

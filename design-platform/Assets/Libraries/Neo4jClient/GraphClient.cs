@@ -59,11 +59,11 @@ namespace Neo4jClient
                 {
                     //  transactionManager = new TransactionManager(this);
                 }
-
+                #pragma warning disable CS0618
                 rootNode = string.IsNullOrEmpty(RootApiResponse.ReferenceNode)
                     ? null
                     : new RootNode(long.Parse(GetLastPathSegment(RootApiResponse.ReferenceNode)), this);
-
+                #pragma warning restore CS0618
                 // http://blog.neo4j.org/2012/04/streaming-rest-api-interview-with.html
                 ExecutionConfiguration.UseJsonStreaming = ExecutionConfiguration.UseJsonStreaming &&
                                                           RootApiResponse.Version >= new Version(1, 8);

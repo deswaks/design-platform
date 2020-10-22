@@ -25,13 +25,14 @@ namespace Neo4jClient.Gremlin
             get { return this.ToDebugQueryText(); }
         }
 
+#pragma warning disable CS0618
         IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
         {
             if (client == null) throw new DetachedNodeException();
             return client.ExecuteGetAllProjectionsGremlin<TResult>(new GremlinQuery(client, queryText, queryParameters, queryDeclarations))
                 .GetEnumerator();
         }
-
+#pragma warning restore CS0618
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<NodeReference>)this).GetEnumerator();

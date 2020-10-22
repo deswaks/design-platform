@@ -187,6 +187,18 @@ public class Building {
             }
         }
     }
+    public void UpdatePOVElements() {
+
+        // Delete preexisting	
+        if (walls.Count > 0) DeleteAllWalls();
+        if (interfaces.Count > 0) DeleteAllInterfaces();
+
+        CreateInterfaces();
+
+        foreach (Interface interFace in interfaces) {
+            BuildWall(interFace);
+        }
+    }
 }
 
 
