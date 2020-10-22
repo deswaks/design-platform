@@ -15,7 +15,6 @@ public class ButtonManagerModify : MonoBehaviour {
         SelectMode.Instance.SetMode(MoveMode.Instance);
     }
     public void Rotate() {
-        SelectMode.Instance.SetMode(null);
         if (SelectMode.Instance.selection != null) {
             SelectMode.Instance.selection.Rotate();
         }
@@ -28,23 +27,23 @@ public class ButtonManagerModify : MonoBehaviour {
     }
 
     public void Delete() {
-        SelectMode.Instance.SetMode(null);
         if (SelectMode.Instance.selection != null) {
             SelectMode.Instance.selection.Delete();
         }
     }
 
     public void PublishRoomType(int buildType) {
-        SelectMode.Instance.SetMode(null);
         SelectMode.Instance.selection.SetRoomType((RoomType)buildType);
     }
 
     public void PublishRoomNote() {
-        SelectMode.Instance.SetMode(null);
+        //GameObject myInputGO = GameObject.Find("InputField Room Note");
         TMP_InputField myInputIF = GameObject.Find("InputProperty").GetComponent<TMP_InputField>();
         SelectMode.Instance.selection.SetRoomNote(myInputIF.text);
         myInputIF.text = "";
 
         Debug.Log(SelectMode.Instance.selection.customProperty);
     }
+
+
 }

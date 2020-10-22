@@ -29,6 +29,7 @@ public static class PdfExport {
 
         // Get an XGraphics and xFont objects for drawing
         XGraphics gfx = XGraphics.FromPdfPage(page);
+        XFont font = new XFont("Verdana", 20, XFontStyle.BoldItalic);
 
         // Draw
         DrawRooms(gfx);
