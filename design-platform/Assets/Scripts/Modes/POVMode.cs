@@ -43,10 +43,10 @@ public class POVMode : Mode {
 
         TickModeType();
 
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            SetModeType(ModeType.MENU);
-            Main.Instance.SetMode(SelectMode.Instance);
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape)) {
+        //    SetModeType(ModeType.MENU);
+        //    Main.Instance.SetMode(SelectMode.Instance);
+        //}
         
     }
     public override void OnModeResume() {
@@ -59,8 +59,10 @@ public class POVMode : Mode {
 
 
         // Generates notification in corner of screen
-        GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "Canvas3D").First().gameObject;
-        notificationObject = NotificationHandler.GenerateNotification(new Vector3(10, -10, 0), notificationParent);
+        GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "UIPanel3D").First().gameObject;
+        string notificationText = "You can exit 3D mode at any time by pressing the escape button.";
+        string notificationTitle = "POV Mode";
+        notificationObject = NotificationHandler.GenerateNotification(notificationText,notificationTitle,new Vector3(10, -10, 0), notificationParent);
 
         currentModeType = ModeType.POV;
         SetModeType(ModeType.POV);

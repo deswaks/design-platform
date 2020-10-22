@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using JetBrains.Annotations;
+using TMPro;
 
 public class ButtonManagerModify : MonoBehaviour {
     public Main main;
@@ -36,10 +37,12 @@ public class ButtonManagerModify : MonoBehaviour {
     }
 
     public void PublishRoomNote() {
-        GameObject myInputGO = GameObject.Find("InputField Room Note");
-        InputField myInputIF = myInputGO.GetComponent<InputField>();
+        //GameObject myInputGO = GameObject.Find("InputField Room Note");
+        TMP_InputField myInputIF = GameObject.Find("InputProperty").GetComponent<TMP_InputField>();
         SelectMode.Instance.selection.SetRoomNote(myInputIF.text);
         myInputIF.text = "";
+
+        Debug.Log(SelectMode.Instance.selection.customProperty);
     }
 
 

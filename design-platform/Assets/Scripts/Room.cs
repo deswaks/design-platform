@@ -24,7 +24,7 @@ public class Room : MonoBehaviour {
     public float height = 3.0f;
 
     public string customProperty;
-    private Dictionary<string, string> customParameters = new Dictionary<string, string>();
+    //private Dictionary<string, string> customProperties = new Dictionary<string, string>();
 
     private bool isHighlighted { set; get; }
     private Room prefabRoom;    
@@ -115,10 +115,6 @@ public class Room : MonoBehaviour {
 
     public RoomShape GetRoomShape() {
         return shape;
-    }
-
-    public void AddCustomParameter(string name, string value) {
-        customParameters.Add(name, value);
     }
 
     /// <summary>
