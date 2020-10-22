@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Diagnostics;
 using System.Linq;
 using Xbim.Common;
 using Xbim.Common.Step21;
@@ -49,21 +48,25 @@ namespace Ifc {
         /// <returns></returns>
         public static IfcWallStandardCase CreateWall(IfcStore model, Interface interFace) {
 
-            Vector3 startPoint = interFace.GetStartPoint();
-            Vector3 endPoint = interFace.GetEndPoint();
-            Vector3 wallVector = endPoint - startPoint;
-            float height = interFace.attachedFaces[0].parentRoom.height;
+            // Get data from wall
+            string wallName = interFace.ToString() ;
+            Vector3 startPoint = interFace.GetStartPoint() * 1000;
+            Vector3 endPoint = interFace.GetEndPoint() * 1000;
+            Vector3 wallVector = (endPoint - startPoint).normalized;
+            float length = (endPoint - startPoint).magnitude;
+            float height = interFace.attachedFaces[0].parentRoom.height * 1000;
+            float thickness = interFace.GetWallThickness() * 1000;
 
             //begin a transaction
-            using var transaction = model.BeginTransaction("Create Wall");
+            var transaction = model.BeginTransaction("Create Wall");
             var wall = model.Instances.New<IfcWallStandardCase>();
-            wall.Name = "Wall name";
+            wall.Name = wallName;
 
-            //represent wall as a rectangular profile
+            //represent wall as a rectangular flat profile
             var rectProf = model.Instances.New<IfcRectangleProfileDef>();
             rectProf.ProfileType = IfcProfileTypeEnum.AREA;
-            rectProf.XDim = interFace.wall.wallThickness;
-            rectProf.YDim = wallVector.magnitude;
+            rectProf.YDim = thickness;
+            rectProf.XDim = length;
 
             var insertPoint = model.Instances.New<IfcCartesianPoint>();
             insertPoint.SetXY(0, 0);

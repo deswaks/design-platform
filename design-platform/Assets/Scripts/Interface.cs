@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Interface {
@@ -30,4 +31,13 @@ public class Interface {
             Building.Instance.RemoveInterface(this);
         }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public float GetWallThickness() {
+        float[] thicknesses = attachedFaces.Where(f => f != null).Select(f => f.wallThickness).ToArray();
+        return thicknesses.Max();
+    }
+
 }

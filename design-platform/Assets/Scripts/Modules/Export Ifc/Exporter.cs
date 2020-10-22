@@ -52,9 +52,15 @@ namespace Ifc {
                 UnityEngine.Debug.Log("Failed to save HelloWall.ifc");
                 UnityEngine.Debug.Log(e.Message);
             }
+
+            // Open file
+            Process.Start("Exports\\Building.ifc");
         }
 
         private static void CreateWalls() {
+
+            // Create the interfaces that are the basis for walls
+            Building.Instance.CreateInterfaces();
 
             foreach (Interface interFace in Building.Instance.interfaces) {
                 IfcWallStandardCase wall = Converter.CreateWall(model, interFace);
