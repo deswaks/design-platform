@@ -10,6 +10,7 @@ public class BuildMode : Mode {
 
     // Set at runtime
     public Room previewRoom;
+    
 
     public static BuildMode Instance {
         // Use the ?? operator, to return 'instance' if 'instance' does not equal null
@@ -58,6 +59,7 @@ public class BuildMode : Mode {
     public void Build() {
         Room builtRoom = Building.Instance.BuildRoom(buildShape: selectedShape, templateRoom: previewRoom);
         builtRoom.SetRoomState(Room.RoomStates.Stationary);
+       
     }
 
     // Moves Preview room with the mouse
