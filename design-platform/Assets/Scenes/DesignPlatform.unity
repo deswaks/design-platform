@@ -1425,9 +1425,6 @@ MonoBehaviour:
   roomMask:
     serializedVersion: 2
     m_Bits: 256
-  wallMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &130546038
 GameObject:
   m_ObjectHideFlags: 0
@@ -24459,7 +24456,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 18.49939, y: -28.010002}
+  m_AnchoredPosition: {x: 18.49939, y: -28.01}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1860713060
