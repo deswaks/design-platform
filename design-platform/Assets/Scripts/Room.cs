@@ -70,7 +70,7 @@ public class Room : MonoBehaviour {
                                                    new Vector3(0, 0, 3),
                                                    new Vector3(3, 0, 3),
                                                    new Vector3(3, 0, 0)};
-                gameObject.name = "Room(Rectangle)";
+                gameObject.name = "Rectange room (" + (Building.Instance.rooms.Count+1).ToString()+")";
                 break;
             case RoomShape.LSHAPE:
                 controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
@@ -79,7 +79,7 @@ public class Room : MonoBehaviour {
                                                           new Vector3(3, 0, 3),
                                                           new Vector3(5, 0, 3),
                                                           new Vector3(5, 0, 0)};
-                gameObject.name = "Room(L-Shape)";
+                gameObject.name = "L-room (" + (Building.Instance.rooms.Count+1).ToString()+")";
                 break;
         }
         faces = new List<Face>();
