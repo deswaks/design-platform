@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3D Mode
+  m_text: Title sample
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa328c1ae3ffb6b4583cf371153b0be6, type: 2}
   m_sharedMaterial: {fileID: 21918420405216288, guid: fa328c1ae3ffb6b4583cf371153b0be6,
@@ -171,7 +171,6 @@ GameObject:
   - component: {fileID: 7006084040671915744}
   - component: {fileID: 7006084040671915745}
   - component: {fileID: 7006084040671915774}
-  - component: {fileID: 5633496198487860729}
   m_Layer: 5
   m_Name: notification
   m_TagString: Untagged
@@ -224,8 +223,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 6ca804909faea644aa355ec5c5a9e1ba, type: 3}
-  title: 3D Mode
-  description: You can exit 3D mode at any time by pressing the escape button.
+  title: Title sample
+  description: Description sample
   timer: 2
   notificationAnimator: {fileID: 0}
   iconObj: {fileID: 7006084042006115715}
@@ -322,26 +321,6 @@ MonoBehaviour:
   icon: {fileID: 7006084042006115715}
   title: {fileID: 7006084040250668021}
   description: {fileID: 7006084041306713407}
---- !u!114 &5633496198487860729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7006084040671915772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 1
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!1 &7006084040712022071
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,7 +576,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You can exit 3D mode at any time by pressing the escape button.
+  m_text: Description sample
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2f17e8bb3967fe14093d5fec798fffd9, type: 2}
   m_sharedMaterial: {fileID: 21700449227511232, guid: 2f17e8bb3967fe14093d5fec798fffd9,

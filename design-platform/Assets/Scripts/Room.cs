@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
@@ -21,12 +22,12 @@ public class Room : MonoBehaviour {
 
     public Building parentBuilding;
     public float height = 3.0f;
+
     public string customProperty;
+    //private Dictionary<string, string> customProperties = new Dictionary<string, string>();
 
     private bool isHighlighted { set; get; }
-    private ProBuilderMesh mesh3D;
-    private Room prefabRoom;
-
+    private Room prefabRoom;    
 
     private GameObject moveHandle;
     private bool isRoomInMoveMode = false;
@@ -35,14 +36,10 @@ public class Room : MonoBehaviour {
     public GameObject editHandlePrefab;
     public List<GameObject> activeEditHandles;
 
-
     public GameObject moveHandlePrefab;
-    private Vector3 moveModeScreenPoint;
     private Vector3 moveModeOffset;
 
-    private Vector3 lastLegalPlacementPoint;
-
-    public RoomType RoomType { get; private set; }
+    public RoomType roomType { get; private set; }
 
     public enum RoomStates {
         Stationary,
@@ -73,7 +70,7 @@ public class Room : MonoBehaviour {
                                                    new Vector3(0, 0, 3),
                                                    new Vector3(3, 0, 3),
                                                    new Vector3(3, 0, 0)};
-                gameObject.name = "Rectange room (" + (Building.Instance.rooms.Count+1).ToString()+")";
+                gameObject.name = "Room(Rectangle)";
                 break;
             case RoomShape.LSHAPE:
                 controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
@@ -82,7 +79,7 @@ public class Room : MonoBehaviour {
                                                           new Vector3(3, 0, 3),
                                                           new Vector3(5, 0, 3),
                                                           new Vector3(5, 0, 0)};
-                gameObject.name = "L-room (" + (Building.Instance.rooms.Count+1).ToString()+")";
+                gameObject.name = "Room(L-Shape)";
                 break;
         }
         faces = new List<Face>();
@@ -416,7 +413,7 @@ public class Room : MonoBehaviour {
     /// </summary>
     void OnMouseDown() {
         if (roomState == RoomStates.Moving) {
-            moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+            //Vector3 moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
             moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
     }
@@ -438,9 +435,9 @@ public class Room : MonoBehaviour {
 
             if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
                 isCurrentlyColliding = false;
-                Material meshRenderMaterial = gameObject.GetComponent<MeshRenderer>().material;
-                if (isHighlighted) meshRenderMaterial = highlightMaterial;
-                else meshRenderMaterial = currentMaterial;
+                //Material meshRenderMaterial = gameObject.GetComponent<MeshRenderer>().material;
+                if (isHighlighted) gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
+                else gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
 
             }
             else { // if there is one or more collision(s)
@@ -467,10 +464,11 @@ public class Room : MonoBehaviour {
 
 
     public void SetRoomType(RoomType type) {
-        RoomType = type;
+        roomType = type;
 
         switch (type) {
             case RoomType.PREVIEW:
+                isHighlighted = true;
                 currentMaterial = prefabRoom.highlightMaterial;
                 gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                 break;

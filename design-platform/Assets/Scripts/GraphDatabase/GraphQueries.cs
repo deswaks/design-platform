@@ -196,7 +196,7 @@ namespace Database {
                     id = rd.Next(0, 5000),                              /////////////////////////// SKAL OPDATERES
                     name = room.GetRoomShape().ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
                     area = 17.5f,                                       /////////////////////////// SKAL OPDATERES
-                    type = room.RoomType,
+                    type = room.roomType,
                     shape = room.GetRoomShape(),
                     vertices = GraphUtils.Vector3ListToStringList(room.GetControlPoints())
                 };
