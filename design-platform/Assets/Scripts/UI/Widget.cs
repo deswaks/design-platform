@@ -10,7 +10,7 @@ public abstract class Widget
 
     public Widget(GameObject panel) {
         Panel = panel;
-        GameObject prefabPanel = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Widget");
+        GameObject prefabPanel = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Structural Widget");
         Panel = GameObject.Instantiate(prefabPanel, panel.transform.position, panel.transform.rotation);
         
     }
