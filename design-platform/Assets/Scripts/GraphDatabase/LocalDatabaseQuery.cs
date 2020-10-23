@@ -1,21 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using Neo4jClient;
-using Neo4jClient.Extension.Cypher;
-using Neo4jClient.Extensions;
-using Neo4jClient.Extension.Cypher.Attributes;
-
-using UnitsNet;
-using Neo4j.Driver.V1;
-using Neo4j.Driver;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System.IO;
-using UnityEditor.Experimental.AssetImporters;
+using UnityEditor;
+using System.Linq;
 
-namespace Database { 
+namespace Database {
     public class LocalDatabase {
 
         /// <summary>
@@ -60,6 +50,20 @@ namespace Database {
 
             // Saves file
             File.WriteAllText(jsonPath, jsonString);
+
+
+            // Generates notification in corner of screen
+            string notificationTitle = "File saved";
+            string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();            
+            
+            
+
+            GameObject notificationParent = SceneAsset.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
+            Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
+            Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
+            
+            GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
+
 
             #region old_codie
             ////// Save the JSON to a file.

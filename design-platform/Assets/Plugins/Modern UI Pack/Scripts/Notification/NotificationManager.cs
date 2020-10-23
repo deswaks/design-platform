@@ -14,7 +14,6 @@ namespace Michsky.UI.ModernUIPack
         [TextArea] public string description = "Notification description";
         public float timer = 3.0f;
 
-
         // Resources
         public Animator notificationAnimator;
         public Image iconObj;
@@ -97,9 +96,12 @@ namespace Michsky.UI.ModernUIPack
 
         IEnumerator StartTimer()
         {
+            //Dette tidspunkt er lige når den dukker op
             yield return new WaitForSeconds(timer);
             notificationAnimator.Play("Out");
             StopCoroutine("StartTimer");
+            //Dette tidspunkt er lige når den lukker igen
+            Destroy(gameObject); // <- indsat af Niklas
         }
 
         public void OpenNotification()
@@ -117,6 +119,7 @@ namespace Michsky.UI.ModernUIPack
         public void CloseNotification()
         {
             notificationAnimator.Play("Out");
+
         }
 
         public void UpdateUI()
