@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+
 public static class NotificationHandler
 {
     public static GameObject GenerateNotification(string text, string title, Vector3 location, GameObject parent, float timer = 0) {
@@ -20,8 +21,8 @@ public static class NotificationHandler
         notificationManager.title = title;
 
         
-        Debug.Log(notificationObject.transform.localPosition);
-        Debug.Log(notificationObject.transform.position);
+        Debug.Log("Local: " + notificationObject.transform.localPosition);
+        Debug.Log("Global: " + notificationObject.transform.position);
 
         if(timer == 0) {
             notificationManager.OpenNotificationWithoutTimer();
