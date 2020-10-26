@@ -1,21 +1,22 @@
 ﻿using Microsoft.Isam.Esent.Interop;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
-public abstract class Widget
-{
+public abstract class Widget {
     public (int width, int height) Size;
-    public GameObject Panel { get; private set; }
+    public GameObject PrefabPanel;
+    public GameObject Panel;
+    public GameObject Host;
 
-    public Widget(GameObject panel) {
-        Panel = panel;
-        GameObject prefabPanel = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Widget");
-        Panel = GameObject.Instantiate(prefabPanel, panel.transform.position, panel.transform.rotation);
-        
+    public Widget(GameObject host){
+        Host = host;
     }
-
-    public abstract void Update();
-
-
+    public abstract void InsertInDashboard();
+    public abstract GameObject DrawPanel();
+    public abstract void UpdatePanel();
+    public void DeletePanel() {
+        Object.Destroy(Panel);
+    }
 }
