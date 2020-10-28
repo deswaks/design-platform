@@ -10,6 +10,7 @@ public class Building {
     private static Building instance;
     public List<Room> rooms { get; private set; }
     public List<Wall> walls { get; private set; }
+    public List<Slab> slabs { get; private set; }
     public List<Interface> interfaces { get; private set; }
 
     public static Building Instance {
@@ -21,6 +22,7 @@ public class Building {
     public Building() {
         rooms = new List<Room>();
         walls = new List<Wall>();
+        slabs = new List<Slab>();
         interfaces = new List<Interface>();
     }
 
@@ -113,7 +115,43 @@ public class Building {
             walls[0].DeleteWall();
         }
     }
+    /// <summary>
+    /// Builds a new salb
+    /// </summary>
+    public Slab BuildSlab(Interface interFace) {
+        GameObject newSlabGameObject = new GameObject("slab");
+        Slab newSlab = (Slab)newSlabGameObject.AddComponent(typeof(Slab));
 
+        newSlab.InitializeSlab(interFace);
+
+        slabs.Add(newSlab);
+
+        return newSlab;
+    }
+
+    /// <summary>
+    /// Get a list of builded slabs
+    /// </summary>
+    public List<Slab> GetSlabs() {
+        return slabs;
+    }
+
+    /// <summary>
+    /// Removes slab from the list of slabs
+    /// </summary>
+    public void RemoveSlab(Slab slab) {
+        if (slabs.Contains(slab)) slabs.Remove(slab);
+    }
+
+    /// <summary>
+    /// Removes ALL slabs
+    /// </summary>
+    public void DeleteAllSlabs() {
+        int amount = slabs.Count;
+        for (int i = 0; i < amount; i++) {
+            slabs[0].DeleteSlab();
+        }
+    }
     /// <summary>
     /// Removes ALL interfaces
     /// </summary>
@@ -209,13 +247,18 @@ public class Building {
 
         // Delete preexisting	
         if (walls.Count > 0) DeleteAllWalls();
+        if (slabs.Count > 0) DeleteAllSlabs();
         if (interfaces.Count > 0) DeleteAllInterfaces();
 
         CreateVerticalInterfaces();
+        CreateHorizontalInterfaces();
 
         foreach (Interface interFace in interfaces) {
-            if(interFace.Get)
-            BuildWall(interFace);
+            if (interFace.GetOrientation() == Orientation.VERTICAL) {
+                BuildWall(interFace);
+            }
+            if (interFace.GetOrientation() == Orientation.HORIZONTAL)
+                BuildSlab(interFace);
         }
     }
 }

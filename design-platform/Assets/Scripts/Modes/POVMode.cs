@@ -57,7 +57,7 @@ public class POVMode : Mode {
         POVCamera.gameObject.SetActive(true);
         PlanCamera.gameObject.SetActive(false);
 
-        // Dele preexisting interfaces and walls build new ones
+        // Delete preexisting interfaces and walls build new ones
         Building.Instance.UpdatePOVElements();
 
         // Generates notification in corner of screen

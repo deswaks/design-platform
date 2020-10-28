@@ -1,7 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
+using System.Security.AccessControl;
 using UnityEngine;
+using UnityEngine.ProBuilder;
+using UnityEngine.ProBuilder.MeshOperations;
+using UnityEditor.ProBuilder;
+using UnityEditorInternal;
+using System.Runtime.InteropServices;
 
 public class Slab : MonoBehaviour {
     public Interface interFace { get; private set; }
@@ -10,7 +17,7 @@ public class Slab : MonoBehaviour {
     private Slab prefabSlab;
 
     /// <summary>
-    /// Construct walls.
+    /// Construct slabs.
     /// </summary>
     public void InitializeSlab(Interface interFace) {
 
@@ -22,31 +29,30 @@ public class Slab : MonoBehaviour {
         prefabSlab = (Slab)prefabSlabObject.GetComponent(typeof(Slab));
         gameObject.name = "CLT Slab";
 
-        List<Vector3> slabControlPoints = new List<Vector3> {
-            
-        };
+        List<Vector3> slabControlPoints = interFace.GetSlabControlPoints(localCoordinates: false);
 
-        //gameObject.AddComponent<MeshCollider>();
-        //gameObject.AddComponent<PolyShape>();
-        //gameObject.AddComponent<ProBuilderMesh>();
 
-        //PolyShape polyshape = gameObject.GetComponent<PolyShape>();
-        //polyshape.SetControlPoints(wallControlPoints);
-        //polyshape.extrude = slabThickness; 
-        //polyshape.CreateShapeFromPolygon();
+        gameObject.AddComponent<MeshCollider>();
+        gameObject.AddComponent<PolyShape>();
+        gameObject.AddComponent<ProBuilderMesh>();
 
-        //gameObject.GetComponent<ProBuilderMesh>().Refresh();
-        //gameObject.GetComponent<MeshRenderer>().material = prefabWall.wallMaterial;
+        PolyShape polyshape = gameObject.GetComponent<PolyShape>();
+        polyshape.SetControlPoints(slabControlPoints);
+        polyshape.extrude = slabThickness; 
+        polyshape.CreateShapeFromPolygon();
+
+        gameObject.GetComponent<ProBuilderMesh>().Refresh();
+        gameObject.GetComponent<MeshRenderer>().material = prefabSlab.slabMaterial;
 
     }
 
     /// <summary>
-    /// Deletes a wall and removes it from the wall list.
+    /// Deletes a slab and removes it from the slab list.
     /// </summary>
     public void DeleteSlab() {
-        //if (Building.Instance.walls.Contains(this)) {
-        //    Building.Instance.RemoveWall(this);
-        //}
-        //Destroy(gameObject);
+        if (Building.Instance.slabs.Contains(this)) {
+            Building.Instance.RemoveSlab(this);
+        }
+        Destroy(gameObject);
     }
 }

@@ -47,4 +47,7 @@ public class Interface {
         float[] thicknesses = attachedFaces.Where(f => f != null).Select(f => f.wallThickness).ToArray();
         return thicknesses.Max();
     }
+    public Orientation GetOrientation() {
+        return attachedFaces[0].orientation;
+    }
 }

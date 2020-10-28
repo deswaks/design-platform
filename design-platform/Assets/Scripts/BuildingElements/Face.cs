@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Face
 {
@@ -49,6 +50,13 @@ public class Face
                 break;
             case Orientation.HORIZONTAL:
                 cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates);
+                if (faceIndex == cp.Count+1) {
+                    for(int i = 0; i < cp.Count; i++ ) {
+                        cp[i] += Vector3.up * parentRoom.height;
+                    };
+                }
+    
+                //cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates);
                 endpoints = cp.ToArray();
                 break;
             default:
