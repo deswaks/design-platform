@@ -27,6 +27,7 @@ namespace Dashboard {
 
         public void InsertWidgets() {
             GameObject dualRow = null;
+            TemplateRow.SetActive(true);
 
             foreach (Widget widget in widgets){
 
@@ -53,6 +54,7 @@ namespace Dashboard {
                     }
                 }
             }
+            TemplateRow.SetActive(false);
         }
 
         public void AddWidgetToList(Widget widget) {

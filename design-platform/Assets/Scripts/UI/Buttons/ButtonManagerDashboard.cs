@@ -6,4 +6,8 @@ public class ButtonManagerDashboard : MonoBehaviour {
         Dashboard.Dashboard.Instance.InsertWidgets();
     }
 
+    public void RefreshDashboard() {
+        Dashboard.Dashboard.instance.UpdateCurrentWidgets();
+    }
+
 }
