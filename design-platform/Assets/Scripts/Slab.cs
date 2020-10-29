@@ -6,7 +6,6 @@ using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using UnityEditor.ProBuilder;
 using UnityEditorInternal;
 using System.Runtime.InteropServices;
 
