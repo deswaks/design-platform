@@ -15,6 +15,7 @@ public class Main : MonoBehaviour {
     }
 
     void Start() {
+        ModuleLoader.LoadModules();
         instance = this;
         Grid.size = 1.0f;
         SetMode(SelectMode.Instance);
