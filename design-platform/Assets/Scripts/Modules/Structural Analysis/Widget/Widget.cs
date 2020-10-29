@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Structural {
-    public class Widget : global::Widget {
+    public class StructuralWidget : global::Widget {
 
+        private readonly GameObject PrefabPanel;
         private readonly GameObject PrefabRow;
 
-        public Widget(GameObject host) : base(host) {
-            Size = (1, 1);
-            PrefabRow = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Loads Overview Row");
+        public StructuralWidget(GameObject host) : base(host) {
             PrefabPanel = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Structural Widget");
+            PrefabRow = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Loads Overview Row");
         }
-        public override void InsertInDashboard() {
-            // Skriv sig selv ind i dashboard
+
+        public override Object CreatePanel() {
+            // This widget only uses a prefab
+            return Object.Instantiate(PrefabPanel);
         }
-        public override GameObject DrawPanel() {
-            Panel = Object.Instantiate(PrefabPanel, Host.transform.position, Host.transform.rotation);
-            // Insert something into the rows
-            return Panel;
-        }
+
         public override void UpdatePanel() {
-            //Go through the information and insert in the correct places
+            // An update method will usually go through relevant information and insert in the correct places
         }
     }
 }
