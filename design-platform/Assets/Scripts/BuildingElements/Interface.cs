@@ -3,51 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Interface {
-    public Face[] attachedFaces = new Face[2];
-    public Wall wall;
+namespace DesignPlatform.Core {
+    public class Interface {
+        public Face[] attachedFaces = new Face[2];
+        public Wall wall;
 
-    public Vector3 GetStartPoint(bool localCoordinates = false) {
-        float[] parameters = attachedFaces[0].paramerters[this];
-        (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-        Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];
+        public Vector3 GetStartPoint(bool localCoordinates = false) {
+            float[] parameters = attachedFaces[0].paramerters[this];
+            (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
+            Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];
 
-        return startPoint;
-    }
-
-    public Vector3 GetEndPoint(bool localCoordinates = false) {
-        float[] parameters = attachedFaces[0].paramerters[this];
-        (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-        Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[1];
-
-        return startPoint;
-    }
-
-    public List <Vector3> GetSlabControlPoints(bool localCoordinates = false) {
-        List <Vector3> cp = attachedFaces[0].GetOGControlPoints(localCoordinates: localCoordinates).ToList();
-         
-        return cp;
-    }
-
-
-
-    /// <summary>
-    /// Deletes the room
-    /// </summary>
-    public void Delete() {
-        if (Building.Instance.interfaces.Contains(this)) {
-            Building.Instance.RemoveInterface(this);
+            return startPoint;
         }
-    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public float GetWallThickness() {
-        float[] thicknesses = attachedFaces.Where(f => f != null).Select(f => f.wallThickness).ToArray();
-        return thicknesses.Max();
-    }
-    public Orientation GetOrientation() {
-        return attachedFaces[0].orientation;
+        public Vector3 GetEndPoint(bool localCoordinates = false) {
+            float[] parameters = attachedFaces[0].paramerters[this];
+            (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
+            Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[1];
+
+            return startPoint;
+        }
+
+        public List<Vector3> GetSlabControlPoints(bool localCoordinates = false) {
+            List<Vector3> cp = attachedFaces[0].GetOGControlPoints(localCoordinates: localCoordinates).ToList();
+
+            return cp;
+        }
+
+
+
+        /// <summary>
+        /// Deletes the room
+        /// </summary>
+        public void Delete() {
+            if (Building.Instance.interfaces.Contains(this)) {
+                Building.Instance.RemoveInterface(this);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetWallThickness() {
+            float[] thicknesses = attachedFaces.Where(f => f != null).Select(f => f.wallThickness).ToArray();
+            return thicknesses.Max();
+        }
+        public Orientation GetOrientation() {
+            return attachedFaces[0].orientation;
+        }
     }
 }
