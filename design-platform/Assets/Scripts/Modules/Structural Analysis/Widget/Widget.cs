@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Structural {
@@ -8,9 +9,12 @@ namespace Structural {
         private readonly GameObject PrefabPanel;
         private readonly GameObject PrefabRow;
 
-        public StructuralWidget(GameObject host) : base(host) {
-            PrefabPanel = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Structural Widget");
-            PrefabRow = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Loads Overview Row");
+        public StructuralWidget() : base() {
+            //PrefabPanel = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Structural Widget.prefab");
+            PrefabPanel = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/Modules/Structural Analysis/Widget/Structural Widget.prefab");
+            //PrefabRow = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Loads Overview Row.prefab");
+            PrefabRow = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/Modules/Structural Analysis/Widget/Loads Overview Row.prefab");
+
         }
 
         public override Object CreatePanel() {
@@ -22,4 +26,5 @@ namespace Structural {
             // An update method will usually go through relevant information and insert in the correct places
         }
     }
+    
 }

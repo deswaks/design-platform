@@ -19,6 +19,10 @@ public class Main : MonoBehaviour {
         instance = this;
         Grid.size = 1.0f;
         SetMode(SelectMode.Instance);
+
+        ///////////////////////////////////////////////////////////////// WIDGET TEST ///////////////////////////
+        Structural.StructuralWidget strucWidget = new Structural.StructuralWidget();
+        strucWidget.RequestDraw();
     }
 
     void Update() {

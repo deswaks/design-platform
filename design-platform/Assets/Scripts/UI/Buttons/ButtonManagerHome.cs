@@ -1,8 +1,5 @@
 ﻿using Database;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ButtonManagerHome : MonoBehaviour {
     public void SaveLocal() {

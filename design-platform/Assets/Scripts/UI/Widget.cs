@@ -1,6 +1,8 @@
-﻿using Microsoft.Isam.Esent.Interop;
+﻿using Boo.Lang;
+using Microsoft.Isam.Esent.Interop;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,10 +11,12 @@ public abstract class Widget {
     public (int width, int height) Size;
     public GameObject Panel;
     public GameObject Host;
+    public string Name;
 
-    public Widget(GameObject host) {
+
+    public Widget() {
         Size = (1, 1);
-        
+        Name = "Widget";
     }
 
     /// <summary>
@@ -31,11 +35,10 @@ public abstract class Widget {
     /// </summary>
     public void RequestDraw() {
         try {
-            Dashboard.Instance.AddWidgetToList(this);
+            Dashboard.Dashboard.Instance.AddWidgetToList(this);
         }
-        catch (System.Exception) {
+        catch {
             Debug.Log("Failed to find dashboard when adding widget.");
-            throw;
         }
     }
 
@@ -47,6 +50,8 @@ public abstract class Widget {
         if (Panel != null) Delete();
         Panel = (GameObject)CreatePanel();
         Panel.transform.parent = host.transform;
+        Panel.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        Panel.transform.localRotation = Quaternion.identity;
         AddLayoutElementComponent();
         UpdatePanel();
     }
@@ -61,10 +66,10 @@ public abstract class Widget {
     public void AddLayoutElementComponent() {
         if (Panel.GetComponent<LayoutElement>() == null) {
             LayoutElement layoutElement = Panel.AddComponent<LayoutElement>();
-            layoutElement.minHeight = 500;
-            layoutElement.minWidth = 500;
-            layoutElement.preferredHeight = 500;
-            layoutElement.preferredWidth = 500;
+            layoutElement.minHeight = Size.height * 500;
+            layoutElement.minWidth  = Size.width * 500;
+            layoutElement.preferredHeight = Size.height * 500;
+            layoutElement.preferredWidth  = Size.width * 500;
         }
     }
 }
