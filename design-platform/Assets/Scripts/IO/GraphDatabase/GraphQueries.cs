@@ -14,12 +14,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO;
 using UnityEditor.Experimental.AssetImporters;
+using DesignPlatform.Core;
 
 
 //using System.Numerics;
 
 
-namespace Database {
+namespace DesignPlatform.Database {
     public class GraphProgram {
 
         public static void WorkIt() {
@@ -181,7 +182,7 @@ namespace Database {
 
             return results.Select(r => Convert.ToInt32(r)).ToList();
         }
-            
+
         /// <summary>
         /// Saves/inserts all rooms from Unity into graph database
         /// </summary>
@@ -190,7 +191,7 @@ namespace Database {
             List<Room> buildingRooms = Building.Instance.GetRooms();
             Debug.Log(buildingRooms.Count);
 
-            foreach(Room room in buildingRooms) {
+            foreach (Room room in buildingRooms) {
                 System.Random rd = new System.Random();
                 RoomNode RoomNode = new RoomNode {
                     id = rd.Next(0, 5000),                              /////////////////////////// SKAL OPDATERES
@@ -252,7 +253,7 @@ namespace Database {
         /// <param name="label">Label of nodes to delete</param>
         public void DeleteAllNodesWithLabel(string label = "") {
             _graphClient.Cypher
-                .Match(String.Format("(r:{0})", label))
+                .Match(string.Format("(r:{0})", label))
                 .DetachDelete("r")
                 .ExecuteWithoutResultsAsync();
         }

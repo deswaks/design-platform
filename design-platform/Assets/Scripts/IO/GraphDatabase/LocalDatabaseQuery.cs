@@ -4,8 +4,9 @@ using Newtonsoft.Json;
 using System.IO;
 using UnityEditor;
 using System.Linq;
+using DesignPlatform.Core;
 
-namespace Database {
+namespace DesignPlatform.Database {
     public class LocalDatabase {
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace Database {
             foreach (RoomNode roomNode in roomNodes) {
                 CreateUnityRoomFromRoomNode(roomNode);
             }
- 
+
         }
 
         /// <summary>
@@ -55,14 +56,14 @@ namespace Database {
 
             // Generates notification in corner of screen
             string notificationTitle = "File saved";
-            string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();            
-            
-            
+            string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
 
-            GameObject notificationParent = SceneAsset.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
+
+
+            GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
             Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
             Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
-            
+
             GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
 
 

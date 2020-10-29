@@ -4,12 +4,11 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Dashboard {
-
+namespace DesignPlatform.Core {
 
     public class Dashboard {
         public static Dashboard instance;
-        
+
         private List<Widget> widgets = new List<Widget>();
 
         private GameObject DashboardGameObject;
@@ -28,11 +27,11 @@ namespace Dashboard {
         public void InsertWidgets() {
             GameObject dualRow = null;
 
-            foreach (Widget widget in widgets){
+            foreach (Widget widget in widgets) {
 
                 // If widget is full width, a new row is created and the widget is inserted into it
                 if (widget.Size.width == 2) {
-                    GameObject hostRow = GameObject.Instantiate( TemplateRow, WidgetArea.transform );
+                    GameObject hostRow = Object.Instantiate(TemplateRow, WidgetArea.transform);
                     widget.Draw(hostRow);
                     // Forces rebuild of layout to update position in layout groups
                     LayoutRebuilder.ForceRebuildLayoutImmediate(TemplateRow.transform as RectTransform);
@@ -40,8 +39,8 @@ namespace Dashboard {
 
                 else if (widget.Size.width == 1) {
                     // If no dualRow is available
-                    if(dualRow == null) {
-                        dualRow = GameObject.Instantiate(TemplateRow, WidgetArea.transform);
+                    if (dualRow == null) {
+                        dualRow = Object.Instantiate(TemplateRow, WidgetArea.transform);
                         widget.Draw(dualRow);
                     }
                     // If a dualRow already exists (meaning one place remains)

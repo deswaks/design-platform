@@ -25,9 +25,10 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
+using DesignPlatform.Core;
 
-namespace Ifc {
-    public static class Exporter {
+namespace DesignPlatform.Export {
+    public static class IfcExporter {
         private static IfcStore model;
         private static IfcBuilding building;
 
@@ -63,8 +64,8 @@ namespace Ifc {
             Building.Instance.CreateVerticalInterfaces();
 
             foreach (Interface interFace in Building.Instance.interfaces) {
-                IfcWallStandardCase wall = Converter.CreateWall(model, interFace);
-                if (wall != null) Converter.AddPropertiesToWall(model, wall);
+                IfcWallStandardCase wall = IfcConverter.CreateWall(model, interFace);
+                if (wall != null) IfcConverter.AddPropertiesToWall(model, wall);
 
                 // Add to model
                 using (var transaction = model.BeginTransaction("Add Wall")) {

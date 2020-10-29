@@ -24,9 +24,10 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
+using DesignPlatform.Core;
 
-namespace Ifc {
-    public static class Converter {
+namespace DesignPlatform.Export {
+    public static class IfcConverter {
 
         public static void IfcSpaceFromRoom(Room room) {
 
@@ -49,10 +50,10 @@ namespace Ifc {
         public static IfcWallStandardCase CreateWall(IfcStore model, Interface interFace) {
 
             // Get data from wall
-            string wallName = interFace.ToString() ;
+            string wallName = interFace.ToString();
             Vector3 startPoint = interFace.GetStartPoint() * 1000;
             Vector3 endPoint = interFace.GetEndPoint() * 1000;
-            Vector3 midPoint = (endPoint - startPoint)/2;
+            Vector3 midPoint = (endPoint - startPoint) / 2;
             Vector3 wallVector = (endPoint - startPoint).normalized;
             float length = (endPoint - startPoint).magnitude;
             float height = interFace.attachedFaces[0].parentRoom.height * 1000;
@@ -113,7 +114,7 @@ namespace Ifc {
             placementAxis.Axis = model.Instances.New<IfcDirection>();
             placementAxis.Axis.SetXYZ(0, 0, 1);
             localPlacement.RelativePlacement = placementAxis;
-            
+
             wall.ObjectPlacement = localPlacement;
 
             // Where Clause: The IfcWallStandard relies on the provision of an IfcMaterialLayerSetUsage 

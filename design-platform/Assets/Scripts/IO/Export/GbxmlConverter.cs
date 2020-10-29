@@ -1,11 +1,12 @@
-﻿using gbXMLSerializer;
+﻿using DesignPlatform.Core;
+using gbXMLSerializer;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using gbs = gbXMLSerializer;
 
-namespace gbXML {
-    public static class Converter {
+namespace DesignPlatform.Export {
+    public static class GbxmlConverter {
 
         public static gbs.Space XmlSpaceFromRoom(Room room) {
 
@@ -15,33 +16,33 @@ namespace gbXML {
             space.Name = "Space_";// + room.name;
 
             // Space area
-            gbs.Area area = new gbs.Area();
+            Area area = new Area();
             area.val = string.Format("{0:N2}", room.GetFloorArea());
             space.spacearea = area;
 
             // Space volume
-            gbs.Volume vol = new gbs.Volume();
+            Volume vol = new Volume();
             vol.val = string.Format("{0:N2}", room.GetVolume());
             space.spacevol = vol;
 
             // Shell geometry
-            gbs.ShellGeometry shellGeometry = new gbs.ShellGeometry();
-            shellGeometry.unit = gbs.lengthUnitEnum.Meters;
+            ShellGeometry shellGeometry = new ShellGeometry();
+            shellGeometry.unit = lengthUnitEnum.Meters;
             shellGeometry.id = "sg" + space.Name;
             space.ShellGeo = shellGeometry;
 
             // Closed shell
-            gbs.ClosedShell closedShell = new gbs.ClosedShell();
+            ClosedShell closedShell = new ClosedShell();
             shellGeometry.ClosedShell = closedShell;
 
             List<List<Vector3>> surfacesVertices = room.GetSurfaceVertices();
 
             // Make polyloop arrays
-            closedShell.PolyLoops = gbs.prod.makePolyLoopArray(surfacesVertices.Count);
+            closedShell.PolyLoops = prod.makePolyLoopArray(surfacesVertices.Count);
             for (int i = 0; i < closedShell.PolyLoops.GetLength(0); i++) {
 
                 // Make polyloop points
-                closedShell.PolyLoops[i].Points = gbs.BasicSerialization.makeCartesianPtArray(surfacesVertices[i].Count);
+                closedShell.PolyLoops[i].Points = BasicSerialization.makeCartesianPtArray(surfacesVertices[i].Count);
 
                 for (int j = 0; j < closedShell.PolyLoops[i].Points.GetLength(0); j++) {
                     List<string> coordinates = new List<string>();

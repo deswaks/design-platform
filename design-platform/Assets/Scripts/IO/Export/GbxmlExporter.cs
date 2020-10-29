@@ -4,9 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using gs = gbXMLSerializer;
+using DesignPlatform.Core;
 
-namespace gbXML {
-    public static class Exporter {
+namespace DesignPlatform.Export {
+    public static class GbxmlExporter {
         public static gs.gbXML gbx = new gs.gbXML();
 
         public static void ClearXML() {
@@ -30,7 +31,7 @@ namespace gbXML {
             // Create spaces
             List<gs.Space> spaces = new List<gs.Space>();
             foreach (Room room in Building.Instance.GetRooms()) {
-                gs.Space space = Converter.XmlSpaceFromRoom(room);
+                gs.Space space = GbxmlConverter.XmlSpaceFromRoom(room);
                 building.Area += (float)space.Area;
                 spaces.Add(space);
             }
@@ -41,6 +42,6 @@ namespace gbXML {
             Process.Start("Exports\\building.gbxml"); //Start viewer
         }
 
-        
+
     }
 }
