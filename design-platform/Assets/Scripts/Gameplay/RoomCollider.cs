@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using UnityEditor.ProBuilder;
 
 public class RoomCollider : MonoBehaviour {
     public bool isCurrentlyColliding = false;
