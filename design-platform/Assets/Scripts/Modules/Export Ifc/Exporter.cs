@@ -60,7 +60,7 @@ namespace Ifc {
         private static void CreateWalls() {
 
             // Create the interfaces that are the basis for walls
-            Building.Instance.CreateInterfaces();
+            Building.Instance.CreateVerticalInterfaces();
 
             foreach (Interface interFace in Building.Instance.interfaces) {
                 IfcWallStandardCase wall = Converter.CreateWall(model, interFace);

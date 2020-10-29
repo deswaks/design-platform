@@ -42,7 +42,13 @@ public static class ModuleLoader {
 
     public static string[] FindModules(string moduleFolderPath) {
         string searchString = "*" + ".dll";
-        string[] modules = Directory.GetFiles(moduleFolderPath, searchString, SearchOption.AllDirectories);
-        return modules;
+        try {
+            string[] modules = Directory.GetFiles(moduleFolderPath, searchString, SearchOption.AllDirectories);
+            return modules;
+        }
+        catch (Exception) {
+            Console.Write("Could not find the modules folder");
+            throw;
+        }
     }
 }

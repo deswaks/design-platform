@@ -23,6 +23,14 @@ public class Interface {
         return startPoint;
     }
 
+    public List <Vector3> GetSlabControlPoints(bool localCoordinates = false) {
+        List <Vector3> cp = attachedFaces[0].GetOGControlPoints(localCoordinates: localCoordinates).ToList();
+         
+        return cp;
+    }
+
+
+
     /// <summary>
     /// Deletes the room
     /// </summary>
@@ -38,5 +46,8 @@ public class Interface {
     public float GetWallThickness() {
         float[] thicknesses = attachedFaces.Where(f => f != null).Select(f => f.wallThickness).ToArray();
         return thicknesses.Max();
+    }
+    public Orientation GetOrientation() {
+        return attachedFaces[0].orientation;
     }
 }

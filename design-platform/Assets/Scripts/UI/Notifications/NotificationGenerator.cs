@@ -21,8 +21,8 @@ public static class NotificationHandler
         notificationManager.title = title;
 
         
-        Debug.Log("Local: " + notificationObject.transform.localPosition);
-        Debug.Log("Global: " + notificationObject.transform.position);
+        //Debug.Log(notificationObject.transform.localPosition);
+        //Debug.Log(notificationObject.transform.position);
 
         if(timer == 0) {
             notificationManager.OpenNotificationWithoutTimer();
