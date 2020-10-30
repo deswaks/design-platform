@@ -31,17 +31,6 @@ namespace DesignPlatform.Core {
         }
 
         public override void Tick() {
-
-            //switch (currentModeType) {
-            //    case ModeType.POV:
-            //        if (Input.GetKeyDown(KeyCode.Escape)) { SetModeType(ModeType.MENU); }
-            //        break;
-
-            //    case ModeType.MENU:
-            //        if (Input.GetKeyDown(KeyCode.Escape)) { SetModeType(ModeType.POV); }
-            //        break;
-            //}
-
             TickModeType();
 
             if (Input.GetKeyDown(KeyCode.Escape)) {

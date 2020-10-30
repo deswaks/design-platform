@@ -17,5 +17,6 @@ namespace DesignPlatform.Core {
         public void StartPOVMode() {
             Main.Instance.SetMode(POVMode.Instance);
         }
+
     }
 }

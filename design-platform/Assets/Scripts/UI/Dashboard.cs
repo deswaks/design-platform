@@ -64,6 +64,8 @@ namespace DesignPlatform.Core {
                     }
                 }
             }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(WidgetArea.transform as RectTransform);
+
             TemplateRow.SetActive(false);
         }
 
