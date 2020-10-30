@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Widget_CircleDiagram : Widget
+public class Widget_CircleDiagram : DesignPlatform.Core.Widget
 {
     // Names of used GameObjects in prefab
     private static readonly string TitleName = "txt_Title";

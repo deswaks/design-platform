@@ -23,15 +23,15 @@ namespace DesignPlatform.Core {
             SetMode(SelectMode.Instance);
 
 
-    }
+    
             // Pre load assets
             Utils.AssetUtil.LoadBundle("materials");
             Utils.AssetUtil.LoadBundle("prefabs");
 
             ///////////////////////////////////////////////////////////////// WIDGET TEST ///////////////////////////
-            Structural.StructuralWidget strucWidget = new Structural.StructuralWidget();
+            StructuralWidget strucWidget = new StructuralWidget();
             strucWidget.RequestDraw();
-            DesignPlatform.RoomScheduleWidget widgey = new DesignPlatform.RoomScheduleWidget();
+            RoomScheduleWidget widgey = new RoomScheduleWidget();
             widgey.RequestDraw();
             Widget_CircleDiagram circle = new Widget_CircleDiagram();
             circle.RequestDraw();
