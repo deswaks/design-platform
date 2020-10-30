@@ -28,6 +28,7 @@ namespace Dashboard {
         }
 
         public void InsertWidgets() {
+            ClearAllWidgets();
             GameObject dualRow = null;
             TemplateRow.SetActive(true);
 

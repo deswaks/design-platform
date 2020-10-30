@@ -27302,7 +27302,7 @@ GameObject:
   - component: {fileID: 2105328106}
   - component: {fileID: 2105328105}
   m_Layer: 5
-  m_Name: BottomMenu
+  m_Name: ModifyMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

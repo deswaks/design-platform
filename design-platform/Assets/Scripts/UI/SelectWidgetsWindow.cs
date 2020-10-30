@@ -7,19 +7,22 @@ using UnityEngine.UI;
 namespace Dashboard {
     public class SelectWidgetsWindow : MonoBehaviour {
 
-        GameObject rowTemplate;
+        GameObject rowTemplate = null;
         Dictionary<Widget, bool> widgets = new Dictionary<Widget, bool>();
         List<GameObject> widgetToggles = new List<GameObject>();
 
         void Start() {
             rowTemplate = gameObject.transform.Find("rowTemplate").gameObject;
-            rowTemplate.SetActive(false);
             gameObject.SetActive(false);
 
         }
 
         // Sets up list of widgets and toggles them all
         void OnEnable() {
+            if(rowTemplate == null) {
+                rowTemplate = gameObject.transform.Find("rowTemplate").gameObject;
+            }
+            rowTemplate.SetActive(true);
 
             // Finds all widgets and puts them in dictionary
             widgets = Dashboard.Instance.widgets;
@@ -27,7 +30,6 @@ namespace Dashboard {
             widgetToggles.ForEach(t => GameObject.Destroy(t));
             widgetToggles = new List<GameObject>();
 
-            rowTemplate.SetActive(true);
 
             foreach (var w in widgets) {
                 GameObject currentRow = Instantiate(rowTemplate, rowTemplate.transform.parent);
