@@ -53,11 +53,20 @@ namespace DesignPlatform.Core {
                 case RoomShape.RECTANGLE:
                     //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
                     colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 });
-
                     break;
                 case RoomShape.LSHAPE:
                     colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
                     colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2
+                    break;
+                case RoomShape.USHAPE:
+                    colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
+                    colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2                    
+                    colliderIndexPairsList.Add(new List<int> { 5, 6, 7, 6 }); // Collider cube 3                    
+                    break;                
+                case RoomShape.SSHAPE:
+                    colliderIndexPairsList.Add(new List<int> { 1, 2, 2, 3 }); // Collider cube 1
+                    colliderIndexPairsList.Add(new List<int> { 0, 4, 0, 3 }); // Collider cube 2                    
+                    colliderIndexPairsList.Add(new List<int> { 5, 6, 7, 6 }); // Collider cube 3                    
                     break;
             }
 

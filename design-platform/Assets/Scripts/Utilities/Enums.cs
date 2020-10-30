@@ -11,7 +11,8 @@ namespace DesignPlatform.Core {
     public enum RoomShape {
         RECTANGLE,
         LSHAPE,
-        USHAPE
+        USHAPE,
+        SSHAPE
     }
 
     public enum Axis {

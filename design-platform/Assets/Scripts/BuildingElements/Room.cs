@@ -79,6 +79,27 @@ namespace DesignPlatform.Core {
                                                           new Vector3(5, 0, 0)};
                     gameObject.name = "Room(L-Shape)";
                     break;
+                case RoomShape.USHAPE:
+                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                                                          new Vector3(0, 0, 5),
+                                                          new Vector3(3, 0, 5),
+                                                          new Vector3(3, 0, 3),
+                                                          new Vector3(5, 0, 3),
+                                                          new Vector3(5, 0, 5),
+                                                          new Vector3(8, 0, 5),
+                                                          new Vector3(8, 0, 0)};
+                    break;                
+                case RoomShape.SSHAPE:
+                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                                                          new Vector3(0, 0, 5),
+                                                          new Vector3(3, 0, 5),
+                                                          new Vector3(3, 0, 3),
+                                                          new Vector3(6, 0, 3),
+                                                          new Vector3(6, 0, -2),
+                                                          new Vector3(3, 0, -2),
+                                                          new Vector3(3, 0, 0),
+                    };
+                    break;
             }
             faces = new List<Face>();
             for (int i = 0; i < controlPoints.Count + 2; i++) {
@@ -361,6 +382,14 @@ namespace DesignPlatform.Core {
                                            cp[0].z + (cp[3].z - cp[0].z) * 0.65f);
                     break;
                 case RoomShape.USHAPE:
+                    tagPoint = new Vector3(cp[0].x + (cp[7].x - cp[0].x) * 0.5f,
+                                           height + 0.01f,
+                                           cp[0].z + (cp[3].z - cp[0].z) * 0.5f);
+                    break;
+                case RoomShape.SSHAPE:
+                    tagPoint = new Vector3(cp[0].x + (cp[4].x - cp[0].x) * 0.5f,
+                                           height + 0.01f,
+                                           cp[0].z + (cp[3].z - cp[0].z) * 0.5f);
                     break;
                 default:
                     break;
