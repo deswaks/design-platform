@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
-using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using UnityEditorInternal;
-using System.Runtime.InteropServices;
+using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class Slab : MonoBehaviour {
@@ -25,7 +22,8 @@ namespace DesignPlatform.Core {
 
             gameObject.layer = 14; // Slab layer
 
-            GameObject prefabSlabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/SlabPrefab.prefab");
+            GameObject prefabSlabObject = AssetUtil.LoadGameObject("prefabs", "SlabPrefab");
+
             prefabSlab = (Slab)prefabSlabObject.GetComponent(typeof(Slab));
             gameObject.name = "CLT Slab";
 

@@ -2,12 +2,10 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
-using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using UnityEditorInternal;
-using System.Runtime.InteropServices;
+using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class Wall : MonoBehaviour {
@@ -27,7 +25,8 @@ namespace DesignPlatform.Core {
 
             gameObject.layer = 13; // Wall layer
 
-            GameObject prefabWallObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/WallPrefab.prefab");
+            GameObject prefabWallObject = AssetUtil.LoadGameObject("prefabs", "WallPrefab");
+
             prefabWall = (Wall)prefabWallObject.GetComponent(typeof(Wall));
             gameObject.name = "CLT Wall";
 

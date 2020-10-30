@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using System.Linq;
 
 namespace DesignPlatform.Core {
     public static class ModuleLoader {
@@ -16,27 +17,27 @@ namespace DesignPlatform.Core {
 
             // Go through all modules and load them
             foreach (string modulePath in FindModules(moduleFolderPath)) {
-                Assembly module = LoadModule(modulePath);
-                InitModule(module);
+                InitModule(modulePath);
             }
         }
 
-        public static void InitModule(Assembly module) {
-            Type ModuleInitializer = module.GetType("ModuleInitializer");
-            MethodInfo Init = ModuleInitializer.GetMethod("Init");
-            Init.Invoke(new object(), null);
+        public static void InitModule(string modulePath) {
+            // Convert to absolute path
+            string fullModulePath = Path.GetFullPath(modulePath);
+            string moduleFolderPath = Path.GetDirectoryName(fullModulePath);
+
+            Assembly module = LoadModule(fullModulePath);
+            MethodInfo Initializer = GetModuleInitalizer(module);
+            Initializer.Invoke(new object(), new object[] { (moduleFolderPath.Replace(@"\", "/")+"/")});
         }
 
         public static Assembly LoadModule(string modulePath) {
-            // Convert to absolute path
-            string fullPath = Path.GetFullPath(modulePath);
-
             // Load the assembly
             try {
-                return Assembly.LoadFrom(fullPath);
+                return Assembly.LoadFrom(modulePath);
             }
             catch (Exception) {
-                Console.Write(File.Exists(fullPath));
+                Console.Write(File.Exists(modulePath));
                 throw;
             }
         }
@@ -51,6 +52,14 @@ namespace DesignPlatform.Core {
                 Console.Write("Could not find the modules folder");
                 throw;
             }
+        }
+
+        public static MethodInfo GetModuleInitalizer(Assembly module) {
+            Type ModuleInitializer = module.GetTypes().SingleOrDefault(t => t.Name == "ModuleInitializer");
+            //string nameSpace = GetModuleInitalizer(module);
+            //Type ModuleInitializer = module.GetType(nameSpace + "ModuleInitializer");
+            MethodInfo Initializer = ModuleInitializer.GetMethod("Init");
+            return Initializer;
         }
     }
 }

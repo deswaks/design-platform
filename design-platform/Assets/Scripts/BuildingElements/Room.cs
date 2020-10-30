@@ -12,15 +12,9 @@ namespace DesignPlatform.Core {
 
         public List<Face> faces { get; private set; }
 
-        private RoomShape shape;
+        public RoomShape shape { get; private set; }
         private Material currentMaterial;
-        public Material defaultMaterial;
         public Material highlightMaterial;
-        public Material singleRoomMaterial;
-        public Material doubleRoomMaterial;
-        public Material livingroomMaterial;
-        public Material kitchenMaterial;
-        public Material bathroomMaterial;
 
         public Building parentBuilding;
         public float height = 3.0f;
@@ -29,7 +23,7 @@ namespace DesignPlatform.Core {
         //private Dictionary<string, string> customProperties = new Dictionary<string, string>();
 
         private bool isHighlighted { set; get; }
-        private Room prefabRoom;
+        public Room prefabRoom { get; private set; }
 
         private GameObject moveHandle;
         private bool isRoomInMoveMode = false;
@@ -62,9 +56,11 @@ namespace DesignPlatform.Core {
             roomState = RoomStates.Preview;
 
             // Get relevant properties from prefab object
-            GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
-
+            GameObject prefabObject = AssetUtil.LoadGameObject("prefabs", "RoomPrefab");
             prefabRoom = (Room)prefabObject.GetComponent(typeof(Room));
+
+            currentMaterial = AssetUtil.LoadMaterial("materials", "RoomDefault");
+            highlightMaterial = AssetUtil.LoadMaterial("materials", "RoomHighlight");
 
             switch (shape) {
                 case RoomShape.RECTANGLE:
@@ -222,7 +218,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void SetIsHighlighted(bool highlighted) {
             if (highlighted) {
-                gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
+                gameObject.GetComponent<MeshRenderer>().material = highlightMaterial;
                 isHighlighted = true;
             }
             else {
@@ -437,7 +433,7 @@ namespace DesignPlatform.Core {
                 if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
                     isCurrentlyColliding = false;
                     //Material meshRenderMaterial = gameObject.GetComponent<MeshRenderer>().material;
-                    if (isHighlighted) gameObject.GetComponent<MeshRenderer>().material = prefabRoom.highlightMaterial;
+                    if (isHighlighted) gameObject.GetComponent<MeshRenderer>().material = highlightMaterial;
                     else gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
 
                 }
@@ -458,11 +454,6 @@ namespace DesignPlatform.Core {
         /// </summary>
         public bool GetIsMoveHandleVisible() { return isRoomInMoveMode; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Room GetPrefabRoom() { return prefabRoom; }
-
 
         public void SetRoomType(RoomType type) {
             roomType = type;
@@ -470,31 +461,31 @@ namespace DesignPlatform.Core {
             switch (type) {
                 case RoomType.PREVIEW:
                     isHighlighted = true;
-                    currentMaterial = prefabRoom.highlightMaterial;
+                    currentMaterial = AssetUtil.LoadMaterial("materials", "RoomHighlight");
                     gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                     break;
                 case RoomType.DEFAULT:
-                    currentMaterial = prefabRoom.defaultMaterial;
+                    currentMaterial = AssetUtil.LoadMaterial("materials", "RoomDefault");
                     gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                     break;
                 case RoomType.SINGLEROOM:
-                    currentMaterial = prefabRoom.singleRoomMaterial;
+                    currentMaterial = AssetUtil.LoadMaterial("materials", "RoomSingleroom");
                     gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                     break;
                 case RoomType.DOUBLEROOM:
-                    currentMaterial = prefabRoom.doubleRoomMaterial;
+                    currentMaterial = AssetUtil.LoadMaterial("materials", "RoomDoubleroom");
                     gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                     break;
                 case RoomType.LIVINGROOM:
-                    currentMaterial = prefabRoom.livingroomMaterial;
+                    currentMaterial = AssetUtil.LoadMaterial("materials", "RoomLivingroom");
                     gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                     break;
                 case RoomType.KITCHEN:
-                    currentMaterial = prefabRoom.kitchenMaterial;
+                    currentMaterial = AssetUtil.LoadMaterial("materials", "RoomKitchen");
                     gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                     break;
                 case RoomType.BATHROOM:
-                    currentMaterial = prefabRoom.bathroomMaterial;
+                    currentMaterial = AssetUtil.LoadMaterial("materials", "RoomBathroom");
                     gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
                     break;
             }
