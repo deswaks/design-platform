@@ -1,10 +1,4 @@
-﻿using Boo.Lang;
-using Microsoft.Isam.Esent.Interop;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace DesignPlatform.Core {
@@ -51,6 +45,7 @@ namespace DesignPlatform.Core {
             if (Panel != null) Delete();
             Panel = (GameObject)CreatePanel();
             Panel.transform.parent = host.transform;
+            Panel.transform.localPosition = Vector3.zero;
             Panel.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             Panel.transform.localRotation = Quaternion.identity;
             AddLayoutElementComponent();

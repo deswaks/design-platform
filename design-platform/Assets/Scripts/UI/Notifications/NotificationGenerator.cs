@@ -18,10 +18,6 @@ namespace DesignPlatform.Core {
             notificationManager.description = text;
             notificationManager.title = title;
 
-
-            //Debug.Log(notificationObject.transform.localPosition);
-            //Debug.Log(notificationObject.transform.position);
-
             if (timer == 0) {
                 notificationManager.OpenNotificationWithoutTimer();
             }

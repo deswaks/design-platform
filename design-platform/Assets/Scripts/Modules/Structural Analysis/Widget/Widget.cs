@@ -11,6 +11,7 @@ namespace StructuralAnalysis {
         private readonly GameObject PrefabRow;
 
         public StructuralWidget() : base() {
+            Name = "Structural Widget";
             PrefabPanel = AssetUtil.LoadGameObject("structuralanalysis", "Structural Widget");
             PrefabRow = AssetUtil.LoadGameObject("structuralanalysis", "Loads Overview Row");
         }
