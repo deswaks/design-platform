@@ -27,7 +27,6 @@ public class Widget_CircleDiagram : Widget
     {
         Size = (width: 1, height: 1);
         Name = "Circle Diagram";
-        PrefabPanel = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
     }
 
     public void InsertInDashboard()
@@ -43,6 +42,7 @@ public class Widget_CircleDiagram : Widget
     public override Object CreatePanel() // Initialize widget
     {
         // Loads prefab object and instantiates Widget
+        PrefabPanel = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
         Panel = (GameObject)GameObject.Instantiate(PrefabPanel);//, parent.transform);
 
         // Locates primary components of widget
@@ -100,6 +100,10 @@ public class Widget_CircleDiagram : Widget
 
             currentWedge.GetComponent<UnityEngine.UI.Image>().color = color;
             currentListObject.GetComponentInChildren<UnityEngine.UI.Image>().color = color;
+
+            wedges.Add(currentWedge);
+            listObjects.Add(currentListObject);
+
             i++;
         }
 
@@ -121,6 +125,7 @@ private void ClearDiagram()
         }
         wedges = new List<GameObject>();
         listObjects = new List<GameObject>();
-
+        diagramData = null;
+        diagramData = new Dictionary<string, float>();
     }
 }

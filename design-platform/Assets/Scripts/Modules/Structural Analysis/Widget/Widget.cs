@@ -10,6 +10,7 @@ namespace Structural {
         private readonly GameObject PrefabRow;
 
         public StructuralWidget() : base() {
+            Name = "Structural Widget";
             //PrefabPanel = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Structural Widget.prefab");
             PrefabPanel = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/Modules/Structural Analysis/Widget/Structural Widget.prefab");
             //PrefabRow = (GameObject)Resources.Load("Scripts/Modules/Structural Analysis/Widget/Loads Overview Row.prefab");

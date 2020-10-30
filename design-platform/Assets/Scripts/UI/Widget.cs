@@ -44,6 +44,7 @@ public abstract class Widget {
         if (Panel != null) Delete();
         Panel = (GameObject)CreatePanel();
         Panel.transform.parent = host.transform;
+        Panel.transform.localPosition = Vector3.zero;
         Panel.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         Panel.transform.localRotation = Quaternion.identity;
         AddLayoutElementComponent();

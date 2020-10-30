@@ -23,6 +23,10 @@ public class Main : MonoBehaviour {
         ///////////////////////////////////////////////////////////////// WIDGET TEST ///////////////////////////
         Structural.StructuralWidget strucWidget = new Structural.StructuralWidget();
         strucWidget.RequestDraw();
+        RoomScheduleWidget widgey = new RoomScheduleWidget();
+        widgey.RequestDraw();
+        Widget_CircleDiagram circle = new Widget_CircleDiagram();
+        circle.RequestDraw();
     }
 
     void Update() {

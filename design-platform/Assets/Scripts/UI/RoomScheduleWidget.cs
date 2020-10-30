@@ -21,7 +21,6 @@ public class RoomScheduleWidget : global::Widget
     {
         Size = (width: 2, height: 1);
         Name = "Room Schedule";
-        PrefabPanel = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
     }
 
     public void InsertInDashboard()
@@ -37,11 +36,12 @@ public class RoomScheduleWidget : global::Widget
     public override Object CreatePanel() // Initialize widget
     {
         // Loads prefab object and instantiates Widget
-        Panel = (GameObject)GameObject.Instantiate(PrefabPanel);//, parent.transform).transform.GetChild(0).gameObject;
+        PrefabPanel = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+        Panel = GameObject.Instantiate(PrefabPanel);//, parent.transform).transform.GetChild(0).gameObject;
 
         // Locates primary components of widget
-        headerRow = Panel.transform.Find(HeaderRowName).gameObject;
-        contentTemplate = Panel.transform.Find(ContentTemplateName).gameObject;
+        headerRow = Panel.transform.Find("Widget_RoomSchedule").Find(HeaderRowName).gameObject;
+        contentTemplate = Panel.transform.Find("Widget_RoomSchedule").Find(ContentTemplateName).gameObject;
 
         columnCount = contentTemplate.transform.childCount;
 

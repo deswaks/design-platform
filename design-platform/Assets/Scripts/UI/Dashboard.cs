@@ -52,6 +52,8 @@ namespace Dashboard {
                         dualRow = GameObject.Instantiate(TemplateRow, WidgetArea.transform);
                         widgetRows.Add(dualRow);
                         widget.Draw(dualRow);
+                        LayoutRebuilder.ForceRebuildLayoutImmediate(dualRow.transform as RectTransform);
+
                     }
                     // If a dualRow already exists (meaning one place remains)
                     else {
