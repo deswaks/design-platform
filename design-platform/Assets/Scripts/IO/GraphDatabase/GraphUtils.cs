@@ -13,7 +13,7 @@ using UnityEngine;
 //using System.Numerics;
 
 
-namespace Database {
+namespace DesignPlatform.Database {
     public static class GraphUtils {
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Database {
         public static List<Vector3> StringListToVector3List(IEnumerable<string> pointStrings) {
             List<Vector3> points = new List<Vector3>();
             if (pointStrings != null) {
-                points = pointStrings.ToList().Select(p => GraphUtils.StringToVector3(p)).ToList();
+                points = pointStrings.ToList().Select(p => StringToVector3(p)).ToList();
             }
             return points;
         }

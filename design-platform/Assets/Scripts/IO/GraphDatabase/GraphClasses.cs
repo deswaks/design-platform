@@ -5,6 +5,7 @@ using Neo4jClient;
 using Neo4jClient.Extension.Cypher;
 using Neo4jClient.Extensions;
 using Neo4jClient.Extension.Cypher.Attributes;
+using DesignPlatform.Core;
 
 using UnitsNet;
 using Neo4j.Driver.V1;
@@ -13,8 +14,8 @@ using UnityEngine;
 //using System.Numerics;
 
 
-namespace Database {
-    
+namespace DesignPlatform.Database {
+
     /// CLASSES / LABELS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public class RoomNode {
@@ -26,10 +27,10 @@ namespace Database {
         public DateTimeOffset dateCreated { get; set; }
         public string[] vertices { get; set; }
 
-        public RoomNode() {}
+        public RoomNode() { }
 
         public override string ToString() {
-            return string.Format("Id: {0}, Name: {1}, Type: {2}, Shape: {3}", id, name, type.ToString("g"),shape.ToString());
+            return string.Format("Id: {0}, Name: {1}, Type: {2}, Shape: {3}", id, name, type.ToString("g"), shape.ToString());
         }
 
         public List<Vector3> GetVerticesAsVector3() {
@@ -65,7 +66,7 @@ namespace Database {
         public Address WorkAddress { get; set; }
         public bool IsOperative { get; set; }
         public int SerialNumber { get; set; }
-        public Decimal SpendingAuthorisation { get; set; }
+        public decimal SpendingAuthorisation { get; set; }
         public DateTimeOffset DateCreated { get; set; }
 
 

@@ -5,8 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Dashboard {
-
+namespace DesignPlatform.Core {
 
     public class Dashboard {
         private static Dashboard instance;

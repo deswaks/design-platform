@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonManagerMain : MonoBehaviour
-{
-    public void QuitApplication()
-    {
-        Application.Quit();
-    }
+namespace DesignPlatform.Core {
+    public class ButtonManagerMain : MonoBehaviour {
+        public void QuitApplication() {
+            Application.Quit();
+        }
 
+    }
 }
