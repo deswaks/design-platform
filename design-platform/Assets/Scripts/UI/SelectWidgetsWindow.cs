@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json.Bson;
+﻿using DesignPlatform.Core;
+using Newtonsoft.Json.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Dashboard {
+namespace DesignPlatform.Core {
     public class SelectWidgetsWindow : MonoBehaviour {
 
         GameObject rowTemplate = null;

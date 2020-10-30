@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using DesignPlatform.Core;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace DesignPlatform {
-    public class RoomScheduleWidget : global::Widget {
+    public class RoomScheduleWidget : Widget {
         // Names of used GameObjects in prefab
         private static readonly string HeaderRowName = "Row_Headers";
         private static readonly string ContentTemplateName = "Row_ContentTemplate";
