@@ -7,7 +7,7 @@ public class ButtonManagerDashboard : MonoBehaviour {
     }
 
     public void RefreshDashboard() {
-        Dashboard.Dashboard.instance.UpdateCurrentWidgets();
+        Dashboard.Dashboard.Instance.UpdateCurrentWidgets();
     }
 
 }

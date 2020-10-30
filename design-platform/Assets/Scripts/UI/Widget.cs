@@ -1,10 +1,4 @@
-﻿using Boo.Lang;
-using Microsoft.Isam.Esent.Interop;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public abstract class Widget {
