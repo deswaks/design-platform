@@ -1,0 +1,26 @@
+ManifestFileVersion: 0
+CRC: 3101629330
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 176c43801aac62e2a017013c934debda
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 21c99c86a43ad817b2cb7f65458ae090
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Materials/RoomDoubleroom.mat
+- Assets/Materials/RoomKitchen.mat
+- Assets/Materials/RoomLivingroom.mat
+- Assets/Materials/RoomBathroom.mat
+- Assets/Materials/RoomHighlight.mat
+- Assets/Materials/RoomSingleRoom.mat
+- Assets/Materials/RoomDefault.mat
+Dependencies: []

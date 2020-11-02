@@ -3,139 +3,130 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class POVMode : Mode {
+namespace DesignPlatform.Core {
+    public class POVMode : Mode {
 
-    private static POVMode instance;
+        private static POVMode instance;
 
-    public float mouseSensitivity = 50f;
+        public float mouseSensitivity = 50f;
 
-    public static GameObject player;
-    private GameObject notificationObject = null;
-    public Camera PlanCamera;
-    public Camera POVCamera;
+        public static GameObject player;
+        private GameObject notificationObject = null;
+        public Camera PlanCamera;
+        public Camera POVCamera;
 
-    float xRotation = 0f;
+        float xRotation = 0f;
 
-    public enum ModeType {
-        POV,
-        MENU
-    }
-
-    private ModeType currentModeType = ModeType.POV;
-
-    public static POVMode Instance {
-        // Use the ?? operator, to return 'instance' if 'instance' does not equal null
-        // otherwise we assign instance to a new component and return that
-        get { return instance ?? (instance = new POVMode()); }
-    }
-
-    public override void Tick() {
-
-        //switch (currentModeType) {
-        //    case ModeType.POV:
-        //        if (Input.GetKeyDown(KeyCode.Escape)) { SetModeType(ModeType.MENU); }
-        //        break;
-
-        //    case ModeType.MENU:
-        //        if (Input.GetKeyDown(KeyCode.Escape)) { SetModeType(ModeType.POV); }
-        //        break;
-        //}
-
-        TickModeType();
-
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            SetModeType(ModeType.MENU);
-            Main.Instance.SetMode(SelectMode.Instance);
+        public enum ModeType {
+            POV,
+            MENU
         }
 
-    }
-    public override void OnModeResume() {
-        player = GameObject.Find("First person player");
-        PlanCamera = GameObject.Find("Plan Camera").GetComponent<Camera>();
-        POVCamera = player.GetComponentInChildren<Camera>(true);
+        private ModeType currentModeType = ModeType.POV;
 
-        POVCamera.gameObject.SetActive(true);
-        PlanCamera.gameObject.SetActive(false);
+        public static POVMode Instance {
+            // Use the ?? operator, to return 'instance' if 'instance' does not equal null
+            // otherwise we assign instance to a new component and return that
+            get { return instance ?? (instance = new POVMode()); }
+        }
 
-        // Delete preexisting interfaces and walls build new ones
-        Building.Instance.UpdatePOVElements();
+        public override void Tick() {
+            TickModeType();
 
-        // Generates notification in corner of screen
-        GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "UIPanel3D").First().gameObject;
-        string notificationText = "You can exit POV mode at any time by pressing the escape button.";
-        string notificationTitle = "POV Mode";
-        notificationObject = NotificationHandler.GenerateNotification(notificationText,notificationTitle,new Vector3(10, -10, 0), notificationParent);
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                SetModeType(ModeType.MENU);
+                Main.Instance.SetMode(SelectMode.Instance);
+            }
 
-        currentModeType = ModeType.POV;
-        SetModeType(ModeType.POV);
-        OnModeTypeResume();
-    }
-    public override void OnModePause() {
-        POVCamera.gameObject.SetActive(false);
-        PlanCamera.gameObject.SetActive(true);
+        }
+        public override void OnModeResume() {
+            player = GameObject.Find("First person player");
+            PlanCamera = GameObject.Find("Plan Camera").GetComponent<Camera>();
+            POVCamera = player.GetComponentInChildren<Camera>(true);
 
-        NotificationHandler.DestroyNotification(notificationObject);
-        notificationObject = null;
+            POVCamera.gameObject.SetActive(true);
+            PlanCamera.gameObject.SetActive(false);
 
-    }
+            // Delete preexisting interfaces and walls build new ones
+            Building.Instance.UpdatePOVElements();
 
-    /// <summary>
-    /// Set mode type
-    /// </summary>
-    /// <param name="modeType"></param>
-    public void SetModeType(ModeType modeType) {
-        if (modeType != currentModeType) {
-            OnModeTypePause();
-            currentModeType = modeType;
+            // Generates notification in corner of screen
+            GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "UIPanel3D").First().gameObject;
+            string notificationText = "You can exit POV mode at any time by pressing the escape button.";
+            string notificationTitle = "POV Mode";
+            notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, new Vector3(10, -10, 0), notificationParent);
+
+            currentModeType = ModeType.POV;
+            SetModeType(ModeType.POV);
             OnModeTypeResume();
         }
-    }
-    public void TickModeType() {
-        switch (currentModeType) {
-            case ModeType.POV:
-                UpdatePOVCamera();
-                break;
+        public override void OnModePause() {
+            POVCamera.gameObject.SetActive(false);
+            PlanCamera.gameObject.SetActive(true);
 
-            case ModeType.MENU:
-                break;
+            NotificationHandler.DestroyNotification(notificationObject);
+            notificationObject = null;
+
         }
-    }
-    public void OnModeTypeResume() {
-        switch (currentModeType) {
-            case ModeType.POV:
-                Cursor.lockState = CursorLockMode.Locked;
-                break;
 
-            case ModeType.MENU:
-                break;
+        /// <summary>
+        /// Set mode type
+        /// </summary>
+        /// <param name="modeType"></param>
+        public void SetModeType(ModeType modeType) {
+            if (modeType != currentModeType) {
+                OnModeTypePause();
+                currentModeType = modeType;
+                OnModeTypeResume();
+            }
         }
-    }
-    public void OnModeTypePause() {
-        switch (currentModeType) {
-            case ModeType.POV:
-                Cursor.lockState = CursorLockMode.None;
-                break;
+        public void TickModeType() {
+            switch (currentModeType) {
+                case ModeType.POV:
+                    UpdatePOVCamera();
+                    break;
 
-            case ModeType.MENU:
-                break;
+                case ModeType.MENU:
+                    break;
+            }
         }
+        public void OnModeTypeResume() {
+            switch (currentModeType) {
+                case ModeType.POV:
+                    Cursor.lockState = CursorLockMode.Locked;
+                    break;
+
+                case ModeType.MENU:
+                    break;
+            }
+        }
+        public void OnModeTypePause() {
+            switch (currentModeType) {
+                case ModeType.POV:
+                    Cursor.lockState = CursorLockMode.None;
+                    break;
+
+                case ModeType.MENU:
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void UpdatePOVCamera() {
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+            // Look Up/Down 
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            POVCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+            // Se til siden
+            player.transform.Rotate(Vector3.up * mouseX);
+        }
+
     }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public void UpdatePOVCamera() {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-
-        // Look Up/Down 
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-        POVCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-
-        // Se til siden
-        player.transform.Rotate(Vector3.up * mouseX);
-    }
-
 }
