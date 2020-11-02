@@ -64,9 +64,14 @@ namespace DesignPlatform.Core {
                     colliderIndexPairsList.Add(new List<int> { 5, 6, 7, 6 }); // Collider cube 3                    
                     break;                
                 case RoomShape.SSHAPE:
-                    colliderIndexPairsList.Add(new List<int> { 1, 2, 2, 3 }); // Collider cube 1
+                    colliderIndexPairsList.Add(new List<int> { 1, 2, 3, 2 }); // Collider cube 1
                     colliderIndexPairsList.Add(new List<int> { 0, 4, 0, 3 }); // Collider cube 2                    
-                    colliderIndexPairsList.Add(new List<int> { 5, 6, 7, 6 }); // Collider cube 3                    
+                    colliderIndexPairsList.Add(new List<int> { 6, 5, 6, 7 }); // Collider cube 3                    
+                    break;
+                case RoomShape.TSHAPE:
+                    colliderIndexPairsList.Add(new List<int> { 1, 0, 1, 2 }); // Collider cube 1
+                    colliderIndexPairsList.Add(new List<int> { 7, 6, 6, 2 }); // Collider cube 2                    
+                    colliderIndexPairsList.Add(new List<int> { 5, 4, 4, 3 }); // Collider cube 3                    
                     break;
             }
 

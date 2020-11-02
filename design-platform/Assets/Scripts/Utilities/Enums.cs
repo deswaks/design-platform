@@ -12,7 +12,8 @@ namespace DesignPlatform.Core {
         RECTANGLE,
         LSHAPE,
         USHAPE,
-        SSHAPE
+        SSHAPE,
+        TSHAPE
     }
 
     public enum Axis {

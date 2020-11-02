@@ -100,6 +100,17 @@ namespace DesignPlatform.Core {
                                                           new Vector3(3, 0, 0),
                     };
                     break;
+                case RoomShape.TSHAPE:
+                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                                                          new Vector3(-2, 0, 0),
+                                                          new Vector3(-2, 0, 3),
+                                                          new Vector3(5, 0, 3),
+                                                          new Vector3(5, 0, 0),
+                                                          new Vector3(3, 0, 0),
+                                                          new Vector3(3, 0, -3),
+                                                          new Vector3(0, 0, -3),
+                    };
+                    break;
             }
             faces = new List<Face>();
             for (int i = 0; i < controlPoints.Count + 2; i++) {
@@ -390,6 +401,11 @@ namespace DesignPlatform.Core {
                     tagPoint = new Vector3(cp[0].x + (cp[4].x - cp[0].x) * 0.5f,
                                            height + 0.01f,
                                            cp[0].z + (cp[3].z - cp[0].z) * 0.5f);
+                    break;
+                case RoomShape.TSHAPE:
+                    tagPoint = new Vector3(cp[0].x + (cp[5].x - cp[0].x) * 0.5f,
+                                           height + 0.01f,
+                                           cp[0].z + (cp[5].z - cp[0].z) * 0.5f);
                     break;
                 default:
                     break;
