@@ -6,6 +6,7 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
 using DesignPlatform.Utils;
+using DesignPlatform.Database;
 
 namespace DesignPlatform.Core {
     public class Building {
@@ -88,6 +89,7 @@ namespace DesignPlatform.Core {
             Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
 
             newWall.InitializeWall(interFace);
+            Debug.Log(interFace.GetStartPoint() + ", " + interFace.GetEndPoint()); /////////////////////////////////////////////////////////////////
 
             walls.Add(newWall);
 
@@ -227,6 +229,79 @@ namespace DesignPlatform.Core {
                 }
             }
         }
+        public void CreateVerticalInterfacesv2()
+        {
+            // For all faces
+            foreach(Room room in rooms)
+            {
+                foreach(Face face in room.faces)
+                {
+                    // Skip if face is not a wall
+                    if (face.orientation != Orientation.VERTICAL) continue;
+
+                    // Find points on face line from the controlpoints of all other rooms
+                    List<Vector3> splitPoints = new List<Vector3>();
+                    foreach (Room room2 in rooms)
+                    {
+                        if (room == room2) continue;
+                        foreach (Vector3 point in room2.GetControlPoints())
+                        {
+                            if (face.CollidesWithGrid(point))
+                            {
+                                splitPoints.Add(point);
+                            }
+                        }
+                    }
+
+                    // Sort splitpoints between startpoint and endpoint
+                    (Vector3 startPoint, Vector3 endPoint) = face.Get2DEndPoints(localCoordinates: false);
+                    splitPoints.Add(startPoint);
+                    splitPoints.Add(endPoint);
+                    //splitPoints = splitPoints.OrderBy(p => (p - startPoint).magnitude).ToList();
+                    //List<float> splitParameters = splitPoints.Select(p => (p - startPoint).magnitude).ToList();
+                    List<float> splitParameters = splitPoints.Select(p => (p - startPoint).magnitude).OrderBy(n=>n).ToList();
+                    splitParameters = RangeUtils.Reparametrize(splitParameters, splitParameters[0], splitParameters[splitParameters.Count - 1]);
+
+
+                    // Hvert interface-sted
+                    for (int i = 0; i < splitParameters.Count - 1; i++)
+                    {
+
+                        // Check if an interface exists with the same points
+                        Vector3 ifStartPoint = splitPoints[i];
+                        Vector3 ifEndPoint = splitPoints[i + 1];
+                        Interface existingInterface = null;
+                        foreach (Interface interFace in interfaces)
+                        {
+                            if (interFace.GetStartPoint() == ifStartPoint && interFace.GetEndPoint() == ifEndPoint
+                             || interFace.GetStartPoint() == ifEndPoint && interFace.GetEndPoint() == ifStartPoint)
+                            {
+                                existingInterface = interFace;
+                            }
+                        }
+
+                        // Attach to existing interface
+                        if (existingInterface != null)
+                        {
+                            existingInterface.attachedFaces[1] = face;
+                            face.AddInterface(existingInterface, splitParameters[i], splitParameters[i + 1]);
+                        }
+
+                        // Create new interface
+                        else
+                        {
+                            Interface interFace = new Interface();
+                            interFace.attachedFaces[0] = face;
+                            interfaces.Add(interFace);
+                            face.AddInterface(interFace, splitParameters[i], splitParameters[i + 1]);
+                        }
+                    }
+
+
+                }
+            }
+        }
+
         public void CreateHorizontalInterfaces() {
             // For all faces
             for (int r = 0; r < rooms.Count; r++) {
@@ -262,6 +337,7 @@ namespace DesignPlatform.Core {
                 if (interFace.GetOrientation() == Orientation.HORIZONTAL)
                     BuildSlab(interFace);
             }
+
         }
     }
 }

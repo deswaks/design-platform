@@ -106,24 +106,23 @@ namespace DesignPlatform.Database {
             jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\interfaces.json";
 
             // Collects Unity room as RoomNodes
-            List<InterfaceNode> interfaceNodes = AllRoomInterfacesToInterfaceNodes(Building.Instance.rooms);
+            List<InterfaceNode> interfaceNodes = AllRoomInterfacesToInterfaceNodes();
 
             // Serializes RoomNodes to json format
             string jsonString = JsonConvert.SerializeObject(interfaceNodes);
 
-
             // Saves file
             File.WriteAllText(jsonPath, jsonString);
 
-            //// Generates notification in corner of screen
-            //string notificationTitle = "File saved";
-            //string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
+            // Generates notification in corner of screen
+            string notificationTitle = "File saved";
+            string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
 
-            //GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
-            //Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
-            //Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
+            GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
+            Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
+            Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
 
-            //GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
+            GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
 
         }
         /// <summary>
@@ -174,26 +173,22 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="rooms">List of rooms</param>
         /// <returns>List of InterfaceNodes created.</returns>
-        public static List<InterfaceNode> AllRoomInterfacesToInterfaceNodes(List<Room> rooms) {
-            List<Interface> allInterfaces = Building.Instance.interfaces; //rooms.SelectMany(r => r.faces.SelectMany(f => f.interfaces)).ToList();
+        public static List<InterfaceNode> AllRoomInterfacesToInterfaceNodes() {
+            List<Interface> allInterfaces = Building.Instance.walls.Select(w => w.interFace).ToList();
+            //List<Interface> allInterfaces = Building.Instance.interfaces.Where(i => i.GetOrientation() == Orientation.VERTICAL).ToList();
+
+            //allInterfaces.ForEach(interFace => Debug.Log(interFace.GetStartPoint() + ", " + interFace.GetEndPoint()));
 
             List < InterfaceNode> interfaceNodes = new List<InterfaceNode>();
-
 
             foreach (Interface iface in allInterfaces) {
 
                 InterfaceNode node = new InterfaceNode {
                     vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { iface.GetStartPoint(), iface.GetEndPoint() })
                 };
-
-                Debug.Log(node.vertices);
-
                 interfaceNodes.Add(node);
-
             }
-
             return interfaceNodes;
         }
-
     }
 }

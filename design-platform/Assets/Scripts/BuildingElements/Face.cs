@@ -8,7 +8,7 @@ namespace DesignPlatform.Core {
         public Room parentRoom { get; private set; }
         public int faceIndex { get; private set; }
         public List<Interface> interfaces { get; private set; }
-        public Dictionary<Interface, float[]> paramerters { get; private set; }
+        public Dictionary<Interface, float[]> parameters { get; private set; }
         public Orientation orientation { get; private set; }
 
         public float wallThickness = 0.2f;
@@ -18,7 +18,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         public Face(Room parent, int index) {
             interfaces = new List<Interface>();
-            paramerters = new Dictionary<Interface, float[]>();
+            parameters = new Dictionary<Interface, float[]>();
             parentRoom = parent;
             faceIndex = index;
             SetOrientation();
@@ -83,7 +83,7 @@ namespace DesignPlatform.Core {
         public void AddInterface(Interface interFace, float startParameter = 0.0f, float endParameter = 1.0f) {
             interfaces.Add(interFace);
             if (orientation == Orientation.VERTICAL) {
-                paramerters.Add(interFace, new float[] { startParameter, endParameter });
+                parameters.Add(interFace, new float[] { startParameter, endParameter });
             }
 
         }
