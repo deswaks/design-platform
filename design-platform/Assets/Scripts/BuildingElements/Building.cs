@@ -89,7 +89,6 @@ namespace DesignPlatform.Core {
             Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
 
             newWall.InitializeWall(interFace);
-            Debug.Log(interFace.GetStartPoint() + ", " + interFace.GetEndPoint()); /////////////////////////////////////////////////////////////////
 
             walls.Add(newWall);
 
@@ -229,76 +228,60 @@ namespace DesignPlatform.Core {
                 }
             }
         }
-        public void CreateVerticalInterfacesv2()
+        /// <summary>
+        /// Identifies the type of joint at all intersections (points) between the interfaces of the building
+        /// </summary>
+        public void FindWallJoints()
         {
-            // For all faces
-            foreach(Room room in rooms)
+            // Culls interfaces with same start- and endpoint
+            List<Interface> culledInterfaces = interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
+
+            // Finds all joint points (unique points shared by all interfaces)
+            List<Vector3> jointPoints = new List<Vector3>();
+            culledInterfaces.ForEach(i =>{
+                jointPoints.Add(i.GetEndPoint()  );
+                jointPoints.Add(i.GetStartPoint()); });
+
+            jointPoints = jointPoints.Distinct().ToList();
+
+            UnityEngine.Object prefab = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/joint2.prefab",typeof(GameObject)); // MIDLERTIDIG
+
+            foreach (Vector3 point in jointPoints)
             {
-                foreach(Face face in room.faces)
+                // Finds interfaces that have an endpoint in the given point
+                List<Interface> jointInterfaces = culledInterfaces.Where(i => i.GetEndPoint() == point || i.GetStartPoint() == point).ToList();
+
+                // Finds vector of all interfaces joint in the given point
+                List<Vector3> wallVectors = jointInterfaces.Select(interFace => (interFace.GetStartPoint() - interFace.GetEndPoint()).normalized).ToList();
+
+                string jointType = ":(";
+
+                switch (wallVectors.Count)
                 {
-                    // Skip if face is not a wall
-                    if (face.orientation != Orientation.VERTICAL) continue;
-
-                    // Find points on face line from the controlpoints of all other rooms
-                    List<Vector3> splitPoints = new List<Vector3>();
-                    foreach (Room room2 in rooms)
-                    {
-                        if (room == room2) continue;
-                        foreach (Vector3 point in room2.GetControlPoints())
-                        {
-                            if (face.CollidesWithGrid(point))
-                            {
-                                splitPoints.Add(point);
-                            }
+                    case 2:
+                        float dot = Vector3.Dot(wallVectors[0], wallVectors[1]);
+                        if (dot == 1 || dot == -1) // Parallel
+                        { 
+                            jointType = "||";
                         }
-                    }
-
-                    // Sort splitpoints between startpoint and endpoint
-                    (Vector3 startPoint, Vector3 endPoint) = face.Get2DEndPoints(localCoordinates: false);
-                    splitPoints.Add(startPoint);
-                    splitPoints.Add(endPoint);
-                    //splitPoints = splitPoints.OrderBy(p => (p - startPoint).magnitude).ToList();
-                    //List<float> splitParameters = splitPoints.Select(p => (p - startPoint).magnitude).ToList();
-                    List<float> splitParameters = splitPoints.Select(p => (p - startPoint).magnitude).OrderBy(n=>n).ToList();
-                    splitParameters = RangeUtils.Reparametrize(splitParameters, splitParameters[0], splitParameters[splitParameters.Count - 1]);
-
-
-                    // Hvert interface-sted
-                    for (int i = 0; i < splitParameters.Count - 1; i++)
-                    {
-
-                        // Check if an interface exists with the same points
-                        Vector3 ifStartPoint = splitPoints[i];
-                        Vector3 ifEndPoint = splitPoints[i + 1];
-                        Interface existingInterface = null;
-                        foreach (Interface interFace in interfaces)
+                        else if (dot == 0) // Perpendicular
                         {
-                            if (interFace.GetStartPoint() == ifStartPoint && interFace.GetEndPoint() == ifEndPoint
-                             || interFace.GetStartPoint() == ifEndPoint && interFace.GetEndPoint() == ifStartPoint)
-                            {
-                                existingInterface = interFace;
-                            }
+                            jointType = "L";
                         }
+                        break;
 
-                        // Attach to existing interface
-                        if (existingInterface != null)
-                        {
-                            existingInterface.attachedFaces[1] = face;
-                            face.AddInterface(existingInterface, splitParameters[i], splitParameters[i + 1]);
-                        }
+                    case 3:
+                        jointType = "T";
+                        break;
 
-                        // Create new interface
-                        else
-                        {
-                            Interface interFace = new Interface();
-                            interFace.attachedFaces[0] = face;
-                            interfaces.Add(interFace);
-                            face.AddInterface(interFace, splitParameters[i], splitParameters[i + 1]);
-                        }
-                    }
-
-
+                    case 4:
+                        jointType = "+";
+                        break;
                 }
+
+                GameObject note = (GameObject)GameObject.Instantiate(prefab);//, parent.transform);
+                note.transform.position = point;
+                note.GetComponent<TMPro.TMP_Text>().text = jointType;
             }
         }
 
@@ -328,6 +311,8 @@ namespace DesignPlatform.Core {
             if (interfaces.Count > 0) DeleteAllInterfaces();
 
             CreateVerticalInterfaces();
+            //FindWallJoints(); // Uncomment to insert text notes at each joint
+
             CreateHorizontalInterfaces();
 
             foreach (Interface interFace in interfaces) {
