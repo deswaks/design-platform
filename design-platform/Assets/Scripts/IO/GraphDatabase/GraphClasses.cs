@@ -38,6 +38,10 @@ namespace DesignPlatform.Database {
         }
     }
 
+    public class InterfaceNode {
+        public string[] vertices { get; set; }
+    }
+
 
     /// RELATIONSHIPS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,6 +49,14 @@ namespace DesignPlatform.Database {
     public class AdjacentRoomRelationship : BaseRelationship {
         public const string LabelName = "ADJACENT_TO";
         public AdjacentRoomRelationship(string from = null, string to = null)
+            : base(from, to) {
+        }
+    }
+
+    [CypherLabel(Name = LabelName)]
+    public class InterfaceRoomRelationship : BaseRelationship {
+        public const string LabelName = "INTERFACE_OF";
+        public InterfaceRoomRelationship(string from = null, string to = null)
             : base(from, to) {
         }
     }

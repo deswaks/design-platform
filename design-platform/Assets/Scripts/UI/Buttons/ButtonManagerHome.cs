@@ -26,5 +26,8 @@ namespace DesignPlatform.Core {
         public void ExportIFC() {
             IfcExporter.Export();
         }
+        public void ExportWallsForRevit() {
+            LocalDatabase.SaveAllUnityInterfacesToJson();
+        }
     }
 }

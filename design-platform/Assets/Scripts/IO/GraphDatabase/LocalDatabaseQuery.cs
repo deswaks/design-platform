@@ -2,7 +2,6 @@
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
-using UnityEditor;
 using System.Linq;
 using DesignPlatform.Core;
 
@@ -59,7 +58,6 @@ namespace DesignPlatform.Database {
             string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
 
 
-
             GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
             Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
             Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
@@ -101,6 +99,34 @@ namespace DesignPlatform.Database {
         }
 
         /// <summary>
+        /// Converts all Unity rooms to RoomNodes and then saves them to a json file at the specified path.
+        /// </summary>
+        /// <param name="savePath">Full path of json file, with backslashes.</param>
+        public static void SaveAllUnityInterfacesToJson(string jsonPath = null) {
+            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\interfaces.json";
+
+            // Collects Unity room as RoomNodes
+            List<InterfaceNode> interfaceNodes = AllRoomInterfacesToInterfaceNodes(Building.Instance.rooms);
+
+            // Serializes RoomNodes to json format
+            string jsonString = JsonConvert.SerializeObject(interfaceNodes);
+
+
+            // Saves file
+            File.WriteAllText(jsonPath, jsonString);
+
+            //// Generates notification in corner of screen
+            //string notificationTitle = "File saved";
+            //string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
+
+            //GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
+            //Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
+            //Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
+
+            //GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
+
+        }
+        /// <summary>
         /// Loads RoomNodes specified in the given json file.
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
@@ -141,6 +167,32 @@ namespace DesignPlatform.Database {
 
             }
             return roomNodes;
+        }
+
+        /// <summary>
+        /// Using input list of rooms, finds all interfaces belonging to those rooms and returns them as InterfaceNodes.
+        /// </summary>
+        /// <param name="rooms">List of rooms</param>
+        /// <returns>List of InterfaceNodes created.</returns>
+        public static List<InterfaceNode> AllRoomInterfacesToInterfaceNodes(List<Room> rooms) {
+            List<Interface> allInterfaces = Building.Instance.interfaces; //rooms.SelectMany(r => r.faces.SelectMany(f => f.interfaces)).ToList();
+
+            List < InterfaceNode> interfaceNodes = new List<InterfaceNode>();
+
+
+            foreach (Interface iface in allInterfaces) {
+
+                InterfaceNode node = new InterfaceNode {
+                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { iface.GetStartPoint(), iface.GetEndPoint() })
+                };
+
+                Debug.Log(node.vertices);
+
+                interfaceNodes.Add(node);
+
+            }
+
+            return interfaceNodes;
         }
 
     }

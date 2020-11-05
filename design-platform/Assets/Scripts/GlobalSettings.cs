@@ -14,6 +14,8 @@ namespace DesignPlatform.Core {
             }
             return saveFolder + @"\" + saveFileName;
         }
-
+        public static string GetSaveFolder() {
+            return saveFolder;
+        }
     }
 }
