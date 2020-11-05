@@ -263,5 +263,17 @@ namespace DesignPlatform.Core {
                     BuildSlab(interFace);
             }
         }
+
+        public List<List<Vector3>> GetInterfacesEndpoints() {
+            List<List<Vector3>> InterfacesEndpoints = new List<List<Vector3>>();
+            for (int i = 0; i < interfaces.Count; i++) {
+                if (interfaces[i].GetOrientation() == Orientation.VERTICAL) {
+                    InterfacesEndpoints.Add(new List<Vector3>());
+                    InterfacesEndpoints[i].Add(interfaces[i].GetStartPoint());
+                    InterfacesEndpoints[i].Add(interfaces[i].GetEndPoint());
+                }
+            }
+            return InterfacesEndpoints;
+        }
     }
 }

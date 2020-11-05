@@ -15,6 +15,8 @@ namespace DesignPlatform.Core {
             gameObject.name = "edit handle";
             UpdateTransform(updateRotation: true);
             gameObject.AddComponent<BoxCollider>();
+
+            gameObject.GetComponent<SpriteRenderer>().sortingOrder = 100;
         }
 
         public void OnMouseDown() {
@@ -40,7 +42,7 @@ namespace DesignPlatform.Core {
 
         public void UpdateTransform(bool updatePosition = true, bool updateRotation = false) {
             if (updatePosition) {
-                transform.position = parentRoom.GetWallMidpoints()[wallIndex] + new Vector3(0, parentRoom.height + 0.01f, 0);
+                transform.position = parentRoom.GetWallMidpoints()[wallIndex] + Vector3.up * (parentRoom.height + 0.05f);
             }
             if (updateRotation) {
                 transform.RotateAround(

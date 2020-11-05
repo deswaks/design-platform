@@ -178,16 +178,17 @@ namespace DesignPlatform.Core {
 
             // Set controlpoints
             lr.useWorldSpace = false;
-            Vector3[] points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up*(height+0.001f)).ToArray();
-            lr.positionCount = points.Length;
-            lr.SetPositions(points);
+            List<Vector3> points = GetControlPoints(localCoordinates: true, closed: true).Select(p => p + Vector3.up*(height+0.001f)).ToList();
+            lr.positionCount = points.Count;
+            lr.SetPositions(points.ToArray());
 
             // Style
             lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "wall2D"), lr.positionCount).ToArray();
             float width = 0.2f;
             Color color = Color.black;
-            if (highlighted) { width = 0.3f;  color = Color.yellow; }
-            if (colliding) { color = Color.red; }
+            lr.sortingOrder = 0;
+            if (highlighted) { lr.sortingOrder = 1;  width = 0.3f;  color = Color.yellow; }
+            if (colliding) { lr.sortingOrder = 1; color = Color.red; }
 
             lr.startWidth = width; lr.endWidth = width;
             foreach (Material material in lr.materials) {

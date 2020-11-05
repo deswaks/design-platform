@@ -30,9 +30,8 @@ namespace DesignPlatform.Core {
             prefabWall = (Wall)prefabWallObject.GetComponent(typeof(Wall));
             gameObject.name = "CLT Wall";
 
-
             List<Vector3> startEndPoints = new List<Vector3>() { interFace.GetStartPoint(),
-                                                             interFace.GetEndPoint()};
+                                                                 interFace.GetEndPoint()};
             Vector3 normal = Vector3.Cross(startEndPoints[1] - startEndPoints[0], Vector3.up).normalized;
             List<Vector3> dubStartEndPoints = startEndPoints.Select(v => new Vector3(v.x, v.y, v.z)).ToList();
             List<Vector3> wallControlPoints = new List<Vector3> {
