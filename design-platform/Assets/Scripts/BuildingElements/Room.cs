@@ -7,62 +7,70 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
+
+    public enum RoomState {
+        Stationary,
+        Preview,
+        Moving
+    }
+
+    public enum RoomType {
+        //Til senere implementering
+        DELETED = -2,
+        HIDDEN = -1,
+        //------------------
+        PREVIEW = 0,
+        DEFAULT = 1,
+        SINGLEROOM = 10,
+        DOUBLEROOM = 11,
+        LIVINGROOM = 12,
+        KITCHEN = 13,
+        BATHROOM = 14
+    }
+
+    public enum RoomShape {
+        RECTANGLE,
+        LSHAPE,
+        USHAPE,
+        SSHAPE,
+        TSHAPE
+    }
+
     public class Room : MonoBehaviour {
+
+        public RoomShape Shape { get; private set; }
+        public RoomType Type { get; private set; }
+        public RoomState State { get; set; }
+
         private List<Vector3> controlPoints;
-
-        public List<Face> faces { get; private set; }
-
-        public RoomShape shape { get; private set; }
-        private Material currentMaterial;
-        public Material highlightMaterial;
-
-        public Building parentBuilding;
         public float height = 3.0f;
 
-        public string customProperty;
-        //private Dictionary<string, string> customProperties = new Dictionary<string, string>();
+        public Building parentBuilding;
+        public List<Face> faces { get; private set; }
 
-        private bool isHighlighted { set; get; }
         public Room prefabRoom { get; private set; }
+        private Material currentMaterial;
+        public Material highlightMaterial;
+        public string customProperty;
 
-        private GameObject moveHandle;
-        private bool isRoomInMoveMode = false;
-
-        private GameObject editHandle;
-        public GameObject editHandlePrefab;
-        public List<GameObject> activeEditHandles;
-
-        public GameObject moveHandlePrefab;
-        private Vector3 moveModeOffset;
-
-        public RoomType roomType { get; private set; }
-
-        public enum RoomStates {
-            Stationary,
-            Preview,
-            Moving
-        }
-        private RoomStates roomState;
-
-        public bool isCurrentlyColliding = false;
+        private bool isHighlighted { set; get; } //Useful because a room can be moving AND highlighted
+        
 
         // Construct room of type 0 (Rectangle) or 1 (L-shape)
         public void InitializeRoom(RoomShape buildShape = RoomShape.RECTANGLE, Building building = null) {
             // Set constant values
             parentBuilding = building;
-            gameObject.layer = 8; // Rooom layer
-
-            shape = buildShape;
-            roomState = RoomStates.Preview;
+            gameObject.layer = 8; // 8 = Rooom layer
+            Shape = buildShape;
+            State = RoomState.Preview;
 
             // Get relevant properties from prefab object
-            GameObject prefabObject = AssetUtil.LoadGameObject("prefabs", "RoomPrefab");
-            prefabRoom = (Room)prefabObject.GetComponent(typeof(Room));
-
+            prefabRoom = (Room)AssetUtil.LoadGameObject("prefabs", "RoomPrefab").GetComponent(typeof(Room));
             currentMaterial = AssetUtil.LoadMaterial("materials", "RoomDefault");
             highlightMaterial = AssetUtil.LoadMaterial("materials", "RoomHighlight");
 
-            switch (shape) {
+            // Controlpoints
+            switch (Shape) {
                 case RoomShape.RECTANGLE:
                     controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
                                                    new Vector3(0, 0, 3),
@@ -112,6 +120,8 @@ namespace DesignPlatform.Core {
                     };
                     break;
             }
+
+            // Create faces
             faces = new List<Face>();
             for (int i = 0; i < controlPoints.Count + 2; i++) {
                 faces.Add(new Face(this, i));
@@ -119,7 +129,6 @@ namespace DesignPlatform.Core {
 
             // Create and attach collider objects
             gameObject.AddComponent<MeshCollider>();
-
 
             // Set room visualization geometry
             gameObject.AddComponent<PolyShape>();
@@ -134,17 +143,20 @@ namespace DesignPlatform.Core {
         }
 
         public void RefreshView() {
+            // Mesh
             PolyShape polyshape = gameObject.GetComponent<PolyShape>();
             polyshape.SetControlPoints(controlPoints);
             polyshape.extrude = height;
             polyshape.CreateShapeFromPolygon();
             gameObject.GetComponent<ProBuilderMesh>().Refresh();
             gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().mesh;
+
+            // Collider
             RoomCollider.GiveCollider(this);
         }
 
         public RoomShape GetRoomShape() {
-            return shape;
+            return Shape;
         }
 
         /// <summary>
@@ -337,10 +349,11 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void ResetOrigin() {
             if (GetControlPoints()[0] != gameObject.transform.position) {
-                Vector3 oCP = GetControlPoints(localCoordinates: true)[0];
-                Vector3 oGO = gameObject.transform.position;
-                Vector3 difference = new Vector3(oCP.x - oGO.x, 0, oCP.z - oGO.z);
-
+                Vector3 originCP = GetControlPoints(localCoordinates: true)[0];
+                Vector3 originGO = gameObject.transform.position;
+                Vector3 difference = new Vector3(originCP.x - originGO.x,
+                                                 0,
+                                                 originCP.z - originGO.z);
                 gameObject.transform.Translate(difference);
                 for (int i = 0; i < controlPoints.Count; i++) {
                     controlPoints[i] -= difference;
@@ -352,36 +365,12 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// 
         /// </summary>
-        public void SetEditHandles() {
-
-            for (int i = 0; i < controlPoints.Count; i++) {
-                editHandle = Instantiate(prefabRoom.editHandlePrefab);
-                editHandle.transform.SetParent(gameObject.transform, true);
-                editHandle.GetComponent<EditHandle>().InitializeHandle(i);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void RemoveEditHandles() {
-            EditHandle[] editHandles = GetComponentsInChildren<EditHandle>();
-            if (editHandles != null) {
-                foreach (EditHandle editHandle in editHandles) {
-                    Destroy(editHandle.gameObject);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <returns></returns>
         public Vector3 GetTagLocation(bool localCoordinates = false) {
             Vector3 tagPoint = new Vector3();
             List<Vector3> cp = GetControlPoints(localCoordinates: localCoordinates);
 
-            switch (shape) {
+            switch (Shape) {
                 case RoomShape.RECTANGLE:
                     tagPoint = new Vector3(cp[0].x + (cp[2].x - cp[0].x) * 0.5f,
                                            height + 0.01f,
@@ -430,33 +419,9 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// 
         /// </summary>
-        public void SetIsInMoveMode(bool setMoveMode = false) {
-            // Destroys any prior movehandle
-            if (moveHandle != null) {
-                Destroy(moveHandle);
-                moveHandle = null;
-            }
-
-            if (setMoveMode == true) {
-                roomState = RoomStates.Moving;
-
-                // Create and attach move handle
-                moveHandle = Instantiate(prefabRoom.moveHandlePrefab);
-                moveHandle.transform.position = GetTagLocation(localCoordinates: true);
-                moveHandle.transform.SetParent(gameObject.transform, false);
-            }
-            else {
-                roomState = RoomStates.Stationary;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         void OnMouseDown() {
-            if (roomState == RoomStates.Moving) {
-                //Vector3 moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
-                moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (State == RoomState.Moving) {
+                MoveMode.Instance.Offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
 
@@ -464,44 +429,38 @@ namespace DesignPlatform.Core {
         /// 
         /// </summary>
         void OnMouseDrag() {
-            if (roomState == RoomStates.Moving) {
-                Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
-                transform.position = Grid.GetNearestGridpoint(curPosition);
+            if (State == RoomState.Moving) {
+                Vector3 currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + MoveMode.Instance.Offset;
+                transform.position = Grid.GetNearestGridpoint(currentPosition);
             }
         }
 
         public void SetIsRoomCurrentlyColliding() {
-            if (roomState == RoomStates.Preview || roomState == RoomStates.Moving) { // Only triggers collision events on moving object
 
-                List<bool> collidersColliding = gameObject.GetComponentsInChildren<RoomCollider>().Select(rc => rc.isCurrentlyColliding).ToList(); // list of whether or not each collider is currently colliding
+            if (State == RoomState.Preview || State == RoomState.Moving) { // Only triggers collision events on moving object
 
-                if (collidersColliding.TrueForAll(b => !b)) { // if there are no collisions in any of room's colliders
-                    isCurrentlyColliding = false;
-                    //Material meshRenderMaterial = gameObject.GetComponent<MeshRenderer>().material;
+                RoomCollider[] colliders = gameObject.GetComponentsInChildren<RoomCollider>();
+                List<bool> collidersColliding = colliders.Select(rc => rc.isCurrentlyColliding).ToList();
+
+                // No collisions
+                if (collidersColliding.TrueForAll(b => !b)) {
                     if (isHighlighted) gameObject.GetComponent<MeshRenderer>().material = highlightMaterial;
                     else gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
-
                 }
-                else { // if there is one or more collision(s)
-                       //Debug.Log("Is colliding");
 
-                    isCurrentlyColliding = true;
+                // One or more collisions
+                else {
                     gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
                 }
             }
-        }
-        public void SetRoomState(RoomStates roomState) {
-            this.roomState = roomState;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool GetIsMoveHandleVisible() { return isRoomInMoveMode; }
-
-
+        /// <param name="type"></param>
         public void SetRoomType(RoomType type) {
-            roomType = type;
+            Type = type;
 
             switch (type) {
                 case RoomType.PREVIEW:

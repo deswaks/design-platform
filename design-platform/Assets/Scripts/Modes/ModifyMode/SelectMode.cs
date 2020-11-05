@@ -80,10 +80,12 @@ namespace DesignPlatform.Core {
 
             if (selection != null) {
                 selection.SetIsHighlighted(false);
-                selection.SetIsInMoveMode(false);
-                selection.RemoveEditHandles();
+                selection.State = RoomState.Stationary;
             }
+            
+            SetMode(null);
             selection = null;
+
         }
 
         private Room GetClickedRoom() {

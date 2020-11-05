@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using DesignPlatform.Utils;
 
 public class Widget_CircleDiagram : DesignPlatform.Core.Widget
 {
@@ -9,7 +10,6 @@ public class Widget_CircleDiagram : DesignPlatform.Core.Widget
     private static readonly string TitleName = "txt_Title";
     private static readonly string WedgeTemplateName = "wedge";
     private static readonly string ListObjectTemplateName = "ListObject";
-    private static readonly string PrefabPath = "Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab";
     private GameObject PrefabPanel;
 
     GameObject titleObject;   // 
@@ -42,7 +42,7 @@ public class Widget_CircleDiagram : DesignPlatform.Core.Widget
     public override Object CreatePanel() // Initialize widget
     {
         // Loads prefab object and instantiates Widget
-        PrefabPanel = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+        PrefabPanel = AssetUtil.LoadGameObject("prefabs", "Widget_CircleDiagram");
         Panel = (GameObject)GameObject.Instantiate(PrefabPanel);//, parent.transform);
 
         // Locates primary components of widget
