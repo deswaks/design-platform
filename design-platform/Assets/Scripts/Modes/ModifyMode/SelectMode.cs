@@ -64,10 +64,14 @@ namespace DesignPlatform.Core {
             // Set new room selection
             Room clickedRoom = GetClickedRoom();
             if (clickedRoom != null) {
-                if (clickedRoom != selection) {
+                if (clickedRoom == selection) {
+                    return;
+                }
+                else {
                     Deselect();
                     selection = clickedRoom;
-                    selection.SetIsHighlighted(true);
+                    selection.UpdateRender2D(highlighted: true);
+                    SetMode(null);
                 }
             }
             else {
@@ -79,11 +83,9 @@ namespace DesignPlatform.Core {
         private void Deselect() {
 
             if (selection != null) {
-                selection.SetIsHighlighted(false);
-                selection.State = RoomState.Stationary;
+                selection.UpdateRender2D(highlighted: false);
+                selection.State = RoomState.STATIONARY;
             }
-            
-            SetMode(null);
             selection = null;
 
         }

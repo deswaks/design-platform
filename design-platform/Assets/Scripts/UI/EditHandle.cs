@@ -1,6 +1,4 @@
 ﻿using DesignPlatform.Utils;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DesignPlatform.Core {
@@ -10,7 +8,7 @@ namespace DesignPlatform.Core {
 
         public Vector3 wallNormal;
 
-        public void InitializeHandle(int wall) {
+        public void InitHandle(int wall) {
             parentRoom = gameObject.transform.parent.gameObject.GetComponent<Room>();
             wallIndex = wall;
             wallNormal = parentRoom.GetWallNormals()[wallIndex];

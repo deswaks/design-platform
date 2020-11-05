@@ -17,7 +17,7 @@ namespace DesignPlatform.Core {
         }
 
         MoveMode() {
-            HandlePrefab = AssetUtil.LoadGameObject("prefabs", "move_handle");
+            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "move_handle");
         }
 
 
@@ -27,15 +27,15 @@ namespace DesignPlatform.Core {
             Room selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
                 CreateHandle(selectedRoom);
-                selectedRoom.State = RoomState.Moving;
+                selectedRoom.State = RoomState.MOVING;
             }
         }
         public override void OnModePause() {
             Room selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
-                RemoveHandle();
-                selectedRoom.State = RoomState.Stationary;
+                selectedRoom.State = RoomState.STATIONARY;
             }
+            RemoveHandle();
         }
 
 

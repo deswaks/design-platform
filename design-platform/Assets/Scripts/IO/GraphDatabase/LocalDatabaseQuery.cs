@@ -131,10 +131,10 @@ namespace DesignPlatform.Database {
 
                 RoomNode roomNode = new RoomNode {
                     id = rd.Next(0, 5000),                              /////////////////////////// SKAL OPDATERES
-                    name = room.GetRoomShape().ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
+                    name = room.Shape.ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
                     area = 17.5f,                                       /////////////////////////// SKAL OPDATERES
                     type = room.Type,
-                    shape = room.GetRoomShape(),
+                    shape = room.Shape,
                     vertices = GraphUtils.Vector3ListToStringList(room.GetControlPoints())
                 };
                 roomNodes.Add(roomNode);

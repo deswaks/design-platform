@@ -22,7 +22,7 @@ namespace DesignPlatform.Core {
 
             gameObject.layer = 14; // Slab layer
 
-            GameObject prefabSlabObject = AssetUtil.LoadGameObject("prefabs", "SlabPrefab");
+            GameObject prefabSlabObject = AssetUtil.LoadAsset<GameObject>("prefabs", "SlabPrefab");
 
             prefabSlab = (Slab)prefabSlabObject.GetComponent(typeof(Slab));
             gameObject.name = "CLT Slab";

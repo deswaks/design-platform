@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3101629330
+CRC: 2649532441
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b5a3d12633e90a5d3bbd9080f4c4a2e9
+    Hash: a93a49dfc6a9d9de5dba603060c0262d
   TypeTreeHash:
     serializedVersion: 2
     Hash: 21c99c86a43ad817b2cb7f65458ae090
@@ -16,6 +16,7 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 Assets:
+- Assets/Materials/wall2D.mat
 - Assets/Materials/RoomDoubleroom.mat
 - Assets/Materials/RoomKitchen.mat
 - Assets/Materials/RoomLivingroom.mat

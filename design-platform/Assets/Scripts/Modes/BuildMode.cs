@@ -59,7 +59,7 @@ namespace DesignPlatform.Core {
         //actually build the thing
         public void Build() {
             Room builtRoom = Building.Instance.BuildRoom(buildShape: selectedShape, templateRoom: previewRoom);
-            builtRoom.State = RoomState.Stationary;
+            builtRoom.State = RoomState.STATIONARY;
 
         }
 

@@ -35,7 +35,7 @@ namespace DesignPlatform {
         public override Object CreatePanel() // Initialize widget
         {
             // Loads prefab object and instantiates Widget
-            PrefabPanel = AssetUtil.LoadGameObject("prefabs", "Widget_RoomSchedule");
+            PrefabPanel = AssetUtil.LoadAsset<GameObject>("prefabs", "Widget_RoomSchedule");
             Panel = GameObject.Instantiate(PrefabPanel); //, parent.transform).transform.GetChild(0).gameObject;
 
             // Locates primary components of widget
@@ -64,7 +64,7 @@ namespace DesignPlatform {
                 {
                 "Room " + roomIndex.ToString(),                                             // Room Name
                 StringUtils.StringUtils.ToTitleCase(room.Type.ToString()),              // Room Type
-                StringUtils.StringUtils.ToTitleCase(room.GetRoomShape().ToString()),        // Room Shape
+                StringUtils.StringUtils.ToTitleCase(room.Shape.ToString()),        // Room Shape
                 room.gameObject.GetInstanceID().ToString(),                                 // Room rumber - SKAL OPDATERES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 room.GetFloorArea().ToString() + " m²"                                      // Floor area
 

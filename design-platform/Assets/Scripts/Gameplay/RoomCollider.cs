@@ -49,7 +49,7 @@ namespace DesignPlatform.Core {
             //      The y coordinate of the location is defined by the average value from the [0] and [1] controlpoints (or [2] and [3]).
             List<List<int>> colliderIndexPairsList = new List<List<int>>();
 
-            switch (room.GetRoomShape()) {
+            switch (room.Shape) {
                 case RoomShape.RECTANGLE:
                     //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
                     colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 });

@@ -25,7 +25,7 @@ namespace DesignPlatform.Core {
 
             gameObject.layer = 13; // Wall layer
 
-            GameObject prefabWallObject = AssetUtil.LoadGameObject("prefabs", "WallPrefab");
+            GameObject prefabWallObject = AssetUtil.LoadAsset<GameObject>("prefabs", "WallPrefab");
 
             prefabWall = (Wall)prefabWallObject.GetComponent(typeof(Wall));
             gameObject.name = "CLT Wall";

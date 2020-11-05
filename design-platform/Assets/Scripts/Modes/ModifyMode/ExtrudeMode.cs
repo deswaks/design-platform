@@ -17,7 +17,8 @@ namespace DesignPlatform.Core {
 
 
         ExtrudeMode() {
-            HandlePrefab = AssetUtil.LoadGameObject("prefabs", "edit_handle");
+            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "edit_handle");
+            Handles = new List<EditHandle>();
         }
 
 
@@ -30,9 +31,9 @@ namespace DesignPlatform.Core {
             }
         }
         public override void OnModePause() {
+            RemoveHandles();
             Room selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
-                RemoveHandles(selectedRoom);
                 selectedRoom.ResetOrigin();
             }
         }
@@ -46,9 +47,9 @@ namespace DesignPlatform.Core {
                 GameObject HandleGO = Object.Instantiate(HandlePrefab);
                 HandleGO.transform.SetParent(room.gameObject.transform, true);
 
-                EditHandle Handle = HandleGO.GetComponent<EditHandle>();
-                Handle.InitializeHandle(i);
-                Handles.Add(Handle);
+                EditHandle handle = HandleGO.GetComponent<EditHandle>();
+                handle.InitHandle(i);
+                Handles.Add(handle);
             }
         }
 
@@ -56,12 +57,16 @@ namespace DesignPlatform.Core {
         /// 
         /// </summary>
         /// <param name="room"></param>
-        public void RemoveHandles(Room room) {
-            if (Handles != null) {
+        public void RemoveHandles() {
+            Debug.Log("Number of handles before: " + Handles.Count.ToString());
+            if (Handles.Count > 0) {
                 foreach (EditHandle handle in Handles) {
                     Object.Destroy(handle.gameObject);
                 }
+                Handles.Clear();
             }
+            
+            Debug.Log("Number of handles after: " + Handles.Count.ToString());
         }
 
 

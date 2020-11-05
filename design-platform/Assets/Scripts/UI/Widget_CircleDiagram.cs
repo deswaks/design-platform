@@ -42,7 +42,7 @@ public class Widget_CircleDiagram : DesignPlatform.Core.Widget
     public override Object CreatePanel() // Initialize widget
     {
         // Loads prefab object and instantiates Widget
-        PrefabPanel = AssetUtil.LoadGameObject("prefabs", "Widget_CircleDiagram");
+        PrefabPanel = AssetUtil.LoadAsset<GameObject>("prefabs", "Widget_CircleDiagram");
         Panel = (GameObject)GameObject.Instantiate(PrefabPanel);//, parent.transform);
 
         // Locates primary components of widget
