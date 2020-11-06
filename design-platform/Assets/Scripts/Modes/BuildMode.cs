@@ -25,7 +25,10 @@ namespace DesignPlatform.Core {
 
         public override void Tick() {
             if (Input.GetMouseButtonDown(0)) {
-                if (EventSystem.current.IsPointerOverGameObject() == false) {
+                if (EventSystem.current.IsPointerOverGameObject()) {
+                    Main.Instance.SetMode(SelectMode.Instance);
+                }
+                else {
                     Build();
                 }
             }
