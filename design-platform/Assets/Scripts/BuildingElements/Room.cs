@@ -22,8 +22,8 @@ namespace DesignPlatform.Core {
         //------------------
         PREVIEW = 0,
         DEFAULT = 1,
-        SINGLEROOM = 10,
-        DOUBLEROOM = 11,
+        DOUBLEROOM = 10,
+        SINGLEROOM = 11,
         LIVINGROOM = 12,
         KITCHEN = 13,
         BATHROOM = 14
@@ -484,11 +484,17 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <param name="type"></param>
         public void SetRoomType(RoomType type) {
-            // Change type
-            Type = type;
-            // Change material
-            currentMaterial = AssetUtil.LoadAsset<Material>("materials", RoomMaterialAsset[type]);
-            gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+            try {
+                // Change type
+                Type = type;
+                // Change material
+                currentMaterial = AssetUtil.LoadAsset<Material>("materials", RoomMaterialAsset[type]);
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                return;
+            }
+            catch {
+                return;
+            }
         }
 
         /// <summary>

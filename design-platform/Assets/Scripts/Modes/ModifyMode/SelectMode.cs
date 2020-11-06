@@ -29,7 +29,6 @@ namespace DesignPlatform.Core {
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(2)) {
                 Deselect();
                 SetMode(null);
-
             }
 
             if (Input.GetKeyDown(KeyCode.Delete)) {
@@ -46,6 +45,18 @@ namespace DesignPlatform.Core {
 
             if (Input.GetKeyDown(KeyCode.R)) {
                 if (selection != null) selection.Rotate();
+            }
+
+            // Check if any number key was pressed
+            if (Input.GetKeyDown(KeyCode.Alpha0)) {
+                if (selection != null) selection.SetRoomType(RoomType.DEFAULT);
+            }
+            for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha9; i++) {
+                if (Input.GetKeyDown((KeyCode) i)) {
+                    if (selection != null) {
+                        selection.SetRoomType((RoomType)i-(int)KeyCode.Alpha1 + 10);
+                    }
+                }
             }
 
             if (currentMode != null) {
