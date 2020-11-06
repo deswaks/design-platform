@@ -58,15 +58,12 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <param name="room"></param>
         public void RemoveHandles() {
-            Debug.Log("Number of handles before: " + Handles.Count.ToString());
             if (Handles.Count > 0) {
                 foreach (EditHandle handle in Handles) {
                     Object.Destroy(handle.gameObject);
                 }
                 Handles.Clear();
             }
-            
-            Debug.Log("Number of handles after: " + Handles.Count.ToString());
         }
 
 

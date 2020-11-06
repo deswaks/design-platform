@@ -53,6 +53,8 @@ namespace DesignPlatform.Core {
             gameObject.GetComponent<ProBuilderMesh>().Refresh();
             gameObject.GetComponent<MeshRenderer>().material = prefabWall.wallMaterial;
 
+            
+
         }
 
         /// <summary>
@@ -64,5 +66,7 @@ namespace DesignPlatform.Core {
             }
             Destroy(gameObject);
         }
+
+
     }
 }

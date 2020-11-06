@@ -153,6 +153,7 @@ namespace DesignPlatform.Core {
             SetRoomType(RoomType.DEFAULT);
             UpdateRender3D();
         }
+
         public void UpdateRender3D() {
             // Mesh
             PolyShape polyshape = gameObject.GetComponent<PolyShape>();
@@ -178,7 +179,7 @@ namespace DesignPlatform.Core {
 
             // Set controlpoints
             lr.useWorldSpace = false;
-            List<Vector3> points = GetControlPoints(localCoordinates: true, closed: true).Select(p => p + Vector3.up*(height+0.001f)).ToList();
+            List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up*(height+0.001f)).ToList();
             lr.positionCount = points.Count;
             lr.SetPositions(points.ToArray());
 
@@ -472,7 +473,7 @@ namespace DesignPlatform.Core {
                 List<bool> collidersColliding = colliders.Select(rc => rc.isCurrentlyColliding).ToList();
 
                 bool isSelected = (SelectMode.Instance.selection == this);
-                bool isColliding = (collidersColliding.TrueForAll(b => b));
+                bool isColliding = (collidersColliding.Contains(true));
                 //Debug.Log("Selected:" + isSelected.ToString() + "  Colliding:" + isColliding.ToString());
                 UpdateRender2D(highlighted: isSelected, colliding: isColliding);
             }

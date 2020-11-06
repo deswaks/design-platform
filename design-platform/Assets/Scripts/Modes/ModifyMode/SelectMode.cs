@@ -32,6 +32,22 @@ namespace DesignPlatform.Core {
 
             }
 
+            if (Input.GetKeyDown(KeyCode.Delete)) {
+                if (selection != null) {selection.Delete(); Deselect(); }
+            }
+
+            if (Input.GetKeyDown(KeyCode.E)) {
+                if (selection != null) SetMode(ExtrudeMode.Instance);
+            }
+
+            if (Input.GetKeyDown(KeyCode.M)) {
+                if (selection != null) SetMode(MoveMode.Instance);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R)) {
+                if (selection != null) selection.Rotate();
+            }
+
             if (currentMode != null) {
                 currentMode.Tick();
             }
