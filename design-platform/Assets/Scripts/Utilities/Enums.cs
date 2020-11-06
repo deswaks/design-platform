@@ -13,6 +13,10 @@ namespace DesignPlatform.Core {
         LSHAPE,
         USHAPE
     }
+    public enum OpeningShape {
+        DOOR,
+        WINDOW
+    }
 
     public enum Axis {
         X,

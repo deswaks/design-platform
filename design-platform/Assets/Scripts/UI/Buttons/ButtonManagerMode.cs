@@ -17,5 +17,9 @@ namespace DesignPlatform.Core {
         public void StartPOVMode() {
             Main.Instance.SetMode(POVMode.Instance);
         }
+        public void StartOpeningMode(int openingShape) {
+            OpeningMode.Instance.SetSelectedShape((OpeningShape)openingShape);
+            Main.Instance.SetMode(OpeningMode.Instance);
+        }
     }
 }

@@ -40,6 +40,7 @@ namespace DesignPlatform.Core {
 
         public GameObject moveHandlePrefab;
         private Vector3 moveModeOffset;
+        private List<List<Vector3>> openingsMoveModeOffset;
 
         public RoomType roomType { get; private set; }
 
@@ -145,7 +146,14 @@ namespace DesignPlatform.Core {
                 point: centerPoint,
                 axis: new Vector3(0, 1, 0),
                 angle: degrees);
-
+            for (int i = 0; i < faces.Count; i++) {
+                for (int j = 0; j < faces[i].openings.Count; j++) {
+                    faces[i].openings[j].gameObject.transform.RotateAround(
+                                            point: centerPoint,
+                                            axis: new Vector3(0, 1, 0),
+                                            angle: degrees);
+                }
+            }
             RefreshView();
         }
 
@@ -275,6 +283,7 @@ namespace DesignPlatform.Core {
         public void ExtrudeWall(int wallToExtrude, float extrusion) {
             // Create move vector for extrusion
             Vector3 localExtrusion = GetWallNormals(localCoordinates: true)[wallToExtrude] * extrusion;
+            Vector3 globalExtrusion = GetWallNormals(localCoordinates: false)[wallToExtrude] * extrusion;
 
             // Clone points
             List<Vector3> controlPointsClone = GetControlPoints(localCoordinates: true).Select(
@@ -285,6 +294,12 @@ namespace DesignPlatform.Core {
             int point2Index = IndexingUtils.WrapIndex(wallToExtrude + 1, controlPoints.Count);
             controlPointsClone[point1Index] += localExtrusion;
             controlPointsClone[point2Index] += localExtrusion;
+
+            // Move openings with extrusion                   
+            foreach (Opening opening in faces[wallToExtrude].openings) {
+                Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, faces[wallToExtrude]);
+                opening.transform.position = openingPoint;
+            }
 
             // Compare normals before and after extrusion element-wise 
             List<Vector3> normals = GetWallNormals(localCoordinates: true);
@@ -414,6 +429,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         void OnMouseDown() {
             if (roomState == RoomStates.Moving) {
+                openingsMoveModeOffset = new List<List<Vector3>>();
                 //Vector3 moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
                 moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
@@ -425,6 +441,12 @@ namespace DesignPlatform.Core {
         void OnMouseDrag() {
             if (roomState == RoomStates.Moving) {
                 Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
+                for (int i = 0; i < faces.Count; i++) {
+                    for (int j = 0; j < faces[i].openings.Count; j++) {
+                        Vector3 diff = gameObject.transform.position - faces[i].openings[j].gameObject.transform.position;
+                        faces[i].openings[j].gameObject.transform.position = (Grid.GetNearestGridpoint(curPosition)) - diff;
+                    }
+                }
                 transform.position = Grid.GetNearestGridpoint(curPosition);
             }
         }

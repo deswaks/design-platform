@@ -56,7 +56,7 @@ namespace DesignPlatform.Core {
             previewRoom = null;
         }
 
-        //actually build the thing
+        // Actually build the thing
         public void Build() {
             Room builtRoom = Building.Instance.BuildRoom(buildShape: selectedShape, templateRoom: previewRoom);
             builtRoom.SetRoomState(Room.RoomStates.Stationary);
