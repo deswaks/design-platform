@@ -14,6 +14,7 @@ namespace DesignPlatform.Core {
         public List<Wall> walls { get; private set; }
         public List<Slab> slabs { get; private set; }
         public List<Interface> interfaces { get; private set; }
+        public List<Opening> openings { get; private set; }
 
         public static Building Instance {
             // Use the ?? operator, to return 'instance' if 'instance' does not equal null
@@ -26,6 +27,7 @@ namespace DesignPlatform.Core {
             walls = new List<Wall>();
             slabs = new List<Slab>();
             interfaces = new List<Interface>();
+            openings = new List<Opening>();
         }
 
         // Returns a list of all the rooms in the building
@@ -154,6 +156,40 @@ namespace DesignPlatform.Core {
                 slabs[0].DeleteSlab();
             }
         }
+
+        /// <summary>
+        /// Builds a new opening
+        /// </summary>
+        public Opening BuildOpening(OpeningShape openingShape = OpeningShape.WINDOW,
+                                    bool preview = false,
+                                    Opening templateOpening = null,
+                                    Face[] closestFaces = null) {
+            
+            GameObject newOpeningGameObject = new GameObject("Opening");
+            Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
+            newOpening.InitializeOpening(parentFaces: closestFaces, openingShape: openingShape);
+            if (preview) { newOpeningGameObject.name = "Preview opening"; }
+
+            if (templateOpening != null) {
+                newOpeningGameObject.transform.position = templateOpening.transform.position;
+                newOpeningGameObject.transform.rotation = templateOpening.transform.rotation;
+            }
+
+            if (preview == false) {
+                openings.Add(newOpening);
+                newOpening.SetOpeningState(Opening.OpeningStates.PLACED);
+                closestFaces[0].AddOpening(newOpening);
+            }
+            return newOpening;
+        }
+
+        /// <summary>
+        /// Removes opening from the list of openings
+        /// </summary>
+        public void RemoveOpening(Opening opening) {
+            if (openings.Contains(opening)) openings.Remove(opening);
+        }
+
         /// <summary>
         /// Removes ALL interfaces
         /// </summary>
@@ -262,6 +298,9 @@ namespace DesignPlatform.Core {
                 if (interFace.GetOrientation() == Orientation.HORIZONTAL)
                     BuildSlab(interFace);
             }
+            //foreach (Opening opening in openings) {
+            //    opening.EctractIntersection();
+            //}
         }
 
         public List<List<Vector3>> GetInterfacesEndpoints() {

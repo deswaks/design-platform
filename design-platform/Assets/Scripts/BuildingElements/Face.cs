@@ -8,6 +8,7 @@ namespace DesignPlatform.Core {
         public Room parentRoom { get; private set; }
         public int faceIndex { get; private set; }
         public List<Interface> interfaces { get; private set; }
+        public List<Opening> openings { get; private set; }
         public Dictionary<Interface, float[]> paramerters { get; private set; }
         public Orientation orientation { get; private set; }
 
@@ -18,6 +19,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         public Face(Room parent, int index) {
             interfaces = new List<Interface>();
+            openings = new List<Opening>();
             paramerters = new Dictionary<Interface, float[]>();
             parentRoom = parent;
             faceIndex = index;
@@ -87,12 +89,23 @@ namespace DesignPlatform.Core {
             }
 
         }
+        public void AddOpening(Opening opening) {
+            openings.Add(opening);
+        }
 
         /// <summary>
         /// Remove the interface 
         /// </summary>
         public void RemoveInterface(Interface interFace) {
             if (interfaces.Contains(interFace)) interfaces.Remove(interFace);
+        }
+        public Interface GetInterfaceAtParameter(float parameterOnFace) {
+            foreach (KeyValuePair<Interface, float[]> iface in paramerters) {
+                if (parameterOnFace > iface.Value[0] && parameterOnFace < iface.Value[1]) {
+                    return iface.Key;
+                }
+            }
+            return null;
         }
 
         public bool CollidesWith(Vector3 point) {
@@ -142,5 +155,11 @@ namespace DesignPlatform.Core {
             return false;
         }
 
+        public float GetPointParameter(Vector3 point) {
+            (Vector3 faceStart, Vector3 faceEnd) = Get2DEndPoints();
+            float parameterOnFace = (point - faceStart).magnitude / (faceEnd - faceStart).magnitude;
+            return parameterOnFace;
+
+        }
     }
 }

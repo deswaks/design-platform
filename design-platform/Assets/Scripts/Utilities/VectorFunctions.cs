@@ -36,6 +36,20 @@ namespace DesignPlatform.Utils {
         public static Vector3 AddConstant(Vector3 v, float addition) {
             return new Vector3(v[0] + addition, v[1] + addition, v[2] + addition);
         }
+        public static Vector3 LineClosestPoint(Vector3 lineStart, Vector3 lineEnd, Vector3 point) {
+            var vVector1 = point - lineStart;
+            var vVector2 = (lineEnd - lineStart).normalized;
 
+            var d = Vector3.Distance(lineStart, lineEnd);
+            var t = Vector3.Dot(vVector2, vVector1);
+
+            if (t <= 0) return lineStart;
+            if (t >= d) return lineEnd;
+
+            var vVector3 = vVector2 * t;
+            var vClosestPoint = lineStart + vVector3;
+
+            return vClosestPoint;
+        }
     }
 }

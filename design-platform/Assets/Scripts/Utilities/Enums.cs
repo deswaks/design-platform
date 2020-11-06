@@ -8,6 +8,11 @@ namespace DesignPlatform.Core {
         VERTICAL
     }
 
+    public enum OpeningShape {
+        DOOR,
+        WINDOW
+    }
+
     public enum Axis {
         X,
         Y,

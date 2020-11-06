@@ -79,6 +79,7 @@ namespace DesignPlatform.Core {
             List<Vector3> vertices = room.GetControlPoints(localCoordinates: true);
             foreach (List<int> xyPairs in colliderIndexPairsList) {
                 GameObject colliderObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                colliderObject.layer = 8;
                 colliderObject.name = "RoomCollider_" + counter++.ToString();
 
                 Vector3 positionVector =
