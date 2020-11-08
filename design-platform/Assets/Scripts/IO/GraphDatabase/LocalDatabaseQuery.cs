@@ -125,6 +125,45 @@ namespace DesignPlatform.Database {
             GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="savePath">Full path of json file, with backslashes.</param>
+        public static void SaveAllWallElementsToJson(string jsonPath = null)
+        {
+            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\interfaces.json";
+
+            Building.Instance.CreateVerticalInterfaces();
+            List<(Vector3 start, Vector3 end)> allWallVertices = Building.Instance.FindWallElements();
+
+            // Collects Unity room as RoomNodes
+            List<InterfaceNode> interfaceNodes = new List<InterfaceNode>();
+            foreach(var points in allWallVertices)
+            {
+                interfaceNodes.Add(new InterfaceNode {
+                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { points.start, points.end })
+                });
+            }
+
+            // Serializes RoomNodes to json format
+            string jsonString = JsonConvert.SerializeObject(interfaceNodes);
+
+            // Saves file
+            File.WriteAllText(jsonPath, jsonString);
+
+            //// Generates notification in corner of screen
+            //string notificationTitle = "File saved";
+            //string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
+
+            //GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
+            //Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
+            //Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
+
+            //GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
+
+        }
+
         /// <summary>
         /// Loads RoomNodes specified in the given json file.
         /// </summary>
