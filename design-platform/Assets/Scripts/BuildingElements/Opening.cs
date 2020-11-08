@@ -178,15 +178,31 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Gets a list of controlpoints - in local coordinates. The controlpoints are the vertices of the underlying polyshape of the opening.
         /// </summary>
-        public List<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false) {
-            List<Vector3> returnPoints = controlPoints;
-            if (closed) {
-                returnPoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
-            }
-            if (!localCoordinates) {
-                returnPoints = returnPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
-            }
-            return returnPoints;
+        //public List<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false) {
+        public List<Vector3> GetControlPoints() {
+            Vector3 pos = gameObject.transform.position;
+            (Vector3, Vector3) endpoints = attachedFaces[0].Get2DEndPoints();
+            Vector3 forW = endpoints.Item2 - endpoints.Item1.normalized;
+            Vector3 norma = Vector3.Cross(endpoints.Item2 - endpoints.Item1,Vector3.up).normalized;
+
+            controlPoints = new List<Vector3> {
+                    -pos + forW*DoorWidth/2 + norma*OpeningDepth/2,
+                    -pos + forW*DoorWidth/2 + norma*OpeningDepth/2 + Vector3.up*DoorHeight,
+                    pos + forW*DoorWidth/2 + norma*OpeningDepth/2 + Vector3.up*DoorHeight,
+                    pos + forW*DoorWidth/2 + norma*OpeningDepth/2
+                };
+
+            return controlPoints;
+
+            //List<Vector3> returnPoints = controlPoints;
+            //if (closed) {
+            //    returnPoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
+            //}
+            //if (!localCoordinates) {
+            //    returnPoints = returnPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
+            //    Debug.Log("GLOBAL");
+            //}
+            //return returnPoints;
         }
 
 
