@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
+using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
@@ -57,14 +58,25 @@ namespace DesignPlatform.Core {
 
 
         private readonly Dictionary<RoomType, string> RoomMaterialAsset = new Dictionary<RoomType, string> {
-            { RoomType.PREVIEW,  "RoomDefault"},
-            { RoomType.DEFAULT,  "RoomDefault"},
-            { RoomType.SELECTED, "RoomHighlight" },
-            { RoomType.SINGLEROOM,  "RoomSingleroom"},
-            { RoomType.DOUBLEROOM,  "RoomDoubleroom"},
-            { RoomType.LIVINGROOM,  "RoomLivingroom"},
-            { RoomType.KITCHEN,  "RoomKitchen"},
-            { RoomType.BATHROOM,  "RoomBathroom"},
+            { RoomType.PREVIEW,  "plan_room_default"},
+            { RoomType.DEFAULT,  "plan_room_default"},
+            { RoomType.SELECTED, "plan_room_highlight" },
+            { RoomType.SINGLEROOM,  "plan_room_singleroom"},
+            { RoomType.DOUBLEROOM,  "plan_room_doubleroom"},
+            { RoomType.LIVINGROOM,  "plan_room_livingroom"},
+            { RoomType.KITCHEN,  "plan_room_kitchen"},
+            { RoomType.BATHROOM,  "plan_room_bathroom"},
+        };
+
+        private readonly Dictionary<RoomType, string> RoomTypeName = new Dictionary<RoomType, string> {
+            { RoomType.PREVIEW,  "Preview"},
+            { RoomType.DEFAULT,  "Room"},
+            { RoomType.SELECTED, "Selected\nRoom" },
+            { RoomType.SINGLEROOM,  "Single Bed\nRoom"},
+            { RoomType.DOUBLEROOM,  "Double Bed\nRoom"},
+            { RoomType.LIVINGROOM,  "Living\nRoom"},
+            { RoomType.KITCHEN,  "Kitchen"},
+            { RoomType.BATHROOM,  "Bathroom"},
         };
 
         /// <summary>
@@ -170,34 +182,59 @@ namespace DesignPlatform.Core {
             RoomCollider.GiveCollider(this);
         }
         private void InitRender2D() {
+            // Init line render
             LineRenderer lr = gameObject.AddComponent<LineRenderer>();
             lr.loop = true;
             lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             lr.receiveShadows = false;
+
+            // Update
             UpdateRender2D();
         }
         public void UpdateRender2D(bool highlighted = false, bool colliding = false) {
             LineRenderer lr = gameObject.GetComponent<LineRenderer>();
+
+            // Update lines
             lr.positionCount = 0;
+            if (GlobalSettings.ShowWallLines) {
+                // Set controlpoints
+                lr.useWorldSpace = false;
+                List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up * (height + 0.001f)).ToList();
+                lr.positionCount = points.Count;
+                lr.SetPositions(points.ToArray());
 
-            // Set controlpoints
-            lr.useWorldSpace = false;
-            List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up*(height+0.001f)).ToList();
-            lr.positionCount = points.Count;
-            lr.SetPositions(points.ToArray());
+                // Style
+                lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "plan_room_wall"), lr.positionCount).ToArray();
+                float width = 0.2f;
+                Color color = Color.black;
+                lr.sortingOrder = 0;
+                if (highlighted) { lr.sortingOrder = 1; width = 0.3f; color = Color.yellow; }
+                if (colliding) { lr.sortingOrder = 1; color = Color.red; }
 
-            // Style
-            lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "wall2D"), lr.positionCount).ToArray();
-            float width = 0.2f;
-            Color color = Color.black;
-            lr.sortingOrder = 0;
-            if (highlighted) { lr.sortingOrder = 1;  width = 0.3f;  color = Color.yellow; }
-            if (colliding) { lr.sortingOrder = 1; color = Color.red; }
-
-            lr.startWidth = width; lr.endWidth = width;
-            foreach (Material material in lr.materials) {
-                material.color = color;
+                lr.startWidth = width; lr.endWidth = width;
+                foreach (Material material in lr.materials) {
+                    material.color = color;
+                }
             }
+
+            // Update text tags
+            if (GetComponentInChildren<TMP_Text>()) Destroy(GetComponentInChildren<TMP_Text>().gameObject);
+            if (GlobalSettings.ShowRoomTags && Type != RoomType.PREVIEW) {
+                // Create tag object
+                GameObject tagObject = new GameObject("Tag");
+                TextMeshPro tag = tagObject.AddComponent<TextMeshPro>();
+                // Set position
+                tagObject.transform.SetParent(gameObject.transform, false);
+                tagObject.transform.position = GetTagLocation();
+                tagObject.transform.Rotate(new Vector3(90, 0, 0));
+                // Set text
+                tag.color = Color.black;
+                tag.fontSize = 5.0f;
+                tag.alignment = TextAlignmentOptions.Center;
+                tag.text = RoomTypeName[Type];
+            }
+
+
         }
 
         /// <summary>
@@ -226,9 +263,9 @@ namespace DesignPlatform.Core {
                 point: centerPoint,
                 axis: new Vector3(0, 1, 0),
                 angle: degrees);
-            for (int i = 0; i < faces.Count; i++) {
-                for (int j = 0; j < faces[i].openings.Count; j++) {
-                    faces[i].openings[j].gameObject.transform.RotateAround(
+            for (int i = 0; i < Faces.Count; i++) {
+                for (int j = 0; j < Faces[i].openings.Count; j++) {
+                    Faces[i].openings[j].gameObject.transform.RotateAround(
                                             point: centerPoint,
                                             axis: new Vector3(0, 1, 0),
                                             angle: degrees);
@@ -366,8 +403,8 @@ namespace DesignPlatform.Core {
             controlPointsClone[point2Index] += localExtrusion;
 
             // Move openings with extrusion                   
-            foreach (Opening opening in faces[wallToExtrude].openings) {
-                Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, faces[wallToExtrude]);
+            foreach (Opening opening in Faces[wallToExtrude].openings) {
+                Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, Faces[wallToExtrude]);
                 opening.transform.position = openingPoint;
             }
 
@@ -467,7 +504,7 @@ namespace DesignPlatform.Core {
         /// 
         /// </summary>
         void OnMouseDown() {
-            if (roomState == RoomStates.Moving) {
+            if (State == RoomState.MOVING) {
                 openingsMoveModeOffset = new List<List<Vector3>>();
                 //Vector3 moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
                 moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -478,12 +515,12 @@ namespace DesignPlatform.Core {
         /// 
         /// </summary>
         void OnMouseDrag() {
-            if (roomState == RoomStates.Moving) {
+            if (State == RoomState.MOVING) {
                 Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
-                for (int i = 0; i < faces.Count; i++) {
-                    for (int j = 0; j < faces[i].openings.Count; j++) {
-                        Vector3 diff = gameObject.transform.position - faces[i].openings[j].gameObject.transform.position;
-                        faces[i].openings[j].gameObject.transform.position = (Grid.GetNearestGridpoint(curPosition)) - diff;
+                for (int i = 0; i < Faces.Count; i++) {
+                    for (int j = 0; j < Faces[i].openings.Count; j++) {
+                        Vector3 diff = gameObject.transform.position - Faces[i].openings[j].gameObject.transform.position;
+                        Faces[i].openings[j].gameObject.transform.position = (Grid.GetNearestGridpoint(curPosition)) - diff;
                     }
                 }
                 transform.position = Grid.GetNearestGridpoint(curPosition);

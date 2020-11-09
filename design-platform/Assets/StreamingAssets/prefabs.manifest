@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 563778685
+CRC: 2324140503
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4d6e06912fde542fc9fd27c97aefea65
+    Hash: e957f1d9dde69d7b53ac8919ba0c8a1a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0186eb77975f482e8da5abb43a221c8e
+    Hash: 98caa6188daacd315a6d3c0d1e2a1202
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -58,6 +58,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 24a437d4abd5d624d85806794441c265, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 041111a7850457c409255485a769029a, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: eb7cf53b7c3b36a4b9f4d2b688942503, type: 3}
@@ -87,6 +89,7 @@ Assets:
 - Assets/Prefabs/Widgets/Widget_RoomSchedule.prefab
 - Assets/Prefabs/edit_handle.prefab
 - Assets/Prefabs/WallPrefab.prefab
+- Assets/Prefabs/OpeningPrefab.prefab
 - Assets/Prefabs/move_handle.prefab
 - Assets/Prefabs/SlabPrefab.prefab
 - Assets/Prefabs/notification.prefab

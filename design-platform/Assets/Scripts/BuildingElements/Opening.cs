@@ -9,6 +9,12 @@ using System.Linq;
 using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
+
+    public enum OpeningShape {
+        DOOR,
+        WINDOW
+    }
+
     public class Opening : MonoBehaviour {
         //UnityEngine.ProBuilder.Csg.Model result;
 
@@ -55,7 +61,7 @@ namespace DesignPlatform.Core {
 
             openingState = OpeningStates.PREVIEW;
 
-            GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/OpeningPrefab.prefab");
+            GameObject prefabObject = AssetUtil.LoadAsset<GameObject>("prefabs","OpeningPrefab");
 
             prefabOpening = (Opening)prefabObject.GetComponent(typeof(Opening));
             Material material = prefabOpening.previewMaterial;
@@ -96,6 +102,44 @@ namespace DesignPlatform.Core {
 
             gameObject.GetComponent<ProBuilderMesh>().Refresh();
             gameObject.GetComponent<MeshRenderer>().material = material;
+
+            InitRender2D();
+            InitRender3D();
+        }
+
+        private void InitRender3D() {
+            UpdateRender3D();
+        }
+        public void UpdateRender3D() {
+        }
+        private void InitRender2D() {
+            LineRenderer lr = gameObject.AddComponent<LineRenderer>();
+            lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "plan_opening"), lr.positionCount).ToArray();
+            lr.sortingOrder = 2;
+            lr.enabled = GlobalSettings.ShowOpeningLines;
+            lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            lr.receiveShadows = false;
+            UpdateRender2D();
+        }
+        public void UpdateRender2D(float width=0.2f) {
+            LineRenderer lr = gameObject.GetComponent<LineRenderer>();
+
+            // Reset line renderer and leave empty if wall visibility is false
+            lr.positionCount = 0;
+            if (!GlobalSettings.ShowOpeningLines) return;
+
+            // Set controlpoints
+            lr.useWorldSpace = false;
+            List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p =>
+                p + Vector3.up * (parentFace.parentRoom.height + 0.001f)).ToList();
+            lr.positionCount = points.Count;
+            lr.SetPositions(points.ToArray());
+
+            // Style
+            lr.startWidth = width; lr.endWidth = width;
+            foreach (Material material in lr.materials) {
+                material.color = Color.white;
+            }
         }
 
         /// <summary>

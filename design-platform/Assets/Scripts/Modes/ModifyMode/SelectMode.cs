@@ -50,11 +50,13 @@ namespace DesignPlatform.Core {
             // Check if any number key was pressed
             if (Input.GetKeyDown(KeyCode.Alpha0)) {
                 if (selection != null) selection.SetRoomType(RoomType.DEFAULT);
+                selection.UpdateRender2D();
             }
             for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha9; i++) {
                 if (Input.GetKeyDown((KeyCode) i)) {
                     if (selection != null) {
                         selection.SetRoomType((RoomType)i-(int)KeyCode.Alpha1 + 10);
+                        selection.UpdateRender2D();
                     }
                 }
             }
