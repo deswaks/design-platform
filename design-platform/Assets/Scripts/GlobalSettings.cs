@@ -8,7 +8,7 @@ namespace DesignPlatform.Core {
         private static string saveFileName = "RoomNodes.json";
         public static bool ShowWallLines = true;
         public static bool ShowRoomTags = true;
-        public static bool ShowOpeningLines = false;
+        public static bool ShowOpeningLines = true;
 
         public static string GetSavePath() {
 

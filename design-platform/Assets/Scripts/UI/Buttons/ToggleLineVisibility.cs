@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace DesignPlatform.Core {
 
-    public class ToggleWallVisibility : MonoBehaviour {
+    public class ToggleLineVisibility : MonoBehaviour {
         Toggle m_Toggle;
 
         void Start() {
@@ -18,8 +18,12 @@ namespace DesignPlatform.Core {
         // Toggle wall visibility
         void ToggleValueChanged(Toggle change) {
             GlobalSettings.ShowWallLines = GetComponent<Toggle>().isOn;
+            GlobalSettings.ShowOpeningLines = GetComponent<Toggle>().isOn;
             foreach (Room room in Building.Instance.rooms) {
                 room.UpdateRender2D();
+            }
+            foreach (Opening opening in Building.Instance.openings) {
+                opening.UpdateRender2D();
             }
         }
     }

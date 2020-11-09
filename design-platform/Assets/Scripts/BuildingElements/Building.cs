@@ -51,12 +51,16 @@ namespace DesignPlatform.Core {
         public Room BuildRoom(RoomShape buildShape = RoomShape.RECTANGLE, bool preview = false, Room templateRoom = null) {
             GameObject newRoomGameObject = new GameObject("Room");
             Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
-            newRoom.InitRoom(buildShape: buildShape, building: this);
-            if (preview) { newRoomGameObject.name = "Preview room"; }
+
+            if (preview) {
+                newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.PREVIEW);
+                newRoomGameObject.name = "Preview room";
+            }
 
             if (templateRoom != null) {
                 newRoomGameObject.transform.position = templateRoom.transform.position;
                 newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
+                newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.DEFAULT);
             }
 
             if (preview == false) { rooms.Add(newRoom); }

@@ -28,6 +28,7 @@ namespace DesignPlatform.Core {
         }
 
         public override void Tick() {
+            Debug.Log("Opening Mode");
             if (Input.GetMouseButtonDown(0)) {
                 if (EventSystem.current.IsPointerOverGameObject() == false) {
                     Build();
@@ -106,6 +107,7 @@ namespace DesignPlatform.Core {
                 //previewOpening.SubMove(closestPoint);
                 previewOpening.transform.position = closestPoint;
                 previewOpening.Rotate(closestFace[0]);
+                previewOpening.UpdateRender2D();
             }
         }
 

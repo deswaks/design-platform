@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734623765043166924}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.6877658, y: -9.96875, z: 11.546286}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,21 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e35db065e902e4aa0a14297e3da29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: 177bdfedb6054b8499b8cb7fb4f2fa25, type: 2}
-  highlightMaterial: {fileID: 2100000, guid: 9653968bd09c4034bbe9fcf9161ec7e7, type: 2}
-  singleRoomMaterial: {fileID: 2100000, guid: adc7ba2d6a3050e44985d44f674505d7, type: 2}
-  doubleRoomMaterial: {fileID: 2100000, guid: e27adad0fd065cc49ae618a32330920f, type: 2}
-  livingroomMaterial: {fileID: 2100000, guid: ed0e5c25134628c44890801df6d2f6bb, type: 2}
-  kitchenMaterial: {fileID: 2100000, guid: a09c5705bf818e841b7af5472078a734, type: 2}
-  bathroomMaterial: {fileID: 2100000, guid: 0c83247b8b22ede4bbb4e0e83c49764a, type: 2}
   height: 3
-  customProperty: 
-  editHandlePrefab: {fileID: 1494882183549886461, guid: 9159b51a0432f2a4d8a40288cbea681f,
-    type: 3}
-  activeEditHandles: []
   moveHandlePrefab: {fileID: 1494882183549886461, guid: 4d66908be642fbc48ac9528df7e4c09b,
     type: 3}
-  isCurrentlyColliding: 0
+  highlightMaterial: {fileID: 2100000, guid: 9653968bd09c4034bbe9fcf9161ec7e7, type: 2}
+  customProperty: 
 --- !u!82 &-2244674077729476019
 AudioSource:
   m_ObjectHideFlags: 0

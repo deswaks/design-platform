@@ -11,7 +11,6 @@ namespace DesignPlatform.Core {
 
     public enum RoomState {
         STATIONARY,
-        PREVIEW,
         MOVING
     }
 
@@ -48,9 +47,9 @@ namespace DesignPlatform.Core {
         private List<Vector3> controlPoints;
         public float height = 3.0f;
         public List<Face> Faces { get; private set; }
-        public GameObject moveHandlePrefab;
+        //public GameObject moveHandlePrefab;
         private Vector3 moveModeOffset;
-        private List<List<Vector3>> openingsMoveModeOffset;
+        //private List<List<Vector3>> openingsMoveModeOffset;
 
         private Material currentMaterial;
         public Material highlightMaterial;
@@ -84,13 +83,12 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <param name="buildShape"></param>
         /// <param name="building"></param>
-        public void InitRoom(RoomShape buildShape = RoomShape.RECTANGLE, Building building = null) {
+        public void InitRoom(RoomShape buildShape = RoomShape.RECTANGLE, Building building = null, RoomType type = RoomType.DEFAULT) {
             // Set constant values
             ParentBuilding = building;
             gameObject.layer = 8;       // 8 = Rooom layer
             Shape = buildShape;
-            State = RoomState.PREVIEW;
-            Type = RoomType.DEFAULT;
+            State = RoomState.STATIONARY;
             currentMaterial = AssetUtil.LoadAsset<Material>("materials", RoomMaterialAsset[Type]);
             highlightMaterial = AssetUtil.LoadAsset<Material>("materials", RoomMaterialAsset[RoomType.SELECTED]);
 
@@ -148,11 +146,12 @@ namespace DesignPlatform.Core {
                     gameObject.name = "Room(T-Shape)"; 
                     break;
             }
-            if (Type == RoomType.PREVIEW) controlPoints = controlPoints.Select(p => p + Vector3.up * (5f)).ToList();
+            //if (Type == RoomType.PREVIEW) controlPoints = controlPoints.Select(p => p + Vector3.up * (5f)).ToList();
 
             InitFaces();
-            InitRender2D();
             InitRender3D();
+            SetRoomType(type);
+            InitRender2D();
         }
 
         private void InitFaces() {
@@ -165,7 +164,6 @@ namespace DesignPlatform.Core {
             gameObject.AddComponent<MeshCollider>();
             gameObject.AddComponent<PolyShape>();
             gameObject.AddComponent<ProBuilderMesh>();
-            SetRoomType(RoomType.DEFAULT);
             UpdateRender3D();
         }
 
@@ -226,6 +224,7 @@ namespace DesignPlatform.Core {
                 // Set position
                 tagObject.transform.SetParent(gameObject.transform, false);
                 tagObject.transform.position = GetTagLocation();
+                tagObject.transform.rotation = Quaternion.identity;
                 tagObject.transform.Rotate(new Vector3(90, 0, 0));
                 // Set text
                 tag.color = Color.black;
@@ -272,6 +271,7 @@ namespace DesignPlatform.Core {
                 }
             }
             UpdateRender3D();
+            UpdateRender2D();
         }
 
         /// <summary>
@@ -340,6 +340,7 @@ namespace DesignPlatform.Core {
         public void Move(Vector3 exactPosition) {
             Vector3 gridPosition = Grid.GetNearestGridpoint(exactPosition);
             gameObject.transform.position = gridPosition;
+            UpdateRender2D();
         }
 
         /// <summary>
@@ -421,9 +422,10 @@ namespace DesignPlatform.Core {
             // If normals did not change: Make extruded points the real control points 
             if (normalsAreIdentical) {
                 controlPoints = controlPointsClone;
-                UpdateRender3D();
-                UpdateRender2D();
             }
+
+            UpdateRender3D();
+            UpdateRender2D();
 
         }
 
@@ -505,7 +507,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         void OnMouseDown() {
             if (State == RoomState.MOVING) {
-                openingsMoveModeOffset = new List<List<Vector3>>();
+                //openingsMoveModeOffset = new List<List<Vector3>>();
                 //Vector3 moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
                 moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
@@ -529,7 +531,7 @@ namespace DesignPlatform.Core {
 
         public void SetIsRoomCurrentlyColliding() {
 
-            if (State == RoomState.PREVIEW || State == RoomState.MOVING) { // Only triggers collision events on moving object
+            if (Type == RoomType.PREVIEW || State == RoomState.MOVING) { // Only triggers collision events on moving object
 
                 RoomCollider[] colliders = gameObject.GetComponentsInChildren<RoomCollider>();
                 List<bool> collidersColliding = colliders.Select(rc => rc.isCurrentlyColliding).ToList();

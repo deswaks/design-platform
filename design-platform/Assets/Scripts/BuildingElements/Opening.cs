@@ -21,10 +21,14 @@ namespace DesignPlatform.Core {
 
         public float WindowWidth = 1.6f;
         public float WindowHeight = 1.2f;
-        public float WindowSillHeight = 1.1f;
+
         public float DoorWidth = 1f;
         public float DoorHeight = 2.4f;
+
         public float OpeningDepth = 0.2f;
+        public float SillHeight;
+        public float Width;
+        public float Height;
 
         public Material previewMaterial;
         public Material windowMaterial;
@@ -52,31 +56,35 @@ namespace DesignPlatform.Core {
 
             openingState = OpeningStates.PREVIEW;
 
-            GameObject prefabObject = AssetUtil.LoadAsset<GameObject>("prefabs","OpeningPrefab");
+            GameObject prefabObject = AssetUtil.LoadAsset<GameObject>("prefabs", "OpeningPrefab");
 
             prefabOpening = (Opening)prefabObject.GetComponent(typeof(Opening));
             Material material = prefabOpening.previewMaterial;
 
             switch (shape) {
                 case OpeningShape.WINDOW:
+                    Width = WindowWidth;
+                    Height = WindowHeight;
+                    SillHeight = 1.1f;
                     controlPoints = new List<Vector3> {
-                    -Vector3.right*WindowWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*WindowSillHeight,
-                    -Vector3.right*WindowWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*WindowSillHeight + Vector3.up*WindowHeight,
-                    Vector3.right*WindowWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*WindowSillHeight + Vector3.up*WindowHeight,
-                    Vector3.right*WindowWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*WindowSillHeight
-                };
+                    -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight,
+                    -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight + Vector3.up*Height,
+                    Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight + Vector3.up*Height,
+                    Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight };
                     material = prefabOpening.windowMaterial;
                     gameObject.name = "Window";
 
 
                     break;
                 case OpeningShape.DOOR:
+                    Width = DoorWidth;
+                    Height = DoorHeight;
+                    SillHeight = OpeningDepth/2;
                     controlPoints = new List<Vector3> {
-                    -Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*OpeningDepth/2,
-                    -Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*DoorHeight + Vector3.up*OpeningDepth/2,
-                    Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*DoorHeight + Vector3.up*OpeningDepth/2,
-                    Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*OpeningDepth/2
-                };
+                    -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight,
+                    -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*Height + Vector3.up*SillHeight,
+                    Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*Height + Vector3.up*SillHeight,
+                    Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight };
                     material = prefabOpening.doorMaterial;
                     gameObject.name = "Door";
                     break;
@@ -107,12 +115,11 @@ namespace DesignPlatform.Core {
             LineRenderer lr = gameObject.AddComponent<LineRenderer>();
             lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "plan_opening"), lr.positionCount).ToArray();
             lr.sortingOrder = 2;
-            lr.enabled = GlobalSettings.ShowOpeningLines;
             lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             lr.receiveShadows = false;
             UpdateRender2D();
         }
-        public void UpdateRender2D(float width=0.2f) {
+        public void UpdateRender2D(float width = 0.2f) {
             LineRenderer lr = gameObject.GetComponent<LineRenderer>();
 
             // Reset line renderer and leave empty if wall visibility is false
@@ -121,16 +128,31 @@ namespace DesignPlatform.Core {
 
             // Set controlpoints
             lr.useWorldSpace = false;
-            List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p =>
-                p + Vector3.up * (parentFace.parentRoom.height + 0.001f)).ToList();
+            float height = 3.001f;
+            if (attachedFaces != null) height = attachedFaces[0].parentRoom.height + 0.001f;
+            List<Vector3> points = GetControlPoints2D().Select(p =>
+                p + Vector3.up * (height)).ToList();
             lr.positionCount = points.Count;
             lr.SetPositions(points.ToArray());
 
             // Style
             lr.startWidth = width; lr.endWidth = width;
             foreach (Material material in lr.materials) {
-                material.color = Color.white;
+                if (shape == OpeningShape.DOOR) material.color = Color.gray;
+                else material.color = Color.blue;
             }
+        }
+
+        public List<Vector3> GetControlPoints2D() {
+            //List<Vector3> controlPoints2D = new List<Vector3> {
+            //    new Vector3 ( -Width / 2, 0, -OpeningDepth/2 ),
+            //    new Vector3 ( -Width / 2, 0,  OpeningDepth/2 ),
+            //    new Vector3 (  Width / 2, 0,  OpeningDepth/2 ),
+            //    new Vector3 (  Width / 2, 0, -OpeningDepth/2 ) };
+            List<Vector3> controlPoints2D = new List<Vector3> {
+                new Vector3 (  Width / 2, 0, 0 ),
+                new Vector3 ( -Width / 2, 0, 0) };
+            return controlPoints2D;
         }
 
         /// <summary>
