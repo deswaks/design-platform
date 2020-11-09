@@ -3,7 +3,7 @@
 namespace DesignPlatform.Core {
     public static class Grid {
         [SerializeField]
-        public static float size = 2f;
+        public static float size = 1f;
 
         public static Vector3 GetNearestGridpoint(Vector3 position) {
             int xCount = Mathf.RoundToInt(position.x / size);
