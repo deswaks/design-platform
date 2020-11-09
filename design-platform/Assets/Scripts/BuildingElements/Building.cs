@@ -164,7 +164,7 @@ namespace DesignPlatform.Core {
                                     bool preview = false,
                                     Opening templateOpening = null,
                                     Face[] closestFaces = null) {
-            
+
             GameObject newOpeningGameObject = new GameObject("Opening");
             Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
             newOpening.InitializeOpening(parentFaces: closestFaces, openingShape: openingShape);
@@ -298,8 +298,9 @@ namespace DesignPlatform.Core {
                 if (interFace.GetOrientation() == Orientation.HORIZONTAL)
                     BuildSlab(interFace);
             }
-            //foreach (Opening opening in openings) {
-            //    opening.EctractIntersection();
+            //foreach (Interface interFace in interfaces) {
+            //    interFace.GetCoincidentOpenings
+
             //}
         }
 

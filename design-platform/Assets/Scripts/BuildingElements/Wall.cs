@@ -13,6 +13,7 @@ namespace DesignPlatform.Core {
         public float wallThickness = 0.2f;
         public Material wallMaterial;
         private Wall prefabWall;
+        private List<Vector3> wallControlPoints { get; set; }
 
         /// <summary>
         /// Construct walls.
@@ -34,7 +35,8 @@ namespace DesignPlatform.Core {
                                                                  interFace.GetEndPoint()};
             Vector3 normal = Vector3.Cross(startEndPoints[1] - startEndPoints[0], Vector3.up).normalized;
             List<Vector3> dubStartEndPoints = startEndPoints.Select(v => new Vector3(v.x, v.y, v.z)).ToList();
-            List<Vector3> wallControlPoints = new List<Vector3> {
+
+            wallControlPoints = new List<Vector3> {
             startEndPoints[0] + normal * wallThickness/2,
             dubStartEndPoints[0] + normal * wallThickness/2 + Vector3.up * 3f,
             dubStartEndPoints[1] + normal * wallThickness/2 + Vector3.up * 3f,
@@ -42,20 +44,15 @@ namespace DesignPlatform.Core {
             };
 
             gameObject.AddComponent<MeshCollider>();
-            gameObject.AddComponent<PolyShape>();
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
-            PolyShape polyshape = gameObject.GetComponent<PolyShape>();
-            polyshape.SetControlPoints(wallControlPoints);
-            polyshape.extrude = wallThickness; 
-            polyshape.CreateShapeFromPolygon();
-            //
-            if(interFace.GetCoincidentOpenings().Count() > 0) {
-                AppendElements.CreateShapeFromPolygon(mesh, wallControlPoints, wallThickness, false, (IList<IList<Vector3>>)GetHoleVertices());
-                gameObject.GetComponent<MeshRenderer>().material = prefabWall.wallMaterial;
+            if (interFace.GetCoincidentOpenings().Count > 0) {
+                mesh.CreateShapeFromPolygon(wallControlPoints, wallThickness, false, GetHoleVertices());
             }
-
-            gameObject.GetComponent<MeshRenderer>().material = prefabWall.wallMaterial;
+            if (interFace.GetCoincidentOpenings().Count < 1) {
+                mesh.CreateShapeFromPolygon(wallControlPoints, wallThickness, false);
+            }
+            mesh.GetComponent<MeshRenderer>().material = prefabWall.wallMaterial;
             mesh.ToMesh();
             mesh.Refresh();
 
@@ -72,9 +69,9 @@ namespace DesignPlatform.Core {
             }
             Destroy(gameObject);
         }
-
-        public List<List<Vector3>> GetHoleVertices() {
-            List<List<Vector3>> allHoleVertices = new List<List<Vector3>>();
+        
+        public IList<IList<Vector3>> GetHoleVertices() {
+            IList<IList<Vector3>> allHoleVertices = new List<IList<Vector3>>();
             for (int i = 0; i < interFace.GetCoincidentOpenings().Count; i++) {
                 allHoleVertices.Add(interFace.GetCoincidentOpenings()[i].GetControlPoints());
             }
