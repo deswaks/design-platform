@@ -10,40 +10,31 @@ using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class Opening : MonoBehaviour {
-        //UnityEngine.ProBuilder.Csg.Model result;
 
         public Face parentFace { get; private set; }
 
         public float WindowWidth = 1.6f;
         public float WindowHeight = 1.2f;
         public float WindowSillHeight = 1.1f;
-        public float DoorWidth = 0.8f;
-        public float DoorHeight = 2.0f;
+        public float DoorWidth = 1f;
+        public float DoorHeight = 2.4f;
         public float OpeningDepth = 0.2f;
 
         public Material previewMaterial;
         public Material windowMaterial;
         public Material doorMaterial;
-        //public Vector3 OpeningOrigin;
 
         public List<Opening> openings { get; private set; }
         public Face[] attachedFaces = new Face[2];
         private OpeningShape shape;
         private Opening prefabOpening;
-        private List<Vector3> controlPoints;
+        public List<Vector3> controlPoints;
 
         public enum OpeningStates {
             PLACED,
             PREVIEW
         }
         private OpeningStates openingState;
-
-        // Generate preview-opening-object (2D-mode)
-        // Find nearest wall 
-        // Allign w. wall
-        // Check if wall is wide enough
-        // Place the opening min. length from wall-endpoints
-        // Preview opening object in 2D mode
 
         public void InitializeOpening(Face[] parentFaces = null,
                                       OpeningShape openingShape = OpeningShape.WINDOW) {
@@ -75,17 +66,17 @@ namespace DesignPlatform.Core {
                     break;
                 case OpeningShape.DOOR:
                     controlPoints = new List<Vector3> {
-                    -Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2,
-                    -Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*DoorHeight,
-                    Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*DoorHeight,
-                    Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2
+                    -Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*OpeningDepth/2,
+                    -Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*DoorHeight + Vector3.up*OpeningDepth/2,
+                    Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*DoorHeight + Vector3.up*OpeningDepth/2,
+                    Vector3.right*DoorWidth/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*OpeningDepth/2
                 };
                     material = prefabOpening.doorMaterial;
                     gameObject.name = "Door";
                     break;
             }
 
-            gameObject.AddComponent<MeshCollider>();
+            //gameObject.AddComponent<MeshCollider>();
             gameObject.AddComponent<PolyShape>();
             gameObject.AddComponent<ProBuilderMesh>();
 
@@ -126,34 +117,14 @@ namespace DesignPlatform.Core {
                 Vector3 centerPoint = gameObject.transform.TransformPoint(Vector3.zero);
                 gameObject.transform.RotateAround(centerPoint, Vector3.up, angle);
             }
-
         }
 
         public void SetOpeningState(OpeningStates openingState) {
             this.openingState = openingState;
         }
 
-        //public void EctractIntersection() {
-        //    GameObject subtractWithGO = this.gameObject;
-        //    GameObject subtractFromhGO = this.GetCoincidentInterface().wall.gameObject;
-        //    // Returns a mesh
-        //    // Træk Opening fra dens wall
-        //    UnityEngine.ProBuilder.Csg.Model result;
-        //    result = UnityEngine.ProBuilder.Csg.Boolean.Subtract(subtractFromhGO, subtractWithGO);
-        //    ProBuilderMesh pb = ProBuilderMesh.Create();
-        //    pb.GetComponent<MeshFilter>().sharedMesh = (Mesh)result;
-        //    var materials = result.materials.ToArray();
-        //    pb.GetComponent<MeshRenderer>().sharedMaterials = materials;
-        //    MeshImporter importer = new MeshImporter(pb.gameObject);
-        //    importer.Import(new MeshImportSettings() { quads = true, smoothing = true, smoothingAngle = 1f });
-        //    pb.ToMesh();
-        //    pb.Refresh();
-        //    pb.CenterPivot(null);
-        //}
-
         // DeleteOpening
 
-        //Building class
         // Get opening
 
         // Get all openings
@@ -178,33 +149,15 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Gets a list of controlpoints - in local coordinates. The controlpoints are the vertices of the underlying polyshape of the opening.
         /// </summary>
-        //public List<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false) {
-        public List<Vector3> GetControlPoints() {
-            Vector3 pos = gameObject.transform.position;
-            (Vector3, Vector3) endpoints = attachedFaces[0].Get2DEndPoints();
-            Vector3 forW = endpoints.Item2 - endpoints.Item1.normalized;
-            Vector3 norma = Vector3.Cross(endpoints.Item2 - endpoints.Item1,Vector3.up).normalized;
-
-            controlPoints = new List<Vector3> {
-                    -pos + forW*DoorWidth/2 + norma*OpeningDepth/2,
-                    -pos + forW*DoorWidth/2 + norma*OpeningDepth/2 + Vector3.up*DoorHeight,
-                    pos + forW*DoorWidth/2 + norma*OpeningDepth/2 + Vector3.up*DoorHeight,
-                    pos + forW*DoorWidth/2 + norma*OpeningDepth/2
-                };
-
-            return controlPoints;
-
-            //List<Vector3> returnPoints = controlPoints;
-            //if (closed) {
-            //    returnPoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
-            //}
-            //if (!localCoordinates) {
-            //    returnPoints = returnPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
-            //    Debug.Log("GLOBAL");
-            //}
-            //return returnPoints;
+        public IList<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false, bool IList = false) {
+            IList<Vector3> returnPoints = controlPoints;
+            if (closed) {
+                returnPoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
+            }
+            if (!localCoordinates) {
+                returnPoints = returnPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
+            }
+            return returnPoints;
         }
-
-
     }
 }

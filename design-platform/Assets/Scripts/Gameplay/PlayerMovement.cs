@@ -23,6 +23,10 @@ namespace DesignPlatform.Core {
         bool isRoomed;
         bool isWalled;
 
+        void Start() {
+            Physics.IgnoreLayerCollision(12, 15);
+            Physics.IgnoreLayerCollision(12, 8);
+        }
         // Update is called once per frame
         void Update() {
             //Physics.IgnoreLayerCollision(controller.gameObject.layer,);
