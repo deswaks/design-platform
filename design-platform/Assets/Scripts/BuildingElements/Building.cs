@@ -9,7 +9,7 @@ using DesignPlatform.Utils;
 using DesignPlatform.Database;
 
 namespace DesignPlatform.Core {
-    public class Building {
+    public partial class Building {
         private static Building instance;
         public List<Room> rooms { get; private set; }
         public List<Wall> walls { get; private set; }
@@ -223,146 +223,8 @@ namespace DesignPlatform.Core {
                             face.AddInterface(interFace, splitParameters[i], splitParameters[i + 1]);
                         }
                     }
-
-
                 }
             }
-        }
-        /// <summary>
-        /// Identifies the type of joint at all intersections (points) between the interfaces of the building
-        /// </summary>
-        public void FindWallJoints()
-        {
-            // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
-
-            // Finds all joint points (unique points shared by all interfaces)
-            List<Vector3> jointPoints = new List<Vector3>();
-            culledInterfaces.ForEach(i =>{
-                jointPoints.Add(i.GetEndPoint()  );
-                jointPoints.Add(i.GetStartPoint()); });
-
-            jointPoints = jointPoints.Distinct().ToList();
-
-            UnityEngine.Object prefab = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/joint2.prefab",typeof(GameObject)); // MIDLERTIDIG
-
-            foreach (Vector3 point in jointPoints)
-            {
-                // Finds interfaces that have an endpoint in the given point
-                List<Interface> jointInterfaces = culledInterfaces.Where(i => i.GetEndPoint() == point || i.GetStartPoint() == point).ToList();
-
-                // Finds vector of all interfaces joint in the given point
-                List<Vector3> wallVectors = jointInterfaces.Select(interFace => (interFace.GetStartPoint() - interFace.GetEndPoint()).normalized).ToList();
-
-                string jointType = ":(";
-                
-                switch (wallVectors.Count)
-                {
-                    case 2:
-                        float dot = Vector3.Dot(wallVectors[0], wallVectors[1]);
-                        if (dot == 1 || dot == -1) // Parallel
-                        { 
-                            jointType = "||";
-                        }
-                        else if (dot == 0) // Perpendicular
-                        {
-                            jointType = "L";
-                        }
-                        break;
-
-                    case 3:
-                        jointType = "T";
-                        break;
-
-                    case 4:
-                        jointType = "+";
-                        break;
-                }
-
-                GameObject note = (GameObject)GameObject.Instantiate(prefab);//, parent.transform);
-                note.transform.position = point;
-                note.GetComponent<TMPro.TMP_Text>().text = jointType;
-            }
-        }
-
-        /// <summary>
-        /// Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements. 
-        /// </summary>
-        public List<(Vector3 start, Vector3 end)> FindWallElements() {
-            // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
-
-            // Identifier ID (Integer) for each wall referring to its wall element
-            List<int> wallIDs  = Enumerable.Repeat(-1,    culledInterfaces.Count).ToList();
-
-
-            // Finds all joint points (unique points shared by all interfaces)
-            List<Vector3> jointPoints = new List<Vector3>();
-            culledInterfaces.ForEach(i => {
-                jointPoints.Add(i.GetEndPoint());
-                jointPoints.Add(i.GetStartPoint()); });
-            jointPoints = jointPoints.Distinct().ToList();
-
-            UnityEngine.Object prefab = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/joint2.prefab", typeof(GameObject)); // MIDLERTIDIG
-
-            // Loops through all interfaces
-            for (int j = 0; j < culledInterfaces.Count; j++) {
-                // Finds parallel-joint interfaces of current interface
-                List<Interface> parallelJointInterfaces = GetParallelConnectedInterfaces(culledInterfaces, culledInterfaces[j]);
-
-                // Sees if one of parallel interfaces belongs to a wall and saves its ID
-                int? wG = parallelJointInterfaces.Select(i => wallIDs[culledInterfaces.IndexOf(i)]).Where(wg => wg != -1)?.FirstOrDefault();
-
-                // If one interface already had an ID attached
-                if(wG != 0)
-                {
-                    parallelJointInterfaces.ForEach(i => wallIDs[culledInterfaces.IndexOf(i)] = wG.Value);
-                    wallIDs[j] = wG.Value;
-                }
-                else // A new ID is created for the set of parallel walls
-                {
-                    wG = wallIDs.Max() + 1;
-                    parallelJointInterfaces.ForEach(i => wallIDs[culledInterfaces.IndexOf(i)] = wG.Value);
-                    wallIDs[j] = wG.Value;
-
-                }
-
-            }
-
-            // Each group consists of interfaces making up an entire wall
-            IEnumerable<IGrouping<int, Interface>> wallElements = culledInterfaces.GroupBy(i => wallIDs[culledInterfaces.IndexOf(i)]);
-
-            // List for resulting wall vertices
-            List<(Vector3 start, Vector3 end)> allWallVertices = new List<(Vector3 start, Vector3 end)>();
-
-            foreach(List<Interface> wallInterfaces in wallElements.Select(list=>list.ToList()).ToList())
-            {
-                List<Vector3> wallPoints = wallInterfaces.SelectMany(i => new List<Vector3> { i.GetEndPoint(), i.GetStartPoint() }).Distinct().ToList();
-                List<float> xs = wallPoints.Select(p => p.x).ToList();
-                List<float> zs = wallPoints.Select(p => p.z).ToList();
-                allWallVertices.Add((new Vector3(xs.Min(),0,zs.Min()), new Vector3(xs.Max(), 0, zs.Max())));
-            }
-            return allWallVertices;
-        }
-
-        public List<Interface> GetParallelConnectedInterfaces(List<Interface> interfacesList, Interface interFace)
-        {
-            Vector3 interfaceDirection = (interFace.GetStartPoint() - interFace.GetEndPoint()).normalized;
-
-            // Finds interfaces that have an endpoint in the given point
-            List<Interface> jointInterfaces = new List<Interface>();
-            jointInterfaces.AddRange(
-                interfacesList
-                .Where(i => i!=interFace && (  i.GetEndPoint() == interFace.GetEndPoint()|| i.GetStartPoint() == interFace.GetEndPoint()))
-                .Where(i => System.Math.Abs(Vector3.Dot((i.GetStartPoint() - i.GetEndPoint()).normalized, interfaceDirection)) == 1)
-                .ToList());
-            jointInterfaces.AddRange(
-                interfacesList
-                .Where(i => i != interFace && (i.GetEndPoint() == interFace.GetStartPoint() || i.GetStartPoint() == interFace.GetStartPoint()))
-                .Where(i => System.Math.Abs(Vector3.Dot((i.GetStartPoint() - i.GetEndPoint()).normalized, interfaceDirection)) == 1)
-                .ToList());
-
-            return jointInterfaces;
         }
 
 
@@ -392,8 +254,8 @@ namespace DesignPlatform.Core {
             if (interfaces.Count > 0) DeleteAllInterfaces();
 
             CreateVerticalInterfaces();
-            FindWallElements();
-            //FindWallJoints(); // Uncomment to insert text notes at each joint
+            //FindWallElements(); 
+            //IdentifyInterfaceJointTypes(); // Uncomment to insert text notes at each joint
 
             CreateHorizontalInterfaces();
 

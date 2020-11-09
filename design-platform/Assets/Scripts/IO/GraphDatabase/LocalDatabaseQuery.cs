@@ -135,7 +135,7 @@ namespace DesignPlatform.Database {
             jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\interfaces.json";
 
             Building.Instance.CreateVerticalInterfaces();
-            List<(Vector3 start, Vector3 end)> allWallVertices = Building.Instance.FindWallElements();
+            List<(Vector3 start, Vector3 end)> allWallVertices = Building.Instance.FindWallElements().Select(e => (e.startPoint.point, e.endPoint.point)).ToList();
 
             // Collects Unity room as RoomNodes
             List<InterfaceNode> interfaceNodes = new List<InterfaceNode>();
