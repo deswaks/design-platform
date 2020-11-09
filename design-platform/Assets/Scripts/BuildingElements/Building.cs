@@ -51,12 +51,16 @@ namespace DesignPlatform.Core {
         public Room BuildRoom(RoomShape buildShape = RoomShape.RECTANGLE, bool preview = false, Room templateRoom = null) {
             GameObject newRoomGameObject = new GameObject("Room");
             Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
-            newRoom.InitializeRoom(buildShape: buildShape, building: this);
-            if (preview) { newRoomGameObject.name = "Preview room"; }
+
+            if (preview) {
+                newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.PREVIEW);
+                newRoomGameObject.name = "Preview room";
+            }
 
             if (templateRoom != null) {
                 newRoomGameObject.transform.position = templateRoom.transform.position;
                 newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
+                newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.DEFAULT);
             }
 
             if (preview == false) { rooms.Add(newRoom); }
@@ -203,9 +207,9 @@ namespace DesignPlatform.Core {
         public void CreateVerticalInterfaces() {
             // For all faces
             for (int r = 0; r < rooms.Count; r++) {
-                for (int f = 0; f < rooms[r].faces.Count; f++) {
+                for (int f = 0; f < rooms[r].Faces.Count; f++) {
 
-                    Face face = rooms[r].faces[f];
+                    Face face = rooms[r].Faces[f];
 
                     // Skip if face is not a wall
                     if (face.orientation != Orientation.VERTICAL) continue;
@@ -266,9 +270,9 @@ namespace DesignPlatform.Core {
         public void CreateHorizontalInterfaces() {
             // For all faces
             for (int r = 0; r < rooms.Count; r++) {
-                for (int f = 0; f < rooms[r].faces.Count; f++) {
+                for (int f = 0; f < rooms[r].Faces.Count; f++) {
 
-                    Face face = rooms[r].faces[f];
+                    Face face = rooms[r].Faces[f];
 
                     // Skip if face is not a slab
                     if (face.orientation != Orientation.HORIZONTAL) continue;
@@ -302,6 +306,18 @@ namespace DesignPlatform.Core {
             //    interFace.GetCoincidentOpenings
 
             //}
+        }
+
+        public List<List<Vector3>> GetInterfacesEndpoints() {
+            List<List<Vector3>> InterfacesEndpoints = new List<List<Vector3>>();
+            for (int i = 0; i < interfaces.Count; i++) {
+                if (interfaces[i].GetOrientation() == Orientation.VERTICAL) {
+                    InterfacesEndpoints.Add(new List<Vector3>());
+                    InterfacesEndpoints[i].Add(interfaces[i].GetStartPoint());
+                    InterfacesEndpoints[i].Add(interfaces[i].GetEndPoint());
+                }
+            }
+            return InterfacesEndpoints;
         }
     }
 }

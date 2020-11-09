@@ -5,11 +5,9 @@ using UnityEngine;
 
 namespace DesignPlatform.Core {
     public class ButtonManagerMode : MonoBehaviour {
-        public Main main;
         public void StartSelectMode() {
             Main.Instance.SetMode(SelectMode.Instance);
         }
-
         public void StartBuildMode(int buildShape) {
             BuildMode.Instance.SetSelectedShape((RoomShape)buildShape);
             Main.Instance.SetMode(BuildMode.Instance);

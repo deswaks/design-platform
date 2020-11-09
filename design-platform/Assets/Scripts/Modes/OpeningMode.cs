@@ -5,15 +5,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
 using System;
-using UnityEditorInternal;
 
 namespace DesignPlatform.Core {
     public class OpeningMode : Mode {
         private static OpeningMode instance;
         private Collider[] collidingRooms;
         private float radius = 4f;
-        private OpeningShape selectedShape { get; set; } //0 is window and 1 is door
-
+        public OpeningShape selectedShape { get; private set; } //0 is window and 1 is door
         public Opening previewOpening;
         public Vector3 closestPoint;
         public Vector3 hitPoint;
@@ -30,6 +28,7 @@ namespace DesignPlatform.Core {
         }
 
         public override void Tick() {
+            Debug.Log("Opening Mode");
             if (Input.GetMouseButtonDown(0)) {
                 if (EventSystem.current.IsPointerOverGameObject() == false) {
                     Build();
@@ -42,6 +41,7 @@ namespace DesignPlatform.Core {
 
             if (previewOpening) { UpdatePreviewLocation(); }
         }
+
         /// <summary>
         /// Create preview opening 
         /// </summary> 
@@ -51,6 +51,7 @@ namespace DesignPlatform.Core {
                                                                 preview: true);
             }
         }
+
         /// <summary>
         /// Delete the preview opening object
         /// </summary> 
@@ -106,6 +107,7 @@ namespace DesignPlatform.Core {
                 //previewOpening.SubMove(closestPoint);
                 previewOpening.transform.position = closestPoint;
                 previewOpening.Rotate(closestFace[0]);
+                previewOpening.UpdateRender2D();
             }
         }
 
@@ -113,6 +115,11 @@ namespace DesignPlatform.Core {
             selectedShape = shape;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mousePos"></param>
+        /// <returns></returns>
         public Face[] ClosestFace(Vector3 mousePos) {
 
             // Create list of rooms that might have the closest face
@@ -128,7 +135,7 @@ namespace DesignPlatform.Core {
             Face[] closestFace = new Face[relevantRooms.Count];
             float[] closestDistance = Enumerable.Repeat(float.PositiveInfinity, relevantRooms.Count).ToArray();
             for (int i = 0; i < relevantRooms.Count; i++) {
-                List<Face> roomFaces = relevantRooms[i].faces.Where(f => f.orientation == Orientation.VERTICAL).ToList();
+                List<Face> roomFaces = relevantRooms[i].Faces.Where(f => f.orientation == Orientation.VERTICAL).ToList();
                 foreach (Face face in roomFaces) {
                     (Vector3 vA, Vector3 vB) = face.Get2DEndPoints();
                     Vector3 closestPoint = VectorFunctions.LineClosestPoint(vA, vB, mousePos);
@@ -150,6 +157,12 @@ namespace DesignPlatform.Core {
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mousePos"></param>
+        /// <param name="closestFace"></param>
+        /// <returns></returns>
         public Vector3 ClosestPoint(Vector3 mousePos, Face closestFace) {
             (Vector3 vA, Vector3 vB) = closestFace.Get2DEndPoints();
             Vector3 closestPoint = VectorFunctions.LineClosestPoint(vA, vB, mousePos);

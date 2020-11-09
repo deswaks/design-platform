@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DesignPlatform.Core {
     public class Zoom2D : MonoBehaviour {
@@ -10,6 +11,8 @@ namespace DesignPlatform.Core {
         public float minSize = 5f;
         public float maxSize = 150f;
         void Update() {
+            if (EventSystem.current.IsPointerOverGameObject()) return; // Abort if UI object is under cursor
+
             scroll = Input.GetAxis("Mouse ScrollWheel");
 
             if (scroll != 0) {

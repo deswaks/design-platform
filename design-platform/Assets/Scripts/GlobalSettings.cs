@@ -6,6 +6,9 @@ namespace DesignPlatform.Core {
         //public static string savepath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\DesignPlatform\RoomNodes.json";
         private static string saveFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\DesignPlatform";
         private static string saveFileName = "RoomNodes.json";
+        public static bool ShowWallLines = true;
+        public static bool ShowRoomTags = true;
+        public static bool ShowOpeningLines = true;
 
         public static string GetSavePath() {
 
@@ -14,6 +17,8 @@ namespace DesignPlatform.Core {
             }
             return saveFolder + @"\" + saveFileName;
         }
+
+
 
     }
 }

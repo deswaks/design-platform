@@ -13,7 +13,6 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO;
-using UnityEditor.Experimental.AssetImporters;
 using DesignPlatform.Core;
 
 
@@ -195,10 +194,10 @@ namespace DesignPlatform.Database {
                 System.Random rd = new System.Random();
                 RoomNode RoomNode = new RoomNode {
                     id = rd.Next(0, 5000),                              /////////////////////////// SKAL OPDATERES
-                    name = room.GetRoomShape().ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
+                    name = room.Shape.ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
                     area = 17.5f,                                       /////////////////////////// SKAL OPDATERES
-                    type = room.roomType,
-                    shape = room.GetRoomShape(),
+                    type = room.Type,
+                    shape = room.Shape,
                     vertices = GraphUtils.Vector3ListToStringList(room.GetControlPoints())
                 };
 

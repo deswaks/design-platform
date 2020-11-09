@@ -7,5 +7,9 @@ namespace DesignPlatform.Core {
             Dashboard.Instance.InsertWidgets();
         }
 
+        public void RefreshDashboard() {
+            DesignPlatform.Core.Dashboard.Instance.UpdateCurrentWidgets();
+        }
+
     }
 }

@@ -1,14 +1,13 @@
-﻿using Michsky.UI.ModernUIPack;
+﻿using DesignPlatform.Utils;
+using Michsky.UI.ModernUIPack;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace DesignPlatform.Core {
     public static class NotificationHandler {
         public static GameObject GenerateNotification(string text, string title, Vector3 location, GameObject parent, float timer = 0) {
-            Object notificationPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/notification.prefab");
-
+            Object notificationPrefab = AssetUtil.LoadAsset<GameObject>("prefabs","notification");
             GameObject notificationObject = (GameObject)Object.Instantiate(notificationPrefab, parent.transform);
 
             notificationObject.transform.localPosition = location;// Vector3.zero;
@@ -18,10 +17,6 @@ namespace DesignPlatform.Core {
 
             notificationManager.description = text;
             notificationManager.title = title;
-
-
-            //Debug.Log(notificationObject.transform.localPosition);
-            //Debug.Log(notificationObject.transform.position);
 
             if (timer == 0) {
                 notificationManager.OpenNotificationWithoutTimer();

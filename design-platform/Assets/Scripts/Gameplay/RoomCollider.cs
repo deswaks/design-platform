@@ -49,15 +49,29 @@ namespace DesignPlatform.Core {
             //      The y coordinate of the location is defined by the average value from the [0] and [1] controlpoints (or [2] and [3]).
             List<List<int>> colliderIndexPairsList = new List<List<int>>();
 
-            switch (room.GetRoomShape()) {
+            switch (room.Shape) {
                 case RoomShape.RECTANGLE:
                     //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
                     colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 });
-
                     break;
                 case RoomShape.LSHAPE:
                     colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
                     colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2
+                    break;
+                case RoomShape.USHAPE:
+                    colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
+                    colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2                    
+                    colliderIndexPairsList.Add(new List<int> { 5, 6, 7, 6 }); // Collider cube 3                    
+                    break;                
+                case RoomShape.SSHAPE:
+                    colliderIndexPairsList.Add(new List<int> { 1, 2, 3, 2 }); // Collider cube 1
+                    colliderIndexPairsList.Add(new List<int> { 0, 4, 0, 3 }); // Collider cube 2                    
+                    colliderIndexPairsList.Add(new List<int> { 6, 5, 6, 7 }); // Collider cube 3                    
+                    break;
+                case RoomShape.TSHAPE:
+                    colliderIndexPairsList.Add(new List<int> { 1, 0, 1, 2 }); // Collider cube 1
+                    colliderIndexPairsList.Add(new List<int> { 7, 6, 6, 2 }); // Collider cube 2                    
+                    colliderIndexPairsList.Add(new List<int> { 5, 4, 4, 3 }); // Collider cube 3                    
                     break;
             }
 

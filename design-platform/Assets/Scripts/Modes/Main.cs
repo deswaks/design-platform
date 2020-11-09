@@ -22,9 +22,19 @@ namespace DesignPlatform.Core {
             Grid.size = 1.0f;
             SetMode(SelectMode.Instance);
 
+
+    
+            // Pre load assets
+            Utils.AssetUtil.LoadBundle("materials");
+            Utils.AssetUtil.LoadBundle("prefabs");
+
             ///////////////////////////////////////////////////////////////// WIDGET TEST ///////////////////////////
             StructuralWidget strucWidget = new StructuralWidget();
             strucWidget.RequestDraw();
+            RoomScheduleWidget widgey = new RoomScheduleWidget();
+            widgey.RequestDraw();
+            Widget_CircleDiagram circle = new Widget_CircleDiagram();
+            circle.RequestDraw();
         }
 
         void Update() {

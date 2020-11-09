@@ -2,12 +2,10 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
-using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using UnityEditorInternal;
-using System.Runtime.InteropServices;
+using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class Wall : MonoBehaviour {
@@ -28,12 +26,13 @@ namespace DesignPlatform.Core {
 
             gameObject.layer = 13; // Wall layer
 
-            GameObject prefabWallObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/WallPrefab.prefab");
+            GameObject prefabWallObject = AssetUtil.LoadAsset<GameObject>("prefabs", "WallPrefab");
+
             prefabWall = (Wall)prefabWallObject.GetComponent(typeof(Wall));
             gameObject.name = "CLT Wall";
 
             List<Vector3> startEndPoints = new List<Vector3>() { interFace.GetStartPoint(),
-                                                             interFace.GetEndPoint()};
+                                                                 interFace.GetEndPoint()};
             Vector3 normal = Vector3.Cross(startEndPoints[1] - startEndPoints[0], Vector3.up).normalized;
             List<Vector3> dubStartEndPoints = startEndPoints.Select(v => new Vector3(v.x, v.y, v.z)).ToList();
 
@@ -57,13 +56,20 @@ namespace DesignPlatform.Core {
             mesh.ToMesh();
             mesh.Refresh();
 
+            
+
         }
+        
+        /// <summary>
+        /// Deletes a wall and removes it from the wall list.
+        /// </summary>
         public void DeleteWall() {
             if (Building.Instance.walls.Contains(this)) {
                 Building.Instance.RemoveWall(this);
             }
             Destroy(gameObject);
         }
+        
         public IList<IList<Vector3>> GetHoleVertices() {
             IList<IList<Vector3>> allHoleVertices = new List<IList<Vector3>>();
             for (int i = 0; i < interFace.GetCoincidentOpenings().Count; i++) {
