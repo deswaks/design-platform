@@ -17,7 +17,6 @@ namespace DesignPlatform.Core {
         }
 
         void Start() {
-            ModuleLoader.LoadModules();
             instance = this;
             Grid.size = 1.0f;
             SetMode(SelectMode.Instance);
@@ -35,6 +34,12 @@ namespace DesignPlatform.Core {
             widgey.RequestDraw();
             Widget_CircleDiagram circle = new Widget_CircleDiagram();
             circle.RequestDraw();
+            ///////////////////////////////////////////////////////////////// WIDGET TEST - SLUT ///////////////////////////
+
+
+
+            ModuleLoader.LoadModules();
+
         }
 
         void Update() {
