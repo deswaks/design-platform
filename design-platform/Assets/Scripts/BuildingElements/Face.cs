@@ -98,10 +98,12 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void RemoveInterface(Interface interFace) {
             if (interfaces.Contains(interFace)) interfaces.Remove(interFace);
+            if (paramerters.Keys.Contains(interFace)) paramerters.Remove(interFace);
         }
         public Interface GetInterfaceAtParameter(float parameterOnFace) {
             foreach (KeyValuePair<Interface, float[]> iface in paramerters) {
                 if (parameterOnFace > iface.Value[0] && parameterOnFace < iface.Value[1]) {
+                    Debug.Log("Found Interface: " + iface.Key.GetEndPoint().ToString() + iface.Key.GetStartPoint().ToString());
                     return iface.Key;
                 }
             }

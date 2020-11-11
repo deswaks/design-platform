@@ -46,6 +46,10 @@ namespace DesignPlatform.Core {
             gameObject.AddComponent<MeshCollider>();
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
+            //Debug.Log(interFace.GetCoincidentOpenings().Count);
+            //Debug.Log("Openings in me: "+interFace.attachedFaces[0].openings.Count);
+            //Debug.Log("Interfaces in me: "+interFace.attachedFaces[0].interfaces.Count);
+
             if (interFace.GetCoincidentOpenings().Count > 0) {
                 mesh.CreateShapeFromPolygon(wallControlPoints, wallThickness, false, GetHoleVertices());
             }
@@ -55,10 +59,8 @@ namespace DesignPlatform.Core {
             mesh.GetComponent<MeshRenderer>().material = prefabWall.wallMaterial;
             mesh.ToMesh();
             mesh.Refresh();
-
-            
-
         }
+
         
         /// <summary>
         /// Deletes a wall and removes it from the wall list.

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 namespace DesignPlatform.Core {
     public class POVMode : Mode {
@@ -14,6 +15,7 @@ namespace DesignPlatform.Core {
         private GameObject notificationObject = null;
         public Camera PlanCamera;
         public Camera POVCamera;
+        private GameObject ui;
 
         float xRotation = 0f;
 
@@ -30,6 +32,10 @@ namespace DesignPlatform.Core {
             get { return instance ?? (instance = new POVMode()); }
         }
 
+        POVMode() {
+            ui = Object.FindObjectsOfType<Canvas>().Where(o => o.gameObject.name == "UI").ToList()[0].gameObject;
+        }
+
         public override void Tick() {
             TickModeType();
 
@@ -39,7 +45,8 @@ namespace DesignPlatform.Core {
             }
 
         }
-        public override void OnModeResume() {
+        public override void OnModeResume() { 
+            ui.SetActive(false);
             player = GameObject.Find("First person player");
             PlanCamera = GameObject.Find("Plan Camera").GetComponent<Camera>();
             POVCamera = player.GetComponentInChildren<Camera>(true);
@@ -61,6 +68,7 @@ namespace DesignPlatform.Core {
             OnModeTypeResume();
         }
         public override void OnModePause() {
+            ui.SetActive(true);
             POVCamera.gameObject.SetActive(false);
             PlanCamera.gameObject.SetActive(true);
 

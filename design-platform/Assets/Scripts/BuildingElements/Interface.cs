@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,14 +31,14 @@ namespace DesignPlatform.Core {
             return cp;
         }
 
-
-
         /// <summary>
         /// Deletes the room
         /// </summary>
         public void Delete() {
             if (Building.Instance.interfaces.Contains(this)) {
                 Building.Instance.RemoveInterface(this);
+                attachedFaces[0].RemoveInterface(this);
+                if(attachedFaces[1]!= null) attachedFaces[1].RemoveInterface(this);
             }
         }
 
@@ -55,6 +56,8 @@ namespace DesignPlatform.Core {
             List<Opening> openingsInParentFace = attachedFaces[0].openings;
             List<Opening> relevantOpeningsInParentFace = new List<Opening>();
             foreach (Opening opening in openingsInParentFace) {
+                Debug.Log(GetEndPoint().ToString() + GetStartPoint().ToString());
+                Debug.Log("Check: " + (opening.GetCoincidentInterface() == this).ToString());
                 if(opening.GetCoincidentInterface() == this) {
                     relevantOpeningsInParentFace.Add(opening);
                 }

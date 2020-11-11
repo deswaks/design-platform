@@ -17,8 +17,6 @@ namespace DesignPlatform.Core {
 
     public class Opening : MonoBehaviour {
 
-        public Face parentFace { get; private set; }
-
         public float WindowWidth = 1.6f;
         public float WindowHeight = 1.2f;
 
@@ -209,6 +207,8 @@ namespace DesignPlatform.Core {
         public Interface GetCoincidentInterface() {
             Vector3 openingPoint = gameObject.transform.position;
             float parameterOnFace = attachedFaces[0].GetPointParameter(openingPoint);
+            //Debug.Log("Opening Parameter on face: " + parameterOnFace);
+            //Debug.Log("Coincident interface: " + attachedFaces[0].GetInterfaceAtParameter(parameterOnFace));
 
             return attachedFaces[0].GetInterfaceAtParameter(parameterOnFace);
         }

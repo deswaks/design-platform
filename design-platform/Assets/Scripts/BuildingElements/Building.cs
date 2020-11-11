@@ -94,17 +94,9 @@ namespace DesignPlatform.Core {
             Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
 
             newWall.InitializeWall(interFace);
-
             walls.Add(newWall);
 
             return newWall;
-        }
-
-        /// <summary>
-        /// Get a list of builded walls
-        /// </summary>
-        public List<Wall> GetWalls() {
-            return walls;
         }
 
         /// <summary>
@@ -286,14 +278,34 @@ namespace DesignPlatform.Core {
             }
         }
         public void UpdatePOVElements() {
+            //Debug.Log("Before delete");
+            //foreach (Room room in rooms) {
+            //    foreach (Face face in room.Faces) {
+            //        Debug.Log("Has " + face.interfaces.Count + " Interfaces");
+            //    }
+            //}
 
             // Delete preexisting	
             if (walls.Count > 0) DeleteAllWalls();
             if (slabs.Count > 0) DeleteAllSlabs();
             if (interfaces.Count > 0) DeleteAllInterfaces();
 
+            //Debug.Log("After Delete");
+            //foreach (Room room in rooms) {
+            //    foreach (Face face in room.Faces) {
+            //        Debug.Log("Has " + face.interfaces.Count + " Interfaces");
+            //    }
+            //}
+
             CreateVerticalInterfaces();
             CreateHorizontalInterfaces();
+
+            //Debug.Log("After Create");
+            //foreach (Room room in rooms) {
+            //    foreach (Face face in room.Faces) {
+            //        Debug.Log("Has " + face.interfaces.Count + " Interfaces");
+            //    }
+            //}
 
             foreach (Interface interFace in interfaces) {
                 if (interFace.GetOrientation() == Orientation.VERTICAL) {
@@ -302,10 +314,6 @@ namespace DesignPlatform.Core {
                 if (interFace.GetOrientation() == Orientation.HORIZONTAL)
                     BuildSlab(interFace);
             }
-            //foreach (Interface interFace in interfaces) {
-            //    interFace.GetCoincidentOpenings
-
-            //}
         }
 
         public List<List<Vector3>> GetInterfacesEndpoints() {
