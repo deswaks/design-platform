@@ -91,7 +91,8 @@ namespace Michsky.UI.ModernUIPack
                     newWindowIndex = i;
             }
 
-            if (newWindowIndex != currentWindowIndex)
+
+            if (true) // newWindowIndex != currentWindowIndex) /////////////// NIKLAS
             {
                 currentWindow = windows[currentWindowIndex].windowObject;
                 currentButton = windows[currentWindowIndex].buttonObject;

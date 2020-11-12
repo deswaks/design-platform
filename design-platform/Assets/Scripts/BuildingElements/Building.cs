@@ -6,9 +6,10 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
 using DesignPlatform.Utils;
+using DesignPlatform.Database;
 
 namespace DesignPlatform.Core {
-    public class Building {
+    public partial class Building {
         private static Building instance;
         public List<Room> rooms { get; private set; }
         public List<Wall> walls { get; private set; }
@@ -225,7 +226,7 @@ namespace DesignPlatform.Core {
                     List<float> splitParameters = splitPoints.Select(p => (p - startPoint).magnitude).ToList();
                     splitParameters = RangeUtils.Reparametrize(splitParameters, splitParameters[0], splitParameters[splitParameters.Count - 1]);
 
-
+                    
                     // Hvert interface-sted
                     for (int i = 0; i < splitParameters.Count - 1; i++) {
 
@@ -254,11 +255,11 @@ namespace DesignPlatform.Core {
                             face.AddInterface(interFace, splitParameters[i], splitParameters[i + 1]);
                         }
                     }
-
-
                 }
             }
         }
+
+
         public void CreateHorizontalInterfaces() {
             // For all faces
             for (int r = 0; r < rooms.Count; r++) {
