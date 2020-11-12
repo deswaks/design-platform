@@ -29,7 +29,36 @@ namespace DesignPlatform.Core {
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(2)) {
                 Deselect();
                 SetMode(null);
+            }
 
+            if (Input.GetKeyDown(KeyCode.Delete)) {
+                if (selection != null) {selection.Delete(); Deselect(); }
+            }
+
+            if (Input.GetKeyDown(KeyCode.E)) {
+                if (selection != null) SetMode(ExtrudeMode.Instance);
+            }
+
+            if (Input.GetKeyDown(KeyCode.M)) {
+                if (selection != null) SetMode(MoveMode.Instance);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R)) {
+                if (selection != null) selection.Rotate();
+            }
+
+            // Check if any number key was pressed
+            if (Input.GetKeyDown(KeyCode.Alpha0)) {
+                if (selection != null) selection.SetRoomType(RoomType.DEFAULT);
+                selection.UpdateRender2D();
+            }
+            for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha9; i++) {
+                if (Input.GetKeyDown((KeyCode) i)) {
+                    if (selection != null) {
+                        selection.SetRoomType((RoomType)i-(int)KeyCode.Alpha1 + 10);
+                        selection.UpdateRender2D();
+                    }
+                }
             }
 
             if (currentMode != null) {
@@ -64,10 +93,14 @@ namespace DesignPlatform.Core {
             // Set new room selection
             Room clickedRoom = GetClickedRoom();
             if (clickedRoom != null) {
-                if (clickedRoom != selection) {
+                if (clickedRoom == selection) {
+                    return;
+                }
+                else {
                     Deselect();
                     selection = clickedRoom;
-                    selection.SetIsHighlighted(true);
+                    selection.UpdateRender2D(highlighted: true);
+                    SetMode(null);
                 }
             }
             else {
@@ -79,11 +112,11 @@ namespace DesignPlatform.Core {
         private void Deselect() {
 
             if (selection != null) {
-                selection.SetIsHighlighted(false);
-                selection.SetIsInMoveMode(false);
-                selection.RemoveEditHandles();
+                selection.UpdateRender2D(highlighted: false);
+                selection.State = RoomState.STATIONARY;
             }
             selection = null;
+
         }
 
         private Room GetClickedRoom() {

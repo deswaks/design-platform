@@ -66,7 +66,6 @@ namespace DesignPlatform.Core {
 
             NotificationHandler.DestroyNotification(notificationObject);
             notificationObject = null;
-
         }
 
         /// <summary>

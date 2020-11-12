@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2192787622
+CRC: 2324140503
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 314b7c06c6699f161d7870a83058c874
+    Hash: e957f1d9dde69d7b53ac8919ba0c8a1a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ffccc0f076068b8c869d3ca7aba92a6b
+    Hash: 98caa6188daacd315a6d3c0d1e2a1202
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -38,6 +38,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
@@ -56,11 +58,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 24a437d4abd5d624d85806794441c265, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 041111a7850457c409255485a769029a, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: eb7cf53b7c3b36a4b9f4d2b688942503, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 07b6d43f4ee942f489868f7b29ec8a4d, type: 3}
 - Class: 114
@@ -79,7 +85,12 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Prefabs/RoomPrefab.prefab
+- Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab
+- Assets/Prefabs/Widgets/Widget_RoomSchedule.prefab
+- Assets/Prefabs/edit_handle.prefab
 - Assets/Prefabs/WallPrefab.prefab
+- Assets/Prefabs/OpeningPrefab.prefab
+- Assets/Prefabs/move_handle.prefab
 - Assets/Prefabs/SlabPrefab.prefab
 - Assets/Prefabs/notification.prefab
 Dependencies:

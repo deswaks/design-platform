@@ -53,5 +53,15 @@ namespace DesignPlatform.Core {
         public Orientation GetOrientation() {
             return attachedFaces[0].orientation;
         }
+        public List<Opening> GetCoincidentOpenings() {
+            List<Opening> openingsInParentFace = attachedFaces[0].openings;
+            List<Opening> relevantOpeningsInParentFace = new List<Opening>();
+            foreach (Opening opening in openingsInParentFace) {
+                if(opening.GetCoincidentInterface() == this) {
+                    relevantOpeningsInParentFace.Add(opening);
+                }
+            }
+            return relevantOpeningsInParentFace;
+        }
     }
 }

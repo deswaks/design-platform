@@ -7,7 +7,7 @@ using UnityEngine;
 namespace DesignPlatform.Core {
     public static class NotificationHandler {
         public static GameObject GenerateNotification(string text, string title, Vector3 location, GameObject parent, float timer = 0) {
-            Object notificationPrefab = AssetUtil.LoadGameObject("prefabs","notification");
+            Object notificationPrefab = AssetUtil.LoadAsset<GameObject>("prefabs","notification");
             GameObject notificationObject = (GameObject)Object.Instantiate(notificationPrefab, parent.transform);
 
             notificationObject.transform.localPosition = location;// Vector3.zero;

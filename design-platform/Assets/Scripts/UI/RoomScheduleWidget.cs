@@ -1,4 +1,5 @@
 ﻿using DesignPlatform.Core;
+using DesignPlatform.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,7 +10,6 @@ namespace DesignPlatform {
         // Names of used GameObjects in prefab
         private static readonly string HeaderRowName = "Row_Headers";
         private static readonly string ContentTemplateName = "Row_ContentTemplate";
-        private static readonly string PrefabPath = "Assets/Prefabs/Widgets/Widget_RoomSchedule.prefab";
         private GameObject PrefabPanel;
 
         GameObject headerRow;   // 
@@ -35,8 +35,8 @@ namespace DesignPlatform {
         public override Object CreatePanel() // Initialize widget
         {
             // Loads prefab object and instantiates Widget
-            PrefabPanel = (GameObject)AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
-            Panel = GameObject.Instantiate(PrefabPanel);//, parent.transform).transform.GetChild(0).gameObject;
+            PrefabPanel = AssetUtil.LoadAsset<GameObject>("prefabs", "Widget_RoomSchedule");
+            Panel = GameObject.Instantiate(PrefabPanel); //, parent.transform).transform.GetChild(0).gameObject;
 
             // Locates primary components of widget
             headerRow = Panel.transform.Find("Widget_RoomSchedule").Find(HeaderRowName).gameObject;
@@ -63,8 +63,8 @@ namespace DesignPlatform {
                 List<string> rowData = new List<string>
                 {
                 "Room " + roomIndex.ToString(),                                             // Room Name
-                StringUtils.StringUtils.ToTitleCase(room.roomType.ToString()),              // Room Type
-                StringUtils.StringUtils.ToTitleCase(room.GetRoomShape().ToString()),        // Room Shape
+                StringUtils.StringUtils.ToTitleCase(room.Type.ToString()),              // Room Type
+                StringUtils.StringUtils.ToTitleCase(room.Shape.ToString()),        // Room Shape
                 room.gameObject.GetInstanceID().ToString(),                                 // Room rumber - SKAL OPDATERES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 room.GetFloorArea().ToString() + " m²"                                      // Floor area
 

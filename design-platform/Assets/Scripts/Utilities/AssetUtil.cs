@@ -11,36 +11,21 @@ namespace DesignPlatform.Utils {
 
         private static Dictionary<string, AssetBundle> LoadedBundles = new Dictionary<string, AssetBundle>();
 
-        public static Material LoadMaterial(string bundleName, string materialName) {
+        public static T LoadAsset<T>(string bundleName, string assetName) {
 
             AssetBundle assetBundle = LoadBundle(bundleName);
 
             // Load asset from bundle
-            Material asset = assetBundle.LoadAsset<Material>(materialName);
-
-            // Check if asset was loaded successfully
-            if (asset == null) {
-                Debug.LogError("Failed to load" + materialName + "from" + bundleName + "assetbundle");
-                return null;
-            }
-
-            return asset;
-        }
-
-        public static GameObject LoadGameObject(string bundleName, string assetName) {
-
-            AssetBundle assetBundle = LoadBundle(bundleName);
-
-            // Load asset from bundle
-            GameObject asset = assetBundle.LoadAsset<GameObject>(assetName);
+            Object asset = assetBundle.LoadAsset<Object>(assetName);
 
             // Check if asset was loaded successfully
             if (asset == null) {
                 Debug.LogError("Failed to load" + assetName + "from" + bundleName + "assetbundle");
-                return null;
+                return default;
             }
 
-            return asset;
+            try { return (T)System.Convert.ChangeType(asset, typeof(T)); }
+            catch { return default; }
         }
 
         public static AssetBundle LoadBundle(string bundleName) {

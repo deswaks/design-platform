@@ -1,28 +1,68 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class ExtrudeMode : Mode {
 
         private static ExtrudeMode instance;
+        public List<EditHandle> Handles { get; private set; }
+        public GameObject HandlePrefab { get; private set; }
+
+
         public static ExtrudeMode Instance {
             get { return instance ?? (instance = new ExtrudeMode()); }
         }
 
-        public override void Tick() {
+
+        ExtrudeMode() {
+            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "edit_handle");
+            Handles = new List<EditHandle>();
         }
 
+
+        public override void Tick() {
+        }
         public override void OnModeResume() {
-            if (SelectMode.Instance.selection != null) {
-                SelectMode.Instance.selection.SetEditHandles();
+            Room selectedRoom = SelectMode.Instance.selection;
+            if (selectedRoom != null) {
+                CreateHandles(selectedRoom);
+            }
+        }
+        public override void OnModePause() {
+            RemoveHandles();
+            Room selectedRoom = SelectMode.Instance.selection;
+            if (selectedRoom != null) {
+                selectedRoom.ResetOrigin();
             }
         }
 
-        public override void OnModePause() {
-            if (SelectMode.Instance.selection != null) {
-                SelectMode.Instance.selection.RemoveEditHandles();
-                SelectMode.Instance.selection.ResetOrigin();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="room"></param>
+        public void CreateHandles(Room room) {
+            for (int i = 0; i < room.GetControlPoints().Count; i++) {
+                GameObject HandleGO = Object.Instantiate(HandlePrefab);
+                HandleGO.transform.SetParent(room.gameObject.transform, true);
+
+                EditHandle handle = HandleGO.GetComponent<EditHandle>();
+                handle.InitHandle(i);
+                Handles.Add(handle);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="room"></param>
+        public void RemoveHandles() {
+            if (Handles.Count > 0) {
+                foreach (EditHandle handle in Handles) {
+                    Object.Destroy(handle.gameObject);
+                }
+                Handles.Clear();
             }
         }
 
