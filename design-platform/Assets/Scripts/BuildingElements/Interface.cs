@@ -9,6 +9,8 @@ namespace DesignPlatform.Core {
         public Wall wall;
 
         public Vector3 GetStartPoint(bool localCoordinates = false) {
+            //Debug.Log("Face 0 parameters: "+attachedFaces[0].parameters[this][0] + " __ " + attachedFaces[0].parameters[this][0] ) ;
+
             float[] parameters = attachedFaces[0].paramerters[this];
             (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
             Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];

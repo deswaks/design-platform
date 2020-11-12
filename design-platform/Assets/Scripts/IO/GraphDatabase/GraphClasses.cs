@@ -37,6 +37,13 @@ namespace DesignPlatform.Database {
             return GraphUtils.StringListToVector3List(vertices);
         }
     }
+    
+    public class WallElementNode {
+        public string[] vertices { get; set; }
+        public string startJointType { get; set; }
+        public string endJointType { get; set; }
+        public string[] midPointJointTypes { get; set; }
+    }
 
 
     /// RELATIONSHIPS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,6 +52,14 @@ namespace DesignPlatform.Database {
     public class AdjacentRoomRelationship : BaseRelationship {
         public const string LabelName = "ADJACENT_TO";
         public AdjacentRoomRelationship(string from = null, string to = null)
+            : base(from, to) {
+        }
+    }
+
+    [CypherLabel(Name = LabelName)]
+    public class InterfaceRoomRelationship : BaseRelationship {
+        public const string LabelName = "INTERFACE_OF";
+        public InterfaceRoomRelationship(string from = null, string to = null)
             : base(from, to) {
         }
     }
