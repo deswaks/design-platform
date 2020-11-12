@@ -53,7 +53,6 @@ namespace DesignPlatform.Core {
                 midpoints.Add((points[i], jointTypes[i]));
             }
             midpoints = midpoints.OrderBy(p => Vector3.Distance(p.point, startPoint.point)).ToList();
-
         }
         public void SetMidPoints(List<(Vector3 point, WallJointType jointType)> midpoints) {
             this.midpoints = midpoints;
@@ -87,23 +86,16 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <returns>List of WallElements with joints set.</returns>
         public List<WallElement> IdentifyWallElementsAndJointTypes() {
-
+            // Gets full, un-split, wall elements with no joint information
             List<WallElement> wallElements = JoinInterfacesToLongestWallElements();
             List<WallElement> newWallElements = new List<WallElement>();
 
-
-            List<Vector3> allPoints = wallElements.SelectMany(w => w.AllPoints()).ToList();
             List<Vector3> distinctJointPoints = wallElements.SelectMany(w => w.AllPoints()).Distinct().ToList();
-
-            Debug.Log("All points: "+allPoints.Count);
-
 
             foreach (Vector3 point in distinctJointPoints) {
 
-                Debug.Log(allPoints.Count(p => p == point));
-
                 // Finds wall elements that have an endpoint in the given point and elements with midpoint(s) in the given point
-                // It SHOULD always find only two elements
+                // In total, only two elements should always be found. 
                 List<WallElement> endJointWallElements = wallElements.Where( w => w.startPoint.point == point || w.endPoint.point == point ).ToList();
                 List<WallElement> midJointWallElements = wallElements.Where(w => w.midpoints.Select(p=>p.point).Contains(point)).ToList();
 
@@ -111,16 +103,12 @@ namespace DesignPlatform.Core {
                 
                 // Cross-joint (two wallElement-midpoints) ////////////////// AS OF NOW, PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
                 if(midJointWallElements.Count == 2) {
-                    Debug.Log("X-joint found!");
                     WallElement primaryElement   = midJointWallElements.OrderBy(e => e.Length()).Last();
                     WallElement secondaryElement = midJointWallElements.OrderBy(e => e.Length()).First();
-
-                    Debug.Log("Longest element: " + primaryElement.Length());
-                    Debug.Log("Shortest element: " + secondaryElement.Length());
-
+                    ////////////////// AS OF NOW, PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
                     if (primaryElement.midpoints.Select(p=>p.point).Contains(point)) primaryElement.SetMidPointJointType(point, WallJointType.X_Primary);
 
-                    // The secondary element will be cut into two elements after all joints are identified
+                    // The secondary element is identified now and will be cut into two elements after all joints are identified
                     if (secondaryElement.midpoints.Select(p => p.point).Contains(point)) secondaryElement.SetMidPointJointType(point, WallJointType.X_Secondary);
                 }
                 // T-joint
@@ -141,11 +129,13 @@ namespace DesignPlatform.Core {
             }
 
             foreach(WallElement wallElement in wallElements) {
+                // If a wall is a secondary part of an X-joint, it will be split into two wall elements
                 if (wallElement.midpoints.Select(p => p.jointType).Contains(WallJointType.X_Secondary)){
 
                     WallElement firstElement  = new WallElement();
                     WallElement secondElement = new WallElement();
 
+                    // Index of midpoint where X-joint is
                     int index = wallElement.midpoints.Select(p => p.jointType).ToList().IndexOf(WallJointType.X_Secondary);
                     
                     firstElement.SetStartPoint(wallElement.startPoint.point,wallElement.startPoint.jointType); 
@@ -159,6 +149,7 @@ namespace DesignPlatform.Core {
                     firstElement.SetEndPoint(wallElement.midpoints[index].point, wallElement.midpoints[index].jointType);
                     secondElement.SetEndPoint(wallElement.endPoint.point, wallElement.endPoint.jointType);
 
+                    // Adds two new elements to resulting list
                     newWallElements.Add(firstElement);
                     newWallElements.Add(secondElement);
                 }
@@ -227,6 +218,7 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements. 
         /// </summary>
+        /// <returns>Returns full, un-split, wall elements with no joint information.</returns>
         private List<WallElement> JoinInterfacesToLongestWallElements() {
             // Culls interfaces with same start- and endpoint
             List<Interface> culledInterfaces = interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
@@ -241,8 +233,6 @@ namespace DesignPlatform.Core {
                 jointPoints.Add(i.GetStartPoint());
             });
             jointPoints = jointPoints.Distinct().ToList();
-
-            UnityEngine.Object prefab = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/joint2.prefab", typeof(GameObject)); // MIDLERTIDIG
 
             // Loops through all interfaces
             for (int j = 0; j < culledInterfaces.Count; j++) {
