@@ -31,7 +31,9 @@ namespace DesignPlatform.Core {
             //Debug.Log("Opening Mode");
             if (Input.GetMouseButtonDown(0)) {
                 if (EventSystem.current.IsPointerOverGameObject() == false) {
-                    Build();
+                    if (MousePositionCollidingRooms(hitPoint) != null) {
+                        Build();
+                    }
                 }
             }
 
@@ -105,7 +107,6 @@ namespace DesignPlatform.Core {
                 Face[] closestFace = ClosestFace(hitPoint);
                 closestPoint = ClosestPoint(hitPoint, closestFace[0]);
                 previewOpening.SubMove(closestPoint);
-                //previewOpening.transform.position = closestPoint;
                 previewOpening.Rotate(closestFace[0]);
                 previewOpening.UpdateRender2D();
             }

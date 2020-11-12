@@ -22,6 +22,7 @@ namespace DesignPlatform.Core {
 
         public float DoorWidth = 1f;
         public float DoorHeight = 2.4f;
+        public float Doorstep = 0.1f;
 
         public float OpeningDepth = 0.051f;
         public float SillHeight;
@@ -71,7 +72,7 @@ namespace DesignPlatform.Core {
                     gameObject.layer = 15; // Door layer
                     Width = DoorWidth;
                     Height = DoorHeight;
-                    SillHeight = OpeningDepth/2;
+                    SillHeight = Doorstep;
                     material = prefabOpening.doorMaterial;
                     gameObject.name = "Door";
                     break;

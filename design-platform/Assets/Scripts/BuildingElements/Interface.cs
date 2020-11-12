@@ -35,7 +35,12 @@ namespace DesignPlatform.Core {
             }
             return endPoint;
         }
-
+        public Vector3 GetCenterPoint(bool localCoordinates = false) {
+            Vector3 SP = GetStartPoint(localCoordinates: localCoordinates);
+            Vector3 EP = GetEndPoint(localCoordinates: localCoordinates);
+            Vector3 CP = new Vector3((SP.x + EP.x) / 2f, (SP.y + EP.y) / 2f, (SP.z + EP.z) / 2f);
+            return CP;
+        }
         /// <summary>
         /// Deletes the room
         /// </summary>

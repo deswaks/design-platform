@@ -36,6 +36,7 @@ namespace DesignPlatform.Core {
 
             gameObject.transform.position = interFace.attachedFaces[0].parentRoom.transform.position
                + Vector3.up * interFace.attachedFaces[0].GetControlPoints()[0].y;
+            gameObject.transform.rotation = interFace.attachedFaces[0].parentRoom.transform.rotation;
 
             mesh.GetComponent<MeshRenderer>().material = prefabSlab.slabMaterial;
 
