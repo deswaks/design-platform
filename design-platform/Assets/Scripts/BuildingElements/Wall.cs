@@ -19,8 +19,6 @@ namespace DesignPlatform.Core {
         /// Construct walls.
         /// </summary>
         public void InitializeWall(Interface interFace) {
-            // lav swich wall types (fra Enum - WallType)
-            // Fix hjørnesamlinger
 
             this.interFace = interFace;
 
@@ -31,36 +29,36 @@ namespace DesignPlatform.Core {
             prefabWall = (Wall)prefabWallObject.GetComponent(typeof(Wall));
             gameObject.name = "CLT Wall";
 
-            List<Vector3> startEndPoints = new List<Vector3>() { interFace.GetStartPoint(),
-                                                                 interFace.GetEndPoint()};
-            Vector3 normal = Vector3.Cross(startEndPoints[1] - startEndPoints[0], Vector3.up).normalized;
-            List<Vector3> dubStartEndPoints = startEndPoints.Select(v => new Vector3(v.x, v.y, v.z)).ToList();
+
+            Vector3 wallCenter  = interFace.attachedFaces[0].parentRoom.GetWallMidpoints()[interFace.attachedFaces[0].faceIndex];
+            Vector3 wallNormal  = interFace.attachedFaces[0].parentRoom.GetWallNormals()[interFace.attachedFaces[0].faceIndex];
+            float wallLength    = (interFace.GetStartPoint() - interFace.GetEndPoint()).magnitude;
+            float wallHeight    = interFace.attachedFaces[0].parentRoom.height;
 
             wallControlPoints = new List<Vector3> {
-            startEndPoints[0] + normal * wallThickness/2,
-            dubStartEndPoints[0] + normal * wallThickness/2 + Vector3.up * 3f,
-            dubStartEndPoints[1] + normal * wallThickness/2 + Vector3.up * 3f,
-            startEndPoints[1] + normal * wallThickness/2
+            new Vector3 (wallLength/2,0,0),
+            new Vector3 (wallLength/2,0,wallHeight),
+            new Vector3 (-wallLength/2,0,wallHeight),
+            new Vector3 (-wallLength/2,0,0)
             };
+
+            gameObject.transform.position = wallCenter;
+            gameObject.transform.rotation = Quaternion.LookRotation( Vector3.up, wallNormal );
 
             gameObject.AddComponent<MeshCollider>();
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
-
-            //Debug.Log(interFace.GetCoincidentOpenings().Count);
-            //Debug.Log("Openings in me: "+interFace.attachedFaces[0].openings.Count);
-            //Debug.Log("Interfaces in me: "+interFace.attachedFaces[0].interfaces.Count);
-
+            
+            List<Vector3> wallMeshControlPoints = wallControlPoints.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList();
+           
             if (interFace.GetCoincidentOpenings().Count > 0) {
-                mesh.CreateShapeFromPolygon(wallControlPoints, wallThickness, false, GetHoleVertices());
+                mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false, GetHoleVertices(wallNormal));
             }
+
             if (interFace.GetCoincidentOpenings().Count < 1) {
-                mesh.CreateShapeFromPolygon(wallControlPoints, wallThickness, false);
+                mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false);
             }
             mesh.GetComponent<MeshRenderer>().material = prefabWall.wallMaterial;
-            mesh.ToMesh();
-            mesh.Refresh();
         }
-
         
         /// <summary>
         /// Deletes a wall and removes it from the wall list.
@@ -72,10 +70,13 @@ namespace DesignPlatform.Core {
             Destroy(gameObject);
         }
         
-        public IList<IList<Vector3>> GetHoleVertices() {
+        public IList<IList<Vector3>> GetHoleVertices(Vector3 wallNormal) {
             IList<IList<Vector3>> allHoleVertices = new List<IList<Vector3>>();
             for (int i = 0; i < interFace.GetCoincidentOpenings().Count; i++) {
-                allHoleVertices.Add(interFace.GetCoincidentOpenings()[i].GetControlPoints());
+                List<Vector3> holeVertices = interFace.GetCoincidentOpenings()[i].GetControlPoints()
+                    .Select(p => gameObject.transform.InverseTransformPoint(p)).ToList();
+
+                allHoleVertices.Add(holeVertices.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList());
             }
             return allHoleVertices;
         }

@@ -507,8 +507,6 @@ namespace DesignPlatform.Core {
         /// </summary>
         void OnMouseDown() {
             if (State == RoomState.MOVING) {
-                //openingsMoveModeOffset = new List<List<Vector3>>();
-                //Vector3 moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
                 moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }

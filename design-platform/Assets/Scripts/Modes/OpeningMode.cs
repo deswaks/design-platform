@@ -28,7 +28,7 @@ namespace DesignPlatform.Core {
         }
 
         public override void Tick() {
-            Debug.Log("Opening Mode");
+            //Debug.Log("Opening Mode");
             if (Input.GetMouseButtonDown(0)) {
                 if (EventSystem.current.IsPointerOverGameObject() == false) {
                     Build();
@@ -104,8 +104,8 @@ namespace DesignPlatform.Core {
             else {
                 Face[] closestFace = ClosestFace(hitPoint);
                 closestPoint = ClosestPoint(hitPoint, closestFace[0]);
-                //previewOpening.SubMove(closestPoint);
-                previewOpening.transform.position = closestPoint;
+                previewOpening.SubMove(closestPoint);
+                //previewOpening.transform.position = closestPoint;
                 previewOpening.Rotate(closestFace[0]);
                 previewOpening.UpdateRender2D();
             }

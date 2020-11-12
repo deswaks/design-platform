@@ -39,33 +39,29 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Gets the original controlpoints of the face (horizontal and vertical faces)
         /// </summary>
-        public Vector3[] GetOGControlPoints(bool localCoordinates = false) {
-            List<Vector3> cp;
-            Vector3[] endpoints = new Vector3[1];
+        public List<Vector3> GetControlPoints(bool localCoordinates = false) {
+            List<Vector3> roomControlPoints = parentRoom.GetControlPoints(localCoordinates: localCoordinates, closed: true);
+            List<Vector3> controlPoints = new List<Vector3>();
 
             switch (orientation) {
+                // Vertical face
                 case Orientation.VERTICAL:
-                    cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates, closed: true);
-                    endpoints = new Vector3[2];
-                    endpoints[0] = cp[faceIndex];
-                    endpoints[1] = cp[faceIndex + 1];
+                    controlPoints.Add(roomControlPoints[faceIndex]);
+                    controlPoints.Add(roomControlPoints[faceIndex + 1]);
                     break;
+                
+                // Horizontal face
                 case Orientation.HORIZONTAL:
-                    cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates);
-                    if (faceIndex == cp.Count + 1) {
-                        for (int i = 0; i < cp.Count; i++) {
-                            cp[i] += Vector3.up * parentRoom.height;
-                        };
+                    controlPoints = roomControlPoints.GetRange(0, roomControlPoints.Count - 1);
+                    
+                    // Top face
+                    if (faceIndex == roomControlPoints.Count) {
+                        controlPoints = controlPoints.Select(p => p + Vector3.up * parentRoom.height).ToList();
                     }
-
-                    //cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates);
-                    endpoints = cp.ToArray();
-                    break;
-                default:
                     break;
             }
 
-            return endpoints;
+            return controlPoints;
         }
 
         public (Vector3, Vector3) Get2DEndPoints(bool localCoordinates = false) {
@@ -103,7 +99,7 @@ namespace DesignPlatform.Core {
         public Interface GetInterfaceAtParameter(float parameterOnFace) {
             foreach (KeyValuePair<Interface, float[]> iface in paramerters) {
                 if (parameterOnFace > iface.Value[0] && parameterOnFace < iface.Value[1]) {
-                    Debug.Log("Found Interface: " + iface.Key.GetEndPoint().ToString() + iface.Key.GetStartPoint().ToString());
+                    //Debug.Log("Found Interface: " + iface.Key.GetEndPoint().ToString() + iface.Key.GetStartPoint().ToString());
                     return iface.Key;
                 }
             }

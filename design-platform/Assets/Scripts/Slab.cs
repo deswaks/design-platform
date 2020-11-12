@@ -27,20 +27,17 @@ namespace DesignPlatform.Core {
             prefabSlab = (Slab)prefabSlabObject.GetComponent(typeof(Slab));
             gameObject.name = "CLT Slab";
 
-            List<Vector3> slabControlPoints = interFace.GetSlabControlPoints(localCoordinates: false);
-
+            List<Vector3> slabControlPoints = interFace.attachedFaces[0].parentRoom.GetControlPoints(localCoordinates: true);
 
             gameObject.AddComponent<MeshCollider>();
-            gameObject.AddComponent<PolyShape>();
-            gameObject.AddComponent<ProBuilderMesh>();
+            ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
-            PolyShape polyshape = gameObject.GetComponent<PolyShape>();
-            polyshape.SetControlPoints(slabControlPoints);
-            polyshape.extrude = slabThickness;
-            polyshape.CreateShapeFromPolygon();
+            mesh.CreateShapeFromPolygon(slabControlPoints, -slabThickness, false);
 
-            gameObject.GetComponent<ProBuilderMesh>().Refresh();
-            gameObject.GetComponent<MeshRenderer>().material = prefabSlab.slabMaterial;
+            gameObject.transform.position = interFace.attachedFaces[0].parentRoom.transform.position
+               + Vector3.up * interFace.attachedFaces[0].GetControlPoints()[0].y;
+
+            mesh.GetComponent<MeshRenderer>().material = prefabSlab.slabMaterial;
 
         }
 

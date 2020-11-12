@@ -278,35 +278,14 @@ namespace DesignPlatform.Core {
             }
         }
         public void UpdatePOVElements() {
-            //Debug.Log("Before delete");
-            //foreach (Room room in rooms) {
-            //    foreach (Face face in room.Faces) {
-            //        Debug.Log("Has " + face.interfaces.Count + " Interfaces");
-            //    }
-            //}
-
             // Delete preexisting	
             if (walls.Count > 0) DeleteAllWalls();
             if (slabs.Count > 0) DeleteAllSlabs();
             if (interfaces.Count > 0) DeleteAllInterfaces();
 
-            //Debug.Log("After Delete");
-            //foreach (Room room in rooms) {
-            //    foreach (Face face in room.Faces) {
-            //        Debug.Log("Has " + face.interfaces.Count + " Interfaces");
-            //    }
-            //}
-
             CreateVerticalInterfaces();
             CreateHorizontalInterfaces();
-
-            //Debug.Log("After Create");
-            //foreach (Room room in rooms) {
-            //    foreach (Face face in room.Faces) {
-            //        Debug.Log("Has " + face.interfaces.Count + " Interfaces");
-            //    }
-            //}
-
+            
             foreach (Interface interFace in interfaces) {
                 if (interFace.GetOrientation() == Orientation.VERTICAL) {
                     BuildWall(interFace);

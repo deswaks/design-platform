@@ -10,25 +10,30 @@ namespace DesignPlatform.Core {
         public Wall wall;
 
         public Vector3 GetStartPoint(bool localCoordinates = false) {
-            float[] parameters = attachedFaces[0].paramerters[this];
-            (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-            Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];
-
+            Vector3 startPoint = new Vector3();
+            if (attachedFaces[0].orientation == Orientation.VERTICAL) {
+                float[] parameters = attachedFaces[0].paramerters[this];
+                (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
+                startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];
+            }
+            else {
+                startPoint = attachedFaces[0].parentRoom.GetControlPoints(localCoordinates: localCoordinates)[0];
+            }
             return startPoint;
         }
 
         public Vector3 GetEndPoint(bool localCoordinates = false) {
-            float[] parameters = attachedFaces[0].paramerters[this];
-            (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-            Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[1];
-
-            return startPoint;
-        }
-
-        public List<Vector3> GetSlabControlPoints(bool localCoordinates = false) {
-            List<Vector3> cp = attachedFaces[0].GetOGControlPoints(localCoordinates: localCoordinates).ToList();
-
-            return cp;
+            Vector3 endPoint = new Vector3();
+            if (attachedFaces[0].orientation == Orientation.VERTICAL) {
+                float[] parameters = attachedFaces[0].paramerters[this];
+                (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
+                endPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[1];
+            }
+            else {
+                List<Vector3> cp = attachedFaces[0].parentRoom.GetControlPoints(localCoordinates: localCoordinates);
+                endPoint = cp[cp.Count];
+            }
+            return endPoint;
         }
 
         /// <summary>
@@ -56,8 +61,6 @@ namespace DesignPlatform.Core {
             List<Opening> openingsInParentFace = attachedFaces[0].openings;
             List<Opening> relevantOpeningsInParentFace = new List<Opening>();
             foreach (Opening opening in openingsInParentFace) {
-                Debug.Log(GetEndPoint().ToString() + GetStartPoint().ToString());
-                Debug.Log("Check: " + (opening.GetCoincidentInterface() == this).ToString());
                 if(opening.GetCoincidentInterface() == this) {
                     relevantOpeningsInParentFace.Add(opening);
                 }
