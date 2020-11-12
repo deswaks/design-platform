@@ -37,9 +37,12 @@ namespace DesignPlatform.Database {
             return GraphUtils.StringListToVector3List(vertices);
         }
     }
-
-    public class InterfaceNode {
+    
+    public class WallElementNode {
         public string[] vertices { get; set; }
+        public string startJointType { get; set; }
+        public string endJointType { get; set; }
+        public string[] midPointJointTypes { get; set; }
     }
 
 

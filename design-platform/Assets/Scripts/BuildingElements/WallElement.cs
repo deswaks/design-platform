@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using UnityEngine;
 
 namespace DesignPlatform.Core {
 
     public enum WallJointType {
         None,
-        Corner,     // Corner joint
-        T_top,      // Element going through (element has midpoint in T-joint)
-        T_bottom,   // Element ends onto primary element (endpoint in T-joint)
-        X_Primary,  // Element going through (element has midpoint in X-joint)
-        X_Secondary, // Element ends onto primary element (endpoint in X-joint)
+        Corner_Primary,     // Element is extended to side of other element
+        Corner_Secondary,   // Element is shortened
+        T_Primary,          // Element going through (element has midpoint in T-joint)
+        T_Secondary,        // Element ends onto primary element (endpoint in T-joint)
+        X_Primary,          // Element going through (element has midpoint in X-joint)
+        X_Secondary,        // Element ends onto primary element (endpoint in X-joint)
         Parallel
     }
 
@@ -35,9 +37,13 @@ namespace DesignPlatform.Core {
         }
         public void SetMidPointJointType(Vector3 point, WallJointType jointType) {
             int index = midpoints.Select(p => p.point).ToList().IndexOf(point);
+            if(index == -1) {
+                Debug.LogError("Trying to set midpoint joint of point not found among midpoints");
+                return;
+            }
             midpoints[index] = (midpoints[index].point, jointType);
         }
-        public void SetMidpoints(List<Vector3> points, List<WallJointType> jointTypes) {
+        public void SetMidPoints(List<Vector3> points, List<WallJointType> jointTypes) {
             if(points.Count != jointTypes.Count) {
                 Debug.LogError("Point- and jointtype lists not of equal size!");
                 return;
@@ -46,16 +52,20 @@ namespace DesignPlatform.Core {
             for(int i = 0; i<points.Count; i++) {
                 midpoints.Add((points[i], jointTypes[i]));
             }
+            midpoints = midpoints.OrderBy(p => Vector3.Distance(p.point, startPoint.point)).ToList();
+
         }
         public void SetMidPoints(List<(Vector3 point, WallJointType jointType)> midpoints) {
             this.midpoints = midpoints;
+            midpoints = midpoints.OrderBy(p => Vector3.Distance(p.point, startPoint.point)).ToList();
         }
         public void SetMidPoints(List<Vector3> points) {
+            midpoints = new List<(Vector3 point, WallJointType jointType)>();
             points.ForEach(p => midpoints.Add((p, WallJointType.None)));
+
+            midpoints = midpoints.OrderBy(p => Vector3.Distance(p.point, startPoint.point) ).ToList();
         } 
-        public Vector3 GetDirection() {
-            return (startPoint.point - endPoint.point).normalized;
-        }
+
         public List<Vector3> AllPoints() {
             List<Vector3> points = new List<Vector3>();
             points.Add(startPoint.point);
@@ -63,66 +73,100 @@ namespace DesignPlatform.Core {
             points.Add(endPoint.point);
             return points;
         }
+        public double Length() {
+            return Vector3.Distance(startPoint.point, endPoint.point);
+        }
+        public Vector3 GetDirection() {
+            return (startPoint.point - endPoint.point).normalized;
+        }
     }
 
     public partial class Building {
+        /// <summary>
+        /// Finds all wall elements from interfaces and identifies the joints between them. 
+        /// </summary>
+        /// <returns>List of WallElements with joints set.</returns>
+        public List<WallElement> IdentifyWallElementsAndJointTypes() {
 
-        public void IdentifyWallElementJointTypes() {
-            List<WallElement> wallElements = FindWallElements();
+            List<WallElement> wallElements = JoinInterfacesToLongestWallElements();
+            List<WallElement> newWallElements = new List<WallElement>();
 
-            List<Vector3> distinctJointPoints = wallElements.SelectMany(w => new List<Vector3> { w.startPoint.point, w.endPoint.point }).Distinct().ToList();
+
+            List<Vector3> allPoints = wallElements.SelectMany(w => w.AllPoints()).ToList();
+            List<Vector3> distinctJointPoints = wallElements.SelectMany(w => w.AllPoints()).Distinct().ToList();
+
+            Debug.Log("All points: "+allPoints.Count);
+
 
             foreach (Vector3 point in distinctJointPoints) {
-                // Finds wall elements that have an endpoint in the given point
-                List<WallElement> jointWallElements = wallElements.Where(w => w.AllPoints().Contains(point)).ToList();
+
+                Debug.Log(allPoints.Count(p => p == point));
+
+                // Finds wall elements that have an endpoint in the given point and elements with midpoint(s) in the given point
+                // It SHOULD always find only two elements
+                List<WallElement> endJointWallElements = wallElements.Where( w => w.startPoint.point == point || w.endPoint.point == point ).ToList();
+                List<WallElement> midJointWallElements = wallElements.Where(w => w.midpoints.Select(p=>p.point).Contains(point)).ToList();
 
                 // Finds vector of all walls joint in the given point
-                List<Vector3> wallVectors = jointWallElements.Select(w => w.GetDirection()).ToList();
+                
+                // Cross-joint (two wallElement-midpoints) ////////////////// AS OF NOW, PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
+                if(midJointWallElements.Count == 2) {
+                    Debug.Log("X-joint found!");
+                    WallElement primaryElement   = midJointWallElements.OrderBy(e => e.Length()).Last();
+                    WallElement secondaryElement = midJointWallElements.OrderBy(e => e.Length()).First();
 
-                string jointType = ":(";
+                    Debug.Log("Longest element: " + primaryElement.Length());
+                    Debug.Log("Shortest element: " + secondaryElement.Length());
 
-                switch (jointWallElements.Count) {
+                    if (primaryElement.midpoints.Select(p=>p.point).Contains(point)) primaryElement.SetMidPointJointType(point, WallJointType.X_Primary);
 
-                    case 2:
-                        float dot = Vector3.Dot(wallVectors[0], wallVectors[1]);
+                    // The secondary element will be cut into two elements after all joints are identified
+                    if (secondaryElement.midpoints.Select(p => p.point).Contains(point)) secondaryElement.SetMidPointJointType(point, WallJointType.X_Secondary);
+                }
+                // T-joint
+                else if(midJointWallElements.Count == 1) {
+                    midJointWallElements.First().SetMidPointJointType( midJointWallElements.First().midpoints.First(p => p.point == point ).point , WallJointType.T_Primary);
+                    if (point == endJointWallElements.First().startPoint.point) endJointWallElements.First().SetStartPointJointType(WallJointType.T_Secondary);
+                    if (point == endJointWallElements.First().endPoint.point) endJointWallElements.First().SetEndPointJointType(WallJointType.T_Secondary);
+                }
+                // Corner joint ///////////////////////////////// AS OF NOW, PRIMARY/SECONDARY ROLE IS ASSIGNED ~RANDOMLY
+                else if (endJointWallElements.Count == 2) {
+                    if (point == endJointWallElements.First().startPoint.point) endJointWallElements.First().SetStartPointJointType(WallJointType.Corner_Primary);
+                    if (point == endJointWallElements.First().endPoint.point)   endJointWallElements.First().SetEndPointJointType(WallJointType.Corner_Primary);                    
+                    
+                    if (point == endJointWallElements.Last().startPoint.point) endJointWallElements.Last().SetStartPointJointType(WallJointType.Corner_Secondary);
+                    if (point == endJointWallElements.Last().endPoint.point)   endJointWallElements.Last().SetEndPointJointType(WallJointType.Corner_Secondary);
+                }
 
-                        if (Mathf.Round(dot) == 1 || Mathf.Round(dot) == -1) // Parallel
-                        {
-                            if (jointWallElements[0].startPoint.point == point) {
-                                jointWallElements[0].SetStartPointJointType(WallJointType.Parallel);
-                            }                            
-                            if (jointWallElements[1].startPoint.point == point) {
-                                jointWallElements[1].SetStartPointJointType(WallJointType.Parallel);
-                            }
-                            if (jointWallElements[0].endPoint.point == point) {
-                                jointWallElements[0].SetEndPointJointType(WallJointType.Parallel);
-                            }                            
-                            if (jointWallElements[1].endPoint.point == point) {
-                                jointWallElements[1].SetEndPointJointType(WallJointType.Parallel);
-                            }
-                        }
+            }
 
-                        else if (Mathf.Round(dot) == 0) // Perpendicular
-                        {
-                            // T-joint:
-                            if (jointWallElements[0].startPoint.point == point && jointWallElements[1].midpoints.Select(p=>p.point).Contains(point)) {
-                                jointWallElements[0].SetStartPointJointType(WallJointType.Parallel);
-                            }
+            foreach(WallElement wallElement in wallElements) {
+                if (wallElement.midpoints.Select(p => p.jointType).Contains(WallJointType.X_Secondary)){
 
+                    WallElement firstElement  = new WallElement();
+                    WallElement secondElement = new WallElement();
 
+                    int index = wallElement.midpoints.Select(p => p.jointType).ToList().IndexOf(WallJointType.X_Secondary);
+                    
+                    firstElement.SetStartPoint(wallElement.startPoint.point,wallElement.startPoint.jointType); 
+                    secondElement.SetStartPoint(wallElement.midpoints[index].point, wallElement.midpoints[index].jointType);
 
-                        }
-                        break;
+                    if (! (wallElement.midpoints.Count == 1)) {
+                        secondElement.SetMidPoints(wallElement.midpoints.GetRange(index, wallElement.midpoints.Count - index));
+                        firstElement.SetMidPoints(wallElement.midpoints.GetRange(1, index - 1));
+                    };
 
-                    case 3:
-                        jointType = "T";
-                        break;
+                    firstElement.SetEndPoint(wallElement.midpoints[index].point, wallElement.midpoints[index].jointType);
+                    secondElement.SetEndPoint(wallElement.endPoint.point, wallElement.endPoint.jointType);
 
-                    case 4:
-                        jointType = "+";
-                        break;
+                    newWallElements.Add(firstElement);
+                    newWallElements.Add(secondElement);
+                }
+                else {
+                    newWallElements.Add(wallElement);
                 }
             }
+            return newWallElements;
         }
 
         /// <summary>
@@ -183,7 +227,7 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements. 
         /// </summary>
-        public List<WallElement> FindWallElements() {
+        private List<WallElement> JoinInterfacesToLongestWallElements() {
             // Culls interfaces with same start- and endpoint
             List<Interface> culledInterfaces = interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
 

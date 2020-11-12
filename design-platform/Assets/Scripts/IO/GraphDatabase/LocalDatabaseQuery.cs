@@ -106,7 +106,7 @@ namespace DesignPlatform.Database {
             jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\interfaces.json";
 
             // Collects Unity room as RoomNodes
-            List<InterfaceNode> interfaceNodes = AllRoomInterfacesToInterfaceNodes();
+            List<WallElementNode> interfaceNodes = AllRoomInterfacesToInterfaceNodes();
 
             // Serializes RoomNodes to json format
             string jsonString = JsonConvert.SerializeObject(interfaceNodes);
@@ -132,22 +132,26 @@ namespace DesignPlatform.Database {
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         public static void SaveAllWallElementsToJson(string jsonPath = null)
         {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\interfaces.json";
+            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\WallElements.json";
 
             Building.Instance.CreateVerticalInterfaces();
-            List<(Vector3 start, Vector3 end)> allWallVertices = Building.Instance.FindWallElements().Select(e => (e.startPoint.point, e.endPoint.point)).ToList();
+
+            List<WallElement> wallElements = Building.Instance.IdentifyWallElementsAndJointTypes();
 
             // Collects Unity room as RoomNodes
-            List<InterfaceNode> interfaceNodes = new List<InterfaceNode>();
-            foreach(var points in allWallVertices)
-            {
-                interfaceNodes.Add(new InterfaceNode {
-                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { points.start, points.end })
+            List<WallElementNode> wallElementNodes = new List<WallElementNode>();
+
+            foreach (WallElement element in wallElements) {
+                wallElementNodes.Add(new WallElementNode {
+                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { element.startPoint.point, element.endPoint.point}),
+                    startJointType = element.startPoint.jointType.ToString(),
+                    endJointType = element.endPoint.jointType.ToString(),
+                    midPointJointTypes = element.midpoints.Select(p => p.jointType.ToString()).ToArray()
                 });
             }
 
             // Serializes RoomNodes to json format
-            string jsonString = JsonConvert.SerializeObject(interfaceNodes);
+            string jsonString = JsonConvert.SerializeObject(wallElementNodes);
 
             // Saves file
             File.WriteAllText(jsonPath, jsonString);
@@ -212,17 +216,17 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="rooms">List of rooms</param>
         /// <returns>List of InterfaceNodes created.</returns>
-        public static List<InterfaceNode> AllRoomInterfacesToInterfaceNodes() {
+        public static List<WallElementNode> AllRoomInterfacesToInterfaceNodes() {
             List<Interface> allInterfaces = Building.Instance.walls.Select(w => w.interFace).ToList();
             //List<Interface> allInterfaces = Building.Instance.interfaces.Where(i => i.GetOrientation() == Orientation.VERTICAL).ToList();
 
             //allInterfaces.ForEach(interFace => Debug.Log(interFace.GetStartPoint() + ", " + interFace.GetEndPoint()));
 
-            List < InterfaceNode> interfaceNodes = new List<InterfaceNode>();
+            List < WallElementNode> interfaceNodes = new List<WallElementNode>();
 
             foreach (Interface iface in allInterfaces) {
 
-                InterfaceNode node = new InterfaceNode {
+                WallElementNode node = new WallElementNode {
                     vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { iface.GetStartPoint(), iface.GetEndPoint() })
                 };
                 interfaceNodes.Add(node);
