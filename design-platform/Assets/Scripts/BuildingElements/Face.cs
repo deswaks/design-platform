@@ -150,8 +150,13 @@ namespace DesignPlatform.Core {
             return (Vector3.Distance(endPoints[0], point)
                     + Vector3.Distance(endPoints[1], point)
                     - Vector3.Distance(endPoints[0], endPoints[1]) < 0.001);
+        }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
         public float GetPointParameter(Vector3 point) {
             (Vector3 faceStart, Vector3 faceEnd) = Get2DEndPoints();
             float parameterOnFace = (point - faceStart).magnitude / (faceEnd - faceStart).magnitude;
