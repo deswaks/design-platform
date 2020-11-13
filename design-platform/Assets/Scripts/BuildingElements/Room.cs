@@ -146,8 +146,6 @@ namespace DesignPlatform.Core {
                     gameObject.name = "Room(T-Shape)"; 
                     break;
             }
-            //if (Type == RoomType.PREVIEW) controlPoints = controlPoints.Select(p => p + Vector3.up * (5f)).ToList();
-
             InitFaces();
             InitRender3D();
             SetRoomType(type);
@@ -216,14 +214,22 @@ namespace DesignPlatform.Core {
             }
 
             // Update text tags
-            if (GetComponentInChildren<TMP_Text>()) Destroy(GetComponentInChildren<TMP_Text>().gameObject);
+            if (GetComponentInChildren<TMP_Text>()) {
+                foreach (TMP_Text text in GetComponentsInChildren<TMP_Text>()) {
+                    Destroy(text.gameObject);
+                }
+            }
             if (GlobalSettings.ShowRoomTags && Type != RoomType.PREVIEW) {
                 // Create tag object
                 GameObject tagObject = new GameObject("Tag");
                 TextMeshPro tag = tagObject.AddComponent<TextMeshPro>();
                 // Set position
-                tagObject.transform.SetParent(gameObject.transform, false);
-                tagObject.transform.position = GetTagLocation();
+                Vector3 tagPosition = GetTagLocation(localCoordinates: true);
+                tagObject.transform.SetParent(gameObject.transform, worldPositionStays: true);
+                tagObject.GetComponent<RectTransform>().anchoredPosition = tagPosition;
+                tagObject.transform.localPosition = new Vector3(tagObject.transform.localPosition.x,
+                                                           tagObject.transform.localPosition.y,
+                                                           tagPosition.z);
                 tagObject.transform.rotation = Quaternion.identity;
                 tagObject.transform.Rotate(new Vector3(90, 0, 0));
                 // Set text
@@ -232,8 +238,6 @@ namespace DesignPlatform.Core {
                 tag.alignment = TextAlignmentOptions.Center;
                 tag.text = RoomTypeName[Type];
             }
-
-
         }
 
         /// <summary>
