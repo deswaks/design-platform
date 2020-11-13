@@ -143,25 +143,14 @@ namespace DesignPlatform.Core {
         /// <returns></returns>
         public bool IsPointOnFace(Vector3 point) {
             List<Vector3> endPoints = GetControlPoints(localCoordinates: false);
-            Vector3 startPoint = endPoints[0]; Vector3 endPoint = endPoints[1];
 
-            // The line is along y
-            if (startPoint.x == point.x && endPoint.x == point.x) {
-                if (Mathf.Min(startPoint.z, endPoint.z) < point.z
-                    && Mathf.Max(startPoint.z, endPoint.z) > point.z) {
-                    return true;
-                }
-            }
-            // The line is along x
-            if (startPoint.z == point.z && endPoint.z == point.z) {
-                if (Mathf.Min(startPoint.x, endPoint.x) < point.x
-                    && Mathf.Max(startPoint.x, endPoint.x) > point.x) {
-                    return true;
-                }
-            }
+            if (Vector3.Distance(endPoints[0], point) < 0.01) return false;
+            if (Vector3.Distance(endPoints[1], point) < 0.01) return false;
 
-            return false;
-        }
+            return (Vector3.Distance(endPoints[0], point)
+                    + Vector3.Distance(endPoints[1], point)
+                    - Vector3.Distance(endPoints[0], endPoints[1]) < 0.001);
+
 
         public float GetPointParameter(Vector3 point) {
             (Vector3 faceStart, Vector3 faceEnd) = Get2DEndPoints();
