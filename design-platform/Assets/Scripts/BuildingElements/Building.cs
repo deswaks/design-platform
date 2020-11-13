@@ -200,6 +200,10 @@ namespace DesignPlatform.Core {
         public void CreateVerticalInterfaces() {
             // For all faces
             for (int r = 0; r < rooms.Count; r++) {
+                string points = "";
+                rooms[r].GetControlPoints().ForEach(p => points+=p.ToString()+" ; ");
+                Debug.Log(points);
+
                 for (int f = 0; f < rooms[r].Faces.Count; f++) {
 
                     Face face = rooms[r].Faces[f];
@@ -213,6 +217,7 @@ namespace DesignPlatform.Core {
                         if (r == r2) continue;
                         foreach (Vector3 point in rooms[r2].GetControlPoints()) {
                             if (face.CollidesWithGrid(point)) {
+                                Debug.Log("Collision!");
                                 splitPoints.Add(point);
                             }
                         }

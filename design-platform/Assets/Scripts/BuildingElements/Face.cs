@@ -136,26 +136,35 @@ namespace DesignPlatform.Core {
             else return false;
         }
 
-        public bool CollidesWithGrid(Vector3 point) {
-            (Vector3 startPoint, Vector3 endPoint) = Get2DEndPoints(localCoordinates: false);
+        //public bool CollidesWithGrid(Vector3 point) {
+        //    (Vector3 startPoint, Vector3 endPoint) = Get2DEndPoints(localCoordinates: false);
 
-            // The line is along y
-            if (startPoint.x == point.x && endPoint.x == point.x) {
-                if (Mathf.Min(startPoint.z, endPoint.z) < point.z
-                    && Mathf.Max(startPoint.z, endPoint.z) > point.z) {
-                    return true;
-                }
-            }
-            // The line is along x
-            if (startPoint.z == point.z && endPoint.z == point.z) {
-                if (Mathf.Min(startPoint.x, endPoint.x) < point.x
-                    && Mathf.Max(startPoint.x, endPoint.x) > point.x) {
-                    return true;
-                }
-            }
+        //    // The line is along y
+        //    if (startPoint.x == point.x && endPoint.x == point.x) {
+        //        if (Mathf.Min(startPoint.z, endPoint.z) < point.z
+        //            && Mathf.Max(startPoint.z, endPoint.z) > point.z) {
+        //            return true;
+        //        }
+        //    }
+        //    // The line is along x
+        //    if (startPoint.z == point.z && endPoint.z == point.z) {
+        //        if (Mathf.Min(startPoint.x, endPoint.x) < point.x
+        //            && Mathf.Max(startPoint.x, endPoint.x) > point.x) {
+        //            return true;
+        //        }
+        //    }
 
-            return false;
+        //    return false;
+        //}
+        public bool CollidesWithGrid(Vector3 C) {
+            (Vector3 A, Vector3 B) = Get2DEndPoints(localCoordinates: false);
+
+            if (Vector3.Distance(A, C) < 0.01) return false;
+            if (Vector3.Distance(B, C) < 0.01) return false;
+
+            return (Vector3.Distance(A, C) + Vector3.Distance(B, C) - Vector3.Distance(A, B) < 0.001);
         }
+
 
         public float GetPointParameter(Vector3 point) {
             (Vector3 faceStart, Vector3 faceEnd) = Get2DEndPoints();
