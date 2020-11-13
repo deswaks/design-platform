@@ -82,6 +82,10 @@ namespace DesignPlatform.Core {
         /// <returns></returns>
         public List<Opening> GetCoincidentOpenings() {
             List<Opening> openingsInParentFace = attachedFaces[0].openings;
+
+            if (attachedFaces[1] != null) { openingsInParentFace.AddRange(attachedFaces[1].openings); }
+            openingsInParentFace = openingsInParentFace.Distinct().ToList();
+
             List<Opening> relevantOpeningsInParentFace = new List<Opening>();
             foreach (Opening opening in openingsInParentFace) {
                 if(opening.GetCoincidentInterface() == this) {
