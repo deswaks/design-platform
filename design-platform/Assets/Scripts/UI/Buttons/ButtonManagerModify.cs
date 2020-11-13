@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.ProBuilder;
-using UnityEngine.ProBuilder.MeshOperations;
-using JetBrains.Annotations;
 using TMPro;
 
 namespace DesignPlatform.Core {

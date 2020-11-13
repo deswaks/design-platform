@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
+using Vectrosity;
 
 namespace DesignPlatform.Core {
 
@@ -47,13 +48,13 @@ namespace DesignPlatform.Core {
         private List<Vector3> controlPoints;
         public float height = 3.0f;
         public List<Face> Faces { get; private set; }
-        //public GameObject moveHandlePrefab;
         private Vector3 moveModeOffset;
-        //private List<List<Vector3>> openingsMoveModeOffset;
 
         private Material currentMaterial;
         public Material highlightMaterial;
         public string customProperty;
+
+        private VectorLine line2D;
 
 
         private readonly Dictionary<RoomType, string> RoomMaterialAsset = new Dictionary<RoomType, string> {
@@ -181,39 +182,57 @@ namespace DesignPlatform.Core {
         }
         private void InitRender2D() {
             // Init line render
-            LineRenderer lr = gameObject.AddComponent<LineRenderer>();
-            lr.loop = true;
-            lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            lr.receiveShadows = false;
-
+            //LineRenderer lr = gameObject.AddComponent<LineRenderer>();
+            //lr.loop = true;
+            //lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            //lr.receiveShadows = false;
             // Update
+            //List<Vector3> points = GetControlPoints(localCoordinates: true, closed: true)
+            //    .Select(p => p + Vector3.up * (height + 0.001f)).ToList();
+
+            List<Vector3> points = GetControlPoints(localCoordinates: true, closed: true)
+                .Select(p => p + Vector3.up * (height + 0.001f)).ToList();
+            line2D = new VectorLine("line 2D", points, 0.2f);
+            //line2D = VectorLine.SetLine3D(Color.black, points);
+            //line2D.gameObject.transform.SetParent(parent: gameObject.transform, worldPositionStays: false);
             UpdateRender2D();
         }
         public void UpdateRender2D(bool highlighted = false, bool colliding = false) {
-            LineRenderer lr = gameObject.GetComponent<LineRenderer>();
+            //line2D.points3 = GetControlPoints(localCoordinates: true, closed: true)
+            //    .Select(p => p + Vector3.up * (height + 0.001f)).ToList();
+
+            Vector3[] points = GetControlPoints(localCoordinates: true, closed: true)
+                .Select(p => p + Vector3.up * (height + 0.001f)).ToArray();
+            line2D.SetWidth(0.2f);
+            line2D.drawTransform = gameObject.transform;
+            //line2D.SetLine3D(Color.black, points);
+            line2D.Draw();
+            
 
             // Update lines
-            lr.positionCount = 0;
-            if (GlobalSettings.ShowWallLines) {
-                // Set controlpoints
-                lr.useWorldSpace = false;
-                List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up * (height + 0.001f)).ToList();
-                lr.positionCount = points.Count;
-                lr.SetPositions(points.ToArray());
+            //lr.positionCount = 0;
+            //if (GlobalSettings.ShowWallLines) {
+            // Set controlpoints
+            //lr.useWorldSpace = false;
+            //List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up * (height + 0.001f)).ToList();
+            //lr.positionCount = points.Count;
+            //lr.SetPositions(points.ToArray());
 
-                // Style
-                lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "plan_room_wall"), lr.positionCount).ToArray();
-                float width = 0.2f;
-                Color color = Color.black;
-                lr.sortingOrder = 0;
-                if (highlighted) { lr.sortingOrder = 1; width = 0.3f; color = Color.yellow; }
-                if (colliding) { lr.sortingOrder = 1; color = Color.red; }
+            //// Style
+            //lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "plan_room_wall"), lr.positionCount).ToArray();
+            //float width = 0.2f;
+            //Color color = Color.black;
+            //lr.sortingOrder = 0;
+            //if (highlighted) { lr.sortingOrder = 1; width = 0.3f; color = Color.yellow; }
+            //if (colliding) { lr.sortingOrder = 1; color = Color.red; }
 
-                lr.startWidth = width; lr.endWidth = width;
-                foreach (Material material in lr.materials) {
-                    material.color = color;
-                }
-            }
+            //lr.startWidth = width; lr.endWidth = width;
+            //foreach (Material material in lr.materials) {
+            //    material.color = color;
+            //}
+
+            //}
+
 
             // Update text tags
             if (GetComponentInChildren<TMP_Text>()) Destroy(GetComponentInChildren<TMP_Text>().gameObject);
@@ -331,6 +350,7 @@ namespace DesignPlatform.Core {
             if (Building.Instance.rooms.Contains(this)) {
                 ParentBuilding.RemoveRoom(this);
             }
+            VectorLine.Destroy(ref line2D);
             Destroy(gameObject);
         }
 
