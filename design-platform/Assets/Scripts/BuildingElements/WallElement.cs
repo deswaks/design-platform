@@ -176,7 +176,7 @@ namespace DesignPlatform.Core {
 
             jointPoints = jointPoints.Distinct().ToList();
 
-            UnityEngine.Object prefab = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/joint2.prefab", typeof(GameObject)); // MIDLERTIDIG
+            //UnityEngine.Object prefab = UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Prefabs/joint2.prefab", typeof(GameObject)); // MIDLERTIDIG
 
             foreach (Vector3 point in jointPoints) {
                 // Finds interfaces that have an endpoint in the given point
@@ -209,9 +209,9 @@ namespace DesignPlatform.Core {
                         break;
                 }
 
-                GameObject note = (GameObject)GameObject.Instantiate(prefab);//, parent.transform);
-                note.transform.position = point;
-                note.GetComponent<TMPro.TMP_Text>().text = jointType;
+                //GameObject note = (GameObject)GameObject.Instantiate(prefab);//, parent.transform);
+                //note.transform.position = point;
+                //note.GetComponent<TMPro.TMP_Text>().text = jointType;
             }
         }
 

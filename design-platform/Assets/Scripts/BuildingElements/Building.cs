@@ -303,11 +303,6 @@ namespace DesignPlatform.Core {
                 if (interFace.GetOrientation() == Orientation.HORIZONTAL)
                     BuildSlab(interFace);
             }
-
-            //foreach (Interface interFace in interfaces) {
-            //    interFace.GetCoincidentOpenings
-
-            //}
         }
 
         public List<List<Vector3>> GetInterfacesEndpoints() {
