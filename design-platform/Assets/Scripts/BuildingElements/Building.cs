@@ -178,6 +178,9 @@ namespace DesignPlatform.Core {
                 Openings.Add(newOpening);
                 newOpening.SetOpeningState(Opening.OpeningStates.PLACED);
                 closestFaces[0].AddOpening(newOpening);
+                if (closestFaces[1] != null) {
+                    closestFaces[1].AddOpening(newOpening);
+                }
             }
             return newOpening;
         }
