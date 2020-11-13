@@ -213,9 +213,9 @@ namespace DesignPlatform.Core {
                     CreateVertivalInterfacesOnFace(face);
                 }
             }
-            //foreach (Interface interFace in interfaces) {
-            //    Debug.Log(interFace);
-            //}
+            foreach (Interface interFace in Interfaces) {
+                Debug.Log(interFace);
+            }
         }
 
         /// <summary>
@@ -230,13 +230,14 @@ namespace DesignPlatform.Core {
             // Find points on face line from the controlpoints of all other rooms
             List<Vector3> splitPoints = new List<Vector3>();
             for (int r = 0; r < Rooms.Count; r++) {
-                if (face.parentRoom == Rooms[r]) return;
+                if (face.parentRoom == Rooms[r]) continue;
                 foreach (Vector3 point in Rooms[r].GetControlPoints(localCoordinates: false)) {
                     if (face.IsPointOnFace(point)) {
                         splitPoints.Add(point);
                     }
                 }
             }
+            Debug.Log(splitPoints);
 
             // Sort splitpoints between startpoint and endpoint
             List<Vector3> endPoints = face.GetControlPoints(localCoordinates: false);
