@@ -332,7 +332,7 @@ namespace DesignPlatform.Core {
         /// Deletes the room
         /// </summary>
         public void Delete() {
-            if (Building.Instance.rooms.Contains(this)) {
+            if (Building.Instance.Rooms.Contains(this)) {
                 ParentBuilding.RemoveRoom(this);
             }
             Destroy(gameObject);

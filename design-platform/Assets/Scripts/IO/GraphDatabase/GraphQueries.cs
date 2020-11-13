@@ -187,10 +187,9 @@ namespace DesignPlatform.Database {
         /// </summary>
         public void PushAllUnityRoomsToGraph() {
             // Finds all rooms currently in Unity project
-            List<Room> buildingRooms = Building.Instance.GetRooms();
-            Debug.Log(buildingRooms.Count);
+            Debug.Log(Building.Instance.Rooms.Count);
 
-            foreach (Room room in buildingRooms) {
+            foreach (Room room in Building.Instance.Rooms) {
                 System.Random rd = new System.Random();
                 RoomNode RoomNode = new RoomNode {
                     id = rd.Next(0, 5000),                              /////////////////////////// SKAL OPDATERES

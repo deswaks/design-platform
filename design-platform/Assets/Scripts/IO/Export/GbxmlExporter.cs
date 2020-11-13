@@ -30,7 +30,7 @@ namespace DesignPlatform.Export {
 
             // Create spaces
             List<gs.Space> spaces = new List<gs.Space>();
-            foreach (Room room in Building.Instance.GetRooms()) {
+            foreach (Room room in Building.Instance.Rooms) {
                 gs.Space space = GbxmlConverter.XmlSpaceFromRoom(room);
                 building.Area += (float)space.Area;
                 spaces.Add(space);
