@@ -45,10 +45,10 @@ namespace DesignPlatform.Core {
         }
         private OpeningStates openingState;
 
-        public void InitializeOpening(Face[] parentFaces = null,
+        public void InitializeOpening(Face[] attachedFaces = null,
                                       OpeningShape openingShape = OpeningShape.WINDOW) {
             shape = openingShape;
-            attachedFaces = parentFaces;
+            this.attachedFaces = attachedFaces;
 
             openingState = OpeningStates.PREVIEW;
 
@@ -205,5 +205,19 @@ namespace DesignPlatform.Core {
             }
             return returnPoints;
         }
+        public Face[] SetAttachedFaces(Vector3 openingPos) {
+            // Find the two closest faces in the building
+            List<Face> facesToAttach = new List<Face>();
+            foreach (Room room in Building.Instance.Rooms) {
+                foreach (Face face in room.Faces.Where(f => f.orientation == Orientation.VERTICAL)) {
+                    if (face.IsPointOnFace(gameObject.transform.position)) {
+                        facesToAttach.Add(face);
+                    }
+                }
+            }
+            attachedFaces = facesToAttach.ToArray();
+            return attachedFaces;
+        }
+
     }
 }

@@ -48,7 +48,7 @@ namespace DesignPlatform.Core {
                 List<Vector3> wallMeshControlPoints = wallControlPoints.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList();
 
                 if (interFace.GetCoincidentOpenings().Count > 0) {
-                    mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false, GetHoleVertices(wallNormal));
+                    mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false, GetHoleVertices());
                 }
 
                 if (interFace.GetCoincidentOpenings().Count < 1) {
@@ -68,7 +68,7 @@ namespace DesignPlatform.Core {
             Destroy(gameObject);
         }
 
-        public IList<IList<Vector3>> GetHoleVertices(Vector3 wallNormal) {
+        public IList<IList<Vector3>> GetHoleVertices() {
             IList<IList<Vector3>> allHoleVertices = new List<IList<Vector3>>();
             for (int i = 0; i < interFace.GetCoincidentOpenings().Count; i++) {
                 List<Vector3> holeVertices = interFace.GetCoincidentOpenings()[i].GetControlPoints()

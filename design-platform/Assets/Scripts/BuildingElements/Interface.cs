@@ -96,19 +96,47 @@ namespace DesignPlatform.Core {
         /// 
         /// </summary>
         /// <returns></returns>
+        //public List<Opening> GetCoincidentOpenings2() {
+        //    List<Opening> openingsInParentFace = attachedFaces[0].openings;
+
+        //    if (attachedFaces[1] != null) { openingsInParentFace.AddRange(attachedFaces[1].openings); }
+        //    openingsInParentFace = openingsInParentFace.Distinct().ToList();
+
+        //    List<Opening> relevantOpeningsInParentFace = new List<Opening>();
+        //    foreach (Opening opening in openingsInParentFace) {
+        //        if (opening.GetCoincidentInterface() == this) {
+        //            relevantOpeningsInParentFace.Add(opening);
+        //        }
+        //    }
+        //    return relevantOpeningsInParentFace;
+        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<Opening> GetCoincidentOpenings() {
+
             List<Opening> openingsInParentFace = attachedFaces[0].openings;
 
-            if (attachedFaces[1] != null) { openingsInParentFace.AddRange(attachedFaces[1].openings); }
-            openingsInParentFace = openingsInParentFace.Distinct().ToList();
-
+            //Debug.Log("Antal openings i face 0: "+attachedFaces[0].openings.Count);
+            //if (attachedFaces[1] != null) Debug.Log("Antal openings i face 1: "+attachedFaces[1].openings.Count);
+            //if (attachedFaces[1] != null) { openingsInParentFace.AddRange(attachedFaces[1].openings); }
+            //openingsInParentFace = openingsInParentFace.Distinct().ToList();
             List<Opening> relevantOpeningsInParentFace = new List<Opening>();
-            foreach (Opening opening in openingsInParentFace) {
-                if(opening.GetCoincidentInterface() == this) {
-                    relevantOpeningsInParentFace.Add(opening);
+
+            foreach (Opening o in openingsInParentFace) {
+                if (IsPointCBetweenAB(GetStartPoint(), GetEndPoint(), o.transform.position)) {
+                    relevantOpeningsInParentFace.Add(o);
                 }
             }
             return relevantOpeningsInParentFace;
+        }
+        public bool IsPointCBetweenAB(Vector3 A, Vector3 B, Vector3 C) {
+            if (Vector3.Distance(A, C) < 0.01) return false;
+            if (Vector3.Distance(B, C) < 0.01) return false;
+            return (Vector3.Distance(A, C)
+                    + Vector3.Distance(B, C)
+                    - Vector3.Distance(A, B) < 0.001);
         }
     }
 }

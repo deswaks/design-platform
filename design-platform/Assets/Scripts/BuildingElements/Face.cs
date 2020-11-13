@@ -93,6 +93,12 @@ namespace DesignPlatform.Core {
             openings.Add(opening);
         }
 
+        public void RemoveOpening(Opening opening) {
+            if (openings.Contains(opening)) openings.Remove(opening);
+        }
+
+
+
         /// <summary>
         /// Remove the interface 
         /// </summary>

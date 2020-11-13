@@ -162,11 +162,11 @@ namespace DesignPlatform.Core {
         public Opening BuildOpening(OpeningShape openingShape = OpeningShape.WINDOW,
                                     bool preview = false,
                                     Opening templateOpening = null,
-                                    Face[] closestFaces = null) {
+                                    Face[] attachedFaces = null) {
 
             GameObject newOpeningGameObject = new GameObject("Opening");
             Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
-            newOpening.InitializeOpening(parentFaces: closestFaces, openingShape: openingShape);
+            newOpening.InitializeOpening(attachedFaces: attachedFaces, openingShape: openingShape);
             if (preview) { newOpeningGameObject.name = "Preview opening"; }
 
             if (templateOpening != null) {
@@ -177,9 +177,10 @@ namespace DesignPlatform.Core {
             if (preview == false) {
                 Openings.Add(newOpening);
                 newOpening.SetOpeningState(Opening.OpeningStates.PLACED);
-                closestFaces[0].AddOpening(newOpening);
-                if (closestFaces[1] != null) {
-                    closestFaces[1].AddOpening(newOpening);
+                attachedFaces[0].AddOpening(newOpening);
+
+                if (attachedFaces.Length == 2) {
+                    attachedFaces[1].AddOpening(newOpening);
                 }
             }
             return newOpening;
@@ -213,9 +214,7 @@ namespace DesignPlatform.Core {
                     CreateVertivalInterfacesOnFace(face);
                 }
             }
-            foreach (Interface interFace in Interfaces) {
-                Debug.Log(interFace);
-            }
+
         }
 
         /// <summary>
@@ -237,7 +236,7 @@ namespace DesignPlatform.Core {
                     }
                 }
             }
-            Debug.Log(splitPoints);
+            //Debug.Log(splitPoints);
 
             // Sort splitpoints between startpoint and endpoint
             List<Vector3> endPoints = face.GetControlPoints(localCoordinates: false);
@@ -303,6 +302,8 @@ namespace DesignPlatform.Core {
             if (Walls.Count > 0) DeleteAllWalls();
             if (Slabs.Count > 0) DeleteAllSlabs();
             if (Interfaces.Count > 0) DeleteAllInterfaces();
+
+            Debug.Log("Antal openings i alle rum: "+ Rooms.SelectMany(r => r.Faces).Count(f => f.openings.Count > 0));
 
             CreateVerticalInterfaces();
             CreateHorizontalInterfaces();
