@@ -165,7 +165,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void IdentifyInterfaceJointTypes() {
             // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
+            List<Interface> culledInterfaces = Interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
 
             // Finds all joint points (unique points shared by all interfaces)
             List<Vector3> jointPoints = new List<Vector3>();
@@ -221,7 +221,7 @@ namespace DesignPlatform.Core {
         /// <returns>Returns full, un-split, wall elements with no joint information.</returns>
         private List<WallElement> JoinInterfacesToLongestWallElements() {
             // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
+            List<Interface> culledInterfaces = Interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
 
             // Identifier ID (Integer) for each wall referring to its wall element
             List<int> wallIDs = Enumerable.Repeat(-1, culledInterfaces.Count).ToList();

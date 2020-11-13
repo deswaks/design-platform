@@ -62,7 +62,7 @@ namespace DesignPlatform.Core {
         /// Deletes a wall and removes it from the wall list.
         /// </summary>
         public void DeleteWall() {
-            if (Building.Instance.walls.Contains(this)) {
+            if (Building.Instance.Walls.Contains(this)) {
                 Building.Instance.RemoveWall(this);
             }
             Destroy(gameObject);
