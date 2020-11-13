@@ -13,12 +13,15 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="RoomNode">RoomNode to create as a Room in Unity</param>
         public static void CreateUnityRoomFromRoomNode(RoomNode RoomNode) {
+            Debug.Log("RoomType of loaded room: "+((int)RoomNode.type).ToString());
             // Builds room
-            Room newRoom = Building.Instance.BuildRoom(RoomNode.shape, preview: false, templateRoom: null);
+            Room newRoom = Building.Instance.BuildRoom(RoomNode.shape, preview: true, templateRoom: null);
             //Gets control points from graph data
+            
             List<Vector3> controlPoints = GraphUtils.StringListToVector3List(RoomNode.vertices);
             newRoom.SetControlPoints(controlPoints);
             newRoom.SetRoomType(RoomNode.type);
+            newRoom.UpdateRender2D();
         }
 
         /// <summary>
