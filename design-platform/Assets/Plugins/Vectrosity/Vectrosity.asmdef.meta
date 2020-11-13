@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:design-platform/Assets/Plugins/Vectrosity/Vectrosity.asmdef.meta
 guid: 298fdfb39ad775e45aac40f83f757590
 AssemblyDefinitionImporter:
+=======
+guid: 5e19b3761708e475f859f93b9cc52a83
+DefaultImporter:
+>>>>>>> Stashed changes:design-platform/Assets/Plugins/Vectrosity/Vectrosity5-Unity5.6.unitypackage.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

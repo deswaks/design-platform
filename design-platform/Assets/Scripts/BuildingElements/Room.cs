@@ -56,6 +56,16 @@ namespace DesignPlatform.Core {
 
         private VectorLine line2D;
 
+        public bool isSelected {
+            get { return (this == SelectMode.Instance.selection); }
+        }
+        public bool isColliding {
+            get {
+                return gameObject.GetComponentsInChildren<RoomCollider>()
+                    .Select(rc => rc.isColliding).Contains(true);
+            }
+        }
+
 
         private readonly Dictionary<RoomType, string> RoomMaterialAsset = new Dictionary<RoomType, string> {
             { RoomType.PREVIEW,  "plan_room_default"},
@@ -181,61 +191,46 @@ namespace DesignPlatform.Core {
             RoomCollider.GiveCollider(this);
         }
         private void InitRender2D() {
-            // Init line render
-            //LineRenderer lr = gameObject.AddComponent<LineRenderer>();
-            //lr.loop = true;
-            //lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            //lr.receiveShadows = false;
-            // Update
-            //List<Vector3> points = GetControlPoints(localCoordinates: true, closed: true)
-            //    .Select(p => p + Vector3.up * (height + 0.001f)).ToList();
+
+            VectorLine.canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            VectorLine.SetCanvasCamera(Camera.main);
+            VectorLine.canvas.planeDistance = 1;
+
 
             List<Vector3> points = GetControlPoints(localCoordinates: true, closed: true)
                 .Select(p => p + Vector3.up * (height + 0.001f)).ToList();
-            line2D = new VectorLine("line 2D", points, 0.2f);
-            //line2D = VectorLine.SetLine3D(Color.black, points);
-            //line2D.gameObject.transform.SetParent(parent: gameObject.transform, worldPositionStays: false);
+            //List<Vector3> screenPoints = points.Select(p => Camera.main.WorldToScreenPoint(p)).ToList();
+
+            line2D = new VectorLine(gameObject.name + "line", points, 10.0f, LineType.Continuous);
+            line2D.color = Color.black;
+            line2D.SetWidth(10.0f);
+            line2D.joins = Joins.Weld;
+            VectorManager.ObjectSetup(gameObject, line2D, Visibility.Always, Brightness.None);
+
+            line2D.gameObject.transform.position = Vector3.zero;
+            line2D.gameObject.transform.rotation = Quaternion.identity;
+            line2D.gameObject.transform.localScale = Vector3.one;
+
             UpdateRender2D();
         }
-        public void UpdateRender2D(bool highlighted = false, bool colliding = false) {
-            //line2D.points3 = GetControlPoints(localCoordinates: true, closed: true)
-            //    .Select(p => p + Vector3.up * (height + 0.001f)).ToList();
+        public void UpdateRender2D() {
 
-            Vector3[] points = GetControlPoints(localCoordinates: true, closed: true)
-                .Select(p => p + Vector3.up * (height + 0.001f)).ToArray();
-            line2D.SetWidth(0.2f);
-            line2D.drawTransform = gameObject.transform;
-            //line2D.SetLine3D(Color.black, points);
+            // Update line
+            Color color = Color.black;
+            if (isSelected || Type == RoomType.PREVIEW) {
+                line2D.drawDepth = 1;
+                if (isSelected) color = Color.yellow;
+                if (isColliding) color = Color.red;
+            }
+            line2D.color = color;
             line2D.Draw();
-            
-
-            // Update lines
-            //lr.positionCount = 0;
-            //if (GlobalSettings.ShowWallLines) {
-            // Set controlpoints
-            //lr.useWorldSpace = false;
-            //List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up * (height + 0.001f)).ToList();
-            //lr.positionCount = points.Count;
-            //lr.SetPositions(points.ToArray());
-
-            //// Style
-            //lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "plan_room_wall"), lr.positionCount).ToArray();
-            //float width = 0.2f;
-            //Color color = Color.black;
-            //lr.sortingOrder = 0;
-            //if (highlighted) { lr.sortingOrder = 1; width = 0.3f; color = Color.yellow; }
-            //if (colliding) { lr.sortingOrder = 1; color = Color.red; }
-
-            //lr.startWidth = width; lr.endWidth = width;
-            //foreach (Material material in lr.materials) {
-            //    material.color = color;
-            //}
-
-            //}
-
 
             // Update text tags
-            if (GetComponentInChildren<TMP_Text>()) Destroy(GetComponentInChildren<TMP_Text>().gameObject);
+            if (GetComponentInChildren<TMP_Text>()) {
+                foreach (TMP_Text text in GetComponentsInChildren<TMP_Text>()) {
+                    Destroy(text.gameObject);
+                }
+            }
             if (GlobalSettings.ShowRoomTags && Type != RoomType.PREVIEW) {
                 // Create tag object
                 GameObject tagObject = new GameObject("Tag");
@@ -546,20 +541,6 @@ namespace DesignPlatform.Core {
                     }
                 }
                 transform.position = Grid.GetNearestGridpoint(curPosition);
-            }
-        }
-
-        public void SetIsRoomCurrentlyColliding() {
-
-            if (Type == RoomType.PREVIEW || State == RoomState.MOVING) { // Only triggers collision events on moving object
-
-                RoomCollider[] colliders = gameObject.GetComponentsInChildren<RoomCollider>();
-                List<bool> collidersColliding = colliders.Select(rc => rc.isCurrentlyColliding).ToList();
-
-                bool isSelected = (SelectMode.Instance.selection == this);
-                bool isColliding = (collidersColliding.Contains(true));
-                //Debug.Log("Selected:" + isSelected.ToString() + "  Colliding:" + isColliding.ToString());
-                UpdateRender2D(highlighted: isSelected, colliding: isColliding);
             }
         }
 

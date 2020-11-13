@@ -8,33 +8,35 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
     public class RoomCollider : MonoBehaviour {
-        public bool isCurrentlyColliding = false;
+
+        public bool isColliding = false;
 
         //Detects collision with other rooms when placing them
         void OnCollisionEnter(Collision other) {
-            CheckCollisionWithRoomColliders(other, isColliding: true);
+            GameObject roomGameObject = gameObject.transform.parent.gameObject;
+            RoomCollider otherRoomCollider = other.gameObject.GetComponent<RoomCollider>();
+
+            // Only acts if collision object is other room room object and not a sibling (other colliders in same room)
+            if (otherRoomCollider != null && roomGameObject != other.gameObject.transform.parent.gameObject) {
+                isColliding = true;
+            }
+            roomGameObject.GetComponent<Room>().UpdateRender2D();
         }
 
         void OnCollisionStay(Collision other) {
-            CheckCollisionWithRoomColliders(other, isColliding: true);
+            
         }
 
         void OnCollisionExit(Collision other) {
-            CheckCollisionWithRoomColliders(other, isColliding: false);
-        }
+            GameObject roomGameObject = gameObject.transform.parent.gameObject;
+            RoomCollider otherRoomCollider = other.gameObject.GetComponent<RoomCollider>();
 
-        void CheckCollisionWithRoomColliders(Collision other, bool isColliding) {
-
-            GameObject parentObject = gameObject.transform.parent.gameObject;
             // Only acts if collision object is other room room object and not a sibling (other colliders in same room)
-            if (other.gameObject.GetComponent<RoomCollider>() && other.gameObject.transform.parent != parentObject.transform) {
-                isCurrentlyColliding = isColliding;
-                //Debug.Log("Is colliding with "+other.gameObject.name);
-
+            if (otherRoomCollider != null && roomGameObject != other.gameObject.transform.parent.gameObject) {
+                isColliding = false;
             }
-            parentObject.GetComponent<Room>().SetIsRoomCurrentlyColliding();
+            roomGameObject.GetComponent<Room>().UpdateRender2D();
         }
-
 
         public static void GiveCollider(Room room) {
 

@@ -99,7 +99,7 @@ namespace DesignPlatform.Core {
                 else {
                     Deselect();
                     selection = clickedRoom;
-                    selection.UpdateRender2D(highlighted: true);
+                    selection.UpdateRender2D();
                     SetMode(null);
                 }
             }
@@ -110,13 +110,13 @@ namespace DesignPlatform.Core {
         }
 
         private void Deselect() {
-
-            if (selection != null) {
-                selection.UpdateRender2D(highlighted: false);
-                selection.State = RoomState.STATIONARY;
-            }
+            Room deselected = selection;
             selection = null;
 
+            if (deselected != null) {
+                deselected.State = RoomState.STATIONARY;
+                deselected.UpdateRender2D();
+            }
         }
 
         private Room GetClickedRoom() {

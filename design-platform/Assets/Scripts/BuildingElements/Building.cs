@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder;
-using UnityEngine.ProBuilder.MeshOperations;
 using System.Linq;
 using DesignPlatform.Utils;
 
@@ -56,11 +54,15 @@ namespace DesignPlatform.Core {
                 newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.PREVIEW);
                 newRoomGameObject.name = "Preview room";
             }
-
-            if (templateRoom != null) {
-                newRoomGameObject.transform.position = templateRoom.transform.position;
-                newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
-                newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.DEFAULT);
+            else {
+                if (templateRoom != null) {
+                    newRoomGameObject.transform.position = templateRoom.transform.position;
+                    newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
+                    newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.DEFAULT);
+                }
+                else {
+                    newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.DEFAULT);
+                }
             }
 
             if (preview == false) { rooms.Add(newRoom); }
