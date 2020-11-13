@@ -136,8 +136,14 @@ namespace DesignPlatform.Core {
             else return false;
         }
 
-        public bool CollidesWithGrid(Vector3 point) {
-            (Vector3 startPoint, Vector3 endPoint) = Get2DEndPoints(localCoordinates: false);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public bool IsPointOnFace(Vector3 point) {
+            List<Vector3> endPoints = GetControlPoints(localCoordinates: false);
+            Vector3 startPoint = endPoints[0]; Vector3 endPoint = endPoints[1];
 
             // The line is along y
             if (startPoint.x == point.x && endPoint.x == point.x) {

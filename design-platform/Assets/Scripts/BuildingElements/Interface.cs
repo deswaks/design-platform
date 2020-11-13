@@ -16,6 +16,11 @@ namespace DesignPlatform.Core {
             return textString;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="localCoordinates"></param>
+        /// <returns></returns>
         public Vector3 GetStartPoint(bool localCoordinates = false) {
             Vector3 startPoint = new Vector3();
             if (attachedFaces[0].orientation == Orientation.VERTICAL) {
@@ -29,6 +34,11 @@ namespace DesignPlatform.Core {
             return startPoint;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="localCoordinates"></param>
+        /// <returns></returns>
         public Vector3 GetEndPoint(bool localCoordinates = false) {
             Vector3 endPoint = new Vector3();
             if (attachedFaces[0].orientation == Orientation.VERTICAL) {
@@ -42,6 +52,12 @@ namespace DesignPlatform.Core {
             }
             return endPoint;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="localCoordinates"></param>
+        /// <returns></returns>
         public Vector3 GetCenterPoint(bool localCoordinates = false) {
             Vector3 SP = GetStartPoint(localCoordinates: localCoordinates);
             Vector3 EP = GetEndPoint(localCoordinates: localCoordinates);
@@ -53,7 +69,7 @@ namespace DesignPlatform.Core {
         /// Deletes the room
         /// </summary>
         public void Delete() {
-            if (Building.Instance.interfaces.Contains(this)) {
+            if (Building.Instance.Interfaces.Contains(this)) {
                 Building.Instance.RemoveInterface(this);
                 attachedFaces[0].RemoveInterface(this);
                 if(attachedFaces[1]!= null) attachedFaces[1].RemoveInterface(this);

@@ -46,7 +46,7 @@ namespace DesignPlatform.Core {
         /// Deletes a slab and removes it from the slab list.
         /// </summary>
         public void DeleteSlab() {
-            if (Building.Instance.slabs.Contains(this)) {
+            if (Building.Instance.Slabs.Contains(this)) {
                 Building.Instance.RemoveSlab(this);
             }
             Destroy(gameObject);

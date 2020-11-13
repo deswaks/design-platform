@@ -53,10 +53,10 @@ namespace DesignPlatform.PdfExport {
             XPen wallPen2 = new XPen(XColors.Black, 6);
             wallPen2.LineCap = XLineCap.Square;
 
-            foreach (Room room in Building.Instance.GetRooms()) {
+            foreach (Room room in Building.Instance.Rooms) {
                 drawRoomPolygon(gfx, roomBrush, room);
             }
-            foreach (Room room in Building.Instance.GetRooms()) {
+            foreach (Room room in Building.Instance.Rooms) {
                 drawWallLines(gfx, wallPen1, wallPen2, room);
             }
         }
@@ -71,7 +71,7 @@ namespace DesignPlatform.PdfExport {
             XStringFormat tagFormat = new XStringFormat();
             tagFormat.Alignment = XStringAlignment.Center;
 
-            foreach (Room room in Building.Instance.GetRooms()) {
+            foreach (Room room in Building.Instance.Rooms) {
                 WriteRoomName(gfx, nameFont, room, tagFormat);
                 WriteRoomArea(gfx, areaFont, room, tagFormat);
             }

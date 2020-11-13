@@ -63,7 +63,7 @@ namespace DesignPlatform.Export {
             // Create the interfaces that are the basis for walls
             Building.Instance.CreateVerticalInterfaces();
 
-            foreach (Interface interFace in Building.Instance.interfaces) {
+            foreach (Interface interFace in Building.Instance.Interfaces) {
                 IfcWallStandardCase wall = IfcConverter.CreateWall(model, interFace);
                 if (wall != null) IfcConverter.AddPropertiesToWall(model, wall);
 

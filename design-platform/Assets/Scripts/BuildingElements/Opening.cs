@@ -150,7 +150,7 @@ namespace DesignPlatform.Core {
         /// Deletes the opening
         /// </summary>
         public void Delete() {
-            if (Building.Instance.openings.Contains(this)) {
+            if (Building.Instance.Openings.Contains(this)) {
                 Building.Instance.RemoveOpening(this);
             }
             Destroy(gameObject);
