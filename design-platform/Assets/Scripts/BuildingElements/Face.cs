@@ -26,6 +26,10 @@ namespace DesignPlatform.Core {
             SetOrientation();
         }
 
+        public override string ToString() {
+            return parentRoom.ToString() + " Face#" + faceIndex.ToString();
+        }
+
         /// <summary>
         /// Determs the orientation of the face (horizontal or vertical)
         /// </summary>

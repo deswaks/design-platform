@@ -225,7 +225,6 @@ namespace DesignPlatform.Core {
                     splitPoints = splitPoints.OrderBy(p => (p - startPoint).magnitude).ToList();
                     List<float> splitParameters = splitPoints.Select(p => (p - startPoint).magnitude).ToList();
                     splitParameters = RangeUtils.Reparametrize(splitParameters, splitParameters[0], splitParameters[splitParameters.Count - 1]);
-
                     
                     // Hvert interface-sted
                     for (int i = 0; i < splitParameters.Count - 1; i++) {
@@ -256,6 +255,9 @@ namespace DesignPlatform.Core {
                         }
                     }
                 }
+            }
+            foreach (Interface interFace in interfaces) {
+                Debug.Log(interFace);
             }
         }
 

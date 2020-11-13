@@ -154,6 +154,10 @@ namespace DesignPlatform.Core {
             InitRender2D();
         }
 
+        public override string ToString() {
+            return gameObject.name.ToString();
+        }
+
         private void InitFaces() {
             Faces = new List<Face>();
             for (int i = 0; i < controlPoints.Count + 2; i++) {
