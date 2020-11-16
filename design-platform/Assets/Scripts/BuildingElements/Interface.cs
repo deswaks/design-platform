@@ -1,4 +1,5 @@
 ﻿﻿using Microsoft.VisualBasic.ApplicationServices;
+using DesignPlatform.Geometry;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,57 +8,68 @@ using UnityEngine;
 namespace DesignPlatform.Core {
     public class Interface {
 
-        public Interface() {
-            Faces = new Face[2];
+        public Interface(Face face) {
+            Faces = new List<Face>();
+            Faces.Add(face);
+        }
+        public Interface(List<Face> faces) {
+            Faces = faces;
         }
 
         public List<Room> Rooms {
-            get { return Faces.Select(f => f.Room).ToList(); }
+            get {
+                if (Faces != null && Faces.Count() > 0) {
+                    return Faces.Select(f => f.Room).ToList();
+                }
+                else return new List<Room>();
+            }
             set {; }
         }
-        public Face[] Faces {
-            get { return Faces; }
-            set {; }
+        public List<Face> Faces {get; set;}
+        public Wall Wall {
+            get { return Faces[0].InterfaceWalls[this]; }
+            private set {; } }
+        public Slab Slab {
+            get { return Faces[0].InterfaceSlabs[this]; }
+            private set {; }
+        }
+        public List<Opening> Openings {
+            get { return Faces.SelectMany(f => f.InterfaceOpenings[this]).ToList().Distinct().ToList(); }
+            private set {; }
         }
 
-
-
-        public Wall wall;
+        public List<Opening> OpeningsVertical {
+            get {
+                List<Opening> faceOpenings = Faces.SelectMany(f => f.Openings).Distinct().ToList();
+                Line interfaceLine = new Line(GetStartPoint(), GetEndPoint());
+                return faceOpenings.Where(o => interfaceLine.IsOnLine(o.CenterPoint)).ToList();
+            }
+        }
 
         /// <summary>
         /// 
         /// </summary>
         public Orientation Orientation {
-            get { return Faces[0].orientation;  }
+            get { return Faces[0].Orientation;  }
             private set {; }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public float WallThickness {
+        public float Thickness {
             get {
-                float[] thicknesses = Faces.Where(f => f != null).Select(f => f.wallThickness).ToArray();
+                float[] thicknesses = Faces.Where(f => f != null).Select(f => f.Thickness).ToArray();
                 return thicknesses.Max();
             }
             private set {; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="localCoordinates"></param>
-        /// <returns></returns>
-        public Vector3 GetStartPoint(bool localCoordinates = false) {
-            //Debug.Log("Face 0 parameters: "+attachedFaces[0].parameters[this][0] + " __ " + attachedFaces[0].parameters[this][0] ) ;
 
-            float[] parameters = Faces[0].paramerters[this];
-            (Vector3 fStartPoint, Vector3 fEndPoint) = Faces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-            Vector3 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];
         public override string ToString() {
             string textString = "Interface attached to:";
-            if (attachedFaces[0] != null) textString += " [0] " + attachedFaces[0].ToString();
-            if (attachedFaces[1] != null) textString += " and [1] " + attachedFaces[1].ToString();
+            if (Faces[0] != null) textString += " [0] " + Faces[0].ToString();
+            if (Faces[1] != null) textString += " and [1] " + Faces[1].ToString();
             return textString;
         }
 
@@ -68,13 +80,13 @@ namespace DesignPlatform.Core {
         /// <returns></returns>
         public Vector3 GetStartPoint(bool localCoordinates = false) {
             Vector3 startPoint = new Vector3();
-            if (attachedFaces[0].orientation == Orientation.VERTICAL) {
-                float[] parameters = attachedFaces[0].paramerters[this];
-                (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
+            if (Faces[0].Orientation == Orientation.VERTICAL) {
+                float[] parameters = Faces[0].InterfaceParameters[this];
+                (Vector3 fStartPoint, Vector3 fEndPoint) = Faces[0].Get2DEndPoints(localCoordinates: localCoordinates);
                 startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];
             }
             else {
-                startPoint = attachedFaces[0].parentRoom.GetControlPoints(localCoordinates: localCoordinates)[0];
+                startPoint = Rooms[0].GetControlPoints(localCoordinates: localCoordinates)[0];
             }
             return startPoint;
         }
@@ -86,13 +98,13 @@ namespace DesignPlatform.Core {
         /// <returns></returns>
         public Vector3 GetEndPoint(bool localCoordinates = false) {
             Vector3 endPoint = new Vector3();
-            if (attachedFaces[0].orientation == Orientation.VERTICAL) {
-                float[] parameters = attachedFaces[0].paramerters[this];
-                (Vector3 fStartPoint, Vector3 fEndPoint) = attachedFaces[0].Get2DEndPoints(localCoordinates: localCoordinates);
+            if (Faces[0].Orientation == Orientation.VERTICAL) {
+                float[] parameters = Faces[0].InterfaceParameters[this];
+                (Vector3 fStartPoint, Vector3 fEndPoint) = Faces[0].Get2DEndPoints(localCoordinates: localCoordinates);
                 endPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[1];
             }
             else {
-                List<Vector3> cp = attachedFaces[0].parentRoom.GetControlPoints(localCoordinates: localCoordinates);
+                List<Vector3> cp = Rooms[0].GetControlPoints(localCoordinates: localCoordinates);
                 endPoint = cp[cp.Count];
             }
             return endPoint;
@@ -116,38 +128,9 @@ namespace DesignPlatform.Core {
         public void Delete() {
             if (Building.Instance.Interfaces.Contains(this)) {
                 Building.Instance.RemoveInterface(this);
-                attachedFaces[0].RemoveInterface(this);
-                if(attachedFaces[1]!= null) attachedFaces[1].RemoveInterface(this);
+                Faces[0].RemoveInterface(this);
+                if(Faces[1]!= null) Faces[1].RemoveInterface(this);
             }
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public List<Opening> GetCoincidentOpenings() {
-
-            List<Opening> openingsInParentFace = attachedFaces[0].openings;
-
-            //Debug.Log("Antal openings i face 0: "+attachedFaces[0].openings.Count);
-            //if (attachedFaces[1] != null) Debug.Log("Antal openings i face 1: "+attachedFaces[1].openings.Count);
-            //if (attachedFaces[1] != null) { openingsInParentFace.AddRange(attachedFaces[1].openings); }
-            //openingsInParentFace = openingsInParentFace.Distinct().ToList();
-            List<Opening> relevantOpeningsInParentFace = new List<Opening>();
-
-            foreach (Opening o in openingsInParentFace) {
-                if (IsPointCBetweenAB(GetStartPoint(), GetEndPoint(), o.transform.position)) {
-                    relevantOpeningsInParentFace.Add(o);
-                }
-            }
-            return relevantOpeningsInParentFace;
-        }
-        public bool IsPointCBetweenAB(Vector3 A, Vector3 B, Vector3 C) {
-            if (Vector3.Distance(A, C) < 0.01) return false;
-            if (Vector3.Distance(B, C) < 0.01) return false;
-            return (Vector3.Distance(A, C)
-                    + Vector3.Distance(B, C)
-                    - Vector3.Distance(A, B) < 0.001);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace DesignPlatform.Core {
             Rooms = new List<Room>();
             Walls = new List<Wall>();
             Slabs = new List<Slab>();
-            Interfaces = new List<Interface>();
+            interfaces = new List<Interface>();
             Openings = new List<Opening>();
         }
 
@@ -67,7 +67,7 @@ namespace DesignPlatform.Core {
         private List<Wall> walls;
         public List<Wall> Walls {
             get {
-                if (walls.Count == 0) BuildAllWalls();
+                if (walls == null || walls.Count == 0) BuildAllWalls();
                 return walls;
             }
             private set {; }
@@ -162,8 +162,8 @@ namespace DesignPlatform.Core {
         private List<Interface> interfaces;
         public List<Interface> Interfaces {
             get {
-                if (interfaces.Count == 0) BuildAllInterfaces();
-                return interfaces;
+                if (interfaces == null || interfaces.Count == 0) return BuildAllInterfaces();
+                else return interfaces;
             }
             private set {; }
         }
@@ -186,24 +186,23 @@ namespace DesignPlatform.Core {
                     BuildInterfaces(face);
                 }
             }
-            return Interfaces;
+            return interfaces;
         }
         public List<Interface> BuildInterfaces(Face face) {
             // Slab interface
-            if (face.orientation == Orientation.HORIZONTAL) {
+            if (face.Orientation == Orientation.HORIZONTAL) {
                 return BuildHorizontalFaceInterfaces(face);
             }
             // Wall interface
-            if (face.orientation == Orientation.VERTICAL) {
+            if (face.Orientation == Orientation.VERTICAL) {
                 return BuildVerticalFaceInterfaces(face);
             }
             return null;
         }
         private List<Interface> BuildHorizontalFaceInterfaces(Face face) {
             List<Interface> faceInterfaces = new List<Interface>();
-            Interface newInterface = new Interface();
-            newInterface.Faces[0] = face;      //Add face to interface
-            Interfaces.Add(newInterface);              //Add interface to building
+            Interface newInterface = new Interface(face);
+            interfaces.Add(newInterface);              //Add interface to building
             face.AddInterface(newInterface);           //Add interface to face
             faceInterfaces.Add(newInterface);
             return faceInterfaces;
@@ -233,7 +232,7 @@ namespace DesignPlatform.Core {
 
                 // Check if an interface exists with the same points
                 Interface existingInterface = null;
-                foreach (Interface interF in Interfaces) {
+                foreach (Interface interF in interfaces) {
                     if (interF.GetStartPoint() == interFaceLine.StartPoint
                         && interF.GetEndPoint() == interFaceLine.EndPoint
                         || interF.GetStartPoint() == interFaceLine.EndPoint
@@ -251,9 +250,8 @@ namespace DesignPlatform.Core {
 
                 // Create new interface
                 else {
-                    Interface newInterface = new Interface();
-                    newInterface.Faces[0] = face;
-                    Interfaces.Add(newInterface);
+                    Interface newInterface = new Interface(face);
+                    interfaces.Add(newInterface);
                     face.AddInterface(newInterface, splitParameters[i], splitParameters[i + 1]);
                     faceInterfaces.Add(newInterface);
                 }
@@ -295,11 +293,11 @@ namespace DesignPlatform.Core {
         public Opening BuildOpening(OpeningShape openingShape = OpeningShape.WINDOW,
                                     bool preview = false,
                                     Opening templateOpening = null,
-                                    Face[] closestFaces = null) {
+                                    List<Face> attachedFaces = null) {
 
             GameObject newOpeningGameObject = new GameObject("Opening");
             Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
-            newOpening.InitializeOpening(parentFaces: closestFaces, openingShape: openingShape);
+            newOpening.InitializeOpening(attachedFaces: attachedFaces, openingShape: openingShape);
             if (preview) { newOpeningGameObject.name = "Preview opening"; }
 
             if (templateOpening != null) {
@@ -310,7 +308,7 @@ namespace DesignPlatform.Core {
             if (preview == false) {
                 Openings.Add(newOpening);
                 newOpening.SetOpeningState(Opening.OpeningStates.PLACED);
-                closestFaces[0].AddOpening(newOpening);
+                attachedFaces[0].AddOpening(newOpening.GetCoincidentInterface(), newOpening);
             }
             return newOpening;
         }

@@ -18,9 +18,18 @@ namespace DesignPlatform.Core {
             get { return Faces.Select(f => f.Room).ToList(); }
             set {; }
         }
-        public List<Face> Faces {
-            get { return Faces; }
-            set {; }
+        public List<Face> Faces { get; private set; }
+        public Interface Interface {
+            get { return Faces[0].InterfaceOpenings.FirstOrDefault(x => x.Value.Contains(this)).Key; }
+            private set {; }
+        }
+        public Wall Wall {
+            get { return Faces[0].InterfaceWalls[Interface]; }
+            private set {; }
+        }
+        public Slab Slab {
+            get { return Faces[0].InterfaceSlabs[Interface]; }
+            private set {; }
         }
 
         public float WindowWidth = 1.6f;
@@ -40,10 +49,14 @@ namespace DesignPlatform.Core {
         public Material doorMaterial;
 
         public List<Opening> openings { get; private set; }
-        public Face[] attachedFaces = new Face[2];
+        public Face[] attachedFaces { get; private set; }
         private OpeningShape shape;
-        private Opening prefabOpening;
         public List<Vector3> controlPoints;
+
+        public Vector3 CenterPoint {
+            get { return gameObject.transform.position; }
+            private set {; }
+        }
 
         public enum OpeningStates {
             PLACED,
@@ -51,27 +64,22 @@ namespace DesignPlatform.Core {
         }
         private OpeningStates openingState;
 
-        public void InitializeOpening(Face[] attachedFaces = null,
+        public void InitializeOpening(List<Face> attachedFaces = null,
                                       OpeningShape openingShape = OpeningShape.WINDOW) {
             shape = openingShape;
-            this.attachedFaces = attachedFaces;
+            Faces = attachedFaces;
 
             openingState = OpeningStates.PREVIEW;
 
-            GameObject prefabObject = AssetUtil.LoadAsset<GameObject>("prefabs", "OpeningPrefab");
-
-            prefabOpening = (Opening)prefabObject.GetComponent(typeof(Opening));
-            Material material = prefabOpening.previewMaterial;
-
+            Material material = AssetUtil.LoadAsset<Material>("materials", "openingMaterial"); ;
             switch (shape) {
                 case OpeningShape.WINDOW:
                     gameObject.layer = 16; // Window layer
                     Width = WindowWidth;
                     Height = WindowHeight;
                     SillHeight = 1.1f;
-                    material = prefabOpening.windowMaterial;
+                    material = AssetUtil.LoadAsset<Material>("materials", "windowMaterial");
                     gameObject.name = "Window";
-
 
                     break;
                 case OpeningShape.DOOR:
@@ -79,7 +87,7 @@ namespace DesignPlatform.Core {
                     Width = DoorWidth;
                     Height = DoorHeight;
                     SillHeight = Doorstep;
-                    material = prefabOpening.doorMaterial;
+                    material = AssetUtil.LoadAsset<Material>("materials", "doorMaterial");
                     gameObject.name = "Door";
                     break;
             }
@@ -93,8 +101,8 @@ namespace DesignPlatform.Core {
             gameObject.AddComponent<PolyShape>();
             gameObject.AddComponent<ProBuilderMesh>();
 
-            List<Vector3> openingMeshControlPoints = controlPoints.Select(p => p -= Vector3.forward * (OpeningDepth / 2)).ToList();
-
+            List<Vector3> openingMeshControlPoints = controlPoints
+                .Select(p => p -= Vector3.forward * (OpeningDepth / 2)).ToList();
 
             PolyShape polyshape = gameObject.GetComponent<PolyShape>();
             polyshape.SetControlPoints(controlPoints);
@@ -131,7 +139,7 @@ namespace DesignPlatform.Core {
             // Set controlpoints
             lr.useWorldSpace = false;
             float height = 3.001f;
-            if (attachedFaces != null) height = attachedFaces[0].Room.height + 0.001f;
+            if (Faces != null) height = Faces[0].Room.height + 0.001f;
             List<Vector3> points = GetControlPoints2D().Select(p =>
                 p + Vector3.up * (height)).ToList();
             lr.positionCount = points.Count;
@@ -173,14 +181,12 @@ namespace DesignPlatform.Core {
             gameObject.transform.position = gridPosition;
         }
         public void Rotate(Face closestFace) {
-            Vector3 faceNormal = closestFace.parentRoom.GetWallNormals()[closestFace.faceIndex];
-            gameObject.transform.rotation = Quaternion.LookRotation(faceNormal,Vector3.up);
+            gameObject.transform.rotation = Quaternion.LookRotation(closestFace.Normal, Vector3.up);
         }
 
         public void SetOpeningState(OpeningStates openingState) {
             this.openingState = openingState;
         }
-
 
         public Vector3 ClosestPoint(Vector3 mousePos, Face closestFace) {
             (Vector3 vA, Vector3 vB) = closestFace.Get2DEndPoints();
@@ -191,9 +197,9 @@ namespace DesignPlatform.Core {
 
         public Interface GetCoincidentInterface() {
             Vector3 openingPoint = gameObject.transform.position;
-            float parameterOnFace = attachedFaces[0].GetPointParameter(openingPoint);
+            float parameterOnFace = Faces[0].GetPointParameter(openingPoint);
 
-            return attachedFaces[0].GetInterfaceAtParameter(parameterOnFace);
+            return Faces[0].GetInterfaceAtParameter(parameterOnFace);
         }
         /// <summary>
         /// Gets a list of controlpoints - in local coordinates. The controlpoints are the vertices of the underlying polyshape of the opening.
@@ -211,18 +217,23 @@ namespace DesignPlatform.Core {
             }
             return returnPoints;
         }
-        public Face[] SetAttachedFaces(Vector3 openingPos) {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="openingPos"></param>
+        /// <returns></returns>
+        public void SetAttachedFaces(Vector3 openingPos) {
             // Find the two closest faces in the building
             List<Face> facesToAttach = new List<Face>();
             foreach (Room room in Building.Instance.Rooms) {
-                foreach (Face face in room.Faces.Where(f => f.orientation == Orientation.VERTICAL)) {
+                foreach (Face face in room.Faces.Where(f => f.Orientation == Orientation.VERTICAL)) {
                     if (face.IsPointOnFace(gameObject.transform.position)) {
                         facesToAttach.Add(face);
                     }
                 }
             }
-            attachedFaces = facesToAttach.ToArray();
-            return attachedFaces;
+            Faces = facesToAttach;
         }
 
     }

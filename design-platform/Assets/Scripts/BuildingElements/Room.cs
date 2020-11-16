@@ -49,7 +49,19 @@ namespace DesignPlatform.Core {
         public float height = 3.0f;
         public List<Face> Faces { get; private set; }
         public List<Interface> Interfaces {
-            get { return Faces.SelectMany(f => f.interfaces).ToList(); }
+            get { return Faces.SelectMany(f => f.Interfaces).ToList(); }
+            private set {; }
+        }
+        public List<Wall> Walls {
+            get { return Faces.SelectMany(f => f.Walls).ToList(); }
+            private set {; }
+        }
+        public List<Slab> Slabs {
+            get { return Faces.SelectMany(f => f.Slabs).ToList(); }
+            private set {; }
+        }
+        public List<Opening> Openings {
+            get { return Faces.SelectMany(f => f.Openings).ToList(); }
             private set {; }
         }
 
@@ -57,11 +69,6 @@ namespace DesignPlatform.Core {
         private Material currentMaterial;
         public Material highlightMaterial;
         public string customProperty;
-
-
-        public List<Opening> openings { 
-        get { return Faces.SelectMany(f => f.openings).ToList(); }
-        }
 
 
         private readonly Dictionary<RoomType, string> RoomMaterialAsset = new Dictionary<RoomType, string> {
@@ -278,15 +285,17 @@ namespace DesignPlatform.Core {
                 point: centerPoint,
                 axis: new Vector3(0, 1, 0),
                 angle: degrees);
-            for (int i = 0; i < Faces.Count; i++) {
-                for (int j = 0; j < Faces[i].openings.Count; j++) {
-                    Faces[i].openings[j].gameObject.transform.RotateAround(
-                                            point: centerPoint,
-                                            axis: new Vector3(0, 1, 0),
-                                            angle: degrees);
-                    Faces[i].openings[j].SetAttachedFaces(Faces[i].openings[j].gameObject.transform.position);
+
+            if (Openings.Count > 0) {
+                foreach (Opening opening in Openings) {
+                    opening.gameObject.transform.RotateAround(
+                                                point: centerPoint,
+                                                axis: new Vector3(0, 1, 0),
+                                                angle: degrees);
+                    opening.SetAttachedFaces(opening.gameObject.transform.position);
                 }
             }
+            
             UpdateRender3D();
             UpdateRender2D();
         }
@@ -421,7 +430,7 @@ namespace DesignPlatform.Core {
             controlPointsClone[point2Index] += localExtrusion;
 
             // Move openings with extrusion                   
-            foreach (Opening opening in Faces[wallToExtrude].openings) {
+            foreach (Opening opening in Faces[wallToExtrude].Openings) {
                 Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, Faces[wallToExtrude]);
                 opening.transform.position = openingPoint;
                 opening.SetAttachedFaces(opening.transform.position);
@@ -536,15 +545,15 @@ namespace DesignPlatform.Core {
             if (State == RoomState.MOVING) {
                 Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
                 for (int i = 0; i < Faces.Count; i++) {
-                    for (int j = 0; j < Faces[i].openings.Count; j++) {
-                        Vector3 diff = gameObject.transform.position - Faces[i].openings[j].gameObject.transform.position;
-                        Faces[i].openings[j].gameObject.transform.position = (Grid.GetNearestGridpoint(curPosition)) - diff;
+                    for (int j = 0; j < Faces[i].Openings.Count; j++) {
+                        Vector3 diff = gameObject.transform.position - Faces[i].Openings[j].gameObject.transform.position;
+                        Faces[i].Openings[j].gameObject.transform.position = (Grid.GetNearestGridpoint(curPosition)) - diff;
                     }
                 }
                 transform.position = Grid.GetNearestGridpoint(curPosition);
                 
-                foreach (Opening opening in openings) {
-                    foreach (Face openingsAttachedFace in opening.attachedFaces) {
+                foreach (Opening opening in Openings) {
+                    foreach (Face openingsAttachedFace in opening.Faces) {
                         bool faceBelongsToThisRoom = (Faces.Contains(openingsAttachedFace));
                         if (!faceBelongsToThisRoom) openingsAttachedFace.RemoveOpening(opening);
                     }
@@ -552,7 +561,7 @@ namespace DesignPlatform.Core {
 
                 foreach (Room room in Building.Instance.Rooms) {
                     foreach (Face face in room.Faces) {
-                        foreach (Opening opening in face.openings) {
+                        foreach (Opening opening in face.Openings) {
                             opening.SetAttachedFaces(opening.transform.position);
                         }
                     }

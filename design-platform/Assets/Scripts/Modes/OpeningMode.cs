@@ -67,11 +67,11 @@ namespace DesignPlatform.Core {
             //hitPoint = hitPointOnPlane();
             //Face[] closestFaces = ClosestFace(hitPoint);
 
-            Face[] attachedFaces = previewOpening.SetAttachedFaces(previewOpening.transform.position);
+            previewOpening.SetAttachedFaces(previewOpening.transform.position);
 
             Building.Instance.BuildOpening(openingShape: selectedShape,
                                            templateOpening: previewOpening,
-                                           attachedFaces: attachedFaces);
+                                           attachedFaces: previewOpening.Faces);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace DesignPlatform.Core {
             float closestDistance = float.PositiveInfinity;
 
             for (int i = 0; i < relevantRooms.Count; i++) {
-                List<Face> roomFaces = relevantRooms[i].Faces.Where(f => f.orientation == Orientation.VERTICAL).ToList();
+                List<Face> roomFaces = relevantRooms[i].Faces.Where(f => f.Orientation == Orientation.VERTICAL).ToList();
 
                 foreach (Face face in roomFaces) {
 

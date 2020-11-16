@@ -52,7 +52,7 @@ namespace DesignPlatform.Export {
             Vector3 wallVector = (endPoint - startPoint).normalized;
             float length = (endPoint - startPoint).magnitude;
             float height = interFace.Faces[0].Room.height * 1000;
-            float thickness = interFace.WallThickness * 1000;
+            float thickness = interFace.Thickness * 1000;
 
             //begin a transaction
             var transaction = model.BeginTransaction("Create Wall");
