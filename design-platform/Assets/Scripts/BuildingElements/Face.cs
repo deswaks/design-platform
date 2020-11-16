@@ -6,11 +6,14 @@ using System.Linq;
 namespace DesignPlatform.Core {
     public class Face {
 
-        public Face() {
+        public Face(Room parent, int index) {
             InterfaceWalls = new Dictionary<Interface, Wall>();
             InterfaceSlabs = new Dictionary<Interface, Slab>();
             InterfaceOpenings = new Dictionary<Interface, List<Opening>>();
             InterfaceParameters = new Dictionary<Interface, float[]>();
+            Room = parent;
+            FaceIndex = index;
+            SetOrientation();
         }
 
         public Room Room { get; private set; }
@@ -67,18 +70,6 @@ namespace DesignPlatform.Core {
         public Vector3 CenterPoint {
             get { return Room.GetWallMidpoints()[FaceIndex]; }
             private set {; }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Face(Room parent, int index) {
-            Interfaces = new List<Interface>();
-            Openings = new List<Opening>();
-            InterfaceParameters = new Dictionary<Interface, float[]>();
-            Room = parent;
-            FaceIndex = index;
-            SetOrientation();
         }
 
         public override string ToString() {
@@ -192,7 +183,7 @@ namespace DesignPlatform.Core {
         /// <param name="opening"></param>
         public void AddOpening(Interface interFace, Opening opening) {
             if (!InterfaceOpenings.Keys.Contains(interFace)) {
-                InterfaceOpenings.Add(interFace, new List<Opening>());
+                InterfaceOpenings.Add(interFace, new List<Opening> { opening });
             }
             else {
                 InterfaceOpenings[interFace].Add(opening);

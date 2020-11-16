@@ -46,6 +46,7 @@ namespace DesignPlatform.Core {
         /// Create preview opening 
         /// </summary> 
         public override void OnModeResume() {
+            //List<Interface> interfaces = Building.Instance.Interfaces;
             if (previewOpening == null) {
                 previewOpening = Building.Instance.BuildOpening(openingShape: selectedShape,
                                                                 preview: true);

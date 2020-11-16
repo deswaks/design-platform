@@ -78,7 +78,7 @@ namespace DesignPlatform.Core {
                     Width = WindowWidth;
                     Height = WindowHeight;
                     SillHeight = 1.1f;
-                    material = AssetUtil.LoadAsset<Material>("materials", "windowMaterial");
+                    material = AssetUtil.LoadAsset<Material>("materials", "openingWindow");
                     gameObject.name = "Window";
 
                     break;
@@ -87,7 +87,7 @@ namespace DesignPlatform.Core {
                     Width = DoorWidth;
                     Height = DoorHeight;
                     SillHeight = Doorstep;
-                    material = AssetUtil.LoadAsset<Material>("materials", "doorMaterial");
+                    material = AssetUtil.LoadAsset<Material>("materials", "openingDoor");
                     gameObject.name = "Door";
                     break;
             }
@@ -196,9 +196,7 @@ namespace DesignPlatform.Core {
         }
 
         public Interface GetCoincidentInterface() {
-            Vector3 openingPoint = gameObject.transform.position;
-            float parameterOnFace = Faces[0].GetPointParameter(openingPoint);
-
+            float parameterOnFace = Faces[0].GetPointParameter(CenterPoint);
             return Faces[0].GetInterfaceAtParameter(parameterOnFace);
         }
         /// <summary>

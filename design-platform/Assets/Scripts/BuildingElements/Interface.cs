@@ -105,7 +105,7 @@ namespace DesignPlatform.Core {
             }
             else {
                 List<Vector3> cp = Rooms[0].GetControlPoints(localCoordinates: localCoordinates);
-                endPoint = cp[cp.Count];
+                endPoint = cp[cp.Count-1];
             }
             return endPoint;
         }
@@ -126,10 +126,9 @@ namespace DesignPlatform.Core {
         /// Deletes the interface
         /// </summary>
         public void Delete() {
-            if (Building.Instance.Interfaces.Contains(this)) {
-                Building.Instance.RemoveInterface(this);
-                Faces[0].RemoveInterface(this);
-                if(Faces[1]!= null) Faces[1].RemoveInterface(this);
+            Building.Instance.RemoveInterface(this);
+            foreach (Face face in Faces) {
+                face.RemoveInterface(this);
             }
         }
     }

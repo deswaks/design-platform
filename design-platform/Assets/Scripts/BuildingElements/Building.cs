@@ -13,8 +13,8 @@ namespace DesignPlatform.Core {
         }
         public Building() {
             Rooms = new List<Room>();
-            Walls = new List<Wall>();
-            Slabs = new List<Slab>();
+            walls = new List<Wall>();
+            slabs = new List<Slab>();
             interfaces = new List<Interface>();
             Openings = new List<Opening>();
         }
@@ -74,7 +74,7 @@ namespace DesignPlatform.Core {
         }
         public List<Wall> BuildAllWalls() {
             foreach (Interface interFace in InterfacesVertical) BuildWall(interFace);
-            return Walls;
+            return walls;
         }
         /// <summary>
         /// Build
@@ -87,7 +87,7 @@ namespace DesignPlatform.Core {
 
             newWall.InitializeWall(interFace);
 
-            Walls.Add(newWall);
+            walls.Add(newWall);
 
             return newWall;
         }
@@ -96,13 +96,13 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <param name="wall"></param>
         public void RemoveWall(Wall wall) {
-            if (walls.Contains(wall)) Walls.Remove(wall);
+            if (walls.Contains(wall)) walls.Remove(wall);
         }
         /// <summary>
         /// Removes ALL walls
         /// </summary>
         public void DeleteAllWalls() {
-            int amount = Walls.Count;
+            int amount = walls.Count;
             if (amount > 0) {
                 for (int i = 0; i < amount; i++) {
                     walls[0].DeleteWall();
@@ -125,7 +125,7 @@ namespace DesignPlatform.Core {
         }
         public List<Slab> BuildAllSlabs() {
             foreach (Interface interFace in InterfacesHorizontal) BuildSlab(interFace);
-            return Slabs;
+            return slabs;
         }
         /// <summary>
         /// Builds a new slab and adds it to the managed building list
@@ -134,23 +134,23 @@ namespace DesignPlatform.Core {
             GameObject newSlabGameObject = new GameObject("slab");
             Slab newSlab = (Slab)newSlabGameObject.AddComponent(typeof(Slab));
             newSlab.InitializeSlab(interFace);
-            Slabs.Add(newSlab);
+            slabs.Add(newSlab);
             return newSlab;
         }
         /// <summary>
         /// Removes slab from the list of slabs
         /// </summary>
         public void RemoveSlab(Slab slab) {
-            if (Slabs.Contains(slab)) Slabs.Remove(slab);
+            if (slabs.Contains(slab)) slabs.Remove(slab);
         }
         /// <summary>
         /// Removes ALL slabs
         /// </summary>
         public void DeleteAllSlabs() {
-            int amount = Slabs.Count;
+            int amount = slabs.Count;
             if (amount > 0) {
                 for (int i = 0; i < amount; i++) {
-                    Slabs[0].DeleteSlab();
+                    slabs[0].DeleteSlab();
                 }
             }
         }
@@ -243,7 +243,7 @@ namespace DesignPlatform.Core {
 
                 // Attach to existing interface
                 if (existingInterface != null) {
-                    existingInterface.Faces[1] = face;
+                    existingInterface.Faces.Add(face);
                     face.AddInterface(existingInterface, splitParameters[i], splitParameters[i + 1]);
                     faceInterfaces.Add(existingInterface);
                 }
@@ -263,7 +263,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <param name="interFace"></param>
         public void RemoveInterface(Interface interFace) {
-            if (Interfaces.Contains(interFace)) { Interfaces.Remove(interFace); }
+            if (Interfaces.Contains(interFace)) { interfaces.Remove(interFace); }
         }
         /// <summary>
         /// Removes ALL interfaces
@@ -308,7 +308,7 @@ namespace DesignPlatform.Core {
             if (preview == false) {
                 Openings.Add(newOpening);
                 newOpening.SetOpeningState(Opening.OpeningStates.PLACED);
-                attachedFaces[0].AddOpening(newOpening.GetCoincidentInterface(), newOpening);
+                //attachedFaces[0].AddOpening(newOpening.GetCoincidentInterface(), newOpening);
             }
             return newOpening;
         }

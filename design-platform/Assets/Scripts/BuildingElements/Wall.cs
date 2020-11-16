@@ -52,7 +52,10 @@ namespace DesignPlatform.Core {
         /// Construct walls.
         /// </summary>
         public void InitializeWall(Interface interFace) {
-            Interface = interFace;
+            Faces = interFace.Faces;
+            foreach (Face face in Faces) {
+                face.AddWall(interFace, this);
+            }
             gameObject.layer = 13; // Wall layer
 
             Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "wallMaterial");

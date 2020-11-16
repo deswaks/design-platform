@@ -29,8 +29,10 @@ namespace DesignPlatform.Core {
         /// Construct slabs.
         /// </summary>
         public void InitializeSlab(Interface interFace) {
-
-            this.Interface = interFace;
+            Faces = interFace.Faces;
+            foreach (Face face in Faces) {
+                face.AddSlab(interFace, this);
+            }
             gameObject.layer = 14; // Slab layer
             Material slabMaterial = AssetUtil.LoadAsset<Material>("materials", "slabMaterial");
             gameObject.name = "CLT Slab";
