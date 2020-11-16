@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slabThickness: 0.2
-  slabMaterial: {fileID: 2100000, guid: be732c24d8851314f9e67c3e6d3d3873, type: 2}
+  slabMaterial: {fileID: 2100000, guid: bdd421c4380a01840ab9810aff0be0b1, type: 2}

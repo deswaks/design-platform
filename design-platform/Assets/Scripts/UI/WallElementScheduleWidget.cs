@@ -66,6 +66,7 @@ namespace DesignPlatform.Core {
                 {
                 "Wall " + elementIndex.ToString(),
                 e.Length().ToString()+"m",
+                "DVQ",    //Domestic visual (DVQ), Industrial (IVQ), Non visual (NVQ)
                 e.Height.ToString()+"m",
                 (e.Width*1000).ToString()+"mm",
                 e.Area.ToString()+"m²"

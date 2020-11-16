@@ -123,13 +123,16 @@ namespace DesignPlatform.Core {
                     if (point == endJointWallElements.First().startPoint.point) endJointWallElements.First().SetStartPointJointType(WallJointType.T_Secondary);
                     if (point == endJointWallElements.First().endPoint.point) endJointWallElements.First().SetEndPointJointType(WallJointType.T_Secondary);
                 }
-                // Corner joint ///////////////////////////////// AS OF NOW, PRIMARY/SECONDARY ROLE IS ASSIGNED ~RANDOMLY
+                // Corner joint ///////////////////////////////// AS OF NOW, PRIMARY ROLE IS ASSIGNED TO LONGEST ELEMENT
                 else if (endJointWallElements.Count == 2) {
-                    if (point == endJointWallElements.First().startPoint.point) endJointWallElements.First().SetStartPointJointType(WallJointType.Corner_Primary);
-                    if (point == endJointWallElements.First().endPoint.point)   endJointWallElements.First().SetEndPointJointType(WallJointType.Corner_Primary);                    
+                    WallElement primaryElement = midJointWallElements.OrderBy(e => e.Length()).Last();
+                    WallElement secondaryElement = midJointWallElements.OrderBy(e => e.Length()).First();
+
+                    if (point == primaryElement.startPoint.point) primaryElement.SetStartPointJointType(WallJointType.Corner_Primary);
+                    if (point == primaryElement.endPoint.point) primaryElement.SetEndPointJointType(WallJointType.Corner_Primary);                    
                     
-                    if (point == endJointWallElements.Last().startPoint.point) endJointWallElements.Last().SetStartPointJointType(WallJointType.Corner_Secondary);
-                    if (point == endJointWallElements.Last().endPoint.point)   endJointWallElements.Last().SetEndPointJointType(WallJointType.Corner_Secondary);
+                    if (point == secondaryElement.startPoint.point) secondaryElement.SetStartPointJointType(WallJointType.Corner_Secondary);
+                    if (point == secondaryElement.endPoint.point) secondaryElement.SetEndPointJointType(WallJointType.Corner_Secondary);
                 }
 
             }
@@ -284,6 +287,8 @@ namespace DesignPlatform.Core {
                 wallElement.SetMidPoints(currentWallVertices);
 
                 wallElements.Add(wallElement);
+
+                if (wallElement.Length() > 16.5) Debug.Log("Panel surpasses maximum length of 16.5m");
             }
 
             return wallElements;
