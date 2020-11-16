@@ -44,12 +44,6 @@ namespace DesignPlatform.Core {
         public float Width;
         public float Height;
 
-        public Material previewMaterial;
-        public Material windowMaterial;
-        public Material doorMaterial;
-
-        public List<Opening> openings { get; private set; }
-        public Face[] attachedFaces { get; private set; }
         private OpeningShape shape;
         public List<Vector3> controlPoints;
 
@@ -221,7 +215,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <param name="openingPos"></param>
         /// <returns></returns>
-        public void SetAttachedFaces(Vector3 openingPos) {
+        public void SetAttachedFaces() {
             // Find the two closest faces in the building
             List<Face> facesToAttach = new List<Face>();
             foreach (Room room in Building.Instance.Rooms) {

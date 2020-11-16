@@ -65,11 +65,7 @@ namespace DesignPlatform.Core {
         /// Build the opening gameObject
         /// </summary>        
         public void Build() {
-            //hitPoint = hitPointOnPlane();
-            //Face[] closestFaces = ClosestFace(hitPoint);
-
-            previewOpening.SetAttachedFaces(previewOpening.transform.position);
-
+            previewOpening.SetAttachedFaces();
             Building.Instance.BuildOpening(openingShape: selectedShape,
                                            templateOpening: previewOpening,
                                            attachedFaces: previewOpening.Faces);

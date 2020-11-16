@@ -292,7 +292,7 @@ namespace DesignPlatform.Core {
                                                 point: centerPoint,
                                                 axis: new Vector3(0, 1, 0),
                                                 angle: degrees);
-                    opening.SetAttachedFaces(opening.gameObject.transform.position);
+                    opening.SetAttachedFaces();
                 }
             }
             
@@ -433,7 +433,7 @@ namespace DesignPlatform.Core {
             foreach (Opening opening in Faces[wallToExtrude].Openings) {
                 Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, Faces[wallToExtrude]);
                 opening.transform.position = openingPoint;
-                opening.SetAttachedFaces(opening.transform.position);
+                opening.SetAttachedFaces();
             }
 
             // Compare normals before and after extrusion element-wise 
@@ -562,7 +562,7 @@ namespace DesignPlatform.Core {
                 foreach (Room room in Building.Instance.Rooms) {
                     foreach (Face face in room.Faces) {
                         foreach (Opening opening in face.Openings) {
-                            opening.SetAttachedFaces(opening.transform.position);
+                            opening.SetAttachedFaces();
                         }
                     }
                 }
