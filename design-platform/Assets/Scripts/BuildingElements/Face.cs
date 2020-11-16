@@ -24,6 +24,10 @@ namespace DesignPlatform.Core {
             SetOrientation();
         }
 
+        public override string ToString() {
+            return parentRoom.ToString() + " Face#" + faceIndex.ToString();
+        }
+
         /// <summary>
         /// Determs the orientation of the face (horizontal or vertical)
         /// </summary>
@@ -37,33 +41,29 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Gets the original controlpoints of the face (horizontal and vertical faces)
         /// </summary>
-        public Vector3[] GetOGControlPoints(bool localCoordinates = false) {
-            List<Vector3> cp;
-            Vector3[] endpoints = new Vector3[1];
+        public List<Vector3> GetControlPoints(bool localCoordinates = false) {
+            List<Vector3> roomControlPoints = parentRoom.GetControlPoints(localCoordinates: localCoordinates, closed: true);
+            List<Vector3> controlPoints = new List<Vector3>();
 
             switch (orientation) {
+                // Vertical face
                 case Orientation.VERTICAL:
-                    cp = Room.GetControlPoints(localCoordinates: localCoordinates, closed: true);
-                    endpoints = new Vector3[2];
-                    endpoints[0] = cp[faceIndex];
-                    endpoints[1] = cp[faceIndex + 1];
+                    controlPoints.Add(roomControlPoints[faceIndex]);
+                    controlPoints.Add(roomControlPoints[faceIndex + 1]);
                     break;
+                
+                // Horizontal face
                 case Orientation.HORIZONTAL:
-                    cp = Room.GetControlPoints(localCoordinates: localCoordinates);
-                    if (faceIndex == cp.Count + 1) {
-                        for (int i = 0; i < cp.Count; i++) {
-                            cp[i] += Vector3.up * Room.height;
-                        };
+                    controlPoints = roomControlPoints.GetRange(0, roomControlPoints.Count - 1);
+                    
+                    // Top face
+                    if (faceIndex == roomControlPoints.Count) {
+                        controlPoints = controlPoints.Select(p => p + Vector3.up * parentRoom.height).ToList();
                     }
-
-                    //cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates);
-                    endpoints = cp.ToArray();
-                    break;
-                default:
                     break;
             }
 
-            return endpoints;
+            return controlPoints;
         }
 
         public (Vector3, Vector3) Get2DEndPoints(bool localCoordinates = false) {
@@ -91,15 +91,23 @@ namespace DesignPlatform.Core {
             openings.Add(opening);
         }
 
+        public void RemoveOpening(Opening opening) {
+            if (openings.Contains(opening)) openings.Remove(opening);
+        }
+
+
+
         /// <summary>
         /// Remove the interface 
         /// </summary>
         public void RemoveInterface(Interface interFace) {
             if (interfaces.Contains(interFace)) interfaces.Remove(interFace);
+            if (paramerters.Keys.Contains(interFace)) paramerters.Remove(interFace);
         }
         public Interface GetInterfaceAtParameter(float parameterOnFace) {
             foreach (KeyValuePair<Interface, float[]> iface in paramerters) {
                 if (parameterOnFace > iface.Value[0] && parameterOnFace < iface.Value[1]) {
+                    //Debug.Log("Found Interface: " + iface.Key.GetEndPoint().ToString() + iface.Key.GetStartPoint().ToString());
                     return iface.Key;
                 }
             }
@@ -132,27 +140,27 @@ namespace DesignPlatform.Core {
             else return false;
         }
 
-        public bool CollidesWithGrid(Vector3 point) {
-            (Vector3 startPoint, Vector3 endPoint) = Get2DEndPoints(localCoordinates: false);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public bool IsPointOnFace(Vector3 point) {
+            List<Vector3> endPoints = GetControlPoints(localCoordinates: false);
 
-            // The line is along y
-            if (startPoint.x == point.x && endPoint.x == point.x) {
-                if (Mathf.Min(startPoint.z, endPoint.z) < point.z
-                    && Mathf.Max(startPoint.z, endPoint.z) > point.z) {
-                    return true;
-                }
-            }
-            // The line is along x
-            if (startPoint.z == point.z && endPoint.z == point.z) {
-                if (Mathf.Min(startPoint.x, endPoint.x) < point.x
-                    && Mathf.Max(startPoint.x, endPoint.x) > point.x) {
-                    return true;
-                }
-            }
+            if (Vector3.Distance(endPoints[0], point) < 0.01) return false;
+            if (Vector3.Distance(endPoints[1], point) < 0.01) return false;
 
-            return false;
+            return (Vector3.Distance(endPoints[0], point)
+                    + Vector3.Distance(endPoints[1], point)
+                    - Vector3.Distance(endPoints[0], endPoints[1]) < 0.001);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
         public float GetPointParameter(Vector3 point) {
             (Vector3 faceStart, Vector3 faceEnd) = Get2DEndPoints();
             float parameterOnFace = (point - faceStart).magnitude / (faceEnd - faceStart).magnitude;

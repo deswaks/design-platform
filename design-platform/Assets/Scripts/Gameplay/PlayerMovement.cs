@@ -5,7 +5,7 @@ namespace DesignPlatform.Core {
 
         public CharacterController controller;
 
-        public float speed = 4f;
+        public float speed = 6f;
         public float gravity = -9.81f;
         public float jumpHeight = 3f;
 
