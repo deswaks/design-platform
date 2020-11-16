@@ -122,8 +122,8 @@ namespace DesignPlatform.Core {
         private Room GetClickedRoom() {
             Room clickedRoom = null;
             Ray ray = Camera.main.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray: ray, hitInfo: out RaycastHit hitInfo)) {
+            int roomMask = 1 << 8;
+            if (Physics.Raycast(ray: ray, maxDistance: 1000f, hitInfo: out RaycastHit hitInfo, layerMask: roomMask)) {
                 // if the hit game object is a room (ie. it is on layer 8)
                 if (hitInfo.collider.gameObject.layer == 8) {
                     clickedRoom = hitInfo.collider.gameObject.GetComponent<Room>();

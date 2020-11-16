@@ -47,7 +47,7 @@ namespace DesignPlatform.Database {
             jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSavePath();
 
             // Collects Unity room as RoomNodes
-            List<RoomNode> roomNodes = UnityRoomsToRoomNodes(Building.Instance.GetRooms());
+            List<RoomNode> roomNodes = UnityRoomsToRoomNodes(Building.Instance.Rooms);
 
             // Serializes RoomNodes to json format
             string jsonString = JsonConvert.SerializeObject(roomNodes);
@@ -220,7 +220,7 @@ namespace DesignPlatform.Database {
         /// <param name="rooms">List of rooms</param>
         /// <returns>List of InterfaceNodes created.</returns>
         public static List<WallElementNode> AllRoomInterfacesToInterfaceNodes() {
-            List<Interface> allInterfaces = Building.Instance.walls.Select(w => w.interFace).ToList();
+            List<Interface> allInterfaces = Building.Instance.Walls.Select(w => w.interFace).ToList();
             //List<Interface> allInterfaces = Building.Instance.interfaces.Where(i => i.GetOrientation() == Orientation.VERTICAL).ToList();
 
             //allInterfaces.ForEach(interFace => Debug.Log(interFace.GetStartPoint() + ", " + interFace.GetEndPoint()));

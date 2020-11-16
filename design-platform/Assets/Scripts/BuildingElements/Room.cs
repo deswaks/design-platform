@@ -56,6 +56,11 @@ namespace DesignPlatform.Core {
         public string customProperty;
 
 
+        public List<Opening> openings { 
+        get { return Faces.SelectMany(f => f.openings).ToList(); }
+        }
+
+
         private readonly Dictionary<RoomType, string> RoomMaterialAsset = new Dictionary<RoomType, string> {
             { RoomType.PREVIEW,  "plan_room_default"},
             { RoomType.DEFAULT,  "plan_room_default"},
@@ -152,6 +157,10 @@ namespace DesignPlatform.Core {
             InitRender3D();
             SetRoomType(type);
             InitRender2D();
+        }
+
+        public override string ToString() {
+            return gameObject.name.ToString() +" "+ Type.ToString();
         }
 
         private void InitFaces() {
@@ -268,6 +277,7 @@ namespace DesignPlatform.Core {
                                             point: centerPoint,
                                             axis: new Vector3(0, 1, 0),
                                             angle: degrees);
+                    Faces[i].openings[j].SetAttachedFaces(Faces[i].openings[j].gameObject.transform.position);
                 }
             }
             UpdateRender3D();
@@ -328,7 +338,7 @@ namespace DesignPlatform.Core {
         /// Deletes the room
         /// </summary>
         public void Delete() {
-            if (Building.Instance.rooms.Contains(this)) {
+            if (Building.Instance.Rooms.Contains(this)) {
                 ParentBuilding.RemoveRoom(this);
             }
             Destroy(gameObject);
@@ -339,7 +349,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void Move(Vector3 exactPosition) {
             Vector3 gridPosition = Grid.GetNearestGridpoint(exactPosition);
-            gameObject.transform.position = gridPosition;
+            gameObject.transform.position = gridPosition;      
             UpdateRender2D();
         }
 
@@ -407,6 +417,7 @@ namespace DesignPlatform.Core {
             foreach (Opening opening in Faces[wallToExtrude].openings) {
                 Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, Faces[wallToExtrude]);
                 opening.transform.position = openingPoint;
+                opening.SetAttachedFaces(opening.transform.position);
             }
 
             // Compare normals before and after extrusion element-wise 
@@ -507,8 +518,6 @@ namespace DesignPlatform.Core {
         /// </summary>
         void OnMouseDown() {
             if (State == RoomState.MOVING) {
-                //openingsMoveModeOffset = new List<List<Vector3>>();
-                //Vector3 moveModeScreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
                 moveModeOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
@@ -526,6 +535,21 @@ namespace DesignPlatform.Core {
                     }
                 }
                 transform.position = Grid.GetNearestGridpoint(curPosition);
+                
+                foreach (Opening opening in openings) {
+                    foreach (Face openingsAttachedFace in opening.attachedFaces) {
+                        bool faceBelongsToThisRoom = (Faces.Contains(openingsAttachedFace));
+                        if (!faceBelongsToThisRoom) openingsAttachedFace.RemoveOpening(opening);
+                    }
+                }
+
+                foreach (Room room in Building.Instance.Rooms) {
+                    foreach (Face face in room.Faces) {
+                        foreach (Opening opening in face.openings) {
+                            opening.SetAttachedFaces(opening.transform.position);
+                        }
+                    }
+                }
             }
         }
 

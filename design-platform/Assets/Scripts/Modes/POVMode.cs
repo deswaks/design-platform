@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 namespace DesignPlatform.Core {
     public class POVMode : Mode {
@@ -14,6 +17,9 @@ namespace DesignPlatform.Core {
         private GameObject notificationObject = null;
         public Camera PlanCamera;
         public Camera POVCamera;
+        private GameObject ui;
+        private bool ShowWallLines;
+        private bool ShowOpeningLines;
 
         float xRotation = 0f;
 
@@ -30,6 +36,10 @@ namespace DesignPlatform.Core {
             get { return instance ?? (instance = new POVMode()); }
         }
 
+        POVMode() {
+            ui = Object.FindObjectsOfType<Canvas>().Where(o => o.gameObject.name == "UI").ToList()[0].gameObject;
+        }
+
         public override void Tick() {
             TickModeType();
 
@@ -39,10 +49,22 @@ namespace DesignPlatform.Core {
             }
 
         }
-        public override void OnModeResume() {
+        public override void OnModeResume() { 
+            ui.SetActive(false);
             player = GameObject.Find("First person player");
             PlanCamera = GameObject.Find("Plan Camera").GetComponent<Camera>();
             POVCamera = player.GetComponentInChildren<Camera>(true);
+
+            //ShowWallLines = GameObject.Find("Toggle - Standard(Regular)").GetComponent<UnityEngine.UI.Toggle>().isOn;
+            //ShowOpeningLines = GameObject.Find("Toggle - Standard(Regular)").GetComponent<UnityEngine.UI.Toggle>().isOn; ;
+            //GameObject.Find("Toggle - Standard(Regular)").GetComponent<UnityEngine.UI.Toggle>().isOn = false;
+
+            //foreach (Room room in Building.Instance.rooms) {
+            //    room.UpdateRender2D();
+            //}
+            //foreach (Opening opening in Building.Instance.openings) {
+            //    opening.UpdateRender2D();
+            //}
 
             POVCamera.gameObject.SetActive(true);
             PlanCamera.gameObject.SetActive(false);
@@ -61,8 +83,18 @@ namespace DesignPlatform.Core {
             OnModeTypeResume();
         }
         public override void OnModePause() {
+            ui.SetActive(true);
             POVCamera.gameObject.SetActive(false);
             PlanCamera.gameObject.SetActive(true);
+
+            //GlobalSettings.ShowWallLines = ShowWallLines;
+            //GlobalSettings.ShowOpeningLines = ShowOpeningLines;
+            //foreach (Room room in Building.Instance.rooms) {
+            //    room.UpdateRender2D();
+            //}
+            //foreach (Opening opening in Building.Instance.openings) {
+            //    opening.UpdateRender2D();
+            //}
 
             NotificationHandler.DestroyNotification(notificationObject);
             notificationObject = null;
@@ -92,7 +124,8 @@ namespace DesignPlatform.Core {
         public void OnModeTypeResume() {
             switch (currentModeType) {
                 case ModeType.POV:
-                    Cursor.lockState = CursorLockMode.Locked;
+                    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                    UnityEngine.Cursor.visible = false; 
                     break;
 
                 case ModeType.MENU:
@@ -102,7 +135,8 @@ namespace DesignPlatform.Core {
         public void OnModeTypePause() {
             switch (currentModeType) {
                 case ModeType.POV:
-                    Cursor.lockState = CursorLockMode.None;
+                    UnityEngine.Cursor.lockState = CursorLockMode.None;
+                    UnityEngine.Cursor.visible = true;
                     break;
 
                 case ModeType.MENU:
@@ -115,8 +149,8 @@ namespace DesignPlatform.Core {
         /// 
         /// </summary>
         public void UpdatePOVCamera() {
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+            float mouseX = Input.GetAxis("Mouse X"); //* mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y"); //* mouseSensitivity * Time.deltaTime;
 
             // Look Up/Down 
             xRotation -= mouseY;
