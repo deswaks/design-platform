@@ -17,15 +17,14 @@ namespace DesignPlatform.Core {
 
     public class Opening : MonoBehaviour {
 
-        public Face parentFace { get; private set; }
-
         public float WindowWidth = 1.6f;
         public float WindowHeight = 1.2f;
 
         public float DoorWidth = 1f;
         public float DoorHeight = 2.4f;
+        public float Doorstep = 0.1f;
 
-        public float OpeningDepth = 0.2f;
+        public float OpeningDepth = 0.051f;
         public float SillHeight;
         public float Width;
         public float Height;
@@ -46,13 +45,10 @@ namespace DesignPlatform.Core {
         }
         private OpeningStates openingState;
 
-        public void InitializeOpening(Face[] parentFaces = null,
+        public void InitializeOpening(Face[] attachedFaces = null,
                                       OpeningShape openingShape = OpeningShape.WINDOW) {
-
-            gameObject.layer = 15; // Opening layer
-
             shape = openingShape;
-            attachedFaces = parentFaces;
+            this.attachedFaces = attachedFaces;
 
             openingState = OpeningStates.PREVIEW;
 
@@ -63,36 +59,36 @@ namespace DesignPlatform.Core {
 
             switch (shape) {
                 case OpeningShape.WINDOW:
+                    gameObject.layer = 16; // Window layer
                     Width = WindowWidth;
                     Height = WindowHeight;
                     SillHeight = 1.1f;
-                    controlPoints = new List<Vector3> {
-                    -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight,
-                    -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight + Vector3.up*Height,
-                    Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight + Vector3.up*Height,
-                    Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight };
                     material = prefabOpening.windowMaterial;
                     gameObject.name = "Window";
 
 
                     break;
                 case OpeningShape.DOOR:
+                    gameObject.layer = 15; // Door layer
                     Width = DoorWidth;
                     Height = DoorHeight;
-                    SillHeight = OpeningDepth/2;
-                    controlPoints = new List<Vector3> {
-                    -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight,
-                    -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*Height + Vector3.up*SillHeight,
-                    Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*Height + Vector3.up*SillHeight,
-                    Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight };
+                    SillHeight = Doorstep;
                     material = prefabOpening.doorMaterial;
                     gameObject.name = "Door";
                     break;
             }
+            controlPoints = new List<Vector3> {
+                        new Vector3 (Width/2,SillHeight,0),
+                        new Vector3 (Width/2,SillHeight+Height,0),
+                        new Vector3 (-Width/2,SillHeight+Height,0),
+                        new Vector3 (-Width/2,SillHeight,0)
+                    };
 
-            //gameObject.AddComponent<MeshCollider>();
             gameObject.AddComponent<PolyShape>();
             gameObject.AddComponent<ProBuilderMesh>();
+
+            List<Vector3> openingMeshControlPoints = controlPoints.Select(p => p -= Vector3.forward * (OpeningDepth / 2)).ToList();
+
 
             PolyShape polyshape = gameObject.GetComponent<PolyShape>();
             polyshape.SetControlPoints(controlPoints);
@@ -144,11 +140,6 @@ namespace DesignPlatform.Core {
         }
 
         public List<Vector3> GetControlPoints2D() {
-            //List<Vector3> controlPoints2D = new List<Vector3> {
-            //    new Vector3 ( -Width / 2, 0, -OpeningDepth/2 ),
-            //    new Vector3 ( -Width / 2, 0,  OpeningDepth/2 ),
-            //    new Vector3 (  Width / 2, 0,  OpeningDepth/2 ),
-            //    new Vector3 (  Width / 2, 0, -OpeningDepth/2 ) };
             List<Vector3> controlPoints2D = new List<Vector3> {
                 new Vector3 (  Width / 2, 0, 0 ),
                 new Vector3 ( -Width / 2, 0, 0) };
@@ -159,7 +150,7 @@ namespace DesignPlatform.Core {
         /// Deletes the opening
         /// </summary>
         public void Delete() {
-            if (Building.Instance.openings.Contains(this)) {
+            if (Building.Instance.Openings.Contains(this)) {
                 Building.Instance.RemoveOpening(this);
             }
             Destroy(gameObject);
@@ -177,27 +168,13 @@ namespace DesignPlatform.Core {
         }
         public void Rotate(Face closestFace) {
             Vector3 faceNormal = closestFace.parentRoom.GetWallNormals()[closestFace.faceIndex];
-            Vector3 OpeningNormal = gameObject.transform.forward;
-            float angle = Vector3.Angle(OpeningNormal, faceNormal);
-            if (angle > 0f) {
-                Vector3 centerPoint = gameObject.transform.TransformPoint(Vector3.zero);
-                gameObject.transform.RotateAround(centerPoint, Vector3.up, angle);
-            }
+            gameObject.transform.rotation = Quaternion.LookRotation(faceNormal,Vector3.up);
         }
 
         public void SetOpeningState(OpeningStates openingState) {
             this.openingState = openingState;
         }
 
-        // DeleteOpening
-
-        // Get opening
-
-        // Get all openings
-
-        // Remove opening
-
-        // Delete all openings
 
         public Vector3 ClosestPoint(Vector3 mousePos, Face closestFace) {
             (Vector3 vA, Vector3 vB) = closestFace.Get2DEndPoints();
@@ -215,15 +192,32 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Gets a list of controlpoints - in local coordinates. The controlpoints are the vertices of the underlying polyshape of the opening.
         /// </summary>
-        public IList<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false, bool IList = false) {
-            IList<Vector3> returnPoints = controlPoints;
+        public List<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false, bool reverse = true) {
+            List<Vector3> returnPoints = controlPoints;
             if (closed) {
                 returnPoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
             }
             if (!localCoordinates) {
                 returnPoints = returnPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
             }
+            if (reverse) {
+                returnPoints.Reverse();
+            }
             return returnPoints;
         }
+        public Face[] SetAttachedFaces(Vector3 openingPos) {
+            // Find the two closest faces in the building
+            List<Face> facesToAttach = new List<Face>();
+            foreach (Room room in Building.Instance.Rooms) {
+                foreach (Face face in room.Faces.Where(f => f.orientation == Orientation.VERTICAL)) {
+                    if (face.IsPointOnFace(gameObject.transform.position)) {
+                        facesToAttach.Add(face);
+                    }
+                }
+            }
+            attachedFaces = facesToAttach.ToArray();
+            return attachedFaces;
+        }
+
     }
 }

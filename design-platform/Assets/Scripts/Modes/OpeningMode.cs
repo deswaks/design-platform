@@ -28,10 +28,12 @@ namespace DesignPlatform.Core {
         }
 
         public override void Tick() {
-            Debug.Log("Opening Mode");
+            //Debug.Log("Opening Mode");
             if (Input.GetMouseButtonDown(0)) {
                 if (EventSystem.current.IsPointerOverGameObject() == false) {
-                    Build();
+                    if (MousePositionCollidingRooms(hitPoint) != null) {
+                        Build();
+                    }
                 }
             }
 
@@ -64,11 +66,14 @@ namespace DesignPlatform.Core {
         /// Build the opening gameObject
         /// </summary>        
         public void Build() {
-            hitPoint = hitPointOnPlane();
-            Face[] closestFaces = ClosestFace(hitPoint);
+            //hitPoint = hitPointOnPlane();
+            //Face[] closestFaces = ClosestFace(hitPoint);
+
+            Face[] attachedFaces = previewOpening.SetAttachedFaces(previewOpening.transform.position);
+
             Building.Instance.BuildOpening(openingShape: selectedShape,
                                            templateOpening: previewOpening,
-                                           closestFaces: closestFaces);
+                                           attachedFaces: attachedFaces);
         }
 
         /// <summary>
@@ -102,11 +107,10 @@ namespace DesignPlatform.Core {
                 previewOpening.Move(hitPoint);
             }
             else {
-                Face[] closestFace = ClosestFace(hitPoint);
-                closestPoint = ClosestPoint(hitPoint, closestFace[0]);
-                //previewOpening.SubMove(closestPoint);
-                previewOpening.transform.position = closestPoint;
-                previewOpening.Rotate(closestFace[0]);
+                Face closestFace = ClosestFace(hitPoint);
+                closestPoint = ClosestPoint(hitPoint, closestFace);
+                previewOpening.SubMove(closestPoint);
+                previewOpening.Rotate(closestFace);
                 previewOpening.UpdateRender2D();
             }
         }
@@ -120,7 +124,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <param name="mousePos"></param>
         /// <returns></returns>
-        public Face[] ClosestFace(Vector3 mousePos) {
+        public Face ClosestFace(Vector3 mousePos) {
 
             // Create list of rooms that might have the closest face
             List<Room> relevantRooms = new List<Room>();
@@ -131,30 +135,26 @@ namespace DesignPlatform.Core {
                 }
             }
 
-            // Find closest face for each room
-            Face[] closestFace = new Face[relevantRooms.Count];
-            float[] closestDistance = Enumerable.Repeat(float.PositiveInfinity, relevantRooms.Count).ToArray();
+            // Find closest face
+            Face closestFace = null;
+            float closestDistance = float.PositiveInfinity;
+
             for (int i = 0; i < relevantRooms.Count; i++) {
                 List<Face> roomFaces = relevantRooms[i].Faces.Where(f => f.orientation == Orientation.VERTICAL).ToList();
+
                 foreach (Face face in roomFaces) {
+
                     (Vector3 vA, Vector3 vB) = face.Get2DEndPoints();
                     Vector3 closestPoint = VectorFunctions.LineClosestPoint(vA, vB, mousePos);
+
                     float distance = (closestPoint - mousePos).magnitude;
-                    if (distance <= closestDistance[i]) {
-                        closestDistance[i] = distance;
-                        closestFace[i] = face;
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closestFace = face;
                     }
                 }
             }
-
-            // Return one or two closest faces
-            if (relevantRooms.Count > 1 && closestDistance[0] == closestDistance[1]) {
-                return new Face[] { closestFace[0], closestFace[1] };
-            }
-            else {
-                return new Face[] {
-                    closestFace[closestDistance.ToList().IndexOf(closestDistance.Min())]  };
-            }
+            return closestFace;
         }
 
         /// <summary>
