@@ -1,12 +1,9 @@
 ﻿using System.Linq;
 
-namespace Neo4jClient.Cypher
-{
-    public partial class CypherFluentQuery
-    {
+namespace Neo4jClient.Cypher {
+    public partial class CypherFluentQuery {
         /// <inheritdoc />
-        public ICypherFluentQuery WithBookmark(string bookmark)
-        {
+        public ICypherFluentQuery WithBookmark(string bookmark) {
             if (string.IsNullOrWhiteSpace(bookmark))
                 return this;
 
@@ -15,8 +12,7 @@ namespace Neo4jClient.Cypher
         }
 
         /// <inheritdoc />
-        public ICypherFluentQuery WithBookmarks(params string[] bookmarks)
-        {
+        public ICypherFluentQuery WithBookmarks(params string[] bookmarks) {
             QueryWriter.Bookmarks.AddRange(bookmarks.Where(b => !string.IsNullOrWhiteSpace(b)));
             return this;
         }

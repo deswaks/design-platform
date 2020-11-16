@@ -1,51 +1,42 @@
-﻿using System;
+﻿using Neo4jClient.Cypher;
+using Neo4jClient.Transactions;
+using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Neo4jClient.Cypher;
-using Neo4jClient.Transactions;
 
-namespace Neo4jClient
-{
-    public partial class GraphClient : IRawGraphClient, IInternalTransactionalGraphClient<HttpResponseMessage>, IDisposable
-    {
+namespace Neo4jClient {
+    public partial class GraphClient : IRawGraphClient, IInternalTransactionalGraphClient<HttpResponseMessage>, IDisposable {
         public GraphClient(Uri rootUri, string username = null, string password = null)
-            : this(rootUri, new HttpClientWrapper(username, password))
-        {
-//            ServicePointManager.Expect100Continue = true;
-//            ServicePointManager.UseNagleAlgorithm = false;
+            : this(rootUri, new HttpClientWrapper(username, password)) {
+            //            ServicePointManager.Expect100Continue = true;
+            //            ServicePointManager.UseNagleAlgorithm = false;
         }
 
         public GraphClient(Uri rootUri, bool expect100Continue, bool useNagleAlgorithm, string username = null, string password = null)
-            : this(rootUri, new HttpClientWrapper(username, password))
-        {
-//            ServicePointManager.Expect100Continue = expect100Continue;
-//            ServicePointManager.UseNagleAlgorithm = useNagleAlgorithm;
+            : this(rootUri, new HttpClientWrapper(username, password)) {
+            //            ServicePointManager.Expect100Continue = expect100Continue;
+            //            ServicePointManager.UseNagleAlgorithm = useNagleAlgorithm;
         }
 
-        public virtual async Task ConnectAsync(NeoServerConfiguration configuration = null)
-        {
-            if (IsConnected)
-            {
+        public virtual async Task ConnectAsync(NeoServerConfiguration configuration = null) {
+            if (IsConnected) {
                 return;
             }
 
             var stopwatch = Stopwatch.StartNew();
-            var operationCompletedArgs = new OperationCompletedEventArgs
-            {
+            var operationCompletedArgs = new OperationCompletedEventArgs {
                 QueryText = "Connect",
                 ResourcesReturned = 0
             };
 
-            Action stopTimerAndNotifyCompleted = () =>
-            {
+            Action stopTimerAndNotifyCompleted = () => {
                 stopwatch.Stop();
                 operationCompletedArgs.TimeTaken = stopwatch.Elapsed;
                 OnOperationCompleted(operationCompletedArgs);
             };
 
-            try
-            {
+            try {
                 configuration = configuration ?? await NeoServerConfiguration.GetConfigurationAsync(
                     RootUri,
                     ExecutionConfiguration.Username,
@@ -55,15 +46,14 @@ namespace Neo4jClient
 
                 RootApiResponse = configuration.ApiConfig;
 
-                if (!string.IsNullOrWhiteSpace(RootApiResponse.Transaction))
-                {
+                if (!string.IsNullOrWhiteSpace(RootApiResponse.Transaction)) {
                     //  transactionManager = new TransactionManager(this);
                 }
-                #pragma warning disable CS0618
+#pragma warning disable CS0618
                 rootNode = string.IsNullOrEmpty(RootApiResponse.ReferenceNode)
                     ? null
                     : new RootNode(long.Parse(GetLastPathSegment(RootApiResponse.ReferenceNode)), this);
-                #pragma warning restore CS0618
+#pragma warning restore CS0618
                 // http://blog.neo4j.org/2012/04/streaming-rest-api-interview-with.html
                 ExecutionConfiguration.UseJsonStreaming = ExecutionConfiguration.UseJsonStreaming &&
                                                           RootApiResponse.Version >= new Version(1, 8);
@@ -83,8 +73,7 @@ namespace Neo4jClient
                 if (RootApiResponse.Version >= new Version(3, 0))
                     cypherCapabilities = CypherCapabilities.Cypher30;
             }
-            catch (AggregateException ex)
-            {
+            catch (AggregateException ex) {
                 Exception unwrappedException;
                 var wasUnwrapped = ex.TryUnwrap(out unwrappedException);
                 operationCompletedArgs.Exception = wasUnwrapped ? unwrappedException : ex;
@@ -96,8 +85,7 @@ namespace Neo4jClient
 
                 throw;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 operationCompletedArgs.Exception = e;
                 stopTimerAndNotifyCompleted();
                 throw;

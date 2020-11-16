@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 
-namespace UnityEngine.UI
-{
-    namespace Michsky.UI.ModernUIPack
-    {
-        public class UIGradient : BaseMeshEffect
-        {
+namespace UnityEngine.UI {
+    namespace Michsky.UI.ModernUIPack {
+        public class UIGradient : BaseMeshEffect {
             [SerializeField]
             UnityEngine.Gradient _effectGradient = new UnityEngine.Gradient() { colorKeys = new GradientColorKey[] { new GradientColorKey(Color.black, 0), new GradientColorKey(Color.white, 1) } };
 
@@ -20,49 +17,40 @@ namespace UnityEngine.UI
             float _offset = 0f;
 
             #region Properties
-            public Blend BlendMode
-            {
+            public Blend BlendMode {
                 get { return _blendMode; }
-                set
-                {
+                set {
                     _blendMode = value;
                     graphic.SetVerticesDirty();
                 }
             }
 
-            public UnityEngine.Gradient EffectGradient
-            {
+            public UnityEngine.Gradient EffectGradient {
                 get { return _effectGradient; }
-                set
-                {
+                set {
                     _effectGradient = value;
                     graphic.SetVerticesDirty();
                 }
             }
 
-            public Type GradientType
-            {
+            public Type GradientType {
                 get { return _gradientType; }
-                set
-                {
+                set {
                     _gradientType = value;
                     graphic.SetVerticesDirty();
                 }
             }
 
-            public float Offset
-            {
+            public float Offset {
                 get { return _offset; }
-                set
-                {
+                set {
                     _offset = value;
                     graphic.SetVerticesDirty();
                 }
             }
             #endregion
 
-            public override void ModifyMesh(VertexHelper helper)
-            {
+            public override void ModifyMesh(VertexHelper helper) {
                 if (!IsActive() || helper.currentVertCount == 0)
                     return;
 
@@ -71,16 +59,13 @@ namespace UnityEngine.UI
                 helper.GetUIVertexStream(_vertexList);
 
                 int nCount = _vertexList.Count;
-                switch (GradientType)
-                {
-                    case Type.Horizontal:
-                        {
+                switch (GradientType) {
+                    case Type.Horizontal: {
                             float left = _vertexList[0].position.x;
                             float right = _vertexList[0].position.x;
                             float x = 0f;
 
-                            for (int i = nCount - 1; i >= 1; --i)
-                            {
+                            for (int i = nCount - 1; i >= 1; --i) {
                                 x = _vertexList[i].position.x;
 
                                 if (x > right) right = x;
@@ -90,8 +75,7 @@ namespace UnityEngine.UI
                             float width = 1f / (right - left);
                             UIVertex vertex = new UIVertex();
 
-                            for (int i = 0; i < helper.currentVertCount; i++)
-                            {
+                            for (int i = 0; i < helper.currentVertCount; i++) {
                                 helper.PopulateUIVertex(ref vertex, i);
 
                                 vertex.color = BlendColor(vertex.color, EffectGradient.Evaluate((vertex.position.x - left) * width - Offset));
@@ -101,14 +85,12 @@ namespace UnityEngine.UI
                         }
                         break;
 
-                    case Type.Vertical:
-                        {
+                    case Type.Vertical: {
                             float bottom = _vertexList[0].position.y;
                             float top = _vertexList[0].position.y;
                             float y = 0f;
 
-                            for (int i = nCount - 1; i >= 1; --i)
-                            {
+                            for (int i = nCount - 1; i >= 1; --i) {
                                 y = _vertexList[i].position.y;
 
                                 if (y > top) top = y;
@@ -118,8 +100,7 @@ namespace UnityEngine.UI
                             float height = 1f / (top - bottom);
                             UIVertex vertex = new UIVertex();
 
-                            for (int i = 0; i < helper.currentVertCount; i++)
-                            {
+                            for (int i = 0; i < helper.currentVertCount; i++) {
                                 helper.PopulateUIVertex(ref vertex, i);
 
                                 vertex.color = BlendColor(vertex.color, EffectGradient.Evaluate((vertex.position.y - bottom) * height - Offset));
@@ -129,14 +110,12 @@ namespace UnityEngine.UI
                         }
                         break;
 
-                    case Type.Diamond:
-                        {
+                    case Type.Diamond: {
                             float bottom = _vertexList[0].position.y;
                             float top = _vertexList[0].position.y;
                             float y = 0f;
 
-                            for (int i = nCount - 1; i >= 1; --i)
-                            {
+                            for (int i = nCount - 1; i >= 1; --i) {
                                 y = _vertexList[i].position.y;
 
                                 if (y > top) top = y;
@@ -160,8 +139,7 @@ namespace UnityEngine.UI
 
                             UIVertex vertex = new UIVertex();
 
-                            for (int i = 0; i < helper.currentVertCount; i++)
-                            {
+                            for (int i = 0; i < helper.currentVertCount; i++) {
                                 helper.PopulateUIVertex(ref vertex, i);
 
                                 vertex.color = BlendColor(vertex.color, EffectGradient.Evaluate(
@@ -172,8 +150,7 @@ namespace UnityEngine.UI
                         }
                         break;
 
-                    case Type.Radial:
-                        {
+                    case Type.Radial: {
                             float left = _vertexList[0].position.x;
                             float right = _vertexList[0].position.x;
                             float bottom = _vertexList[0].position.y;
@@ -182,8 +159,7 @@ namespace UnityEngine.UI
                             float x = 0f;
                             float y = 0f;
 
-                            for (int i = nCount - 1; i >= 1; --i)
-                            {
+                            for (int i = nCount - 1; i >= 1; --i) {
                                 x = _vertexList[i].position.x;
 
                                 if (x > right) right = x;
@@ -210,8 +186,7 @@ namespace UnityEngine.UI
                             centralVertex.color = Color.white;
 
                             int steps = 64;
-                            for (int i = 0; i < steps; i++)
-                            {
+                            for (int i = 0; i < steps; i++) {
                                 UIVertex curVertex = new UIVertex();
                                 float angle = (float)i * 360f / (float)steps;
                                 float curX = Mathf.Cos(Mathf.Deg2Rad * angle) * radiusX;
@@ -230,8 +205,7 @@ namespace UnityEngine.UI
 
                             UIVertex vertex = new UIVertex();
 
-                            for (int i = 0; i < helper.currentVertCount; i++)
-                            {
+                            for (int i = 0; i < helper.currentVertCount; i++) {
                                 helper.PopulateUIVertex(ref vertex, i);
 
                                 vertex.color = BlendColor(vertex.color, EffectGradient.Evaluate(
@@ -246,26 +220,22 @@ namespace UnityEngine.UI
                 }
             }
 
-            Color BlendColor(Color colorA, Color colorB)
-            {
-                switch (BlendMode)
-                {
+            Color BlendColor(Color colorA, Color colorB) {
+                switch (BlendMode) {
                     default: return colorB;
                     case Blend.Add: return colorA + colorB;
                     case Blend.Multiply: return colorA * colorB;
                 }
             }
 
-            public enum Type
-            {
+            public enum Type {
                 Horizontal,
                 Vertical,
                 Radial,
                 Diamond
             }
 
-            public enum Blend
-            {
+            public enum Blend {
                 Override,
                 Add,
                 Multiply

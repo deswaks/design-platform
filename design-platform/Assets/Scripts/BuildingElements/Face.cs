@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 namespace DesignPlatform.Core {
     public class Face {
-        public Room parentRoom { get; private set; }
+        public Room Room { get; private set; }
         public int faceIndex { get; private set; }
         public List<Interface> interfaces { get; private set; }
         public List<Opening> openings { get; private set; }
@@ -21,7 +19,7 @@ namespace DesignPlatform.Core {
             interfaces = new List<Interface>();
             openings = new List<Opening>();
             paramerters = new Dictionary<Interface, float[]>();
-            parentRoom = parent;
+            Room = parent;
             faceIndex = index;
             SetOrientation();
         }
@@ -30,7 +28,7 @@ namespace DesignPlatform.Core {
         /// Determs the orientation of the face (horizontal or vertical)
         /// </summary>
         private void SetOrientation() {
-            if (faceIndex < parentRoom.GetControlPoints().Count) {
+            if (faceIndex < Room.GetControlPoints().Count) {
                 orientation = Orientation.VERTICAL;
             }
             else orientation = Orientation.HORIZONTAL;
@@ -45,16 +43,16 @@ namespace DesignPlatform.Core {
 
             switch (orientation) {
                 case Orientation.VERTICAL:
-                    cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates, closed: true);
+                    cp = Room.GetControlPoints(localCoordinates: localCoordinates, closed: true);
                     endpoints = new Vector3[2];
                     endpoints[0] = cp[faceIndex];
                     endpoints[1] = cp[faceIndex + 1];
                     break;
                 case Orientation.HORIZONTAL:
-                    cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates);
+                    cp = Room.GetControlPoints(localCoordinates: localCoordinates);
                     if (faceIndex == cp.Count + 1) {
                         for (int i = 0; i < cp.Count; i++) {
-                            cp[i] += Vector3.up * parentRoom.height;
+                            cp[i] += Vector3.up * Room.height;
                         };
                     }
 
@@ -71,7 +69,7 @@ namespace DesignPlatform.Core {
         public (Vector3, Vector3) Get2DEndPoints(bool localCoordinates = false) {
             (Vector3, Vector3) endpoints = (new Vector3(), new Vector3());
             if (orientation == Orientation.VERTICAL) {
-                List<Vector3> cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates, closed: true);
+                List<Vector3> cp = Room.GetControlPoints(localCoordinates: localCoordinates, closed: true);
                 endpoints.Item1 = cp[faceIndex];
                 endpoints.Item2 = cp[faceIndex + 1];
             }

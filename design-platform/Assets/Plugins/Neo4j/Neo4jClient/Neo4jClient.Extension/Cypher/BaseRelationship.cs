@@ -1,11 +1,8 @@
-﻿namespace Neo4jClient.Extension.Cypher
-{
-    public abstract class BaseRelationship
-    {
-        protected BaseRelationship(string key) : this(key,null,null){}
-        protected BaseRelationship(string fromKey, string toKey) : this(fromKey+toKey, fromKey,toKey){}
-        protected BaseRelationship(string key, string fromKey, string toKey)
-        {
+﻿namespace Neo4jClient.Extension.Cypher {
+    public abstract class BaseRelationship {
+        protected BaseRelationship(string key) : this(key, null, null) { }
+        protected BaseRelationship(string fromKey, string toKey) : this(fromKey + toKey, fromKey, toKey) { }
+        protected BaseRelationship(string key, string fromKey, string toKey) {
             FromKey = fromKey;
             ToKey = toKey;
             Key = key;

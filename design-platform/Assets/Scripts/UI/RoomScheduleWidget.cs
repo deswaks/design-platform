@@ -1,8 +1,6 @@
 ﻿using DesignPlatform.Core;
 using DesignPlatform.Utils;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace DesignPlatform {
@@ -55,7 +53,7 @@ namespace DesignPlatform {
             DeleteContentRows();
             int roomIndex = 0;
 
-            foreach (Room room in Building.Instance.rooms) {
+            foreach (Room room in Building.Instance.Rooms) {
                 GameObject currentRow = GameObject.Instantiate(contentTemplate, contentTemplate.transform.parent);
                 currentRow.name = "Row" + roomIndex.ToString();
                 contentRows.Add(currentRow);

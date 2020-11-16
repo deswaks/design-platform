@@ -1,7 +1,4 @@
 ﻿using StructuralAnalysis;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DesignPlatform.Core {
@@ -22,7 +19,7 @@ namespace DesignPlatform.Core {
             SetMode(SelectMode.Instance);
 
 
-    
+
             // Pre load assets
             Utils.AssetUtil.LoadBundle("materials");
             Utils.AssetUtil.LoadBundle("prefabs");

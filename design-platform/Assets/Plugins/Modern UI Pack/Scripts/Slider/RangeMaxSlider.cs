@@ -1,11 +1,9 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class RangeMaxSlider : Slider
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class RangeMaxSlider : Slider {
         public RangeMinSlider minSlider;
         public TextMeshProUGUI label;
         public string numberFormat;
@@ -13,19 +11,16 @@ namespace Michsky.UI.ModernUIPack
         public float realValue;
         private bool assignedRealValue = false;
 
-        protected override void Start()
-        {
+        protected override void Start() {
             realValue = maxValue;
             base.Start();
         }
 
-        protected override void Set(float input, bool sendCallback)
-        {
+        protected override void Set(float input, bool sendCallback) {
             if (minSlider == null)
                 minSlider = transform.parent.Find("Min Slider").GetComponent<RangeMinSlider>();
 
-            if (!assignedRealValue)
-            {
+            if (!assignedRealValue) {
                 realValue = maxValue;
                 assignedRealValue = true;
             }
@@ -45,8 +40,7 @@ namespace Michsky.UI.ModernUIPack
             base.Set(input, sendCallback);
         }
 
-        public void Refresh(float input)
-        {
+        public void Refresh(float input) {
             Set(input, false);
         }
     }

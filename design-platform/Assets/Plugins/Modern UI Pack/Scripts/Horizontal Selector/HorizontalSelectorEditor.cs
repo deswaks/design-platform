@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(HorizontalSelector))]
     [System.Serializable]
-    public class HorizontalSelectorEditor : Editor
-    {
+    public class HorizontalSelectorEditor : Editor {
         // Variables
         private HorizontalSelector hsTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             hsTarget = (HorizontalSelector)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -93,8 +89,7 @@ namespace Michsky.UI.ModernUIPack
             var defaultIndex = serializedObject.FindProperty("defaultIndex");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("ITEMS", customSkin.FindStyle("Header"));
@@ -162,8 +157,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (saveValue.boolValue == true)
-                    {
+                    if (saveValue.boolValue == true) {
                         EditorGUI.indentLevel = 2;
                         GUILayout.BeginHorizontal();
 
@@ -190,8 +184,7 @@ namespace Michsky.UI.ModernUIPack
                     GUILayout.EndHorizontal();
                     GUILayout.BeginHorizontal();
 
-                    if (enableIndicators.boolValue == true)
-                    {
+                    if (enableIndicators.boolValue == true) {
                         if (hsTarget.indicatorObject == null)
                             EditorGUILayout.HelpBox("'Indicator Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
 
@@ -201,9 +194,8 @@ namespace Michsky.UI.ModernUIPack
                         else
                             hsTarget.indicatorParent.gameObject.SetActive(true);
                     }
-                    
-                    else
-                    {
+
+                    else {
                         if (hsTarget.indicatorParent != null)
                             hsTarget.indicatorParent.gameObject.SetActive(false);
                     }
@@ -238,8 +230,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndVertical();
 
-                    if (saveValue.boolValue == true)
-                    {
+                    if (saveValue.boolValue == true) {
                         GUILayout.Space(2);
                         EditorGUILayout.HelpBox("Save Selection is enabled. This option won't be used if there's a stored value.", MessageType.Info);
                     }

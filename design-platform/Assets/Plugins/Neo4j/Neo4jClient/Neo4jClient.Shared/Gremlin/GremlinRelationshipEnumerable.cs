@@ -2,60 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Neo4jClient.Gremlin
-{
+namespace Neo4jClient.Gremlin {
     [DebuggerDisplay("{DebugQueryText}")]
-    internal class GremlinRelationshipEnumerable : IGremlinRelationshipQuery
-    {
+    internal class GremlinRelationshipEnumerable : IGremlinRelationshipQuery {
         readonly IGraphClient client;
         readonly string queryText;
         readonly IDictionary<string, object> queryParameters;
         readonly IList<string> queryDeclaration;
 
-        public GremlinRelationshipEnumerable(IGremlinQuery query)
-        {
+        public GremlinRelationshipEnumerable(IGremlinQuery query) {
             client = query.Client;
             queryText = query.QueryText;
             queryParameters = query.QueryParameters;
             queryDeclaration = query.QueryDeclarations;
         }
 
-        public string DebugQueryText
-        {
+        public string DebugQueryText {
             get { return this.ToDebugQueryText(); }
         }
 
-        IEnumerator<RelationshipInstance> IEnumerable<RelationshipInstance>.GetEnumerator()
-        {
+        IEnumerator<RelationshipInstance> IEnumerable<RelationshipInstance>.GetEnumerator() {
             if (client == null) throw new DetachedNodeException();
-            #pragma warning disable CS0618
+#pragma warning disable CS0618
             var results = client.ExecuteGetAllRelationshipsGremlin(queryText, queryParameters);
-            #pragma warning restore CS0618
+#pragma warning restore CS0618
             return results.GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
+        IEnumerator IEnumerable.GetEnumerator() {
             return ((IEnumerable<RelationshipInstance>)this).GetEnumerator();
         }
 
-        IGraphClient IAttachedReference.Client
-        {
+        IGraphClient IAttachedReference.Client {
             get { return client; }
         }
 
-        string IGremlinQuery.QueryText
-        {
+        string IGremlinQuery.QueryText {
             get { return queryText; }
         }
 
-        IDictionary<string, object> IGremlinQuery.QueryParameters
-        {
+        IDictionary<string, object> IGremlinQuery.QueryParameters {
             get { return queryParameters; }
         }
 
-        IList<string> IGremlinQuery.QueryDeclarations
-        {
+        IList<string> IGremlinQuery.QueryDeclarations {
             get { return queryDeclaration; }
         }
     }

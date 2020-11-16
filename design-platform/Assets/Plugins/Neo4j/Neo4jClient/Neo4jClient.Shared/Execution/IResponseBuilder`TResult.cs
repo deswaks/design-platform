@@ -2,12 +2,9 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Neo4jClient.Cypher;
 
-namespace Neo4jClient.Execution
-{
-    internal interface IResponseBuilder<TResult> where TResult : new()
-    {
+namespace Neo4jClient.Execution {
+    internal interface IResponseBuilder<TResult> where TResult : new() {
         IResponseBuilder<TResult> WithExpectedStatusCodes(params HttpStatusCode[] statusCodes);
         IResponseFailBuilder<TResult> FailOnCondition(Func<HttpResponseMessage, bool> condition);
         Task<TResult> ExecuteAsync(string commandDescription);

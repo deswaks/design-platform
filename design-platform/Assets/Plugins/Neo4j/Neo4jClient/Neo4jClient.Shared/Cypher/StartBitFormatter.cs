@@ -4,24 +4,20 @@ using System.Linq;
 using System.Reflection;
 using CreateParameterCallback = System.Func<object, string>;
 
-namespace Neo4jClient.Cypher
-{
-    internal static class StartBitFormatter
-    {
+namespace Neo4jClient.Cypher {
+    internal static class StartBitFormatter {
         internal static string FormatAsCypherText(
             object startBits,
-            CreateParameterCallback createParameterCallback)
-        {
+            CreateParameterCallback createParameterCallback) {
             var startBitsAsDictionary = startBits
                 .GetType()
                 .GetProperties()
-                .Select(property =>
-                {
+                .Select(property => {
                     var getMethod = property.GetGetMethod();
                     var value = getMethod.Invoke(startBits, new object[0]);
-                    return new {Identity = property.Name, Value = value};
+                    return new { Identity = property.Name, Value = value };
                 })
-                .ToDictionary(k => k.Identity, k=> k.Value);
+                .ToDictionary(k => k.Identity, k => k.Value);
 
             if (!startBitsAsDictionary.Keys.Any())
                 throw new ArgumentException("The start object you supplied didn't have any properties on it, resulting in an empty START clause. Consult the documentation at https://bitbucket.org/Readify/neo4jclient/wiki/cypher if you're unsure about how to use this overload.", "startBits");
@@ -31,12 +27,10 @@ namespace Neo4jClient.Cypher
 
         internal static string FormatAsCypherText(
             IDictionary<string, object> startBits,
-            CreateParameterCallback createParameterCallback)
-        {
+            CreateParameterCallback createParameterCallback) {
             var cypherTextBits = startBits
                 .Keys
-                .Select(identity =>
-                {
+                .Select(identity => {
                     var value = startBits[identity];
                     if (value == null)
                         throw new ArgumentException(string.Format("The value of {0} was null.", identity), "startBits");
@@ -48,8 +42,7 @@ namespace Neo4jClient.Cypher
             return string.Join(", ", cypherTextBits);
         }
 
-        static string FormatBitAsCypherText(string identity, object value, CreateParameterCallback createParameterCallback)
-        {
+        static string FormatBitAsCypherText(string identity, object value, CreateParameterCallback createParameterCallback) {
             var valueType = value.GetType();
             var formatterKey = Formatters
                 .Keys
@@ -69,8 +62,7 @@ namespace Neo4jClient.Cypher
             return Formatters[formatterKey](value, createParameterCallback);
         }
 
-        static bool IsCovariantlyEquivalentEnumerable(Type type1, Type type2)
-        {
+        static bool IsCovariantlyEquivalentEnumerable(Type type1, Type type2) {
             return
                 type1.GetTypeInfo().IsGenericType &&
                 type1.GetGenericTypeDefinition() == typeof(IEnumerable<>) &&
@@ -119,30 +111,25 @@ namespace Neo4jClient.Cypher
             }
         };
 
-        static string FormatValue(StartBit value, CreateParameterCallback createParameterCallback)
-        {
+        static string FormatValue(StartBit value, CreateParameterCallback createParameterCallback) {
             return value.ToCypherText(createParameterCallback);
         }
 
-        static string FormatValue(NodeReference value, CreateParameterCallback createParameterCallback)
-        {
-            return FormatValue(new[] {value}, createParameterCallback);
+        static string FormatValue(NodeReference value, CreateParameterCallback createParameterCallback) {
+            return FormatValue(new[] { value }, createParameterCallback);
         }
 
-        static string FormatValue(IEnumerable<NodeReference> value, CreateParameterCallback createParameterCallback)
-        {
+        static string FormatValue(IEnumerable<NodeReference> value, CreateParameterCallback createParameterCallback) {
             var ids = value.Select(v => v.Id).ToArray();
             var idsParam = ids.Count() == 1 ? createParameterCallback(ids.Single()) : createParameterCallback(ids);
             return string.Format("node({0})", idsParam);
         }
 
-        static string FormatValue(RelationshipReference value, CreateParameterCallback createParameterCallback)
-        {
+        static string FormatValue(RelationshipReference value, CreateParameterCallback createParameterCallback) {
             return FormatValue(new[] { value }, createParameterCallback);
         }
 
-        static string FormatValue(IEnumerable<RelationshipReference> value, CreateParameterCallback createParameterCallback)
-        {
+        static string FormatValue(IEnumerable<RelationshipReference> value, CreateParameterCallback createParameterCallback) {
             var ids = value.Select(v => v.Id).ToArray();
             var idsParam = ids.Count() == 1 ? createParameterCallback(ids.Single()) : createParameterCallback(ids);
             return string.Format("relationship({0})", idsParam);

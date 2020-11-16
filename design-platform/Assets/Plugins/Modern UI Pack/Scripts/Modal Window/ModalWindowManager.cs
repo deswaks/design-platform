@@ -1,12 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class ModalWindowManager : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class ModalWindowManager : MonoBehaviour {
         // Resources
         public Image windowIcon;
         public TextMeshProUGUI windowTitle;
@@ -30,15 +28,12 @@ namespace Michsky.UI.ModernUIPack
         Animator mwAnimator;
         public bool isOn = false;
 
-        void Start()
-        {
-            try
-            {
+        void Start() {
+            try {
                 mwAnimator = gameObject.GetComponent<Animator>();
             }
 
-            catch
-            {
+            catch {
                 Debug.LogError("Modal Window - Cannot initalize the window due to missing 'Animator' variable.", this);
             }
 
@@ -52,25 +47,20 @@ namespace Michsky.UI.ModernUIPack
                 UpdateUI();
         }
 
-        public void UpdateUI()
-        {
-            try
-            {
+        public void UpdateUI() {
+            try {
                 windowIcon.sprite = icon;
                 windowTitle.text = titleText;
                 windowDescription.text = descriptionText;
             }
 
-            catch
-            {
+            catch {
                 Debug.LogWarning("Modal Window - Cannot update the content due to missing variables.", this);
             }
         }
 
-        public void OpenWindow()
-        {
-            if (isOn == false)
-            {
+        public void OpenWindow() {
+            if (isOn == false) {
                 if (sharpAnimations == false)
                     mwAnimator.CrossFade("Fade-in", 0.1f);
                 else
@@ -80,10 +70,8 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void CloseWindow()
-        {
-            if (isOn == true)
-            {
+        public void CloseWindow() {
+            if (isOn == true) {
                 if (sharpAnimations == false)
                     mwAnimator.CrossFade("Fade-out", 0.1f);
                 else
@@ -93,10 +81,8 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void AnimateWindow()
-        {
-            if (isOn == false)
-            {
+        public void AnimateWindow() {
+            if (isOn == false) {
                 if (sharpAnimations == false)
                     mwAnimator.CrossFade("Fade-in", 0.1f);
                 else
@@ -105,8 +91,7 @@ namespace Michsky.UI.ModernUIPack
                 isOn = true;
             }
 
-            else
-            {
+            else {
                 if (sharpAnimations == false)
                     mwAnimator.CrossFade("Fade-out", 0.1f);
                 else

@@ -1,6 +1,4 @@
-﻿using DesignPlatform.Core;
-using Newtonsoft.Json.Bson;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +18,7 @@ namespace DesignPlatform.Core {
 
         // Sets up list of widgets and toggles them all
         void OnEnable() {
-            if(rowTemplate == null) {
+            if (rowTemplate == null) {
                 rowTemplate = gameObject.transform.Find("rowTemplate").gameObject;
             }
             rowTemplate.SetActive(true);
@@ -43,16 +41,16 @@ namespace DesignPlatform.Core {
             }
 
             //Dashboard.Instance.SetAllWidgetsAndToggles(widgets);
-            
+
             rowTemplate.SetActive(false);
 
         }
 
         public void ToggleWidget(Toggle toggle) {
-            
+
             Widget widget = widgets.First(w => w.Key.Name == toggle.gameObject.name).Key;
             widgets[widget] = toggle.gameObject.GetComponent<Toggle>().isOn;
-            
+
             Dashboard.Instance.SetAllWidgetsAndToggles(widgets);
         }
     }

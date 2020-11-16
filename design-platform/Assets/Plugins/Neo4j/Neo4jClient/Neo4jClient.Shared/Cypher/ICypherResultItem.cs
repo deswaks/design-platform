@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 
-namespace Neo4jClient.Cypher
-{
-    public interface ICypherResultItem
-    {
+namespace Neo4jClient.Cypher {
+    public interface ICypherResultItem {
         /// <summary>
         /// Does not emit anything into the query; purely used for design-time type coersion in C#
         /// </summary>

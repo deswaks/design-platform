@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using DesignPlatform.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class Slab : MonoBehaviour {
@@ -48,7 +46,7 @@ namespace DesignPlatform.Core {
         /// Deletes a slab and removes it from the slab list.
         /// </summary>
         public void DeleteSlab() {
-            if (Building.Instance.slabs.Contains(this)) {
+            if (Building.Instance.Slabs.Contains(this)) {
                 Building.Instance.RemoveSlab(this);
             }
             Destroy(gameObject);

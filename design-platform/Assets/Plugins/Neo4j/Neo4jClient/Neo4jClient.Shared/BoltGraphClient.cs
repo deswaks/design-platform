@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Neo4j.Driver.V1;
 using Neo4jClient.ApiModels;
 using Neo4jClient.Cypher;
@@ -13,19 +7,22 @@ using Neo4jClient.Serialization;
 using Neo4jClient.Transactions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using ITransaction = Neo4jClient.Transactions.ITransaction;
 
 //TODO: Logging
 //TODO: Config Stuff
 //TODO: Transaction Stuff
 
-namespace Neo4jClient
-{
+namespace Neo4jClient {
     /// <summary>
     ///     The <see cref="BoltGraphClient" /> is the client for connecting to the Bolt protocol of Neo4j.
     /// </summary>
-    public partial class BoltGraphClient : IBoltGraphClient, IRawGraphClient, ITransactionalGraphClient
-    {
+    public partial class BoltGraphClient : IBoltGraphClient, IRawGraphClient, ITransactionalGraphClient {
         internal const string NotValidForBolt = "This is not available using the BoltGraphClient.";
 
         internal static readonly JsonConverter[] DefaultJsonConverters =
@@ -34,7 +31,7 @@ namespace Neo4jClient
             new NullableEnumValueConverter(),
             new TimeZoneInfoConverter(),
             new EnumValueConverter(),
-            new ZonedDateTimeConverter(), 
+            new ZonedDateTimeConverter(),
             new LocalDateTimeConverter()
         };
 
@@ -43,36 +40,31 @@ namespace Neo4jClient
         private readonly string password;
         private readonly string realm;
 
-        #pragma warning disable CS0649
+#pragma warning disable CS0649
         private readonly ITransactionManager<BoltResponse> transactionManager;
-        #pragma warning restore CS0649
+#pragma warning restore CS0649
         private readonly IServerAddressResolver addressResolver;
         private readonly string username;
         private readonly Uri uri;
 
         public BoltGraphClient(Uri uri, string username = null, string password = null, string realm = null)
-            : this(uri, null, username, password, realm)
-        { }
+            : this(uri, null, username, password, realm) { }
 
         public BoltGraphClient(IEnumerable<string> uris, string username = null, string password = null, string realm = null)
-            : this(new Uri("bolt+routing://virtual.neo4j.uri"), uris?.Select(UriCreator.From).ToList(), username, password, realm)
-        { }
+            : this(new Uri("bolt+routing://virtual.neo4j.uri"), uris?.Select(UriCreator.From).ToList(), username, password, realm) { }
 
         public BoltGraphClient(string uri, IEnumerable<string> uris, string username = null, string password = null, string realm = null)
-        : this(new Uri(uri), uris?.Select(UriCreator.From).ToList(), username, password, realm)
-        {}
+        : this(new Uri(uri), uris?.Select(UriCreator.From).ToList(), username, password, realm) { }
 
-        public BoltGraphClient(string uri, string username = null, string password= null, string realm = null)
-            : this(new Uri(uri), username, password, realm)
-        { }
+        public BoltGraphClient(string uri, string username = null, string password = null, string realm = null)
+            : this(new Uri(uri), username, password, realm) { }
 
-        #pragma warning disable CS0618
+#pragma warning disable CS0618
         public BoltGraphClient(IDriver driver)
-            : this(driver.Uri, null, null, null)
-        {
+            : this(driver.Uri, null, null, null) {
             Driver = driver;
         }
-        #pragma warning restore CS0618
+#pragma warning restore CS0618
 
         internal IDriver Driver { get; set; }
         internal IServerAddressResolver AddressResolver => addressResolver;
@@ -83,9 +75,8 @@ namespace Neo4jClient
         /// <inheritdoc />
         public ICypherFluentQuery Cypher => new CypherFluentQuery(this, true);
         #endregion
-        
-        private void CheckTransactionEnvironmentWithPolicy(IExecutionPolicy policy)
-        {
+
+        private void CheckTransactionEnvironmentWithPolicy(IExecutionPolicy policy) {
             var inTransaction = InTransaction;
 
             transactionManager?.RegisterToTransactionIfNeeded();
@@ -99,27 +90,23 @@ namespace Neo4jClient
 
         #region ExecutionContext class
 
-        internal class ExecutionContext
-        {
+        internal class ExecutionContext {
             private readonly Stopwatch stopwatch;
             private BoltGraphClient owner;
 
-            private ExecutionContext()
-            {
+            private ExecutionContext() {
                 stopwatch = Stopwatch.StartNew();
             }
 
             public IExecutionPolicy Policy { get; set; }
             public static bool HasErrors { get; set; }
 
-            public static ExecutionContext Begin(BoltGraphClient owner)
-            {
+            public static ExecutionContext Begin(BoltGraphClient owner) {
                 var policy = owner.PolicyFactory.GetPolicy(PolicyType.Cypher);
 
                 owner.CheckTransactionEnvironmentWithPolicy(policy);
 
-                var executionContext = new ExecutionContext
-                {
+                var executionContext = new ExecutionContext {
                     owner = owner,
                     Policy = policy
                 };
@@ -127,28 +114,23 @@ namespace Neo4jClient
                 return executionContext;
             }
 
-            public void Complete(CypherQuery query, string lastBookmark)
-            {
+            public void Complete(CypherQuery query, string lastBookmark) {
                 // only parse the events when there's an event handler
                 Complete(owner.OperationCompleted != null ? query.DebugQueryText : string.Empty, lastBookmark, 0, null, identifier: query.Identifier, bookmarks: query.Bookmarks);
             }
 
-            public void Complete(CypherQuery query, string lastBookmark, int resultsCount)
-            {
+            public void Complete(CypherQuery query, string lastBookmark, int resultsCount) {
                 // only parse the events when there's an event handler
                 Complete(owner.OperationCompleted != null ? query.DebugQueryText : string.Empty, lastBookmark, resultsCount, null, query.CustomHeaders, identifier: query.Identifier, bookmarks: query.Bookmarks);
             }
 
-            public void Complete(CypherQuery query, string lastBookmark, Exception exception)
-            {
+            public void Complete(CypherQuery query, string lastBookmark, Exception exception) {
                 // only parse the events when there's an event handler
-                Complete(owner.OperationCompleted != null ? query.DebugQueryText : string.Empty, lastBookmark, -1, exception, identifier:query.Identifier, bookmarks:query.Bookmarks);
+                Complete(owner.OperationCompleted != null ? query.DebugQueryText : string.Empty, lastBookmark, -1, exception, identifier: query.Identifier, bookmarks: query.Bookmarks);
             }
 
-            public void Complete(string queryText, string lastBookmark, int resultsCount = -1, Exception exception = null, NameValueCollection customHeaders = null, int? maxExecutionTime = null, string identifier = null, IEnumerable<string> bookmarks = null)
-            {
-                var args = new OperationCompletedEventArgs
-                {
+            public void Complete(string queryText, string lastBookmark, int resultsCount = -1, Exception exception = null, NameValueCollection customHeaders = null, int? maxExecutionTime = null, string identifier = null, IEnumerable<string> bookmarks = null) {
+                var args = new OperationCompletedEventArgs {
                     LastBookmark = lastBookmark,
                     QueryText = queryText,
                     ResourcesReturned = resultsCount,
@@ -169,8 +151,7 @@ namespace Neo4jClient
         #region Implementation of IDisposable
 
         /// <inheritdoc />
-        protected void Dispose(bool isDisposing)
-        {
+        protected void Dispose(bool isDisposing) {
             if (!isDisposing)
                 return;
 
@@ -178,8 +159,7 @@ namespace Neo4jClient
         }
 
         /// <inheritdoc />
-        public void Dispose()
-        {
+        public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -190,275 +170,235 @@ namespace Neo4jClient
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public RootNode RootNode
-        {
+        public RootNode RootNode {
             get { throw new InvalidOperationException(NotValidForBolt); }
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
         public NodeReference<TNode> Create<TNode>(TNode node, IEnumerable<IRelationshipAllowingParticipantNode<TNode>> relationships, IEnumerable<IndexEntry> indexEntries)
-            where TNode : class
-        {
+            where TNode : class {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Node<TNode> Get<TNode>(NodeReference reference)
-        {
+        public Node<TNode> Get<TNode>(NodeReference reference) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Task<Node<TNode>> GetAsync<TNode>(NodeReference reference)
-        {
+        public Task<Node<TNode>> GetAsync<TNode>(NodeReference reference) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Node<TNode> Get<TNode>(NodeReference<TNode> reference)
-        {
+        public Node<TNode> Get<TNode>(NodeReference<TNode> reference) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public RelationshipInstance<TData> Get<TData>(RelationshipReference<TData> reference) 
-            where TData : class, new()
-        {
+        public RelationshipInstance<TData> Get<TData>(RelationshipReference<TData> reference)
+            where TData : class, new() {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public RelationshipInstance<TData> Get<TData>(RelationshipReference reference) where TData : class, new()
-        {
+        public RelationshipInstance<TData> Get<TData>(RelationshipReference reference) where TData : class, new() {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Task<RelationshipInstance<TData>> GetAsync<TData>(RelationshipReference reference) where TData : class, new()
-        {
+        public Task<RelationshipInstance<TData>> GetAsync<TData>(RelationshipReference reference) where TData : class, new() {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void Update<TNode>(NodeReference<TNode> nodeReference, TNode replacementData, IEnumerable<IndexEntry> indexEntries = null)
-        {
+        public void Update<TNode>(NodeReference<TNode> nodeReference, TNode replacementData, IEnumerable<IndexEntry> indexEntries = null) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Node<TNode> Update<TNode>(NodeReference<TNode> nodeReference, Action<TNode> updateCallback, Func<TNode, IEnumerable<IndexEntry>> indexEntriesCallback = null, Action<IEnumerable<FieldChange>> changeCallback = null)
-        {
+        public Node<TNode> Update<TNode>(NodeReference<TNode> nodeReference, Action<TNode> updateCallback, Func<TNode, IEnumerable<IndexEntry>> indexEntriesCallback = null, Action<IEnumerable<FieldChange>> changeCallback = null) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void Update<TRelationshipData>(RelationshipReference<TRelationshipData> relationshipReference, Action<TRelationshipData> updateCallback) where TRelationshipData : class, new()
-        {
+        public void Update<TRelationshipData>(RelationshipReference<TRelationshipData> relationshipReference, Action<TRelationshipData> updateCallback) where TRelationshipData : class, new() {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void Delete(NodeReference reference, DeleteMode mode)
-        {
+        public void Delete(NodeReference reference, DeleteMode mode) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public RelationshipReference CreateRelationship<TSourceNode, TRelationship>(NodeReference<TSourceNode> sourceNodeReference, TRelationship relationship) where TRelationship : Relationship, IRelationshipAllowingSourceNode<TSourceNode>
-        {
+        public RelationshipReference CreateRelationship<TSourceNode, TRelationship>(NodeReference<TSourceNode> sourceNodeReference, TRelationship relationship) where TRelationship : Relationship, IRelationshipAllowingSourceNode<TSourceNode> {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void DeleteRelationship(RelationshipReference reference)
-        {
+        public void DeleteRelationship(RelationshipReference reference) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public string ExecuteScalarGremlin(string query, IDictionary<string, object> parameters)
-        {
+        public string ExecuteScalarGremlin(string query, IDictionary<string, object> parameters) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public IEnumerable<TResult> ExecuteGetAllProjectionsGremlin<TResult>(IGremlinQuery query) where TResult : new()
-        {
+        public IEnumerable<TResult> ExecuteGetAllProjectionsGremlin<TResult>(IGremlinQuery query) where TResult : new() {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public IEnumerable<Node<TNode>> ExecuteGetAllNodesGremlin<TNode>(IGremlinQuery query)
-        {
+        public IEnumerable<Node<TNode>> ExecuteGetAllNodesGremlin<TNode>(IGremlinQuery query) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public IEnumerable<RelationshipInstance> ExecuteGetAllRelationshipsGremlin(string query, IDictionary<string, object> parameters)
-        {
+        public IEnumerable<RelationshipInstance> ExecuteGetAllRelationshipsGremlin(string query, IDictionary<string, object> parameters) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public IEnumerable<RelationshipInstance<TData>> ExecuteGetAllRelationshipsGremlin<TData>(string query, IDictionary<string, object> parameters) where TData : class, new()
-        {
+        public IEnumerable<RelationshipInstance<TData>> ExecuteGetAllRelationshipsGremlin<TData>(string query, IDictionary<string, object> parameters) where TData : class, new() {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Dictionary<string, IndexMetaData> GetIndexes(IndexFor indexFor)
-        {
+        public Dictionary<string, IndexMetaData> GetIndexes(IndexFor indexFor) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public bool CheckIndexExists(string indexName, IndexFor indexFor)
-        {
+        public bool CheckIndexExists(string indexName, IndexFor indexFor) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void CreateIndex(string indexName, IndexConfiguration config, IndexFor indexFor)
-        {
+        public void CreateIndex(string indexName, IndexConfiguration config, IndexFor indexFor) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void ReIndex(NodeReference node, IEnumerable<IndexEntry> indexEntries)
-        {
+        public void ReIndex(NodeReference node, IEnumerable<IndexEntry> indexEntries) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void ReIndex(RelationshipReference relationship, IEnumerable<IndexEntry> indexEntries)
-        {
+        public void ReIndex(RelationshipReference relationship, IEnumerable<IndexEntry> indexEntries) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void DeleteIndex(string indexName, IndexFor indexFor)
-        {
+        public void DeleteIndex(string indexName, IndexFor indexFor) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void DeleteIndexEntries(string indexName, NodeReference relationshipReference)
-        {
+        public void DeleteIndexEntries(string indexName, NodeReference relationshipReference) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void DeleteIndexEntries(string indexName, RelationshipReference relationshipReference)
-        {
+        public void DeleteIndexEntries(string indexName, RelationshipReference relationshipReference) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public IEnumerable<Node<TNode>> QueryIndex<TNode>(string indexName, IndexFor indexFor, string query)
-        {
+        public IEnumerable<Node<TNode>> QueryIndex<TNode>(string indexName, IndexFor indexFor, string query) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public IEnumerable<Node<TNode>> LookupIndex<TNode>(string exactIndexName, IndexFor indexFor, string indexKey, long id)
-        {
+        public IEnumerable<Node<TNode>> LookupIndex<TNode>(string exactIndexName, IndexFor indexFor, string indexKey, long id) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public IEnumerable<Node<TNode>> LookupIndex<TNode>(string exactIndexName, IndexFor indexFor, string indexKey, int id)
-        {
+        public IEnumerable<Node<TNode>> LookupIndex<TNode>(string exactIndexName, IndexFor indexFor, string indexKey, int id) {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public void ShutdownServer()
-        {
+        public void ShutdownServer() {
             throw new InvalidOperationException(NotValidForBolt);
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public IGremlinClient Gremlin
-        {
+        public IGremlinClient Gremlin {
             get { throw new InvalidOperationException(NotValidForBolt); }
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Uri GremlinEndpoint
-        {
+        public Uri GremlinEndpoint {
             get { throw new InvalidOperationException(NotValidForBolt); }
         }
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Uri NodeIndexEndpoint
-        {
+        public Uri NodeIndexEndpoint {
             get { throw new InvalidOperationException(NotValidForBolt); }
         }
 
 
         /// <inheritdoc />
         [Obsolete(NotValidForBolt)]
-        public Uri RelationshipIndexEndpoint
-        {
+        public Uri RelationshipIndexEndpoint {
             get { throw new InvalidOperationException(NotValidForBolt); }
         }
 
         /// <inheritdoc />
-        public void Connect(NeoServerConfiguration configuration = null)
-        {
+        public void Connect(NeoServerConfiguration configuration = null) {
             var connectTask = ConnectAsync(configuration);
             connectTask.Wait();
         }
 
         /// <inheritdoc />
-        public Task ConnectAsync(NeoServerConfiguration configuration = null)
-        {
-            if (Driver == null)
-            {
+        public Task ConnectAsync(NeoServerConfiguration configuration = null) {
+            if (Driver == null) {
                 var driver = configuration == null
                     ? new DriverWrapper(uri, addressResolver, username, password, realm)
                     : new DriverWrapper(uri, addressResolver, configuration.Username, configuration.Password, configuration.Realm);
                 Driver = driver;
             }
 
-            using (var session = Driver.Session(AccessMode.Read))
-            {
+            using (var session = Driver.Session(AccessMode.Read)) {
                 var serverInformation = session.Run("CALL dbms.components()");
-                foreach (var record in serverInformation)
-                {
+                foreach (var record in serverInformation) {
                     var name = record["name"].As<string>();
                     if (name.ToLowerInvariant() != "neo4j kernel")
                         continue;
@@ -485,20 +425,17 @@ namespace Neo4jClient
         /// <inheritdoc />
         public DefaultContractResolver JsonContractResolver { get; set; }
 
-#endregion
+        #endregion
 
         #region Implementation of IRawGraphClient
 
         /// <inheritdoc />
-        IEnumerable<TResult> IRawGraphClient.ExecuteGetCypherResults<TResult>(CypherQuery query)
-        {
-            var task = ((IRawGraphClient) this).ExecuteGetCypherResultsAsync<TResult>(query);
-            try
-            {
+        IEnumerable<TResult> IRawGraphClient.ExecuteGetCypherResults<TResult>(CypherQuery query) {
+            var task = ((IRawGraphClient)this).ExecuteGetCypherResultsAsync<TResult>(query);
+            try {
                 Task.WaitAll(task);
             }
-            catch (AggregateException ex)
-            {
+            catch (AggregateException ex) {
                 Exception unwrappedException;
                 if (ex.TryUnwrap(out unwrappedException))
                     throw unwrappedException;
@@ -509,27 +446,22 @@ namespace Neo4jClient
         }
 
         /// <inheritdoc />
-        async Task<IEnumerable<TResult>> IRawGraphClient.ExecuteGetCypherResultsAsync<TResult>(CypherQuery query)
-        {
+        async Task<IEnumerable<TResult>> IRawGraphClient.ExecuteGetCypherResultsAsync<TResult>(CypherQuery query) {
             if (Driver == null)
                 throw new InvalidOperationException("Can't execute cypher unless you have connected to the server.");
 
             var context = ExecutionContext.Begin(this);
             List<TResult> results;
             string lastBookmark = null;
-            try
-            {
-                if (InTransaction)
-                {
+            try {
+                if (InTransaction) {
                     var result = await transactionManager.EnqueueCypherRequest($"The query was: {query.QueryText}", this, query).ConfigureAwait(false);
                     results = ParseResults<TResult>(result.StatementResult, query);
                 }
-                else
-                {
-                    using (var session = Driver.Session(query.IsWrite ? AccessMode.Write : AccessMode.Read, query.Bookmarks))
-                    {
-                        var result = query.IsWrite 
-                            ? session.WriteTransaction(s => s.Run(query, this)) 
+                else {
+                    using (var session = Driver.Session(query.IsWrite ? AccessMode.Write : AccessMode.Read, query.Bookmarks)) {
+                        var result = query.IsWrite
+                            ? session.WriteTransaction(s => s.Run(query, this))
                             : session.ReadTransaction(s => s.Run(query, this));
 
                         results = ParseResults<TResult>(result, query);
@@ -537,14 +469,12 @@ namespace Neo4jClient
                     }
                 }
             }
-            catch (AggregateException aggregateException)
-            {
+            catch (AggregateException aggregateException) {
                 Exception unwrappedException;
                 context.Complete(query, lastBookmark, aggregateException.TryUnwrap(out unwrappedException) ? unwrappedException : aggregateException);
                 throw;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 context.Complete(query, lastBookmark, e);
                 throw;
             }
@@ -553,33 +483,27 @@ namespace Neo4jClient
             return results;
         }
 
-        private List<TResult> ParseResults<TResult>(IStatementResult result, CypherQuery query)
-        {
+        private List<TResult> ParseResults<TResult>(IStatementResult result, CypherQuery query) {
             var deserializer = new CypherJsonDeserializer<TResult>(this, query.ResultMode, query.ResultFormat, false, true);
             var results = new List<TResult>();
-            if (typeof(TResult).IsAnonymous())
-            {
+            if (typeof(TResult).IsAnonymous()) {
                 foreach (var record in result)
                     results.AddRange(deserializer.Deserialize(record.ParseAnonymous(this)));
             }
-            else
-            {
+            else {
 
-                StatementResultHelper.JsonSettings = new JsonSerializerSettings
-                {
+                StatementResultHelper.JsonSettings = new JsonSerializerSettings {
                     Converters = JsonConverters,
                     ContractResolver = JsonContractResolver
                 };
 
                 List<IEnumerable<TResult>> converted = new List<IEnumerable<TResult>>();
-                foreach (var record in result)
-                {
+                foreach (var record in result) {
                     var des = record.Deserialize(deserializer, query.ResultMode);
                     converted.Add(des);
                 }
 
-                foreach (var enumerable in converted)
-                {
+                foreach (var enumerable in converted) {
                     results.AddRange(enumerable);
                 }
             }
@@ -588,47 +512,40 @@ namespace Neo4jClient
         }
 
         /// <inheritdoc />
-        void IRawGraphClient.ExecuteCypher(CypherQuery query)
-        {
-            var task = ((IRawGraphClient) this).ExecuteCypherAsync(query);
+        void IRawGraphClient.ExecuteCypher(CypherQuery query) {
+            var task = ((IRawGraphClient)this).ExecuteCypherAsync(query);
             task.Wait();
         }
 
-        #pragma warning disable CS1066
+#pragma warning disable CS1066
         /// <inheritdoc />
         [Obsolete]
-        void IRawGraphClient.ExecuteMultipleCypherQueriesInTransaction(IEnumerable<CypherQuery> queries, NameValueCollection customHeaders = null)
-        {
-            using (var tx = BeginTransaction())
-            {
+        void IRawGraphClient.ExecuteMultipleCypherQueriesInTransaction(IEnumerable<CypherQuery> queries, NameValueCollection customHeaders = null) {
+            using (var tx = BeginTransaction()) {
                 // the HTTP endpoint executed the transactions in a serial fashion
-                foreach (var query in queries)
-                {
-                    ((IRawGraphClient) this).ExecuteCypher(query);
+                foreach (var query in queries) {
+                    ((IRawGraphClient)this).ExecuteCypher(query);
                 }
 
                 tx.Commit();
             }
         }
-        #pragma warning restore CS1066
+#pragma warning restore CS1066
 
         /// <inheritdoc />
-        Task IRawGraphClient.ExecuteCypherAsync(CypherQuery query)
-        {
-           var tx = ExecutionContext.Begin(this);
+        Task IRawGraphClient.ExecuteCypherAsync(CypherQuery query) {
+            var tx = ExecutionContext.Begin(this);
 
             if (Driver == null)
                 throw new InvalidOperationException("Can't execute cypher unless you have connected to the server.");
 
             if (InTransaction)
                 return transactionManager.EnqueueCypherRequest($"The query was: {query.QueryText}", this, query)
-                    .ContinueWith(responseTask => OperationCompleted?.Invoke(this, new OperationCompletedEventArgs
-                    {
+                    .ContinueWith(responseTask => OperationCompleted?.Invoke(this, new OperationCompletedEventArgs {
                         QueryText = $"BOLT:{query.QueryText}"
                     }));
 
-            using (var session = Driver.Session(query.IsWrite ? AccessMode.Write : AccessMode.Read, query.Bookmarks))
-            {
+            using (var session = Driver.Session(query.IsWrite ? AccessMode.Write : AccessMode.Read, query.Bookmarks)) {
                 if (query.IsWrite)
                     session.WriteTransaction(s => s.Run(query, this));
                 else
@@ -647,38 +564,32 @@ namespace Neo4jClient
         #region Implementation of ITransactionalGraphClient
 
         /// <inheritdoc />
-        public ITransaction BeginTransaction()
-        {
-            return BeginTransaction((IEnumerable<string>) null);
+        public ITransaction BeginTransaction() {
+            return BeginTransaction((IEnumerable<string>)null);
         }
-        
+
         /// <inheritdoc />
-        public ITransaction BeginTransaction(string bookmark)
-        {
-            return BeginTransaction(new List<string>{bookmark});
+        public ITransaction BeginTransaction(string bookmark) {
+            return BeginTransaction(new List<string> { bookmark });
         }
-        
+
         /// <inheritdoc />
-        public ITransaction BeginTransaction(IEnumerable<string> bookmarks)
-        {
+        public ITransaction BeginTransaction(IEnumerable<string> bookmarks) {
             return BeginTransaction(TransactionScopeOption.Join, bookmarks);
         }
 
         /// <inheritdoc />
-        public ITransaction BeginTransaction(TransactionScopeOption scopeOption)
-        {
-            return BeginTransaction(scopeOption, (IEnumerable<string>) null);
+        public ITransaction BeginTransaction(TransactionScopeOption scopeOption) {
+            return BeginTransaction(scopeOption, (IEnumerable<string>)null);
         }
 
         /// <inheritdoc />
-        public ITransaction BeginTransaction(TransactionScopeOption scopeOption, string bookmark)
-        {
-            return BeginTransaction(scopeOption, new List<string>{bookmark});
+        public ITransaction BeginTransaction(TransactionScopeOption scopeOption, string bookmark) {
+            return BeginTransaction(scopeOption, new List<string> { bookmark });
         }
 
         /// <inheritdoc />
-        public ITransaction BeginTransaction(TransactionScopeOption scopeOption, IEnumerable<string> bookmarks)
-        {
+        public ITransaction BeginTransaction(TransactionScopeOption scopeOption, IEnumerable<string> bookmarks) {
             if (transactionManager == null)
                 throw new NotSupportedException("HTTP Transactions are only supported on Neo4j 2.0 and newer.");
 
@@ -692,8 +603,7 @@ namespace Neo4jClient
         public bool InTransaction => transactionManager != null && transactionManager.InTransaction;
 
         /// <inheritdoc />
-        public void EndTransaction()
-        {
+        public void EndTransaction() {
             if (transactionManager == null)
                 throw new NotSupportedException("Transactions are only supported on Neo4j 2.0 and newer.");
 
@@ -701,12 +611,11 @@ namespace Neo4jClient
         }
 
         /// <inheritdoc />
-        public Uri TransactionEndpoint
-        {
+        public Uri TransactionEndpoint {
             get { throw new InvalidOperationException(NotValidForBolt); }
         }
 
-#endregion
+        #endregion
 
         #region Implementation of IBoltGraphClient
 
@@ -743,13 +652,12 @@ namespace Neo4jClient
 
         /// <summary>Raises the <see cref="OperationCompleted"/> event.</summary>
         /// <param name="args">The instance of <see cref="OperationCompletedEventArgs"/> to send to listeners.</param>
-        protected void OnOperationCompleted(OperationCompletedEventArgs args)
-        {
+        protected void OnOperationCompleted(OperationCompletedEventArgs args) {
             OperationCompleted?.Invoke(this, args);
         }
 
         #endregion
 
-        
+
     }
 }

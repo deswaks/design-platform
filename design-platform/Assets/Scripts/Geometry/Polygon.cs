@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace DesignPlatform.Utils {
+namespace DesignPlatform.Geometry {
     public class Polygon2D {
         private Vector2[] Vertices { get; set; }
 

@@ -1,10 +1,8 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Neo4jClient.Cypher
-{
-    public partial interface ICypherFluentQuery
-    {
+namespace Neo4jClient.Cypher {
+    public partial interface ICypherFluentQuery {
         ICypherFluentQuery Where(string text);
         ICypherFluentQuery Where<T1>(Expression<Func<T1, bool>> expression);
         ICypherFluentQuery Where<T1, T2>(Expression<Func<T1, T2, bool>> expression);

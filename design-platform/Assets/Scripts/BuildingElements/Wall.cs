@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
+﻿using DesignPlatform.Utils;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class Wall : MonoBehaviour {
@@ -56,20 +54,20 @@ namespace DesignPlatform.Core {
             mesh.ToMesh();
             mesh.Refresh();
 
-            
+
 
         }
-        
+
         /// <summary>
         /// Deletes a wall and removes it from the wall list.
         /// </summary>
         public void DeleteWall() {
-            if (Building.Instance.walls.Contains(this)) {
+            if (Building.Instance.Walls.Contains(this)) {
                 Building.Instance.RemoveWall(this);
             }
             Destroy(gameObject);
         }
-        
+
         public IList<IList<Vector3>> GetHoleVertices() {
             IList<IList<Vector3>> allHoleVertices = new List<IList<Vector3>>();
             for (int i = 0; i < interFace.GetCoincidentOpenings().Count; i++) {

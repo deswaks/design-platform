@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class ModalWindowTabs : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class ModalWindowTabs : MonoBehaviour {
         [Header("PANEL LIST")]
         public List<GameObject> panels = new List<GameObject>();
 
@@ -36,8 +33,7 @@ namespace Michsky.UI.ModernUIPack
         private Animator currentButtonAnimator;
         private Animator nextButtonAnimator;
 
-        void Start()
-        {
+        void Start() {
             currentButton = buttons[currentPanelIndex];
             currentButtonAnimator = currentButton.GetComponent<Animator>();
             currentButtonAnimator.Play(buttonFadeIn);
@@ -47,10 +43,8 @@ namespace Michsky.UI.ModernUIPack
             currentPanelAnimator.Play(panelFadeIn);
         }
 
-        public void PanelAnim(int newPanel)
-        {
-            if (newPanel != currentPanelIndex)
-            {
+        public void PanelAnim(int newPanel) {
+            if (newPanel != currentPanelIndex) {
                 currentPanel = panels[currentPanelIndex];
 
                 currentPanelIndex = newPanel;

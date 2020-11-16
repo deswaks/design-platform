@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 
-namespace Neo4jClient
-{
+namespace Neo4jClient {
     public delegate void OperationCompletedEventHandler(object sender, OperationCompletedEventArgs e);
 
-    public class OperationCompletedEventArgs : EventArgs
-    {
+    public class OperationCompletedEventArgs : EventArgs {
         public string Identifier { get; set; }
         public string LastBookmark { get; set; }
         public string QueryText { get; set; }
@@ -19,8 +16,7 @@ namespace Neo4jClient
         public NameValueCollection CustomHeaders { get; set; }
         public IEnumerable<string> BookmarksUsed { get; set; }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"HasException={HasException}, QueryText={QueryText}";
         }
     }

@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 
-namespace Neo4jClient.ApiModels
-{
-    class RelationshipTemplate
-    {
+namespace Neo4jClient.ApiModels {
+    class RelationshipTemplate {
         [JsonProperty("to")]
         public string To { get; set; }
 

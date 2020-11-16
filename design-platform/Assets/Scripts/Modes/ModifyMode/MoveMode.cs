@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DesignPlatform.Utils;
 using UnityEngine;
-using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class MoveMode : Mode {

@@ -1,24 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http;
 
-namespace Neo4jClient.Execution
-{
-    internal class ResponseFailBuilder : IResponseFailBuilder
-    {
+namespace Neo4jClient.Execution {
+    internal class ResponseFailBuilder : IResponseFailBuilder {
         private readonly HttpRequestMessage _request;
         private readonly ISet<HttpStatusCode> _expectedStatusCodes;
         private readonly ExecutionConfiguration _executionConfiguration;
-        private readonly IList<ErrorGenerator> _errorGenerators; 
+        private readonly IList<ErrorGenerator> _errorGenerators;
         private readonly Func<HttpResponseMessage, bool> _errorCondition;
         private readonly NameValueCollection _customHeaders;
 
         public ResponseFailBuilder(HttpRequestMessage request, ISet<HttpStatusCode> expectedStatusCodes,
             ExecutionConfiguration executionConfiguration, IList<ErrorGenerator> errorGenerators,
-            Func<HttpResponseMessage, bool> errorCondition, NameValueCollection customHeaders)
-        {
+            Func<HttpResponseMessage, bool> errorCondition, NameValueCollection customHeaders) {
             _request = request;
             _expectedStatusCodes = expectedStatusCodes;
             _executionConfiguration = executionConfiguration;
@@ -27,8 +23,7 @@ namespace Neo4jClient.Execution
             _customHeaders = customHeaders;
         }
 
-        public IResponseBuilder WithError(Func<HttpResponseMessage, Exception> errorBuilder)
-        {
+        public IResponseBuilder WithError(Func<HttpResponseMessage, Exception> errorBuilder) {
             var newGenerators = new List<ErrorGenerator>(_errorGenerators)
             {
                 new ErrorGenerator
@@ -47,8 +42,7 @@ namespace Neo4jClient.Execution
                 );
         }
 
-        public IResponseBuilder WithNull()
-        {
+        public IResponseBuilder WithNull() {
             var newGenerators = new List<ErrorGenerator>(_errorGenerators)
             {
                 new ErrorGenerator
@@ -63,7 +57,7 @@ namespace Neo4jClient.Execution
                 _expectedStatusCodes,
                 _executionConfiguration,
                 newGenerators
-                ,_customHeaders
+                , _customHeaders
                 );
         }
     }

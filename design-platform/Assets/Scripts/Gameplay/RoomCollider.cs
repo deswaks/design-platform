@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder;
-using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
     public class RoomCollider : MonoBehaviour {
@@ -62,7 +57,7 @@ namespace DesignPlatform.Core {
                     colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 }); // Collider cube 1
                     colliderIndexPairsList.Add(new List<int> { 3, 4, 0, 3 }); // Collider cube 2                    
                     colliderIndexPairsList.Add(new List<int> { 5, 6, 7, 6 }); // Collider cube 3                    
-                    break;                
+                    break;
                 case RoomShape.SSHAPE:
                     colliderIndexPairsList.Add(new List<int> { 1, 2, 3, 2 }); // Collider cube 1
                     colliderIndexPairsList.Add(new List<int> { 0, 4, 0, 3 }); // Collider cube 2                    

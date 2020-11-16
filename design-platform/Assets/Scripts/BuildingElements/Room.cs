@@ -1,4 +1,5 @@
 ﻿using DesignPlatform.Utils;
+using DesignPlatform.Geometry;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
@@ -47,10 +48,12 @@ namespace DesignPlatform.Core {
         private List<Vector3> controlPoints;
         public float height = 3.0f;
         public List<Face> Faces { get; private set; }
-        //public GameObject moveHandlePrefab;
-        private Vector3 moveModeOffset;
-        //private List<List<Vector3>> openingsMoveModeOffset;
+        public List<Interface> Interfaces {
+            get { return Faces.SelectMany(f => f.interfaces).ToList(); }
+            private set {; }
+        }
 
+        private Vector3 moveModeOffset;
         private Material currentMaterial;
         public Material highlightMaterial;
         public string customProperty;
@@ -332,7 +335,7 @@ namespace DesignPlatform.Core {
         /// Deletes the room
         /// </summary>
         public void Delete() {
-            if (Building.Instance.rooms.Contains(this)) {
+            if (Building.Instance.Rooms.Contains(this)) {
                 ParentBuilding.RemoveRoom(this);
             }
             Destroy(gameObject);

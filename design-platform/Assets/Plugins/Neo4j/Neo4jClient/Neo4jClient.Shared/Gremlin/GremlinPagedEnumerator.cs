@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Neo4jClient.Gremlin
-{
-    internal class GremlinPagedEnumerator<TResult> : IEnumerator<TResult>
-    {
+namespace Neo4jClient.Gremlin {
+    internal class GremlinPagedEnumerator<TResult> : IEnumerator<TResult> {
         readonly Func<IGremlinQuery, IEnumerable<TResult>> pageLoadCallback;
         readonly IGremlinQuery query;
         readonly int pageSize;
@@ -18,15 +16,13 @@ namespace Neo4jClient.Gremlin
         public GremlinPagedEnumerator(
             Func<IGremlinQuery, IEnumerable<TResult>> pageLoadCallback,
             IGremlinQuery query,
-            int pageSize = 100)
-        {
+            int pageSize = 100) {
             this.pageLoadCallback = pageLoadCallback;
             this.query = query;
             this.pageSize = pageSize;
         }
 
-        public bool MoveNext()
-        {
+        public bool MoveNext() {
             var hasAPageLoaded = currentPageIndex != -1;
             var curentPageIsPartialPage = currentPageData != null && currentPageData.Count() < pageSize;
             var currentRecordIsLastOneOnPage = currentPageData != null && currentRowIndex == currentPageData.Count() - 1;
@@ -44,8 +40,7 @@ namespace Neo4jClient.Gremlin
             return currentRowIndex < currentPageData.Count();
         }
 
-        void LoadNextPage()
-        {
+        void LoadNextPage() {
             currentPageIndex++;
             currentRowIndex = -1;
             var drop = currentPageIndex * pageSize;
@@ -53,25 +48,21 @@ namespace Neo4jClient.Gremlin
             currentPageData = pageLoadCallback(pageQuery).ToArray();
         }
 
-        public void Reset()
-        {
+        public void Reset() {
             // MSDN says this method only exists for COM interop and that we
             // don't need to bother with it otherwise http://l.tath.am/ohpNvS
             throw new NotSupportedException();
         }
 
-        public TResult Current
-        {
+        public TResult Current {
             get { return currentPageData[currentRowIndex]; }
         }
 
-        object IEnumerator.Current
-        {
+        object IEnumerator.Current {
             get { return Current; }
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
         }
     }
 }

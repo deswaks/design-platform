@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class ToggleAnim : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class ToggleAnim : MonoBehaviour {
         Toggle toggleObject;
         Animator toggleAnimator;
 
-        void Start()
-        {
+        void Start() {
             toggleObject = gameObject.GetComponent<Toggle>();
             toggleAnimator = gameObject.GetComponent<Animator>();
             toggleObject.onValueChanged.AddListener(TaskOnClick);
@@ -21,8 +18,7 @@ namespace Michsky.UI.ModernUIPack
                 toggleAnimator.Play("Toggle Off");
         }
 
-        void TaskOnClick(bool value)
-        {
+        void TaskOnClick(bool value) {
             if (toggleObject.isOn)
                 toggleAnimator.Play("Toggle On");
 

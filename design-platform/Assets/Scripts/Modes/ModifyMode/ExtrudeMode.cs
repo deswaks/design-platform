@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using DesignPlatform.Utils;
 using System.Collections.Generic;
 using UnityEngine;
-using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class ExtrudeMode : Mode {

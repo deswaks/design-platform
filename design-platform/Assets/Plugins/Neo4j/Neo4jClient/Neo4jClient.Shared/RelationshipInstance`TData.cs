@@ -1,8 +1,6 @@
-﻿namespace Neo4jClient
-{
+﻿namespace Neo4jClient {
     public class RelationshipInstance<TData> : RelationshipInstance
-        where TData : class, new()
-    {
+        where TData : class, new() {
         readonly TData data;
 
         public RelationshipInstance(
@@ -11,22 +9,18 @@
             NodeReference endNodeReference,
             string typeKey,
             TData data)
-            : base(reference, startNodeReference, endNodeReference, typeKey)
-        {
+            : base(reference, startNodeReference, endNodeReference, typeKey) {
             this.data = data;
         }
 
-        public new RelationshipReference<TData> Reference
-        {
-            get
-            {
+        public new RelationshipReference<TData> Reference {
+            get {
                 var baseReference = base.Reference;
-                return new RelationshipReference<TData>(baseReference.Id, ((IAttachedReference) baseReference).Client);
+                return new RelationshipReference<TData>(baseReference.Id, ((IAttachedReference)baseReference).Client);
             }
         }
 
-        public TData Data
-        {
+        public TData Data {
             get { return data; }
         }
     }

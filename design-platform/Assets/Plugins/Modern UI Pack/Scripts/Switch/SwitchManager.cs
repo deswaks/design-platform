@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class SwitchManager : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class SwitchManager : MonoBehaviour {
         // Events
         public UnityEvent OnEvents;
         public UnityEvent OffEvents;
@@ -21,62 +19,50 @@ namespace Michsky.UI.ModernUIPack
         Animator switchAnimator;
         Button switchButton;
 
-        void Start()
-        {
-            try
-            {
+        void Start() {
+            try {
                 switchAnimator = gameObject.GetComponent<Animator>();
                 switchButton = gameObject.GetComponent<Button>();
                 switchButton.onClick.AddListener(AnimateSwitch);
             }
 
-            catch
-            {
+            catch {
                 Debug.LogError("Switch - Cannot initalize the switch due to missing variables.", this);
             }
 
-            if (saveValue == true)
-            {
-                if (PlayerPrefs.GetString(switchTag + "Switch") == "")
-                {
-                    if (isOn == true)
-                    {
+            if (saveValue == true) {
+                if (PlayerPrefs.GetString(switchTag + "Switch") == "") {
+                    if (isOn == true) {
                         switchAnimator.Play("Switch On");
                         isOn = true;
                         PlayerPrefs.SetString(switchTag + "Switch", "true");
                     }
 
-                    else
-                    {
+                    else {
                         switchAnimator.Play("Switch Off");
                         isOn = false;
                         PlayerPrefs.SetString(switchTag + "Switch", "false");
                     }
                 }
 
-                else if (PlayerPrefs.GetString(switchTag + "Switch") == "true")
-                {
+                else if (PlayerPrefs.GetString(switchTag + "Switch") == "true") {
                     switchAnimator.Play("Switch On");
                     isOn = true;
                 }
 
-                else if (PlayerPrefs.GetString(switchTag + "Switch") == "false")
-                {
+                else if (PlayerPrefs.GetString(switchTag + "Switch") == "false") {
                     switchAnimator.Play("Switch Off");
                     isOn = false;
                 }
             }
 
-            else
-            {
-                if (isOn == true)
-                {
+            else {
+                if (isOn == true) {
                     switchAnimator.Play("Switch On");
                     isOn = true;
                 }
 
-                else
-                {
+                else {
                     switchAnimator.Play("Switch Off");
                     isOn = false;
                 }
@@ -88,63 +74,51 @@ namespace Michsky.UI.ModernUIPack
                 OffEvents.Invoke();
         }
 
-        void OnEnable()
-        {
+        void OnEnable() {
             if (switchAnimator == null)
                 switchAnimator = gameObject.GetComponent<Animator>();
 
-            if (saveValue == true)
-            {
-                if (PlayerPrefs.GetString(switchTag + "Switch") == "")
-                {
-                    if (isOn == true)
-                    {
+            if (saveValue == true) {
+                if (PlayerPrefs.GetString(switchTag + "Switch") == "") {
+                    if (isOn == true) {
                         switchAnimator.Play("Switch On");
                         isOn = true;
                         PlayerPrefs.SetString(switchTag + "Switch", "true");
                     }
 
-                    else
-                    {
+                    else {
                         switchAnimator.Play("Switch Off");
                         isOn = false;
                         PlayerPrefs.SetString(switchTag + "Switch", "false");
                     }
                 }
 
-                else if (PlayerPrefs.GetString(switchTag + "Switch") == "true")
-                {
+                else if (PlayerPrefs.GetString(switchTag + "Switch") == "true") {
                     switchAnimator.Play("Switch On");
                     isOn = true;
                 }
 
-                else if (PlayerPrefs.GetString(switchTag + "Switch") == "false")
-                {
+                else if (PlayerPrefs.GetString(switchTag + "Switch") == "false") {
                     switchAnimator.Play("Switch Off");
                     isOn = false;
                 }
             }
 
-            else
-            {
-                if (isOn == true)
-                {
+            else {
+                if (isOn == true) {
                     switchAnimator.Play("Switch On");
                     isOn = true;
                 }
 
-                else
-                {
+                else {
                     switchAnimator.Play("Switch Off");
                     isOn = false;
                 }
             }
         }
 
-        public void AnimateSwitch()
-        {
-            if (isOn == true)
-            {
+        public void AnimateSwitch() {
+            if (isOn == true) {
                 switchAnimator.Play("Switch Off");
                 isOn = false;
                 OffEvents.Invoke();
@@ -153,8 +127,7 @@ namespace Michsky.UI.ModernUIPack
                     PlayerPrefs.SetString(switchTag + "Switch", "false");
             }
 
-            else
-            {
+            else {
                 switchAnimator.Play("Switch On");
                 isOn = true;
                 OnEvents.Invoke();

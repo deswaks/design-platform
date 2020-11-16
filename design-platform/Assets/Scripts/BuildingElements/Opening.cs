@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using DesignPlatform.Utils;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.ProBuilder;
-using UnityEngine.ProBuilder.Csg;
 using UnityEngine.ProBuilder.MeshOperations;
-using System.Linq;
-using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
 
@@ -17,7 +14,14 @@ namespace DesignPlatform.Core {
 
     public class Opening : MonoBehaviour {
 
-        public Face parentFace { get; private set; }
+        public List<Room> Rooms {
+            get { return Faces.Select(f => f.Room).ToList(); }
+            set {; }
+        }
+        public List<Face> Faces {
+            get { return Faces; }
+            set {; }
+        }
 
         public float WindowWidth = 1.6f;
         public float WindowHeight = 1.2f;
@@ -79,7 +83,7 @@ namespace DesignPlatform.Core {
                 case OpeningShape.DOOR:
                     Width = DoorWidth;
                     Height = DoorHeight;
-                    SillHeight = OpeningDepth/2;
+                    SillHeight = OpeningDepth / 2;
                     controlPoints = new List<Vector3> {
                     -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*SillHeight,
                     -Vector3.right*Width/2 + Vector3.forward*OpeningDepth/2 + Vector3.up*Height + Vector3.up*SillHeight,
@@ -129,7 +133,7 @@ namespace DesignPlatform.Core {
             // Set controlpoints
             lr.useWorldSpace = false;
             float height = 3.001f;
-            if (attachedFaces != null) height = attachedFaces[0].parentRoom.height + 0.001f;
+            if (attachedFaces != null) height = attachedFaces[0].Room.height + 0.001f;
             List<Vector3> points = GetControlPoints2D().Select(p =>
                 p + Vector3.up * (height)).ToList();
             lr.positionCount = points.Count;
@@ -159,7 +163,7 @@ namespace DesignPlatform.Core {
         /// Deletes the opening
         /// </summary>
         public void Delete() {
-            if (Building.Instance.openings.Contains(this)) {
+            if (Building.Instance.Openings.Contains(this)) {
                 Building.Instance.RemoveOpening(this);
             }
             Destroy(gameObject);
@@ -176,7 +180,7 @@ namespace DesignPlatform.Core {
             gameObject.transform.position = gridPosition;
         }
         public void Rotate(Face closestFace) {
-            Vector3 faceNormal = closestFace.parentRoom.GetWallNormals()[closestFace.faceIndex];
+            Vector3 faceNormal = closestFace.Room.GetWallNormals()[closestFace.faceIndex];
             Vector3 OpeningNormal = gameObject.transform.forward;
             float angle = Vector3.Angle(OpeningNormal, faceNormal);
             if (angle > 0f) {

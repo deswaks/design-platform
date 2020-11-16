@@ -1,20 +1,17 @@
-﻿using System;
+﻿using Neo4jClient.ApiModels;
+using System;
 using System.Runtime.Serialization;
-using Neo4jClient.ApiModels;
 
-namespace Neo4jClient
-{
+namespace Neo4jClient {
     [DataContract]
-    public class NeoException : Exception
-    {
+    public class NeoException : Exception {
         readonly string neoMessage;
         readonly string neoException;
         readonly string neoFullName;
         readonly string[] neoStackTrace;
 
         internal NeoException(ExceptionResponse response)
-            : base(response.Exception + ": " + response.Message)
-        {
+            : base(response.Exception + ": " + response.Message) {
             neoMessage = response.Message;
             neoException = response.Exception;
             neoFullName = response.FullName;

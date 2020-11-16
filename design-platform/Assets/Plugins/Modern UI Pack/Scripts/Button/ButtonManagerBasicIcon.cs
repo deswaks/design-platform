@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class ButtonManagerBasicIcon : MonoBehaviour, IPointerEnterHandler
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class ButtonManagerBasicIcon : MonoBehaviour, IPointerEnterHandler {
         // Content
         public Sprite buttonIcon;
         public UnityEvent buttonEvent;
@@ -24,35 +22,29 @@ namespace Michsky.UI.ModernUIPack
         public bool useHoverSound = true;
         public bool useClickSound = true;
 
-        void Start()
-        {
+        void Start() {
             if (useCustomContent == false)
                 normalIcon.sprite = buttonIcon;
-        
+
             if (buttonVar == null)
                 buttonVar = gameObject.GetComponent<Button>();
 
-            buttonVar.onClick.AddListener(delegate
-            {
+            buttonVar.onClick.AddListener(delegate {
                 buttonEvent.Invoke();
             });
 
-            if (enableButtonSounds == true && useClickSound == true)
-            {
-                buttonVar.onClick.AddListener(delegate
-                {
+            if (enableButtonSounds == true && useClickSound == true) {
+                buttonVar.onClick.AddListener(delegate {
                     soundSource.PlayOneShot(clickSound);
                 });
             }
         }
 
-        public void UpdateUI()
-        {
+        public void UpdateUI() {
             normalIcon.sprite = buttonIcon;
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
+        public void OnPointerEnter(PointerEventData eventData) {
             if (enableButtonSounds == true && useHoverSound == true && buttonVar.interactable == true)
                 soundSource.PlayOneShot(hoverSound);
         }

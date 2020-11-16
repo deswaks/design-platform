@@ -2,17 +2,14 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(TooltipManager))]
     [System.Serializable]
-    public class TooltipManagerEditor : Editor
-    {
+    public class TooltipManagerEditor : Editor {
         // Variables
         private int currentTab;
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -75,8 +72,7 @@ namespace Michsky.UI.ModernUIPack
             var useAnimator = serializedObject.FindProperty("useAnimator");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("CONTENT", customSkin.FindStyle("Header"));
@@ -144,7 +140,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
                     GUILayout.Space(4);
-                    break;            
+                    break;
             }
 
             // Apply the changes

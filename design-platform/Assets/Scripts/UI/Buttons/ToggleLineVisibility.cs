@@ -19,10 +19,10 @@ namespace DesignPlatform.Core {
         void ToggleValueChanged(Toggle change) {
             GlobalSettings.ShowWallLines = GetComponent<Toggle>().isOn;
             GlobalSettings.ShowOpeningLines = GetComponent<Toggle>().isOn;
-            foreach (Room room in Building.Instance.rooms) {
+            foreach (Room room in Building.Instance.Rooms) {
                 room.UpdateRender2D();
             }
-            foreach (Opening opening in Building.Instance.openings) {
+            foreach (Opening opening in Building.Instance.Openings) {
                 opening.UpdateRender2D();
             }
         }

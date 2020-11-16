@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using TMPro;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class HorizontalSelector : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class HorizontalSelector : MonoBehaviour {
         // Resources
         public TextMeshProUGUI label;
         public TextMeshProUGUI labelHelper;
@@ -35,18 +32,15 @@ namespace Michsky.UI.ModernUIPack
         [Space(8)] public SelectorEvent selectorEvent;
 
         [System.Serializable]
-        public class Item
-        {
+        public class Item {
             public string itemTitle = "Item Title";
             public UnityEvent onValueChanged;
         }
 
-        void Start()
-        {
+        void Start() {
             selectorAnimator = gameObject.GetComponent<Animator>();
 
-            try
-            {
+            try {
                 if (label == null)
                     label = transform.Find("Text").GetComponent<TextMeshProUGUI>();
 
@@ -54,25 +48,21 @@ namespace Michsky.UI.ModernUIPack
                     labelHelper = transform.Find("Text Helper").GetComponent<TextMeshProUGUI>();
             }
 
-            catch
-            {
+            catch {
                 Debug.LogError("Horizontal Selector - Cannot initalize the object due to missing resources.", this);
             }
 
             if (label != null && labelHelper != null)
                 SetupSelector();
 
-            if (invokeAtStart == true)
-            {
+            if (invokeAtStart == true) {
                 itemList[index].onValueChanged.Invoke();
                 selectorEvent.Invoke(index);
             }
         }
 
-        public void SetupSelector()
-        {
-            if (saveValue == true)
-            {
+        public void SetupSelector() {
+            if (saveValue == true) {
                 if (PlayerPrefs.HasKey(selectorTag + "HSelectorValue") == true)
                     defaultIndex = PlayerPrefs.GetInt(selectorTag + "HSelectorValue");
 
@@ -84,15 +74,12 @@ namespace Michsky.UI.ModernUIPack
             labelHelper.text = label.text;
             index = defaultIndex;
 
-            if (enableIndicators == true)
-            {
-                foreach (Transform child in indicatorParent)
-                {
+            if (enableIndicators == true) {
+                foreach (Transform child in indicatorParent) {
                     GameObject.Destroy(child.gameObject);
                 }
 
-                for (int i = 0; i < itemList.Count; ++i)
-                {
+                for (int i = 0; i < itemList.Count; ++i) {
                     GameObject go = Instantiate(indicatorObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
                     go.transform.SetParent(indicatorParent, false);
                     go.name = itemList[i].itemTitle;
@@ -102,32 +89,26 @@ namespace Michsky.UI.ModernUIPack
                     Transform offObj;
                     offObj = go.transform.Find("Off");
 
-                    if (i == index)
-                    {
+                    if (i == index) {
                         onObj.gameObject.SetActive(true);
                         offObj.gameObject.SetActive(false);
                     }
 
-                    else
-                    {
+                    else {
                         onObj.gameObject.SetActive(false);
                         offObj.gameObject.SetActive(true);
                     }
                 }
             }
 
-            else
-            {
+            else {
                 Destroy(indicatorParent.gameObject);
             }
         }
 
-        public void PreviousClick()
-        {
-            if (loopSelection == false)
-            {
-                if (index != 0)
-                {
+        public void PreviousClick() {
+            if (loopSelection == false) {
+                if (index != 0) {
                     labelHelper.text = label.text;
 
                     if (index == 0)
@@ -138,8 +119,7 @@ namespace Michsky.UI.ModernUIPack
 
                     label.text = itemList[index].itemTitle;
 
-                    try
-                    {
+                    try {
                         itemList[index].onValueChanged.Invoke();
                     }
 
@@ -160,8 +140,7 @@ namespace Michsky.UI.ModernUIPack
                 }
             }
 
-            else
-            {
+            else {
                 labelHelper.text = label.text;
 
                 if (index == 0)
@@ -172,8 +151,7 @@ namespace Michsky.UI.ModernUIPack
 
                 label.text = itemList[index].itemTitle;
 
-                try
-                {
+                try {
                     itemList[index].onValueChanged.Invoke();
                 }
 
@@ -196,10 +174,8 @@ namespace Michsky.UI.ModernUIPack
             if (saveValue == true)
                 PlayerPrefs.SetInt(selectorTag + "HSelectorValue", index);
 
-            if (enableIndicators == true)
-            {
-                for (int i = 0; i < itemList.Count; ++i)
-                {
+            if (enableIndicators == true) {
+                for (int i = 0; i < itemList.Count; ++i) {
                     GameObject go = indicatorParent.GetChild(i).gameObject;
 
                     Transform onObj;
@@ -207,14 +183,12 @@ namespace Michsky.UI.ModernUIPack
                     Transform offObj;
                     offObj = go.transform.Find("Off");
 
-                    if (i == index)
-                    {
+                    if (i == index) {
                         onObj.gameObject.SetActive(true);
                         offObj.gameObject.SetActive(false);
                     }
 
-                    else
-                    {
+                    else {
                         onObj.gameObject.SetActive(false);
                         offObj.gameObject.SetActive(true);
                     }
@@ -222,12 +196,9 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void ForwardClick()
-        {
-            if (loopSelection == false)
-            {
-                if (index != itemList.Count - 1)
-                {
+        public void ForwardClick() {
+            if (loopSelection == false) {
+                if (index != itemList.Count - 1) {
                     labelHelper.text = label.text;
 
                     if ((index + 1) >= itemList.Count)
@@ -238,8 +209,7 @@ namespace Michsky.UI.ModernUIPack
 
                     label.text = itemList[index].itemTitle;
 
-                    try
-                    {
+                    try {
                         itemList[index].onValueChanged.Invoke();
                     }
 
@@ -260,8 +230,7 @@ namespace Michsky.UI.ModernUIPack
                 }
             }
 
-            else
-            {
+            else {
                 labelHelper.text = label.text;
 
                 if ((index + 1) >= itemList.Count)
@@ -272,8 +241,7 @@ namespace Michsky.UI.ModernUIPack
 
                 label.text = itemList[index].itemTitle;
 
-                try
-                {
+                try {
                     itemList[index].onValueChanged.Invoke();
                 }
 
@@ -296,10 +264,8 @@ namespace Michsky.UI.ModernUIPack
             if (saveValue == true)
                 PlayerPrefs.SetInt(selectorTag + "HSelectorValue", index);
 
-            if (enableIndicators == true)
-            {
-                for (int i = 0; i < itemList.Count; ++i)
-                {
+            if (enableIndicators == true) {
+                for (int i = 0; i < itemList.Count; ++i) {
                     GameObject go = indicatorParent.GetChild(i).gameObject;
 
                     Transform onObj;
@@ -307,14 +273,12 @@ namespace Michsky.UI.ModernUIPack
                     Transform offObj;
                     offObj = go.transform.Find("Off");
 
-                    if (i == index)
-                    {
+                    if (i == index) {
                         onObj.gameObject.SetActive(true);
                         offObj.gameObject.SetActive(false);
                     }
 
-                    else
-                    {
+                    else {
                         onObj.gameObject.SetActive(false);
                         offObj.gameObject.SetActive(true);
                     }
@@ -322,33 +286,27 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void CreateNewItem(string title)
-        {
+        public void CreateNewItem(string title) {
             Item item = new Item();
             newItemTitle = title;
             item.itemTitle = newItemTitle;
             itemList.Add(item);
         }
 
-        public void AddNewItem()
-        {
+        public void AddNewItem() {
             Item item = new Item();
             itemList.Add(item);
         }
 
-        public void UpdateUI()
-        {
+        public void UpdateUI() {
             label.text = itemList[index].itemTitle;
 
-            if (enableIndicators == true)
-            {
-                foreach (Transform child in indicatorParent)
-                {
+            if (enableIndicators == true) {
+                foreach (Transform child in indicatorParent) {
                     GameObject.Destroy(child.gameObject);
                 }
 
-                for (int i = 0; i < itemList.Count; ++i)
-                {
+                for (int i = 0; i < itemList.Count; ++i) {
                     GameObject go = Instantiate(indicatorObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
                     go.transform.SetParent(indicatorParent, false);
                     go.name = itemList[i].itemTitle;
@@ -358,14 +316,12 @@ namespace Michsky.UI.ModernUIPack
                     Transform offObj;
                     offObj = go.transform.Find("Off");
 
-                    if (i == index)
-                    {
+                    if (i == index) {
                         onObj.gameObject.SetActive(true);
                         offObj.gameObject.SetActive(false);
                     }
 
-                    else
-                    {
+                    else {
                         onObj.gameObject.SetActive(false);
                         offObj.gameObject.SetActive(true);
                     }

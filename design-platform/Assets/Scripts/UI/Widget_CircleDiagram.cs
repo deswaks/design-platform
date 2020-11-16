@@ -1,11 +1,8 @@
-﻿using System.Collections;
+﻿using DesignPlatform.Utils;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using DesignPlatform.Utils;
 
-public class Widget_CircleDiagram : DesignPlatform.Core.Widget
-{
+public class Widget_CircleDiagram : DesignPlatform.Core.Widget {
     // Names of used GameObjects in prefab
     private static readonly string TitleName = "txt_Title";
     private static readonly string WedgeTemplateName = "wedge";
@@ -19,18 +16,17 @@ public class Widget_CircleDiagram : DesignPlatform.Core.Widget
     List<GameObject> listObjects = new List<GameObject>();
 
     Dictionary<string, float> diagramData = new Dictionary<string, float>();
-    
+
 
     private int elementsCount = 0;
 
-    public Widget_CircleDiagram()  : base() // Host skal ses som parent Dashboard-row(?)
+    public Widget_CircleDiagram() : base() // Host skal ses som parent Dashboard-row(?)
     {
         Size = (width: 1, height: 1);
         Name = "Circle Diagram";
     }
 
-    public void InsertInDashboard()
-    {
+    public void InsertInDashboard() {
 
     }
 
@@ -57,8 +53,7 @@ public class Widget_CircleDiagram : DesignPlatform.Core.Widget
         return Panel;
     }
 
-    public override void UpdatePanel()
-    {
+    public override void UpdatePanel() {
         listObjectTemplate.SetActive(true);
         wedgeTemplate.SetActive(true);
 
@@ -79,13 +74,12 @@ public class Widget_CircleDiagram : DesignPlatform.Core.Widget
         float currentAngle = 0;
         int i = 0;
 
-        foreach(var element in diagramData)
-        {
+        foreach (var element in diagramData) {
             GameObject currentWedge = GameObject.Instantiate(wedgeTemplate, wedgeTemplate.transform.parent);
             GameObject currentListObject = GameObject.Instantiate(listObjectTemplate, listObjectTemplate.transform.parent);
 
             // Writes list element
-            currentListObject.GetComponentInChildren<TMPro.TMP_Text>().text = element.Key + " (" + (element.Value*100).ToString()+"%)";
+            currentListObject.GetComponentInChildren<TMPro.TMP_Text>().text = element.Key + " (" + (element.Value * 100).ToString() + "%)";
 
             // Sets wedge fill amount and angle
             currentWedge.GetComponent<UnityEngine.UI.Image>().fillAmount = element.Value;
@@ -111,16 +105,13 @@ public class Widget_CircleDiagram : DesignPlatform.Core.Widget
         listObjectTemplate.SetActive(false);
         wedgeTemplate.SetActive(false);
 
-}
+    }
 
-private void ClearDiagram()
-    {
-        foreach (GameObject wedge in wedges)
-        {
+    private void ClearDiagram() {
+        foreach (GameObject wedge in wedges) {
             GameObject.Destroy(wedge);
-        }        
-        foreach (GameObject listObject in listObjects)
-        {
+        }
+        foreach (GameObject listObject in listObjects) {
             GameObject.Destroy(listObject);
         }
         wedges = new List<GameObject>();

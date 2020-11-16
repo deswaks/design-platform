@@ -1,10 +1,8 @@
 ﻿using DesignPlatform.Utils;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Linq;
-using System;
 
 namespace DesignPlatform.Core {
     public class OpeningMode : Mode {
@@ -46,8 +44,8 @@ namespace DesignPlatform.Core {
         /// Create preview opening 
         /// </summary> 
         public override void OnModeResume() {
-                if (previewOpening == null) {
-                previewOpening = Building.Instance.BuildOpening(openingShape: selectedShape, 
+            if (previewOpening == null) {
+                previewOpening = Building.Instance.BuildOpening(openingShape: selectedShape,
                                                                 preview: true);
             }
         }
@@ -76,7 +74,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         public Vector3 hitPointOnPlane() {
             Plane basePlane = new Plane(Vector3.up, Vector3.zero);
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);  
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float distance;
             hitPoint = Vector3.zero;
             if (basePlane.Raycast(ray, out distance)) {

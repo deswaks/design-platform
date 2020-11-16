@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using UnityEngine;
-using System.Linq;
 
 namespace DesignPlatform.Core {
     public class POVMode : Mode {
@@ -48,7 +46,7 @@ namespace DesignPlatform.Core {
             PlanCamera.gameObject.SetActive(false);
 
             // Delete preexisting interfaces and walls build new ones
-            Building.Instance.UpdatePOVElements();
+            Building.Instance.RebuildPOVElements();
 
             // Generates notification in corner of screen
             GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "UIPanel3D").First().gameObject;

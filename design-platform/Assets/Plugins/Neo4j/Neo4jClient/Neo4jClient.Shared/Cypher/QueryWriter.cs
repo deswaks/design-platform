@@ -1,22 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json.Serialization;
 
-namespace Neo4jClient.Cypher
-{
-    public class QueryWriter
-    {
+namespace Neo4jClient.Cypher {
+    public class QueryWriter {
         readonly StringBuilder queryTextBuilder;
         readonly IDictionary<string, object> queryParameters;
         CypherResultMode resultMode;
         private CypherResultFormat resultFormat;
         private readonly List<string> bookmarks = new List<string>();
-    
-        public QueryWriter()
-        {
+
+        public QueryWriter() {
             queryTextBuilder = new StringBuilder();
             queryParameters = new Dictionary<string, object>();
             resultMode = CypherResultMode.Set;
@@ -29,8 +25,7 @@ namespace Neo4jClient.Cypher
             CypherResultMode resultMode,
             CypherResultFormat resultFormat,
             List<string> bookmarks,
-            string identifier)
-        {
+            string identifier) {
             this.queryTextBuilder = queryTextBuilder;
             this.queryParameters = queryParameters;
             this.resultMode = resultMode;
@@ -41,14 +36,12 @@ namespace Neo4jClient.Cypher
 
         public List<string> Bookmarks => bookmarks;
 
-        public CypherResultMode ResultMode
-        {
+        public CypherResultMode ResultMode {
             get => resultMode;
             set => resultMode = value;
         }
 
-        public CypherResultFormat ResultFormat
-        {
+        public CypherResultFormat ResultFormat {
             get => resultFormat;
             set => resultFormat = value;
         }
@@ -58,21 +51,18 @@ namespace Neo4jClient.Cypher
         public NameValueCollection CustomHeaders { get; set; }
         public string Identifier { get; set; }
 
-        public QueryWriter Clone()
-        {
+        public QueryWriter Clone() {
             var clonedQueryTextBuilder = new StringBuilder(queryTextBuilder.ToString());
             var clonedParameters = new Dictionary<string, object>(queryParameters);
             var clonedBookmarks = new List<string>(bookmarks);
-            
-            return new QueryWriter(clonedQueryTextBuilder, clonedParameters, resultMode, resultFormat, clonedBookmarks, Identifier)
-            {
+
+            return new QueryWriter(clonedQueryTextBuilder, clonedParameters, resultMode, resultFormat, clonedBookmarks, Identifier) {
                 MaxExecutionTime = MaxExecutionTime,
                 CustomHeaders = CustomHeaders
             };
         }
 
-        public CypherQuery ToCypherQuery(IContractResolver contractResolver = null, bool isWrite = true)
-        {
+        public CypherQuery ToCypherQuery(IContractResolver contractResolver = null, bool isWrite = true) {
             var queryText = queryTextBuilder
                 .ToString()
                 .TrimEnd(Environment.NewLine.ToCharArray());
@@ -82,7 +72,7 @@ namespace Neo4jClient.Cypher
                 new Dictionary<string, object>(queryParameters),
                 resultMode,
                 resultFormat,
-				contractResolver,
+                contractResolver,
                 MaxExecutionTime,
                 CustomHeaders,
                 isWrite,
@@ -91,33 +81,27 @@ namespace Neo4jClient.Cypher
                 );
         }
 
-        public string CreateParameter(object paramValue)
-        {
+        public string CreateParameter(object paramValue) {
             var paramName = $"p{queryParameters.Count}";
             queryParameters.Add(paramName, paramValue);
             return $"${paramName}";
         }
 
-        public void CreateParameter(string key, object value)
-        {
+        public void CreateParameter(string key, object value) {
             queryParameters.Add(key, value);
         }
 
-        public void CreateParameters(IDictionary<string,object> parameters)
-        {
-            foreach(var parameter in parameters)
+        public void CreateParameters(IDictionary<string, object> parameters) {
+            foreach (var parameter in parameters)
                 queryParameters.Add(parameter.Key, parameter.Value);
         }
 
-        public bool ContainsParameterWithKey(string key)
-        {
+        public bool ContainsParameterWithKey(string key) {
             return queryParameters.ContainsKey(key);
         }
 
-        public QueryWriter AppendClause(string clause, params object[] paramValues)
-        {
-            if (paramValues.Any())
-            {
+        public QueryWriter AppendClause(string clause, params object[] paramValues) {
+            if (paramValues.Any()) {
                 var paramPlaceholders = paramValues
                     .Select(CreateParameterAndReturnPlaceholder)
                     .Cast<object>()
@@ -127,8 +111,7 @@ namespace Neo4jClient.Cypher
 
             // Only needed while migrating off CypherQueryBuilder
             if (queryTextBuilder.Length > 0 &&
-                !queryTextBuilder.ToString().EndsWith(Environment.NewLine))
-            {
+                !queryTextBuilder.ToString().EndsWith(Environment.NewLine)) {
                 queryTextBuilder.AppendLine();
             }
 
@@ -136,10 +119,8 @@ namespace Neo4jClient.Cypher
 
             return this;
         }
-        public QueryWriter AppendToClause(string appendedData, params object[] paramValues)
-        {
-            if (paramValues.Any())
-            {
+        public QueryWriter AppendToClause(string appendedData, params object[] paramValues) {
+            if (paramValues.Any()) {
                 var paramPlaceholders = paramValues
                     .Select(CreateParameterAndReturnPlaceholder)
                     .Cast<object>()
@@ -148,8 +129,7 @@ namespace Neo4jClient.Cypher
             }
 
             if (queryTextBuilder.Length > 0 &&
-                queryTextBuilder.ToString().EndsWith(Environment.NewLine))
-            {
+                queryTextBuilder.ToString().EndsWith(Environment.NewLine)) {
                 queryTextBuilder.Remove(queryTextBuilder.Length - Environment.NewLine.Length, Environment.NewLine.Length);
             }
 
@@ -158,8 +138,7 @@ namespace Neo4jClient.Cypher
             return this;
         }
 
-        string CreateParameterAndReturnPlaceholder(object paramValue)
-        {
+        string CreateParameterAndReturnPlaceholder(object paramValue) {
             var paramName = string.Format("p{0}", queryParameters.Count);
             queryParameters.Add(paramName, paramValue);
             return $"${paramName}";

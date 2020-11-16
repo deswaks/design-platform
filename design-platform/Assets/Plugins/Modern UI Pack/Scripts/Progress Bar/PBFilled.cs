@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class PBFilled : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class PBFilled : MonoBehaviour {
         [Header("RESOURCES")]
         public TextMeshProUGUI minLabel;
         public TextMeshProUGUI maxLabel;
@@ -17,8 +15,7 @@ namespace Michsky.UI.ModernUIPack
         ProgressBar progressBar;
         Animator barAnimatior;
 
-        void Start()
-        {
+        void Start() {
             progressBar = gameObject.GetComponent<ProgressBar>();
             barAnimatior = gameObject.GetComponent<Animator>();
 
@@ -26,8 +23,7 @@ namespace Michsky.UI.ModernUIPack
             maxLabel.color = maxColor;
         }
 
-        void Update()
-        {
+        void Update() {
             if (progressBar.currentPercent >= transitionAfter)
                 barAnimatior.Play("Radial PB Filled");
 

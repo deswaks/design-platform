@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace Neo4jClient.ApiModels.Cypher
-{
-    public class PathsResult
-    {
+namespace Neo4jClient.ApiModels.Cypher {
+    public class PathsResult {
         [JsonProperty("start")]
         public string Start { get; set; }
 

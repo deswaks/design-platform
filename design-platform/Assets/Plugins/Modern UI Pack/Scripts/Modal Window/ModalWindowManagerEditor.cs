@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(ModalWindowManager))]
     [System.Serializable]
-    public class ModalWindowManagerEditor : Editor
-    {
+    public class ModalWindowManagerEditor : Editor {
         // Variables
         private ModalWindowManager mwTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             mwTarget = (ModalWindowManager)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -88,8 +84,7 @@ namespace Michsky.UI.ModernUIPack
             var useCustomValues = serializedObject.FindProperty("useCustomValues");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("CONTENT", customSkin.FindStyle("Header"));
@@ -104,10 +99,8 @@ namespace Michsky.UI.ModernUIPack
                     if (mwTarget.windowIcon != null)
                         mwTarget.windowIcon.sprite = mwTarget.icon;
 
-                    else
-                    {
-                        if (mwTarget.windowIcon == null)
-                        {
+                    else {
+                        if (mwTarget.windowIcon == null) {
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("'Icon Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();
@@ -124,10 +117,8 @@ namespace Michsky.UI.ModernUIPack
                     if (mwTarget.windowTitle != null)
                         mwTarget.windowTitle.text = titleText.stringValue;
 
-                    else
-                    {
-                        if (mwTarget.windowTitle == null)
-                        {
+                    else {
+                        if (mwTarget.windowTitle == null) {
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("'Title Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();
@@ -144,10 +135,8 @@ namespace Michsky.UI.ModernUIPack
                     if (mwTarget.windowDescription != null)
                         mwTarget.windowDescription.text = descriptionText.stringValue;
 
-                    else
-                    {
-                        if (mwTarget.windowDescription == null)
-                        {
+                    else {
+                        if (mwTarget.windowDescription == null) {
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("'Description Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();

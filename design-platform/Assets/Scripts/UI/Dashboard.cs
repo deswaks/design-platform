@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +28,7 @@ namespace DesignPlatform.Core {
             GameObject dualRow = null;
             TemplateRow.SetActive(true);
 
-            foreach(var widgetKeyValue in widgets){
+            foreach (var widgetKeyValue in widgets) {
                 if (!widgetKeyValue.Value) {
                     continue;
                 }
@@ -39,7 +36,7 @@ namespace DesignPlatform.Core {
 
                 // If widget is full width, a new row is created and the widget is inserted into it
                 if (widget.Size.width == 2) {
-                    GameObject hostRow = GameObject.Instantiate( TemplateRow, WidgetArea.transform );
+                    GameObject hostRow = GameObject.Instantiate(TemplateRow, WidgetArea.transform);
                     widgetRows.Add(hostRow);
                     widget.Draw(hostRow);
                     // Forces rebuild of layout to update position in layout groups
@@ -48,7 +45,7 @@ namespace DesignPlatform.Core {
 
                 else if (widget.Size.width == 1) {
                     // If no dualRow is available
-                    if(dualRow == null) {
+                    if (dualRow == null) {
                         dualRow = GameObject.Instantiate(TemplateRow, WidgetArea.transform);
                         widgetRows.Add(dualRow);
                         widget.Draw(dualRow);
@@ -70,11 +67,11 @@ namespace DesignPlatform.Core {
         }
 
         public void AddWidgetToList(Widget widget) {
-            widgets.Add(widget,true);
+            widgets.Add(widget, true);
         }
 
         public void UpdateCurrentWidgets() {
-            foreach(var widget in widgets) {
+            foreach (var widget in widgets) {
                 if (!widget.Value) {
                     continue;
                 }
@@ -83,13 +80,13 @@ namespace DesignPlatform.Core {
         }
 
         private void ClearAllWidgets() {
-            foreach(GameObject row in widgetRows) {
+            foreach (GameObject row in widgetRows) {
                 GameObject.Destroy(row);
             }
             widgetRows = new List<GameObject>();
         }
 
-        internal void SetAllWidgetsAndToggles(Dictionary<Widget,bool> widgets) {
+        internal void SetAllWidgetsAndToggles(Dictionary<Widget, bool> widgets) {
             this.widgets = widgets;
 
             ClearAllWidgets();

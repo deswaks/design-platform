@@ -4,15 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Neo4jClient.Gremlin
-{
-    internal static class FilterFormatters
-    {
-        internal static FormattedFilter FormatGremlinFilter(IEnumerable<Filter> filters, StringComparison comparison, IGremlinQuery queryThatTheFilterWillEventuallyBeAddedTo)
-        {
+namespace Neo4jClient.Gremlin {
+    internal static class FilterFormatters {
+        internal static FormattedFilter FormatGremlinFilter(IEnumerable<Filter> filters, StringComparison comparison, IGremlinQuery queryThatTheFilterWillEventuallyBeAddedTo) {
             filters = filters
-                .Select(f =>
-                {
+                .Select(f => {
                     if (f.Value != null && f.Value.GetType().GetTypeInfo().IsEnum)
                         f.Value = f.Value.ToString();
                     return f;
@@ -47,8 +43,7 @@ namespace Neo4jClient.Gremlin
             const string filterSeparator = " && ";
             const string concatenatedFiltersFormat = "{{ {0} }}";
 
-            switch (comparison)
-            {
+            switch (comparison) {
                 case StringComparison.Ordinal:
                     typeFilterFormats.Add(new TypeFilter { Type = typeof(string), FilterFormat = "it[{0}].equals({1})", ExpressionType = ExpressionType.Equal });
                     typeFilterFormats.Add(new TypeFilter { Type = typeof(string), FilterFormat = "!it[{0}].equals({1})", ExpressionType = ExpressionType.NotEqual });
@@ -63,8 +58,7 @@ namespace Neo4jClient.Gremlin
 
             var parameters = new Dictionary<string, object>();
             var nextParameterIndex = queryThatTheFilterWillEventuallyBeAddedTo.QueryParameters.Count;
-            Func<object, string> createParameter = value =>
-            {
+            Func<object, string> createParameter = value => {
                 if (value == null) return "null";
                 var paramName = string.Format("p{0}", nextParameterIndex);
                 parameters.Add(paramName, value);
@@ -78,8 +72,7 @@ namespace Neo4jClient.Gremlin
                 let typeFilter = typeFilterFormats.SingleOrDefault(tf => tf.Type == filterValueType && tf.ExpressionType == f.ExpressionType)
                 let isFilterSupported = typeFilter != null
                 let filterFormat = isFilterSupported ? typeFilter.FilterFormat : null
-                select new
-                {
+                select new {
                     f.PropertyName,
                     PropertyNameParam = createParameter(f.PropertyName),
                     ValueParam = createParameter(f.Value),
@@ -111,26 +104,21 @@ namespace Neo4jClient.Gremlin
 
             var filter = string.IsNullOrWhiteSpace(concatenatedFilters) ? string.Empty : ".filter";
 
-            return new FormattedFilter
-            {
+            return new FormattedFilter {
                 FilterText = filter + concatenatedFilters,
                 FilterParameters = parameters
             };
         }
 
-        internal static IEnumerable<Filter> TranslateFilter<TNode>(Expression<Func<TNode, bool>> filter)
-        {
-            if (filter.Body.Type == typeof(bool))
-            {
-                if (filter.Body.NodeType == ExpressionType.MemberAccess)
-                {
+        internal static IEnumerable<Filter> TranslateFilter<TNode>(Expression<Func<TNode, bool>> filter) {
+            if (filter.Body.Type == typeof(bool)) {
+                if (filter.Body.NodeType == ExpressionType.MemberAccess) {
                     var expression = filter.Body as MemberExpression;
 
                     if (expression != null &&
                         (expression.Member is PropertyInfo))// && expression.Member.MemberType == MemberTypes.Property))
                     {
-                        var newFilter = new Filter
-                        {
+                        var newFilter = new Filter {
                             ExpressionType = ExpressionType.Equal,
                             PropertyName = expression.Member.Name,
                             Value = true
@@ -140,17 +128,13 @@ namespace Neo4jClient.Gremlin
                     }
                 }
 
-                if (filter.Body.NodeType == ExpressionType.Not)
-                {
+                if (filter.Body.NodeType == ExpressionType.Not) {
                     var expression = filter.Body as UnaryExpression;
 
-                    if (expression != null)
-                    {
+                    if (expression != null) {
                         var operand = expression.Operand as MemberExpression;
-                        if (operand != null)
-                        {
-                            var newFilter = new Filter
-                            {
+                        if (operand != null) {
+                            var newFilter = new Filter {
                                 ExpressionType = ExpressionType.Equal,
                                 PropertyName = operand.Member.Name,
                                 Value = false
@@ -168,10 +152,8 @@ namespace Neo4jClient.Gremlin
             return TranslateFilterInternal(binaryExpression);
         }
 
-        static IEnumerable<Filter> TranslateFilterInternal(BinaryExpression binaryExpression)
-        {
-            switch (binaryExpression.NodeType)
-            {
+        static IEnumerable<Filter> TranslateFilterInternal(BinaryExpression binaryExpression) {
+            switch (binaryExpression.NodeType) {
                 case ExpressionType.AndAlso:
                 case ExpressionType.And:
                     var leftBinaryExpression = binaryExpression.Left as BinaryExpression;
@@ -217,8 +199,7 @@ namespace Neo4jClient.Gremlin
             };
         }
 
-        internal static ExpressionKey ParseKeyFromExpression(Expression expression)
-        {
+        internal static ExpressionKey ParseKeyFromExpression(Expression expression) {
             var unaryExpression = expression as UnaryExpression;
             if (unaryExpression != null &&
                 unaryExpression.NodeType == ExpressionType.Convert)
@@ -229,8 +210,7 @@ namespace Neo4jClient.Gremlin
                 memberExpression.Member is PropertyInfo
                 //&& memberExpression.Member.MemberType == MemberTypes.Property)
                 )
-                return new ExpressionKey
-                {
+                return new ExpressionKey {
                     Name = memberExpression.Member.Name,
                     PropertyType = ((PropertyInfo)memberExpression.Member).PropertyType
                 };
@@ -238,14 +218,12 @@ namespace Neo4jClient.Gremlin
             throw new NotSupportedException("Only property accessors are supported for the left-hand side of the expression at this time.");
         }
 
-        static object ParseValueFromExpression(Expression expression)
-        {
+        static object ParseValueFromExpression(Expression expression) {
             var lambdaExpression = Expression.Lambda(expression);
             return lambdaExpression.Compile().DynamicInvoke();
         }
 
-        internal class ExpressionKey
-        {
+        internal class ExpressionKey {
             public string Name { get; set; }
             public Type PropertyType { get; set; }
         }

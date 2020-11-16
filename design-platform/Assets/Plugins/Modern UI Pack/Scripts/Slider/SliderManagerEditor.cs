@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(SliderManager))]
     [System.Serializable]
-    public class SliderManagerEditor : Editor
-    {
+    public class SliderManagerEditor : Editor {
         // Variables
         private SliderManager sliderTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             sliderTarget = (SliderManager)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -90,15 +86,13 @@ namespace Michsky.UI.ModernUIPack
             var showPopupValue = serializedObject.FindProperty("showPopupValue");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("CONTENT", customSkin.FindStyle("Header"));
                     GUILayout.Space(2);
 
-                    if (sliderTarget.mainSlider != null)
-                    {
+                    if (sliderTarget.mainSlider != null) {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Current Value"), customSkin.FindStyle("Text"), GUILayout.Width(120));
@@ -146,8 +140,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (showValue.boolValue == true)
-                    {
+                    if (showValue.boolValue == true) {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Label Text"), customSkin.FindStyle("Text"), GUILayout.Width(120));
@@ -156,8 +149,7 @@ namespace Michsky.UI.ModernUIPack
                         GUILayout.EndHorizontal();
                     }
 
-                    if (showPopupValue.boolValue == true)
-                    {
+                    if (showPopupValue.boolValue == true) {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Popup Label Text"), customSkin.FindStyle("Text"), GUILayout.Width(120));
@@ -180,8 +172,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (enableSaving.boolValue == true)
-                    {
+                    if (enableSaving.boolValue == true) {
                         EditorGUI.indentLevel = 2;
                         GUILayout.BeginHorizontal();
 
