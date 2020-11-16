@@ -25,6 +25,7 @@ namespace Michsky.UI.ModernUIPack
         {
             try
             {
+                Debug.Log("trying");
                 switchAnimator = gameObject.GetComponent<Animator>();
                 switchButton = gameObject.GetComponent<Button>();
                 switchButton.onClick.AddListener(AnimateSwitch);
@@ -37,6 +38,8 @@ namespace Michsky.UI.ModernUIPack
 
             if (saveValue == true)
             {
+                Debug.Log("save true");
+
                 if (PlayerPrefs.GetString(switchTag + "Switch") == "")
                 {
                     if (isOn == true)
@@ -69,14 +72,19 @@ namespace Michsky.UI.ModernUIPack
 
             else
             {
-                if (isOn == true)
-                {
+                Debug.Log("save false");
+
+                if (isOn == true) {
+                    Debug.Log("is on");
+
                     switchAnimator.Play("Switch On");
                     isOn = true;
                 }
 
                 else
                 {
+                    Debug.Log("is off");
+
                     switchAnimator.Play("Switch Off");
                     isOn = false;
                 }

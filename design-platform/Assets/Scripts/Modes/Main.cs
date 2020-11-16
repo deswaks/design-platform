@@ -21,13 +21,13 @@ namespace DesignPlatform.Core {
             Grid.size = 1.0f;
             SetMode(SelectMode.Instance);
 
-
-    
             // Pre load assets
             Utils.AssetUtil.LoadBundle("materials");
             Utils.AssetUtil.LoadBundle("prefabs");
 
             ///////////////////////////////////////////////////////////////// WIDGET TEST ///////////////////////////
+            WallElementScheduleWidget wallElementwidget = new WallElementScheduleWidget();
+            wallElementwidget.RequestDraw();
             StructuralWidget strucWidget = new StructuralWidget();
             strucWidget.RequestDraw();
             RoomScheduleWidget widgey = new RoomScheduleWidget();

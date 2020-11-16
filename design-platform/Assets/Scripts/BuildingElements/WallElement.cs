@@ -22,6 +22,12 @@ namespace DesignPlatform.Core {
         public (Vector3 point, WallJointType jointType) endPoint { get; private set; }   = (new Vector3(), WallJointType.None );
         public List<(Vector3 point, WallJointType jointType)> midpoints { get; private set; } = new List<(Vector3 point, WallJointType jointType)>();
 
+        public double Height { get; private set; } = 3.0; // SKAL SUGES FRA NOGET
+        public double Width { get; private set; } = 0.2; // SKAL SUGES
+        public double Area { 
+            get { return Length() * Height; } 
+            private set { Area = value; } 
+        }
 
         public void SetStartPoint(Vector3 point, WallJointType jointType = WallJointType.None) {
             startPoint = (point, jointType);
