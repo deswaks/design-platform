@@ -42,7 +42,7 @@ namespace Michsky.UI.ModernUIPack
             if (allowUpdating == true)
             {
                 cursorPos = Input.mousePosition;
-                cursorPos.z = tooltipZHelper.position.z;       
+                //cursorPos.z = tooltipZHelper.position.z;       
                 uiPos = tooltipRect.anchoredPosition;
                 CheckForBounds();
 

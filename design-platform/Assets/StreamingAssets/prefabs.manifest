@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3848526106
+CRC: 1242874412
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 73e5b9e73ce0ff92a7ba35e48c71ce31
+    Hash: 1fb59f356c8a346ffed40631df17ca8e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5db16c34863bffe30f3cc36537827815
@@ -94,4 +94,4 @@ Assets:
 - Assets/Prefabs/SlabPrefab.prefab
 - Assets/Prefabs/notification.prefab
 Dependencies:
-- C:/Users/ander/Documents/GitHub/design-platform/design-platform/Assets/StreamingAssets/materials
+- E:/github/design-platform/design-platform/Assets/StreamingAssets/materials

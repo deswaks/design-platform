@@ -38,7 +38,7 @@ namespace DesignPlatform.Core {
 
 
 
-            ModuleLoader.LoadModules();
+            //ModuleLoader.LoadModules();
 
         }
 
