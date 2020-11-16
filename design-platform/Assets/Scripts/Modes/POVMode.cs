@@ -125,6 +125,7 @@ namespace DesignPlatform.Core {
             switch (currentModeType) {
                 case ModeType.POV:
                     UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                    UnityEngine.Cursor.visible = false; 
                     break;
 
                 case ModeType.MENU:
@@ -135,6 +136,7 @@ namespace DesignPlatform.Core {
             switch (currentModeType) {
                 case ModeType.POV:
                     UnityEngine.Cursor.lockState = CursorLockMode.None;
+                    UnityEngine.Cursor.visible = true;
                     break;
 
                 case ModeType.MENU:
@@ -147,8 +149,8 @@ namespace DesignPlatform.Core {
         /// 
         /// </summary>
         public void UpdatePOVCamera() {
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+            float mouseX = Input.GetAxis("Mouse X"); //* mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y"); //* mouseSensitivity * Time.deltaTime;
 
             // Look Up/Down 
             xRotation -= mouseY;

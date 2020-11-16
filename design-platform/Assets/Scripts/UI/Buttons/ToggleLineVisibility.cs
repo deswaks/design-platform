@@ -8,7 +8,7 @@ namespace DesignPlatform.Core {
             
             GlobalSettings.ShowWallLines = showLines;
             GlobalSettings.ShowOpeningLines = showLines;
-            foreach (Room room in Building.Instance.rooms) {
+            foreach (Room room in Building.Instance.Rooms) {
                 room.UpdateRender2D();
             }
             foreach (Opening opening in Building.Instance.Openings) {
