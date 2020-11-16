@@ -349,25 +349,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void Move(Vector3 exactPosition) {
             Vector3 gridPosition = Grid.GetNearestGridpoint(exactPosition);
-            gameObject.transform.position = gridPosition;
-
-            foreach (Opening opening in openings) {
-                foreach (Face openingsAttachedFace in opening.attachedFaces) {
-                    bool faceBelongsToThisRoom = (Faces.Contains(openingsAttachedFace));
-                    if (!faceBelongsToThisRoom) openingsAttachedFace.RemoveOpening(opening);
-                }
-            }
-
-            foreach (Room room in Building.Instance.Rooms) {
-                foreach (Face face in room.Faces) {
-                    foreach (Opening opening in face.openings) {
-                        opening.SetAttachedFaces(opening.transform.position);
-
-
-                    }
-                }
-            }
-      
+            gameObject.transform.position = gridPosition;      
             UpdateRender2D();
         }
 
@@ -553,6 +535,21 @@ namespace DesignPlatform.Core {
                     }
                 }
                 transform.position = Grid.GetNearestGridpoint(curPosition);
+                
+                foreach (Opening opening in openings) {
+                    foreach (Face openingsAttachedFace in opening.attachedFaces) {
+                        bool faceBelongsToThisRoom = (Faces.Contains(openingsAttachedFace));
+                        if (!faceBelongsToThisRoom) openingsAttachedFace.RemoveOpening(opening);
+                    }
+                }
+
+                foreach (Room room in Building.Instance.Rooms) {
+                    foreach (Face face in room.Faces) {
+                        foreach (Opening opening in face.openings) {
+                            opening.SetAttachedFaces(opening.transform.position);
+                        }
+                    }
+                }
             }
         }
 

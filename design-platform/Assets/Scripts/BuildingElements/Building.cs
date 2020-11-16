@@ -303,6 +303,16 @@ namespace DesignPlatform.Core {
             if (Slabs.Count > 0) DeleteAllSlabs();
             if (Interfaces.Count > 0) DeleteAllInterfaces();
 
+            foreach (Room room in Rooms) {
+                foreach (Face face in room.Faces) {
+                    foreach (Opening opening in face.openings) {
+                        bool openingBelongsToThisFace = (face.IsPointOnFace(opening.gameObject.transform.position));
+                        bool openingIsAlreadyInList = face.openings.Contains(opening);
+                        if (openingBelongsToThisFace && !openingIsAlreadyInList) face.AddOpening(opening);
+                    }
+                }
+            }
+
             Debug.Log("Antal openings i alle rum: "+ Rooms.SelectMany(r => r.Faces).Count(f => f.openings.Count > 0));
 
             CreateVerticalInterfaces();

@@ -14,7 +14,7 @@ namespace DesignPlatform.Database {
         /// <param name="RoomNode">RoomNode to create as a Room in Unity</param>
         public static void CreateUnityRoomFromRoomNode(RoomNode RoomNode) {
             // Builds room
-            Room newRoom = Building.Instance.BuildRoom(RoomNode.shape, preview: false, templateRoom: null);
+            Room newRoom = Building.Instance.BuildRoom(RoomNode.shape, preview: true, templateRoom: null);
             //Gets control points from graph data
             List<Vector3> controlPoints = GraphUtils.StringListToVector3List(RoomNode.vertices);
             newRoom.SetControlPoints(controlPoints);
