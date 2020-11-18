@@ -52,14 +52,6 @@ namespace DesignPlatform.Core {
             get { return Faces.SelectMany(f => f.Interfaces).ToList(); }
             private set {; }
         }
-        public List<Wall> Walls {
-            get { return Faces.SelectMany(f => f.Walls).ToList(); }
-            private set {; }
-        }
-        public List<Slab> Slabs {
-            get { return Faces.SelectMany(f => f.Slabs).ToList(); }
-            private set {; }
-        }
         public List<Opening> Openings {
             get { return Faces.SelectMany(f => f.Openings).ToList(); }
             private set {; }
@@ -202,6 +194,7 @@ namespace DesignPlatform.Core {
             lr.loop = true;
             lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             lr.receiveShadows = false;
+            lr.sortingLayerName = "PLAN";
 
             // Update
             UpdateRender2D();
@@ -256,6 +249,7 @@ namespace DesignPlatform.Core {
                 tag.fontSize = 5.0f;
                 tag.alignment = TextAlignmentOptions.Center;
                 tag.text = RoomTypeName[Type];
+                tag.sortingOrder = 300;
             }
         }
 
@@ -292,7 +286,7 @@ namespace DesignPlatform.Core {
                                                 point: centerPoint,
                                                 axis: new Vector3(0, 1, 0),
                                                 angle: degrees);
-                    opening.SetAttachedFaces();
+                    opening.AttachClosestFaces();
                 }
             }
             
@@ -354,14 +348,12 @@ namespace DesignPlatform.Core {
         /// Deletes the room
         /// </summary>
         public void Delete() {
-            if (Building.Instance.Rooms.Contains(this)) {
-                //ParentBuilding.RemoveRoom(this);
+            if (Faces != null && Faces.Count > 0) {
                 foreach (Face face in Faces) {
-                    foreach (Opening opening in face.Openings) {
-                        face.RemoveOpening(opening);
-                        Destroy(opening);
-                    }
+                    face.Delete();
                 }
+            }
+            if (Building.Instance.Rooms.Contains(this)) {
                 ParentBuilding.RemoveRoom(this);
             }
             Destroy(gameObject);
@@ -440,7 +432,7 @@ namespace DesignPlatform.Core {
             foreach (Opening opening in Faces[wallToExtrude].Openings) {
                 Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, Faces[wallToExtrude]);
                 opening.transform.position = openingPoint;
-                opening.SetAttachedFaces();
+                opening.AttachClosestFaces();
             }
 
             // Compare normals before and after extrusion element-wise 
@@ -569,7 +561,7 @@ namespace DesignPlatform.Core {
                 foreach (Room room in Building.Instance.Rooms) {
                     foreach (Face face in room.Faces) {
                         foreach (Opening opening in face.Openings) {
-                            opening.SetAttachedFaces();
+                            opening.AttachClosestFaces();
                         }
                     }
                 }

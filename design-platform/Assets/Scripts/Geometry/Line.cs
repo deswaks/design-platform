@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DesignPlatform.Core;
 using UnityEngine;
 
 namespace DesignPlatform.Geometry {
@@ -31,6 +32,11 @@ namespace DesignPlatform.Geometry {
         public Line((Vector3,Vector3) endPoints) {
             StartPoint = endPoints.Item1;
             EndPoint = endPoints.Item2;
+        }
+
+        public Line(Face face) {
+            StartPoint = face.StartPoint;
+            EndPoint = face.EndPoint;
         }
 
         /// <summary>

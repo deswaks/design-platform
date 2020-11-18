@@ -15,7 +15,7 @@ namespace DesignPlatform.Core {
         }
 
         MoveMode() {
-            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "move_handle");
+            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "MoveHandle");
         }
 
 

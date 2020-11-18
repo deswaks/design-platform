@@ -46,12 +46,12 @@ namespace DesignPlatform.Export {
 
             // Get data from wall
             string wallName = interFace.ToString();
-            Vector3 startPoint = interFace.GetStartPoint() * 1000;
-            Vector3 endPoint = interFace.GetEndPoint() * 1000;
+            Vector3 startPoint = interFace.StartPoint * 1000;
+            Vector3 endPoint = interFace.EndPoint * 1000;
             Vector3 midPoint = (endPoint - startPoint) / 2;
             Vector3 wallVector = (endPoint - startPoint).normalized;
             float length = (endPoint - startPoint).magnitude;
-            float height = interFace.Faces[0].Room.height * 1000;
+            float height = interFace.Rooms[0].height * 1000;
             float thickness = interFace.Thickness * 1000;
 
             //begin a transaction

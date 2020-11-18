@@ -5,7 +5,17 @@ namespace DesignPlatform.Core {
     public class BuildMode : Mode {
 
         private static BuildMode instance;
-        private RoomShape selectedShape { get; set; } //0 is rectangle and 1 is L-shape
+
+        private RoomShape selectedShape = RoomShape.RECTANGLE;
+        public RoomShape SelectedShape {
+            get {
+                return selectedShape;
+            }
+            set {
+                selectedShape = value;
+                RebuildPreview(selectedShape);
+            }
+        }
 
         // Set at runtime
         public Room previewRoom;
@@ -18,7 +28,7 @@ namespace DesignPlatform.Core {
         }
 
         public BuildMode() {
-            selectedShape = RoomShape.RECTANGLE;
+            SelectedShape = RoomShape.RECTANGLE;
         }
 
         public override void Tick() {
@@ -32,11 +42,42 @@ namespace DesignPlatform.Core {
             }
 
             if (Input.GetMouseButtonDown(1)) {
-                //Change from rectangle to L-shape and vice versa
+                if ((int)SelectedShape == 4) {
+                    SelectedShape = (RoomShape)0;
+                }
+                else {
+                    SelectedShape = (RoomShape)(int)SelectedShape + 1;
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.R)) {
                 previewRoom.Rotate(); //remember to tell this to the user when implementing tooltips
+            }
+
+            if (Input.GetKeyDown(KeyCode.L)) {
+                SelectedShape = RoomShape.LSHAPE;
+            }
+
+            if (Input.GetKeyDown(KeyCode.U)) {
+                SelectedShape = RoomShape.USHAPE;
+            }
+
+            if (Input.GetKeyDown(KeyCode.S)) {
+                SelectedShape = RoomShape.SSHAPE;
+            }
+
+            if (Input.GetKeyDown(KeyCode.T)) {
+                SelectedShape = RoomShape.TSHAPE;
+            }
+
+            if (Input.GetKeyDown(KeyCode.D)) {
+                OpeningMode.Instance.SelectedShape = OpeningShape.DOOR;
+                Main.Instance.SetMode(OpeningMode.Instance);
+            }
+
+            if (Input.GetKeyDown(KeyCode.W)) {
+                OpeningMode.Instance.SelectedShape = OpeningShape.WINDOW;
+                Main.Instance.SetMode(OpeningMode.Instance);
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -48,18 +89,23 @@ namespace DesignPlatform.Core {
 
         public override void OnModeResume() {
             if (previewRoom == null) {
-                previewRoom = Building.Instance.BuildRoom(buildShape: selectedShape, preview: true);
+                previewRoom = Building.Instance.BuildRoom(buildShape: SelectedShape, preview: true);
             }
         }
 
         public override void OnModePause() {
-            previewRoom.Delete();
+            if (previewRoom != null) previewRoom.Delete();
             previewRoom = null;
+        }
+
+        public void RebuildPreview(RoomShape SelectedShape = RoomShape.RECTANGLE) {
+            if (previewRoom != null) previewRoom.Delete();
+            previewRoom = Building.Instance.BuildRoom(buildShape: SelectedShape, preview: true);
         }
 
         // Actually build the thing
         public void Build() {
-            Room builtRoom = Building.Instance.BuildRoom(buildShape: selectedShape, templateRoom: previewRoom);
+            Room builtRoom = Building.Instance.BuildRoom(buildShape: SelectedShape, templateRoom: previewRoom);
             builtRoom.State = RoomState.STATIONARY;
 
         }
@@ -78,7 +124,7 @@ namespace DesignPlatform.Core {
         }
 
         public void SetSelectedShape(RoomShape shape = RoomShape.RECTANGLE) {
-            selectedShape = shape;
+            SelectedShape = shape;
         }
     }
 }

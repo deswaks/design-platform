@@ -163,13 +163,13 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void IdentifyInterfaceJointTypes() {
             // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = Interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
+            List<Interface> culledInterfaces = Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
 
             // Finds all joint points (unique points shared by all interfaces)
             List<Vector3> jointPoints = new List<Vector3>();
             culledInterfaces.ForEach(i => {
-                jointPoints.Add(i.GetEndPoint());
-                jointPoints.Add(i.GetStartPoint());
+                jointPoints.Add(i.EndPoint);
+                jointPoints.Add(i.StartPoint);
             });
 
             jointPoints = jointPoints.Distinct().ToList();
@@ -178,10 +178,10 @@ namespace DesignPlatform.Core {
 
             foreach (Vector3 point in jointPoints) {
                 // Finds interfaces that have an endpoint in the given point
-                List<Interface> jointInterfaces = culledInterfaces.Where(i => i.GetEndPoint() == point || i.GetStartPoint() == point).ToList();
+                List<Interface> jointInterfaces = culledInterfaces.Where(i => i.EndPoint == point || i.StartPoint == point).ToList();
 
                 // Finds vector of all interfaces joint in the given point
-                List<Vector3> wallVectors = jointInterfaces.Select(interFace => (interFace.GetStartPoint() - interFace.GetEndPoint()).normalized).ToList();
+                List<Vector3> wallVectors = jointInterfaces.Select(interFace => (interFace.StartPoint - interFace.EndPoint).normalized).ToList();
 
                 string jointType = ":(";
 
@@ -219,7 +219,7 @@ namespace DesignPlatform.Core {
         /// <returns>Returns full, un-split, wall elements with no joint information.</returns>
         private List<WallElement> JoinInterfacesToLongestWallElements() {
             // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = Interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
+            List<Interface> culledInterfaces = Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
 
             // Identifier ID (Integer) for each wall referring to its wall element
             List<int> wallIDs = Enumerable.Repeat(-1, culledInterfaces.Count).ToList();
@@ -227,8 +227,8 @@ namespace DesignPlatform.Core {
             // Finds all joint points (unique points shared by all interfaces)
             List<Vector3> jointPoints = new List<Vector3>();
             culledInterfaces.ForEach(i => {
-                jointPoints.Add(i.GetEndPoint());
-                jointPoints.Add(i.GetStartPoint());
+                jointPoints.Add(i.EndPoint);
+                jointPoints.Add(i.StartPoint);
             });
             jointPoints = jointPoints.Distinct().ToList();
 
@@ -263,7 +263,7 @@ namespace DesignPlatform.Core {
             foreach (List<Interface> wallInterfaces in wallGroups.Select(list => list.ToList()).ToList()) {
                 WallElement wallElement = new WallElement();
 
-                List<Vector3> currentWallVertices = wallInterfaces.SelectMany(i => new List<Vector3> { i.GetEndPoint(), i.GetStartPoint() }).Distinct().ToList();
+                List<Vector3> currentWallVertices = wallInterfaces.SelectMany(i => new List<Vector3> { i.EndPoint, i.StartPoint }).Distinct().ToList();
                 // X-values
                 List<float> xs = currentWallVertices.Select(p => p.x).ToList();
                 // Z-values
@@ -282,19 +282,19 @@ namespace DesignPlatform.Core {
         }
 
         public List<Interface> GetParallelConnectedInterfaces(List<Interface> interfacesList, Interface interFace) {
-            Vector3 interfaceDirection = (interFace.GetStartPoint() - interFace.GetEndPoint()).normalized;
+            Vector3 interfaceDirection = (interFace.StartPoint - interFace.EndPoint).normalized;
 
             // Finds interfaces that have an endpoint in the given point
             List<Interface> jointInterfaces = new List<Interface>();
             jointInterfaces.AddRange(
                 interfacesList
-                .Where(i => i != interFace && (i.GetEndPoint() == interFace.GetEndPoint() || i.GetStartPoint() == interFace.GetEndPoint()))
-                .Where(i => System.Math.Abs(Vector3.Dot((i.GetStartPoint() - i.GetEndPoint()).normalized, interfaceDirection)) == 1)
+                .Where(i => i != interFace && (i.EndPoint == interFace.EndPoint || i.StartPoint == interFace.EndPoint))
+                .Where(i => System.Math.Abs(Vector3.Dot((i.StartPoint - i.EndPoint).normalized, interfaceDirection)) == 1)
                 .ToList());
             jointInterfaces.AddRange(
                 interfacesList
-                .Where(i => i != interFace && (i.GetEndPoint() == interFace.GetStartPoint() || i.GetStartPoint() == interFace.GetStartPoint()))
-                .Where(i => System.Math.Abs(Vector3.Dot((i.GetStartPoint() - i.GetEndPoint()).normalized, interfaceDirection)) == 1)
+                .Where(i => i != interFace && (i.EndPoint == interFace.StartPoint || i.StartPoint == interFace.StartPoint))
+                .Where(i => System.Math.Abs(Vector3.Dot((i.StartPoint - i.EndPoint).normalized, interfaceDirection)) == 1)
                 .ToList());
 
             return jointInterfaces;

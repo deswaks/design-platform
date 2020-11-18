@@ -7,9 +7,7 @@ namespace DesignPlatform.Core {
     public class Face {
 
         public Face(Room parent, int index) {
-            InterfaceWalls = new Dictionary<Interface, Wall>();
-            InterfaceSlabs = new Dictionary<Interface, Slab>();
-            InterfaceOpenings = new Dictionary<Interface, List<Opening>>();
+            OpeningParameters = new Dictionary<Opening, float>();
             InterfaceParameters = new Dictionary<Interface, float[]>();
             Room = parent;
             FaceIndex = index;
@@ -23,41 +21,14 @@ namespace DesignPlatform.Core {
         public List<Interface> Interfaces {
             get {
                 return InterfaceParameters.Keys.Select(i => (Interface)i).ToList();
-                //if (InterfaceParameters.Keys.Select(i => (Interface)i).ToList() == null
-                //  || InterfaceParameters.Keys.Select(i => (Interface)i).ToList().Count == 0) {
-                //    Building.Instance.BuildAllInterfaces();
-                //    return InterfaceParameters.Keys.Select(i => (Interface)i).ToList();
-                //}
-                //else {
-                //    return InterfaceParameters.Keys.Select(i => (Interface)i).ToList();
-                //}
-
             }
-            private set {; }
         }
 
-        public Dictionary<Interface, Wall> InterfaceWalls { get; private set; }
-        public List<Wall> Walls {
-            get { return InterfaceWalls.Values.Select(i => (Wall)i).ToList(); }
-            private set {; }
-        }
-
-        public Dictionary<Interface, Slab> InterfaceSlabs { get; private set; }
-        public List<Slab> Slabs {
-            get { return InterfaceSlabs.Values.Select(i => (Slab)i).ToList(); }
-            private set {; }
-        }
-
-        public Dictionary<Interface, List<Opening>> InterfaceOpenings { get; private set; }
+        public Dictionary<Opening, float> OpeningParameters { get; private set; }
         public List<Opening> Openings {
-            get {
-                if (InterfaceOpenings != null && InterfaceOpenings.Keys.Count > 0) {
-                    return InterfaceOpenings.Values.SelectMany(i => i).ToList();
-                }
-                else return new List<Opening>();
-            }
-            private set {; }
+            get { return OpeningParameters.Keys.Select(i => (Opening)i).ToList(); }
         }
+
 
         public Orientation Orientation { get; private set; }
 
@@ -78,6 +49,22 @@ namespace DesignPlatform.Core {
             get { return Room.height; }
             private set {; }
         }
+
+        public Vector3 StartPoint {
+            get { return Room.GetControlPoints()[FaceIndex]; }
+            private set {; }
+        }
+
+        public Vector3 EndPoint {
+            get { return Room.GetControlPoints(closed: true)[FaceIndex + 1]; }
+            private set {; }
+        }
+
+        public Line Line {
+            get { return new Line(this); }
+            private set {; }
+        }
+
         public Vector3 CenterPoint {
             get { return Room.GetWallMidpoints()[FaceIndex]; }
             private set {; }
@@ -156,64 +143,29 @@ namespace DesignPlatform.Core {
         }
 
         /// <summary>
-        /// Add a wall to the managed list of walls
-        /// </summary>
-        /// <param name="interFace"></param>
-        /// <param name="wall"></param>
-        public void AddWall(Interface interFace, Wall wall) {
-            InterfaceWalls.Add(interFace, wall);
-        }
-        /// <summary>
-        /// Remove a wall from the managed list of walls
-        /// </summary>
-        /// <param name="wall"></param>
-        public void RemoveWall(Wall wall) {
-            if (Walls.Contains(wall)) InterfaceWalls.Remove(wall.Interface);
-        }
-
-        /// <summary>
-        /// Add a slab to the managed list of slabs
-        /// </summary>
-        /// <param name="interFace"></param>
-        /// <param name="slab"></param>
-        public void AddSlab(Interface interFace, Slab slab) {
-            InterfaceSlabs.Add(interFace, slab);
-        }
-        /// <summary>
-        /// Remove a slab from the managed list of slabs
-        /// </summary>
-        /// <param name="slab"></param>
-        public void RemoveSlab(Slab slab) {
-            if (Slabs.Contains(slab)) InterfaceSlabs.Remove(slab.Interface);
-        }
-
-        /// <summary>
         /// Add an opening to the managed list of openings
         /// </summary>
         /// <param name="interFace"></param>
         /// <param name="opening"></param>
-        public void AddOpening(Interface interFace, Opening opening) {
-            if (!InterfaceOpenings.Keys.Contains(interFace)) {
-                InterfaceOpenings.Add(interFace, new List<Opening> { opening });
-            }
-            else {
-                InterfaceOpenings[interFace].Add(opening);
-            }
+        public void AddOpening(Opening opening) {
+            if (Openings.Contains(opening)) return;
+            float parameter = Line.Parameter(opening.CenterPoint);
+            OpeningParameters.Add(opening, parameter);
         }
+
         /// <summary>
         /// Remove an opening from the managed list of openings
         /// </summary>
         /// <param name="opening"></param>
         public void RemoveOpening(Opening opening) {
-            if (Openings.Contains(opening)) InterfaceOpenings.Remove(opening.Interface);
+            if (Openings.Contains(opening)) OpeningParameters.Remove(opening);
         }
 
-
-
-
-
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameterOnFace"></param>
+        /// <returns></returns>
         public Interface GetInterfaceAtParameter(float parameterOnFace) {
             foreach (KeyValuePair<Interface, float[]> iface in InterfaceParameters) {
                 if (parameterOnFace > iface.Value[0] && parameterOnFace < iface.Value[1]) {
@@ -222,25 +174,17 @@ namespace DesignPlatform.Core {
             }
             return null;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public bool IsPointOnFace(Vector3 point) {
-            Line faceLine = new Line(Get2DEndPoints());
-            return faceLine.IsOnLine(point);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public float GetPointParameter(Vector3 point) {
-            Line faceLine = new Line(Get2DEndPoints());
-            return faceLine.Parameter(point);
+        public void Delete() {
+            if (Openings != null && Openings.Count > 0) {
+                foreach (Opening opening in Openings) {
+                    if (opening.Faces.Count == 1) opening.Delete();
+                }
+            }
+            if (Interfaces != null && Interfaces.Count > 0) {
+                foreach (Interface interFace in Interfaces) {
+                    if (interFace.Faces.Count == 1) interFace.Delete();
+                }
+            }
         }
     }
 }

@@ -8,14 +8,6 @@ using UnityEngine;
 namespace DesignPlatform.Core {
     public class Interface {
 
-        public Interface(Face face) {
-            Faces = new List<Face>();
-            Faces.Add(face);
-        }
-        public Interface(List<Face> faces) {
-            Faces = faces;
-        }
-
         public List<Room> Rooms {
             get {
                 if (Faces != null && Faces.Count() > 0) {
@@ -23,37 +15,86 @@ namespace DesignPlatform.Core {
                 }
                 else return new List<Room>();
             }
-            set {; }
         }
-        public List<Face> Faces {get; set;}
-        public Wall Wall {
-            get { return Faces[0].InterfaceWalls[this]; }
-            private set {; } }
-        public Slab Slab {
-            get { return Faces[0].InterfaceSlabs[this]; }
-            private set {; }
-        }
+        public List<Face> Faces { get; private set; }
+
         public List<Opening> Openings {
-            get { return Faces.SelectMany(f => f.InterfaceOpenings[this]).ToList().Distinct().ToList(); }
-            private set {; }
+            get {
+                return Faces.SelectMany(f => f.Openings
+                    .Where(o => f.GetInterfaceAtParameter(f.Line.Parameter(o.CenterPoint)) == this))
+                    .Distinct().ToList();
+            }
         }
 
         public List<Opening> OpeningsVertical {
-            get {
-                List<Opening> faceOpenings = Faces.SelectMany(f => f.Openings).Distinct().ToList();
-                Debug.Log(faceOpenings.Count);
-                Line interfaceLine = new Line(GetStartPoint(), GetEndPoint());
-                return faceOpenings.Where(o => interfaceLine.IsOnLine(o.CenterPoint)).ToList();
-            }
+            get { return Openings.Where(o => o.Interface.Orientation == Orientation.VERTICAL).ToList(); }
         }
 
         /// <summary>
         /// 
         /// </summary>
         public Orientation Orientation {
-            get { return Faces[0].Orientation;  }
-            private set {; }
+            get { return Faces[0].Orientation; }
         }
+
+
+
+        public Interface(Face face, float startParameter = 0.0f, float endParameter = 1.0f) {
+            Faces = new List<Face> { face };
+            face.AddInterface(this, startParameter, endParameter);
+        }
+
+        public void AttachFace(Face face, float startParameter, float endParameter) {
+            Faces.Add(face);
+            face.AddInterface(this, startParameter, endParameter);
+        }
+
+        public List<float[]> Parameters {
+            get { return Faces.Select(f => f.InterfaceParameters[this]).ToList(); }
+        }
+
+
+
+        public Vector3 StartPoint {
+            get {
+                if (Faces[0].Orientation == Orientation.VERTICAL) {
+                    Vector3 faceStartPoint = Faces[0].Line.StartPoint;
+                    Vector3 faceEndPoint = Faces[0].Line.EndPoint;
+                    return faceStartPoint + (faceEndPoint - faceStartPoint) * Parameters[0][0];
+                }
+                else {
+                    return Rooms[0].GetControlPoints()[0];
+                }
+            }
+        }
+
+        public Vector3 EndPoint {
+            get {
+                if (Faces[0].Orientation == Orientation.VERTICAL) {
+                    Vector3 faceStartPoint = Faces[0].Line.StartPoint;
+                    Vector3 faceEndPoint = Faces[0].Line.EndPoint;
+                    return faceStartPoint + (faceEndPoint - faceStartPoint) * Parameters[0][1];
+                }
+                else {
+                    return Rooms[0].GetControlPoints()[0];
+                }
+            }
+        }
+
+        public Vector3 CenterPoint {
+            get {
+                if (Faces[0].Orientation == Orientation.VERTICAL) {
+                    Vector3 faceStartPoint = Faces[0].Line.StartPoint;
+                    Vector3 faceEndPoint = Faces[0].Line.EndPoint;
+                    return faceStartPoint + (faceEndPoint - faceStartPoint) * (Parameters[0][0]+ Parameters[0][1])/2;
+                }
+                else {
+                    return Rooms[0].GetControlPoints()[0];
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// 
@@ -75,59 +116,9 @@ namespace DesignPlatform.Core {
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="localCoordinates"></param>
-        /// <returns></returns>
-        public Vector3 GetStartPoint(bool localCoordinates = false) {
-            Vector3 startPoint = new Vector3();
-            if (Faces[0].Orientation == Orientation.VERTICAL) {
-                float[] parameters = Faces[0].InterfaceParameters[this];
-                (Vector3 fStartPoint, Vector3 fEndPoint) = Faces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-                startPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[0];
-            }
-            else {
-                startPoint = Rooms[0].GetControlPoints(localCoordinates: localCoordinates)[0];
-            }
-            return startPoint;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="localCoordinates"></param>
-        /// <returns></returns>
-        public Vector3 GetEndPoint(bool localCoordinates = false) {
-            Vector3 endPoint = new Vector3();
-            if (Faces[0].Orientation == Orientation.VERTICAL) {
-                float[] parameters = Faces[0].InterfaceParameters[this];
-                (Vector3 fStartPoint, Vector3 fEndPoint) = Faces[0].Get2DEndPoints(localCoordinates: localCoordinates);
-                endPoint = fStartPoint + (fEndPoint - fStartPoint) * parameters[1];
-            }
-            else {
-                List<Vector3> cp = Rooms[0].GetControlPoints(localCoordinates: localCoordinates);
-                endPoint = cp[cp.Count-1];
-            }
-            return endPoint;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="localCoordinates"></param>
-        /// <returns></returns>
-        public Vector3 GetCenterPoint(bool localCoordinates = false) {
-            Vector3 SP = GetStartPoint(localCoordinates: localCoordinates);
-            Vector3 EP = GetEndPoint(localCoordinates: localCoordinates);
-            Vector3 CP = new Vector3((SP.x + EP.x) / 2f, (SP.y + EP.y) / 2f, (SP.z + EP.z) / 2f);
-            return CP;
-        }
-
-        /// <summary>
         /// Deletes the interface
         /// </summary>
         public void Delete() {
-            Building.Instance.RemoveInterface(this);
             foreach (Face face in Faces) {
                 face.RemoveInterface(this);
             }

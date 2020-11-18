@@ -9,7 +9,17 @@ namespace DesignPlatform.Core {
         private static OpeningMode instance;
         private Collider[] collidingRooms;
         private float radius = 4f;
-        public OpeningShape selectedShape { get; private set; } //0 is window and 1 is door
+        private OpeningShape selectedShape = OpeningShape.DOOR;
+
+        public OpeningShape SelectedShape {
+            get {
+                return selectedShape;
+            }
+            set {
+                selectedShape = value;
+                RebuildPreview(selectedShape);
+            }
+        }
         public Opening previewOpening;
         public Vector3 closestPoint;
         public Vector3 hitPoint;
@@ -22,7 +32,7 @@ namespace DesignPlatform.Core {
         }
 
         public OpeningMode() {
-            selectedShape = OpeningShape.WINDOW;
+            SelectedShape = OpeningShape.WINDOW;
         }
 
         public override void Tick() {
@@ -33,6 +43,22 @@ namespace DesignPlatform.Core {
                         Build();
                     }
                 }
+            }
+            if (Input.GetMouseButtonDown(1)) {
+                if ((int)SelectedShape == 1) {
+                    SelectedShape = (OpeningShape)0;
+                }
+                else {
+                    SelectedShape = (OpeningShape)(int)SelectedShape + 1;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.D)) {
+                SelectedShape = OpeningShape.DOOR;
+            }
+
+            if (Input.GetKeyDown(KeyCode.W)) {
+                SelectedShape = OpeningShape.WINDOW;
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -48,7 +74,7 @@ namespace DesignPlatform.Core {
         public override void OnModeResume() {
             //List<Interface> interfaces = Building.Instance.Interfaces;
             if (previewOpening == null) {
-                previewOpening = Building.Instance.BuildOpening(openingShape: selectedShape,
+                previewOpening = Building.Instance.BuildOpening(shape: SelectedShape,
                                                                 preview: true);
             }
         }
@@ -57,18 +83,25 @@ namespace DesignPlatform.Core {
         /// Delete the preview opening object
         /// </summary> 
         public override void OnModePause() {
-            previewOpening.Delete();
+            if (previewOpening != null) previewOpening.Delete();
             previewOpening = null;
         }
 
-        /// <summary>
+        /// <summary>S
         /// Build the opening gameObject
         /// </summary>        
         public void Build() {
-            previewOpening.SetAttachedFaces();
-            Building.Instance.BuildOpening(openingShape: selectedShape,
-                                           templateOpening: previewOpening,
-                                           attachedFaces: previewOpening.Faces);
+            Opening newOpening = Building.Instance.BuildOpening(shape: SelectedShape,
+                                           templateOpening: previewOpening);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void RebuildPreview(OpeningShape buildShape) {
+            if (previewOpening != null) previewOpening.Delete();
+            previewOpening = Building.Instance.BuildOpening(shape: buildShape,
+                                                            preview: true);
         }
 
         /// <summary>
@@ -108,10 +141,6 @@ namespace DesignPlatform.Core {
                 previewOpening.Rotate(closestFace);
                 previewOpening.UpdateRender2D();
             }
-        }
-
-        public void SetSelectedShape(OpeningShape shape = OpeningShape.WINDOW) {
-            selectedShape = shape;
         }
 
         /// <summary>

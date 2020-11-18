@@ -10,16 +10,14 @@ namespace DesignPlatform.Core {
 
         public List<Room> Rooms {
             get { return Faces.Select(f => f.Room).ToList(); }
-            set {; }
         }
-        public List<Face> Faces { get; private set; }
-        public Interface Interface {
-            get { return Faces[0].InterfaceSlabs.FirstOrDefault(x => x.Value == this).Key; }
-            private set {; }
+        public List<Face> Faces {
+            get { return Interface.Faces; }
         }
+        public Interface Interface { get; private set; }
+
         public List<Opening> Openings {
-            get { return Faces.SelectMany(f => f.InterfaceOpenings[Interface]).ToList().Distinct().ToList(); }
-            private set {; }
+            get { return Interface.Openings; }
         }
 
         public float Thickness = 0.2f;
@@ -29,10 +27,8 @@ namespace DesignPlatform.Core {
         /// Construct slabs.
         /// </summary>
         public void InitializeSlab(Interface interFace) {
-            Faces = interFace.Faces;
-            foreach (Face face in Faces) {
-                face.AddSlab(interFace, this);
-            }
+            Interface = interFace;
+
             gameObject.layer = 14; // Slab layer
             Material slabMaterial = AssetUtil.LoadAsset<Material>("materials", "slabMaterial");
             gameObject.name = "CLT Slab";

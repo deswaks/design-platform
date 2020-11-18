@@ -15,8 +15,6 @@ namespace DesignPlatform.Core {
             Rooms = new List<Room>();
             walls = new List<Wall>();
             slabs = new List<Slab>();
-            interfaces = new List<Interface>();
-            Openings = new List<Opening>();
         }
 
         /// <summary>
@@ -72,12 +70,10 @@ namespace DesignPlatform.Core {
             }
             private set {; }
         }
+
         public List<Wall> BuildAllWalls() {
             foreach (Opening opening in Openings) {
-                opening.SetAttachedFaces();
-                foreach (Face face in opening.Faces) {
-                    face.AddOpening(opening.GetCoincidentInterface(), opening);
-                }
+                opening.AttachClosestFaces();
             }
             foreach (Interface interFace in InterfacesVertical) {
                 BuildWall(interFace);
@@ -167,13 +163,8 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// All the interfaces of this building
         /// </summary>
-        private List<Interface> interfaces;
         public List<Interface> Interfaces {
-            get {
-                if (interfaces == null || interfaces.Count == 0) return BuildAllInterfaces();
-                else return interfaces;
-            }
-            private set {; }
+            get { return Rooms.SelectMany(r => r.Interfaces).Distinct().ToList(); }
         }
         public List<Interface> InterfacesVertical {
             get { return Interfaces.Where(i => i.Orientation == Orientation.VERTICAL).ToList(); }
@@ -187,101 +178,71 @@ namespace DesignPlatform.Core {
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<Interface> BuildAllInterfaces() {
+        public void BuildAllInterfaces() {
             for (int r = 0; r < Rooms.Count; r++) {
                 for (int f = 0; f < Rooms[r].Faces.Count; f++) {
                     Face face = Rooms[r].Faces[f];
                     BuildInterfaces(face);
                 }
             }
-            return interfaces;
         }
-        public List<Interface> BuildInterfaces(Face face) {
+        public void BuildInterfaces(Face face) {
             // Slab interface
             if (face.Orientation == Orientation.HORIZONTAL) {
-                return BuildHorizontalFaceInterfaces(face);
+                new Interface(face);
             }
             // Wall interface
             if (face.Orientation == Orientation.VERTICAL) {
-                return BuildVerticalFaceInterfaces(face);
+                BuildVerticalFaceInterfaces(face);
             }
-            return null;
         }
-        private List<Interface> BuildHorizontalFaceInterfaces(Face face) {
-            List<Interface> faceInterfaces = new List<Interface>();
-            Interface newInterface = new Interface(face);
-            interfaces.Add(newInterface);              //Add interface to building
-            face.AddInterface(newInterface);           //Add interface to face
-            faceInterfaces.Add(newInterface);
-            return faceInterfaces;
-        }
-        private List<Interface> BuildVerticalFaceInterfaces(Face face) {
-
-            Line faceLine = new Line(face.Get2DEndPoints());
+        private void BuildVerticalFaceInterfaces(Face face) {
 
             // Find points on face line from the controlpoints of all other rooms
-            List<Vector3> splitPoints = new List<Vector3> { faceLine.StartPoint, faceLine.EndPoint };
+            List<Vector3> splitPoints = new List<Vector3> { face.StartPoint, face.EndPoint };
             for (int r2 = 0; r2 < Rooms.Count; r2++) {
                 if (face.Room == Rooms[r2]) continue;
                 foreach (Vector3 point in Rooms[r2].GetControlPoints()) {
-                    if (faceLine.IsOnLine(point)) {
+                    if (face.Line.IsOnLine(point)) {
                         splitPoints.Add(point);
                     }
                 }
             }
             // Sort splitpoints between startpoint and endpoint
-            splitPoints = splitPoints.OrderBy(p => faceLine.Parameter(p)).ToList();
-            List<float> splitParameters = splitPoints.Select(p => faceLine.Parameter(p)).ToList();
+            splitPoints = splitPoints.OrderBy(p => face.Line.Parameter(p)).ToList();
+            List<float> splitParameters = splitPoints.Select(p => face.Line.Parameter(p)).ToList();
 
             // Hvert interface-sted
-            List<Interface> faceInterfaces = new List<Interface>();
             for (int i = 0; i < splitParameters.Count - 1; i++) {
-                Line interFaceLine = new Line(splitPoints[i], splitPoints[i + 1]);
+                Line newInterfaceLine = new Line(splitPoints[i], splitPoints[i + 1]);
 
                 // Check if an interface exists with the same points
-                Interface existingInterface = null;
-                foreach (Interface interF in interfaces) {
-                    if (interF.GetStartPoint() == interFaceLine.StartPoint
-                        && interF.GetEndPoint() == interFaceLine.EndPoint
-                        || interF.GetStartPoint() == interFaceLine.EndPoint
-                        && interF.GetEndPoint() == interFaceLine.EndPoint) {
-                        existingInterface = interF;
+                Interface duplicateInterface = null;
+                foreach (Interface buildingInterface in Interfaces.Where(inte => inte.Orientation == Orientation.VERTICAL)) {
+                    if (Vector3.Distance(buildingInterface.StartPoint, newInterfaceLine.StartPoint) < 0.001
+                        && Vector3.Distance(buildingInterface.EndPoint, newInterfaceLine.EndPoint) < 0.001
+                        || Vector3.Distance(buildingInterface.StartPoint, newInterfaceLine.EndPoint) < 0.001
+                        && Vector3.Distance(buildingInterface.EndPoint, newInterfaceLine.StartPoint) < 0.001) {
+                        duplicateInterface = buildingInterface;
                     }
                 }
 
-                // Attach to existing interface
-                if (existingInterface != null) {
-                    existingInterface.Faces.Add(face);
-                    face.AddInterface(existingInterface, splitParameters[i], splitParameters[i + 1]);
-                    faceInterfaces.Add(existingInterface);
+                // Attach to existing interface or create new
+                if (duplicateInterface == null) {
+                    new Interface(face, splitParameters[i], splitParameters[i + 1]);
+                    if (Interfaces.Count > 7) Debug.Log(Interfaces.Count);
                 }
-
-                // Create new interface
                 else {
-                    Interface newInterface = new Interface(face);
-                    interfaces.Add(newInterface);
-                    face.AddInterface(newInterface, splitParameters[i], splitParameters[i + 1]);
-                    faceInterfaces.Add(newInterface);
+                    duplicateInterface.AttachFace(face, splitParameters[i], splitParameters[i + 1]);
                 }
             }
-            return faceInterfaces;
-        }
-        /// <summary>
-        /// Removes an interface from the managed building list
-        /// </summary>
-        /// <param name="interFace"></param>
-        public void RemoveInterface(Interface interFace) {
-            if (Interfaces.Contains(interFace)) { interfaces.Remove(interFace); }
         }
         /// <summary>
         /// Removes ALL interfaces
         /// </summary>
         public void DeleteAllInterfaces() {
-            int amount = Interfaces.Count;
-            if (amount > 0) {
-                for (int i = 0; i < amount; i++) {
-                    Interfaces[0].Delete();
-                }
+            foreach (Interface interFace in Interfaces) {
+                interFace.Delete();
             }
         }
 
@@ -289,7 +250,9 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// All the openings of this building
         /// </summary>
-        public List<Opening> Openings { get; private set; }
+        public List<Opening> Openings {
+            get { return Rooms.SelectMany(r => r.Openings).Distinct().ToList(); }
+        }
         /// <summary>
         /// Builds a new opening and adds it to the managed building list
         /// </summary>
@@ -298,33 +261,22 @@ namespace DesignPlatform.Core {
         /// <param name="templateOpening"></param>
         /// <param name="closestFaces"></param>
         /// <returns></returns>
-        public Opening BuildOpening(OpeningShape openingShape = OpeningShape.WINDOW,
+        public Opening BuildOpening(OpeningShape shape = OpeningShape.WINDOW,
                                     bool preview = false,
-                                    Opening templateOpening = null,
-                                    List<Face> attachedFaces = null) {
-
+                                    Opening templateOpening = null) {
+            // Create game object
             GameObject newOpeningGameObject = new GameObject("Opening");
-            Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
-            newOpening.InitializeOpening(attachedFaces: attachedFaces, openingShape: openingShape);
-            if (preview) { newOpeningGameObject.name = "Preview opening"; }
-
             if (templateOpening != null) {
                 newOpeningGameObject.transform.position = templateOpening.transform.position;
                 newOpeningGameObject.transform.rotation = templateOpening.transform.rotation;
             }
 
-            if (preview == false) {
-                Openings.Add(newOpening);
-                newOpening.SetOpeningState(Opening.OpeningStates.PLACED);
-                //attachedFaces[0].AddOpening(newOpening.GetCoincidentInterface(), newOpening);
-            }
+            // Create opening component
+            Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
+            if (preview) newOpening.InitializeOpening(shape: shape, state: OpeningState.PREVIEW);
+            else newOpening.InitializeOpening(shape: shape, state: OpeningState.PLACED);
+
             return newOpening;
-        }
-        /// <summary>
-        /// Removes opening from the list of openings
-        /// </summary>
-        public void RemoveOpening(Opening opening) {
-            if (Openings.Contains(opening)) Openings.Remove(opening);
         }
 
 

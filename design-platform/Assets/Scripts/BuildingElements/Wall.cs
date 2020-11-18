@@ -10,21 +10,14 @@ namespace DesignPlatform.Core {
 
         public List<Room> Rooms {
             get { return Faces.Select(f => f.Room).ToList(); }
-            set {; }
         }
-        public List<Face> Faces { get; private set; }
-        public Interface Interface {
-            get {
-                if (Faces != null && Faces.Count() > 0) {
-                    return Faces[0].InterfaceWalls.FirstOrDefault(x => x.Value == this).Key;
-                }
-                else return null;
-            }
-            private set {; }
+        public List<Face> Faces {
+            get { return Interface.Faces; }
         }
+        public Interface Interface { get; private set; }
+
         public List<Opening> Openings {
-            get { return Faces.SelectMany(f => f.InterfaceOpenings[Interface]).ToList().Distinct().ToList(); }
-            private set {; }
+            get { return Interface.Openings; }
         }
 
         private List<Vector3> wallControlPoints { get; set; }
@@ -32,19 +25,15 @@ namespace DesignPlatform.Core {
         public float wallThickness = 0.2f;
         public Vector3 Normal {
             get { return Rooms[0].GetWallNormals()[Faces[0].FaceIndex]; }
-            private set {; }
         }
         public float Length {
-            get { return (Interface.GetStartPoint() - Interface.GetEndPoint()).magnitude; }
-            private set {; }
+            get { return (Interface.StartPoint - Interface.EndPoint).magnitude; }
         }
         public float Height {
             get { return Rooms[0].height; }
-            private set {; }
         }
         public Vector3 CenterPoint {
-            get { return Interface.GetCenterPoint(); }
-            private set {; }
+            get { return Interface.CenterPoint; }
         }
 
 
@@ -52,10 +41,8 @@ namespace DesignPlatform.Core {
         /// Construct walls.
         /// </summary>
         public void InitializeWall(Interface interFace) {
-            Faces = interFace.Faces;
-            foreach (Face face in Faces) {
-                face.AddWall(interFace, this);
-            }
+            Interface = interFace;
+
             gameObject.layer = 13; // Wall layer
 
             Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "wallMaterial");
@@ -63,8 +50,8 @@ namespace DesignPlatform.Core {
 
             wallControlPoints = new List<Vector3> {
                     new Vector3 (Length/2,0,0),
-                    new Vector3 (Length/2,0,Height),
-                    new Vector3 (-Length/2,0,Height),
+                    new Vector3 (Length/2,0,Height-0.01f),
+                    new Vector3 (-Length/2,0,Height-0.01f),
                     new Vector3 (-Length/2,0,0) };
 
             gameObject.transform.position = CenterPoint;

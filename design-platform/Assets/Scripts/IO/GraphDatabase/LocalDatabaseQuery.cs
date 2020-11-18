@@ -228,7 +228,7 @@ namespace DesignPlatform.Database {
             foreach (Interface iface in allInterfaces) {
 
                 WallElementNode node = new WallElementNode {
-                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { iface.GetStartPoint(), iface.GetEndPoint() })
+                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { iface.StartPoint, iface.EndPoint })
                 };
                 interfaceNodes.Add(node);
             }
