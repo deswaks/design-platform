@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace DesignPlatform.Core {
 
     public class ToggleLineVisibility : MonoBehaviour {
         public void ToggleVisibility(bool showLines) {
+            
             
             GlobalSettings.ShowWallLines = showLines;
             GlobalSettings.ShowOpeningLines = showLines;
