@@ -74,62 +74,41 @@ namespace DesignPlatform.Core {
             triangleVertices = indicesToKeep.Select(j => triangleVertices[j]).ToList();
             triangleNormals = indicesToKeep.Select(j => triangleNormals[j]).ToList();
 
-            triangleNormals = triangleNormals.Select(t =>
-            (
+            // Rounds normals to nearest 1 digit
+            triangleNormals = triangleNormals.Select(t =>(
                 new Vector3(Mathf.Round(t.a.x * 10) / 10, Mathf.Round(t.a.y * 10) / 10, Mathf.Round(t.a.z * 10) / 10),
                 new Vector3(Mathf.Round(t.b.x * 10) / 10, Mathf.Round(t.b.y * 10) / 10, Mathf.Round(t.b.z * 10) / 10),
                 new Vector3(Mathf.Round(t.c.x * 10) / 10, Mathf.Round(t.c.y * 10) / 10, Mathf.Round(t.c.z * 10) / 10)
-            )
-            ).ToList();
-
-            Debug.Log("True for all? "+ triangleNormals.Where(t=> ( Mathf.Abs(Vector3.Angle(t.a, t.b)) < 0.01 && Mathf.Abs(Vector3.Angle(t.a, t.c)) < 0.01 && Mathf.Abs(Vector3.Angle(t.b, t.c)) < 0.01)).Count().ToString());
-            (Vector3 aaa, Vector3 bbb, Vector3 ccc) = triangleNormals
-                .Where(t => !(Mathf.Abs(Vector3.Angle(t.a, t.b)) < 0.01 && Mathf.Abs(Vector3.Angle(t.a, t.c)) < 0.01 && Mathf.Abs(Vector3.Angle(t.c, t.b)) < 0.01))
-                .ToList()[0];
-            Debug.Log("aaa: " + aaa.ToString());
-            Debug.Log("bbb: " + bbb.ToString());
-            Debug.Log("ccc: " + ccc.ToString());
-            Debug.Log("Angle? " + triangleNormals
-                .Where(t => !(Vector3.Angle(t.a, t.b) < 0.01 && Vector3.Angle(t.a, t.c) < 0.01 && Vector3.Angle(t.c, t.b) < 0.01))
-                .Select(t=> (Vector3.Angle(t.a, t.b), Vector3.Angle(t.a, t.c), Vector3.Angle(t.c, t.b)))
-                .ToList()[0]
-                .ToString()
-                );
-            //Debug.Log("Dist? " + triangleNormals
-            //    .Where(t => !(Vector3.Distance(t.a, t.b) < 0.1 && Vector3.Distance(t.a, t.c) < 0.1 && Vector3.Distance(t.c, t.b) < 0.1))
-            //    .Select(t => (Vector3.Distance(t.a, t.b), Vector3.Distance(t.a, t.c), Vector3.Distance(t.c, t.b)))
-            //    .ToList()[0]
-            //    .ToString()
-            //);
-
-            Debug.Log("Vertices amount: " + triangleVertices.Count);
-            Debug.Log("Normals amount: " + triangleNormals.Count);
-            Debug.Log("Indices amount: " + indicesToKeep.Count);
+            )).ToList();
 
 
+            // Identifier ID (Integer) for each roof triangle referring to its roof element
+            List<int> roofIDs = Enumerable.Repeat(-1, triangleVertices.Count).ToList();
 
-            Debug.Log(triangleNormals.Count + "   " + triangleVertices.Count);
+            for (int j = 0; j < roofIDs.Count; j++){
 
-            for(int i=0; i < triangleVertices.Count() ; i++) {
-
-                Debug.Log("("+triangleVertices[i].a.ToString() + ";" + triangleVertices[i].b.ToString() + ";" + triangleVertices[i].c.ToString() + ") N: (" +
-                    triangleNormals[i].a.ToString() + ";" + triangleNormals[i].b.ToString() + ";" + triangleNormals[i].c.ToString());
-
-                List<Vector3> vx = new List<Vector3> { triangleVertices[i].a, triangleVertices[i].b, triangleVertices[i].c };
-                vx.ForEach(v => {
-                    GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    sphere.name = "gable " + i.ToString();
-                    sphere.transform.position = v;
-                    sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                });
+                //List<(Vector3 a, Vector3 b, Vector3 c)> parallelTriangles = triangleVertices.Where();
             }
 
 
 
 
 
+                //Debug.Log(triangleNormals.Count + "   " + triangleVertices.Count);
+                //for (int i = 0; i < triangleVertices.Count(); i++)
+                //{
+                //    Debug.Log("(" + triangleVertices[i].a.ToString() + ";" + triangleVertices[i].b.ToString() + ";" + triangleVertices[i].c.ToString() + ") N: (" +
+                //        triangleNormals[i].a.ToString() + ";" + triangleNormals[i].b.ToString() + ";" + triangleNormals[i].c.ToString());
 
+                //    List<Vector3> vx = new List<Vector3> { triangleVertices[i].a, triangleVertices[i].b, triangleVertices[i].c };
+                //    vx.ForEach(v =>
+                //    {
+                //        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                //        sphere.name = "gable " + i.ToString();
+                //        sphere.transform.position = v;
+                //        sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                //    });
+                //}
+            }
         }
-
-    }
 }
