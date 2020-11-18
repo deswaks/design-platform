@@ -355,6 +355,13 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void Delete() {
             if (Building.Instance.Rooms.Contains(this)) {
+                //ParentBuilding.RemoveRoom(this);
+                foreach (Face face in Faces) {
+                    foreach (Opening opening in face.Openings) {
+                        face.RemoveOpening(opening);
+                        Destroy(opening);
+                    }
+                }
                 ParentBuilding.RemoveRoom(this);
             }
             Destroy(gameObject);

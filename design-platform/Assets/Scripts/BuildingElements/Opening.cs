@@ -228,6 +228,8 @@ namespace DesignPlatform.Core {
                 foreach (Face face in room.Faces.Where(f => f.Orientation == Orientation.VERTICAL)) {
                     if (face.IsPointOnFace(gameObject.transform.position)) {
                         facesToAttach.Add(face);
+                        //Interface openingInterface = face.GetInterfaceAtParameter(face.GetPointParameter(this.CenterPoint));
+                        //face.AddOpening(openingInterface, this);
                     }
                 }
             }

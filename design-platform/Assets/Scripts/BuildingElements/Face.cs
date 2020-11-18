@@ -21,7 +21,18 @@ namespace DesignPlatform.Core {
 
         public Dictionary<Interface, float[]> InterfaceParameters { get; private set; }
         public List<Interface> Interfaces {
-            get { return InterfaceParameters.Keys.Select(i => (Interface)i).ToList(); }
+            get {
+                return InterfaceParameters.Keys.Select(i => (Interface)i).ToList();
+                //if (InterfaceParameters.Keys.Select(i => (Interface)i).ToList() == null
+                //  || InterfaceParameters.Keys.Select(i => (Interface)i).ToList().Count == 0) {
+                //    Building.Instance.BuildAllInterfaces();
+                //    return InterfaceParameters.Keys.Select(i => (Interface)i).ToList();
+                //}
+                //else {
+                //    return InterfaceParameters.Keys.Select(i => (Interface)i).ToList();
+                //}
+
+            }
             private set {; }
         }
 

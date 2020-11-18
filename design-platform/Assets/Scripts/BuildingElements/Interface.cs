@@ -41,6 +41,7 @@ namespace DesignPlatform.Core {
         public List<Opening> OpeningsVertical {
             get {
                 List<Opening> faceOpenings = Faces.SelectMany(f => f.Openings).Distinct().ToList();
+                Debug.Log(faceOpenings.Count);
                 Line interfaceLine = new Line(GetStartPoint(), GetEndPoint());
                 return faceOpenings.Where(o => interfaceLine.IsOnLine(o.CenterPoint)).ToList();
             }
