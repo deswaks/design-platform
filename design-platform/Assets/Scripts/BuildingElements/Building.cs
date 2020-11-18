@@ -73,7 +73,15 @@ namespace DesignPlatform.Core {
             private set {; }
         }
         public List<Wall> BuildAllWalls() {
-            foreach (Interface interFace in InterfacesVertical) BuildWall(interFace);
+            foreach (Opening opening in Openings) {
+                opening.SetAttachedFaces();
+                foreach (Face face in opening.Faces) {
+                    face.AddOpening(opening.GetCoincidentInterface(), opening);
+                }
+            }
+            foreach (Interface interFace in InterfacesVertical) {
+                BuildWall(interFace);
+            }
             return walls;
         }
         /// <summary>
