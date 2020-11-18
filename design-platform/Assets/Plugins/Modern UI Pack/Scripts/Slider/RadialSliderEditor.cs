@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(RadialSlider))]
     [System.Serializable]
-    public class RadialSliderEditor : Editor
-    {
+    public class RadialSliderEditor : Editor {
         // Variables
         private RadialSlider rsTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             rsTarget = (RadialSlider)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -93,8 +89,7 @@ namespace Michsky.UI.ModernUIPack
             var decimals = serializedObject.FindProperty("decimals");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("CONTENT", customSkin.FindStyle("Header"));
@@ -106,8 +101,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if(rsTarget.sliderImage != null && rsTarget.indicatorPivot != null && rsTarget.valueText != null)
-                    {
+                    if (rsTarget.sliderImage != null && rsTarget.indicatorPivot != null && rsTarget.valueText != null) {
                         rsTarget.SliderValueRaw = currentValue.floatValue;
                         float normalizedAngle = rsTarget.SliderAngle / 360.0f;
                         rsTarget.indicatorPivot.transform.localEulerAngles = new Vector3(180.0f, 0.0f, rsTarget.SliderAngle);
@@ -164,8 +158,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (rememberValue.boolValue == true)
-                    {
+                    if (rememberValue.boolValue == true) {
                         EditorGUI.indentLevel = 2;
                         GUILayout.BeginHorizontal();
 

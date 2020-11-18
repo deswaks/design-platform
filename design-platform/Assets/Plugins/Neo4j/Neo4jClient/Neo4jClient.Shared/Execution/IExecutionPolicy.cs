@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Neo4jClient.Execution
-{
-    internal interface IExecutionPolicy
-    {
+namespace Neo4jClient.Execution {
+    internal interface IExecutionPolicy {
         bool InTransaction { get; }
         TransactionExecutionPolicy TransactionExecutionPolicy { get; }
         void AfterExecution(IDictionary<string, object> executionMetadata, object executionContext);
@@ -13,8 +11,7 @@ namespace Neo4jClient.Execution
         Uri AddPath(Uri startUri, object startReference);
     }
 
-    internal enum TransactionExecutionPolicy
-    {
+    internal enum TransactionExecutionPolicy {
         Allowed,
         Denied,
         Required

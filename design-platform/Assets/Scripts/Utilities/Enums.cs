@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace DesignPlatform.Core {
+﻿namespace DesignPlatform.Core {
     public enum Orientation {
         HORIZONTAL,
         VERTICAL

@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Specialized;
 
-namespace Neo4jClient.Transactions
-{
+namespace Neo4jClient.Transactions {
     /// <summary>
     /// Represents a Neo4j transaction shared between multiple HTTP requests
     /// </summary>
@@ -10,8 +8,7 @@ namespace Neo4jClient.Transactions
     /// Neo4j server prevents abandoned transactions from clogging server resources
     /// by rolling back those that do not have requests in the configured timeout period.
     /// </remarks>
-    public interface ITransaction : IDisposable
-    {
+    public interface ITransaction : IDisposable {
         /// <summary>
         /// Commits our open transaction.
         /// </summary>

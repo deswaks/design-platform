@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DesignPlatform.Core {
@@ -32,7 +29,7 @@ namespace DesignPlatform.Core {
             }
 
             if (Input.GetKeyDown(KeyCode.Delete)) {
-                if (selection != null) {selection.Delete(); Deselect(); }
+                if (selection != null) { selection.Delete(); Deselect(); }
             }
 
             if (Input.GetKeyDown(KeyCode.E)) {
@@ -53,9 +50,9 @@ namespace DesignPlatform.Core {
                 selection.UpdateRender2D();
             }
             for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha9; i++) {
-                if (Input.GetKeyDown((KeyCode) i)) {
+                if (Input.GetKeyDown((KeyCode)i)) {
                     if (selection != null) {
-                        selection.SetRoomType((RoomType)i-(int)KeyCode.Alpha1 + 10);
+                        selection.SetRoomType((RoomType)i - (int)KeyCode.Alpha1 + 10);
                         selection.UpdateRender2D();
                     }
                 }
@@ -122,7 +119,7 @@ namespace DesignPlatform.Core {
         private Room GetClickedRoom() {
             Room clickedRoom = null;
             Ray ray = Camera.main.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-            int roomMask = 1 << 8;
+            int roomMask = 1 << 8 | 1 << 9;
             if (Physics.Raycast(ray: ray, maxDistance: 1000f, hitInfo: out RaycastHit hitInfo, layerMask: roomMask)) {
                 // if the hit game object is a room (ie. it is on layer 8)
                 if (hitInfo.collider.gameObject.layer == 8) {

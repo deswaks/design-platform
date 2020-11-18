@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(DropdownMultiSelect))]
     [System.Serializable]
-    public class DropdownMultiSelectEditor : Editor
-    {      
+    public class DropdownMultiSelectEditor : Editor {
         // Variables
         private DropdownMultiSelect dropdownTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             dropdownTarget = (DropdownMultiSelect)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variables
             GUISkin customSkin;
 
@@ -93,8 +89,7 @@ namespace Michsky.UI.ModernUIPack
             var animationType = serializedObject.FindProperty("animationType");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("ITEMS", customSkin.FindStyle("Header"));
@@ -102,7 +97,7 @@ namespace Michsky.UI.ModernUIPack
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
                     EditorGUI.indentLevel = 1;
 
-                    EditorGUILayout.PropertyField(dropdownItems, new GUIContent("Dropdown Items"), true); 
+                    EditorGUILayout.PropertyField(dropdownItems, new GUIContent("Dropdown Items"), true);
                     dropdownItems.isExpanded = true;
 
                     GUILayout.EndHorizontal();
@@ -174,10 +169,9 @@ namespace Michsky.UI.ModernUIPack
                     enableTrigger.boolValue = GUILayout.Toggle(enableTrigger.boolValue, new GUIContent("Enable Trigger"), customSkin.FindStyle("Toggle"));
                     enableTrigger.boolValue = GUILayout.Toggle(enableTrigger.boolValue, new GUIContent(""), customSkin.FindStyle("Toggle Helper"));
 
-                    GUILayout.EndHorizontal();  
+                    GUILayout.EndHorizontal();
 
-                    if (enableTrigger.boolValue == true && dropdownTarget.triggerObject == null)
-                    {
+                    if (enableTrigger.boolValue == true && dropdownTarget.triggerObject == null) {
                         GUILayout.BeginHorizontal();
                         EditorGUILayout.HelpBox("'Trigger Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                         GUILayout.EndHorizontal();
@@ -190,22 +184,19 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (dropdownTarget.scrollbar != null)
-                    {
+                    if (dropdownTarget.scrollbar != null) {
                         if (enableScrollbar.boolValue == true)
                             dropdownTarget.scrollbar.SetActive(true);
                         else
                             dropdownTarget.scrollbar.SetActive(false);
                     }
 
-                    else
-                    {
-                        if (enableScrollbar.boolValue == true)
-                        {
+                    else {
+                        if (enableScrollbar.boolValue == true) {
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("'Scrollbar' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();
-                        }                     
+                        }
                     }
 
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
@@ -226,10 +217,9 @@ namespace Michsky.UI.ModernUIPack
                     isListItem.boolValue = GUILayout.Toggle(isListItem.boolValue, new GUIContent(""), customSkin.FindStyle("Toggle Helper"));
 
                     GUILayout.EndHorizontal();
-             
 
-                    if (isListItem.boolValue == true && dropdownTarget.listParent == null)
-                    {
+
+                    if (isListItem.boolValue == true && dropdownTarget.listParent == null) {
                         GUILayout.BeginHorizontal();
                         EditorGUILayout.HelpBox("'List Parent' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                         GUILayout.EndHorizontal();

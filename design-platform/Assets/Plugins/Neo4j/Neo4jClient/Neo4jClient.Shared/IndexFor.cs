@@ -1,7 +1,5 @@
-namespace Neo4jClient
-{
-    public enum IndexFor
-    {
+namespace Neo4jClient {
+    public enum IndexFor {
         Node,
         Relationship
     }

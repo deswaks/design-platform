@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3795802225
+CRC: 2411605485
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f92a1a4db9190a8cf663b292a5f2ed8f
+    Hash: 1782b47fdcd4ad136957e03403da6dad
   TypeTreeHash:
     serializedVersion: 2
     Hash: 21c99c86a43ad817b2cb7f65458ae090
@@ -18,10 +18,12 @@ ClassTypes:
 Assets:
 - Assets/Materials/plan_room_wall.mat
 - Assets/Materials/plan_room_doubleroom.mat
+- Assets/Materials/slabMaterial.mat
 - Assets/Materials/OpeningWindow.mat
 - Assets/Materials/plan_room_kitchen.mat
 - Assets/Materials/plan_room_livingroom.mat
-- Assets/Materials/OpeningPreview.mat
+- Assets/Materials/wallMaterial.mat
+- Assets/Materials/openingMaterial.mat
 - Assets/Materials/plan_opening.mat
 - Assets/Materials/plan_room_bathroom.mat
 - Assets/Materials/plan_room_highlight.mat

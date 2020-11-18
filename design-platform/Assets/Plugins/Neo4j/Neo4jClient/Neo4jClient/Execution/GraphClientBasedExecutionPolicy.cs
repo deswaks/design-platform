@@ -1,9 +1,6 @@
-﻿namespace Neo4jClient.Execution
-{
-    internal abstract partial class GraphClientBasedExecutionPolicy : IExecutionPolicy
-    {
-        public bool InTransaction
-        {
+﻿namespace Neo4jClient.Execution {
+    internal abstract partial class GraphClientBasedExecutionPolicy : IExecutionPolicy {
+        public bool InTransaction {
             get { return false; }
         }
 

@@ -1,23 +1,19 @@
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Linq;
 using Neo4jClient.Serialization;
 using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
-namespace Neo4jClient.Cypher
-{
-    public enum CypherResultFormat
-    {
+namespace Neo4jClient.Cypher {
+    public enum CypherResultFormat {
         Rest,
         Transactional,
         DependsOnEnvironment
     }
 
     [DebuggerDisplay("{DebugQueryText}")]
-    public class CypherQuery
-    {
-        
+    public class CypherQuery {
+
         readonly string queryText;
         readonly IDictionary<string, object> queryParameters;
         readonly CypherResultMode resultMode;
@@ -25,14 +21,13 @@ namespace Neo4jClient.Cypher
         readonly IContractResolver jsonContractResolver;
         readonly int? maxExecutionTime;
         private readonly NameValueCollection customHeaders;
-        
+
         public CypherQuery(
             string queryText,
             IDictionary<string, object> queryParameters,
             CypherResultMode resultMode,
             IContractResolver contractResolver = null) :
-            this(queryText, queryParameters, resultMode, CypherResultFormat.DependsOnEnvironment, contractResolver)
-        {
+            this(queryText, queryParameters, resultMode, CypherResultFormat.DependsOnEnvironment, contractResolver) {
         }
 
         public CypherQuery(
@@ -40,14 +35,13 @@ namespace Neo4jClient.Cypher
             IDictionary<string, object> queryParameters,
             CypherResultMode resultMode,
             CypherResultFormat resultFormat,
-            IContractResolver contractResolver = null, 
-            int? maxExecutionTime = null, 
+            IContractResolver contractResolver = null,
+            int? maxExecutionTime = null,
             NameValueCollection customHeaders = null,
             bool isWrite = true,
             IEnumerable<string> bookmarks = null,
             string identifier = null
-            )
-        {
+            ) {
             this.queryText = queryText;
             this.queryParameters = queryParameters;
             this.resultMode = resultMode;
@@ -84,17 +78,13 @@ namespace Neo4jClient.Cypher
         /// </summary>
         public NameValueCollection CustomHeaders => customHeaders;
 
-        CustomJsonSerializer BuildSerializer()
-        {
+        CustomJsonSerializer BuildSerializer() {
             return new CustomJsonSerializer { JsonConverters = GraphClient.DefaultJsonConverters, JsonContractResolver = jsonContractResolver };
         }
 
-        public string DebugQueryText
-        {
-            get
-            {
-                if (queryParameters == null)
-                {
+        public string DebugQueryText {
+            get {
+                if (queryParameters == null) {
                     return queryText;
                 }
 
@@ -103,10 +93,9 @@ namespace Neo4jClient.Cypher
                     .Keys
                     .Aggregate(
                         queryText,
-                        (current, paramName) =>
-                        {
+                        (current, paramName) => {
                             var value = queryParameters[paramName];
-                            value = serializer.Serialize(value);                           
+                            value = serializer.Serialize(value);
                             return current.Replace("$" + paramName, value.ToString()).Replace("{" + paramName + "}", value.ToString());
                         });
 

@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(ButtonManagerIcon))]
     [System.Serializable]
-    public class ButtonManagerIconEditor : Editor
-    {
+    public class ButtonManagerIconEditor : Editor {
         // Variables
         private ButtonManagerIcon buttonTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             buttonTarget = (ButtonManagerIcon)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -84,8 +80,7 @@ namespace Michsky.UI.ModernUIPack
             var clickSound = serializedObject.FindProperty("clickSound");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("CONTENT", customSkin.FindStyle("Header"));
@@ -97,20 +92,17 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (useCustomContent.boolValue == false && buttonTarget.normalIcon != null)
-                    {
+                    if (useCustomContent.boolValue == false && buttonTarget.normalIcon != null) {
                         buttonTarget.normalIcon.sprite = buttonTarget.buttonIcon;
                         buttonTarget.highlightedIcon.sprite = buttonTarget.buttonIcon;
-                    }               
+                    }
 
-                    else if (useCustomContent.boolValue == false && buttonTarget.normalIcon == null)
-                    {
+                    else if (useCustomContent.boolValue == false && buttonTarget.normalIcon == null) {
                         GUILayout.Space(2);
                         EditorGUILayout.HelpBox("'Icon Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                     }
 
-                    if (useHoverSound.boolValue == true)
-                    {
+                    if (useHoverSound.boolValue == true) {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Hover Sound"), customSkin.FindStyle("Text"), GUILayout.Width(120));
@@ -119,8 +111,7 @@ namespace Michsky.UI.ModernUIPack
                         GUILayout.EndHorizontal();
                     }
 
-                    if (useClickSound.boolValue == true)
-                    {
+                    if (useClickSound.boolValue == true) {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Click Sound"), customSkin.FindStyle("Text"), GUILayout.Width(120));
@@ -153,8 +144,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (enableButtonSounds.boolValue == true)
-                    {
+                    if (enableButtonSounds.boolValue == true) {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Sound Source"), customSkin.FindStyle("Text"), GUILayout.Width(120));
@@ -183,8 +173,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (enableButtonSounds.boolValue == true)
-                    {
+                    if (enableButtonSounds.boolValue == true) {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                         useHoverSound.boolValue = GUILayout.Toggle(useHoverSound.boolValue, new GUIContent("Enable Hover Sound"), customSkin.FindStyle("Toggle"));
@@ -198,12 +187,10 @@ namespace Michsky.UI.ModernUIPack
 
                         GUILayout.EndHorizontal();
 
-                        if (buttonTarget.soundSource == null)
-                        {
+                        if (buttonTarget.soundSource == null) {
                             EditorGUILayout.HelpBox("'Sound Source' is not assigned. Go to Resources tab or click the button to create a new audio source.", MessageType.Info);
 
-                            if (GUILayout.Button("Create a new one", customSkin.button))
-                            {
+                            if (GUILayout.Button("Create a new one", customSkin.button)) {
                                 buttonTarget.soundSource = buttonTarget.gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
                                 currentTab = 2;
                             }
@@ -211,7 +198,7 @@ namespace Michsky.UI.ModernUIPack
                     }
 
                     GUILayout.Space(4);
-                    break;            
+                    break;
             }
 
             // Apply the changes

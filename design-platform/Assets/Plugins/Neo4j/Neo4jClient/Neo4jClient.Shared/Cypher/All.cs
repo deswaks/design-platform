@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace Neo4jClient.Cypher
-{
+namespace Neo4jClient.Cypher {
     /// <summary>
     /// Represents a star in a Cypher function, so <code>All.Count()</code>
     /// is equivalent to <code>count(*)</code>. Only for use in return expressions
@@ -10,14 +9,12 @@ namespace Neo4jClient.Cypher
     /// called directly. (This class is just syntactic sugar for lambda expressions;
     /// there is no .NET implementation of its methods.)
     /// </summary>
-    public abstract class All
-    {
+    public abstract class All {
         /// <summary>
         /// Equivalent to <code>count(*)</code>
         /// http://docs.neo4j.org/chunked/stable/query-aggregation.html#_count
         /// </summary>
-        public static long Count()
-        {
+        public static long Count() {
             throw new InvalidOperationException("This method can't be executed directly: it has no .NET implementation. You need to use it as part of a Cypher return expression, like .Return(() => new { Count = All.Count() });");
         }
 

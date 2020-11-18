@@ -1,10 +1,8 @@
-using System.Net;
 using Newtonsoft.Json;
+using System.Net;
 
-namespace Neo4jClient.ApiModels
-{
-    class BatchStepResult
-    {
+namespace Neo4jClient.ApiModels {
+    class BatchStepResult {
         [JsonProperty("id")]
         public int Id { get; set; }
 

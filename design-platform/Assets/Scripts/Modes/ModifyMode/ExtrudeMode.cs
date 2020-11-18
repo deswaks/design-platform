@@ -1,13 +1,12 @@
-﻿using System.Collections;
+﻿using DesignPlatform.Utils;
 using System.Collections.Generic;
 using UnityEngine;
-using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class ExtrudeMode : Mode {
 
         private static ExtrudeMode instance;
-        public List<EditHandle> Handles { get; private set; }
+        public List<ExtrudeHandle> Handles { get; private set; }
         public GameObject HandlePrefab { get; private set; }
 
 
@@ -17,8 +16,8 @@ namespace DesignPlatform.Core {
 
 
         ExtrudeMode() {
-            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "edit_handle");
-            Handles = new List<EditHandle>();
+            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "ExtrudeHandle");
+            Handles = new List<ExtrudeHandle>();
         }
 
 
@@ -47,7 +46,7 @@ namespace DesignPlatform.Core {
                 GameObject HandleGO = Object.Instantiate(HandlePrefab);
                 HandleGO.transform.SetParent(room.gameObject.transform, true);
 
-                EditHandle handle = HandleGO.GetComponent<EditHandle>();
+                ExtrudeHandle handle = HandleGO.GetComponent<ExtrudeHandle>();
                 handle.InitHandle(i);
                 Handles.Add(handle);
             }
@@ -59,7 +58,7 @@ namespace DesignPlatform.Core {
         /// <param name="room"></param>
         public void RemoveHandles() {
             if (Handles.Count > 0) {
-                foreach (EditHandle handle in Handles) {
+                foreach (ExtrudeHandle handle in Handles) {
                     Object.Destroy(handle.gameObject);
                 }
                 Handles.Clear();

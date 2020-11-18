@@ -1,66 +1,110 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DesignPlatform.Geometry;
 using UnityEngine;
 using System.Linq;
 
 namespace DesignPlatform.Core {
     public class Face {
-        public Room parentRoom { get; private set; }
-        public int faceIndex { get; private set; }
-        public List<Interface> interfaces { get; private set; }
-        public List<Opening> openings { get; private set; }
-        public Dictionary<Interface, float[]> paramerters { get; private set; }
-        public Orientation orientation { get; private set; }
 
-        public float wallThickness = 0.2f;
-
-        /// <summary>
-        /// 
-        /// </summary>
         public Face(Room parent, int index) {
-            interfaces = new List<Interface>();
-            openings = new List<Opening>();
-            paramerters = new Dictionary<Interface, float[]>();
-            parentRoom = parent;
-            faceIndex = index;
+            OpeningParameters = new Dictionary<Opening, float>();
+            InterfaceParameters = new Dictionary<Interface, float[]>();
+            Room = parent;
+            FaceIndex = index;
             SetOrientation();
         }
 
+        public Room Room { get; private set; }
+        public int FaceIndex { get; private set; }
+
+        public Dictionary<Interface, float[]> InterfaceParameters { get; private set; }
+        public List<Interface> Interfaces {
+            get {
+                return InterfaceParameters.Keys.Select(i => (Interface)i).ToList();
+            }
+        }
+
+        public Dictionary<Opening, float> OpeningParameters { get; private set; }
+        public List<Opening> Openings {
+            get { return OpeningParameters.Keys.Select(i => (Opening)i).ToList(); }
+        }
+
+
+        public Orientation Orientation { get; private set; }
+
+        public float Thickness = 0.2f;
+
+        public Vector3 Normal {
+            get { return Room.GetWallNormals()[FaceIndex]; }
+            private set {; }
+        }
+        public float Length {
+            get {
+                return (Room.GetControlPoints()[FaceIndex]
+                  - Room.GetControlPoints(closed: true)[FaceIndex + 1]).magnitude;
+            }
+            private set {; }
+        }
+        public float Height {
+            get { return Room.height; }
+            private set {; }
+        }
+
+        public Vector3 StartPoint {
+            get { return Room.GetControlPoints()[FaceIndex]; }
+            private set {; }
+        }
+
+        public Vector3 EndPoint {
+            get { return Room.GetControlPoints(closed: true)[FaceIndex + 1]; }
+            private set {; }
+        }
+
+        public Line Line {
+            get { return new Line(this); }
+            private set {; }
+        }
+
+        public Vector3 CenterPoint {
+            get { return Room.GetWallMidpoints()[FaceIndex]; }
+            private set {; }
+        }
+
         public override string ToString() {
-            return parentRoom.ToString() + " Face#" + faceIndex.ToString();
+            return Room.ToString() + " Face#" + FaceIndex.ToString();
         }
 
         /// <summary>
         /// Determs the orientation of the face (horizontal or vertical)
         /// </summary>
         private void SetOrientation() {
-            if (faceIndex < parentRoom.GetControlPoints().Count) {
-                orientation = Orientation.VERTICAL;
+            if (FaceIndex < Room.GetControlPoints().Count) {
+                Orientation = Orientation.VERTICAL;
             }
-            else orientation = Orientation.HORIZONTAL;
+            else Orientation = Orientation.HORIZONTAL;
         }
 
         /// <summary>
         /// Gets the original controlpoints of the face (horizontal and vertical faces)
         /// </summary>
         public List<Vector3> GetControlPoints(bool localCoordinates = false) {
-            List<Vector3> roomControlPoints = parentRoom.GetControlPoints(localCoordinates: localCoordinates, closed: true);
+            List<Vector3> roomControlPoints = Room.GetControlPoints(localCoordinates: localCoordinates, closed: true);
             List<Vector3> controlPoints = new List<Vector3>();
 
-            switch (orientation) {
+            switch (Orientation) {
                 // Vertical face
                 case Orientation.VERTICAL:
-                    controlPoints.Add(roomControlPoints[faceIndex]);
-                    controlPoints.Add(roomControlPoints[faceIndex + 1]);
+                    controlPoints.Add(roomControlPoints[FaceIndex]);
+                    controlPoints.Add(roomControlPoints[FaceIndex + 1]);
                     break;
-                
+
                 // Horizontal face
                 case Orientation.HORIZONTAL:
                     controlPoints = roomControlPoints.GetRange(0, roomControlPoints.Count - 1);
-                    
+
                     // Top face
-                    if (faceIndex == roomControlPoints.Count) {
-                        controlPoints = controlPoints.Select(p => p + Vector3.up * parentRoom.height).ToList();
+                    if (FaceIndex == roomControlPoints.Count) {
+                        controlPoints = controlPoints.Select(p => p + Vector3.up * Height).ToList();
                     }
                     break;
             }
@@ -70,104 +114,77 @@ namespace DesignPlatform.Core {
 
         public (Vector3, Vector3) Get2DEndPoints(bool localCoordinates = false) {
             (Vector3, Vector3) endpoints = (new Vector3(), new Vector3());
-            if (orientation == Orientation.VERTICAL) {
-                List<Vector3> cp = parentRoom.GetControlPoints(localCoordinates: localCoordinates, closed: true);
-                endpoints.Item1 = cp[faceIndex];
-                endpoints.Item2 = cp[faceIndex + 1];
+            if (Orientation == Orientation.VERTICAL) {
+                List<Vector3> cp = Room.GetControlPoints(localCoordinates: localCoordinates, closed: true);
+                endpoints.Item1 = cp[FaceIndex];
+                endpoints.Item2 = cp[FaceIndex + 1];
             }
             return endpoints;
         }
 
-
         /// <summary>
-        /// Add a interface to a face
+        /// Add an interface to the managed list of interfaces
         /// </summary>
+        /// <param name="interFace"></param>
         public void AddInterface(Interface interFace, float startParameter = 0.0f, float endParameter = 1.0f) {
-            interfaces.Add(interFace);
-            if (orientation == Orientation.VERTICAL) {
-                paramerters.Add(interFace, new float[] { startParameter, endParameter });
+            if (Orientation == Orientation.VERTICAL) {
+                InterfaceParameters.Add(interFace, new float[] { startParameter, endParameter });
             }
-
+            else {
+                InterfaceParameters.Add(interFace, new float[] { 0.0f, 0.0f });
+            }
         }
-        public void AddOpening(Opening opening) {
-            openings.Add(opening);
+        /// <summary>
+        /// Remove an interface from the managed list of interfaces
+        /// </summary>
+        /// <param name="interFace"></param>
+        public void RemoveInterface(Interface interFace) {
+            if (Interfaces.Contains(interFace)) InterfaceParameters.Remove(interFace);
         }
-
-        public void RemoveOpening(Opening opening) {
-            if (openings.Contains(opening)) openings.Remove(opening);
-        }
-
-
 
         /// <summary>
-        /// Remove the interface 
+        /// Add an opening to the managed list of openings
         /// </summary>
-        public void RemoveInterface(Interface interFace) {
-            if (interfaces.Contains(interFace)) interfaces.Remove(interFace);
-            if (paramerters.Keys.Contains(interFace)) paramerters.Remove(interFace);
+        /// <param name="interFace"></param>
+        /// <param name="opening"></param>
+        public void AddOpening(Opening opening) {
+            if (Openings.Contains(opening)) return;
+            float parameter = Line.Parameter(opening.CenterPoint);
+            OpeningParameters.Add(opening, parameter);
         }
+
+        /// <summary>
+        /// Remove an opening from the managed list of openings
+        /// </summary>
+        /// <param name="opening"></param>
+        public void RemoveOpening(Opening opening) {
+            if (Openings.Contains(opening)) OpeningParameters.Remove(opening);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parameterOnFace"></param>
+        /// <returns></returns>
         public Interface GetInterfaceAtParameter(float parameterOnFace) {
-            foreach (KeyValuePair<Interface, float[]> iface in paramerters) {
+            foreach (KeyValuePair<Interface, float[]> iface in InterfaceParameters) {
                 if (parameterOnFace > iface.Value[0] && parameterOnFace < iface.Value[1]) {
-                    //Debug.Log("Found Interface: " + iface.Key.GetEndPoint().ToString() + iface.Key.GetStartPoint().ToString());
                     return iface.Key;
                 }
             }
             return null;
         }
-
-        public bool CollidesWith(Vector3 point) {
-            (Vector3 startPoint, Vector3 endPoint) = Get2DEndPoints(localCoordinates: false);
-            float dxc = point.x - startPoint.x;
-            float dyc = point.y - startPoint.y;
-            float dxl = endPoint.x - startPoint.x;
-            float dyl = endPoint.y - startPoint.y;
-            float cross = dxc * dyl - dyc * dxl;
-
-            // The point is on the line
-            if (cross < 0.001f) {
-
-                // Compare x
-                if (Mathf.Abs(dxl) >= Mathf.Abs(dyl))
-                    return dxl > 0 ?
-                      startPoint.x <= point.x && point.x <= endPoint.x :
-                      endPoint.x <= point.x && point.x <= startPoint.x;
-
-                // Compare y
-                else
-                    return dyl > 0 ?
-                      startPoint.z <= point.z && point.z <= endPoint.z :
-                      endPoint.z <= point.z && point.z <= startPoint.z;
+        public void Delete() {
+            if (Openings != null && Openings.Count > 0) {
+                foreach (Opening opening in Openings) {
+                    if (opening.Faces.Count == 1) opening.Delete();
+                }
             }
-            else return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public bool IsPointOnFace(Vector3 point) {
-            List<Vector3> endPoints = GetControlPoints(localCoordinates: false);
-
-            if (Vector3.Distance(endPoints[0], point) < 0.01) return false;
-            if (Vector3.Distance(endPoints[1], point) < 0.01) return false;
-
-            return (Vector3.Distance(endPoints[0], point)
-                    + Vector3.Distance(endPoints[1], point)
-                    - Vector3.Distance(endPoints[0], endPoints[1]) < 0.001);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public float GetPointParameter(Vector3 point) {
-            (Vector3 faceStart, Vector3 faceEnd) = Get2DEndPoints();
-            float parameterOnFace = (point - faceStart).magnitude / (faceEnd - faceStart).magnitude;
-            return parameterOnFace;
-
+            if (Interfaces != null && Interfaces.Count > 0) {
+                foreach (Interface interFace in Interfaces) {
+                    if (interFace.Faces.Count == 1) interFace.Delete();
+                }
+            }
         }
     }
 }

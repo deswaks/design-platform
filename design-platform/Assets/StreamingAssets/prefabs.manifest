@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3218859450
+CRC: 2161692608
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 16d6970451fe486238641a5edcab5444
+    Hash: 7f62b159a334ed486c429d58aaa174ee
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 17ee668cb7c9550279425a060d9ee7ca
+    Hash: 1f37d3601e9ea143d5f598cc81005bce
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -87,12 +87,11 @@ Assets:
 - Assets/Prefabs/RoomPrefab.prefab
 - Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab
 - Assets/Prefabs/Widgets/Widget_RoomSchedule.prefab
-- Assets/Prefabs/edit_handle.prefab
+- Assets/Prefabs/ExtrudeHandle.prefab
 - Assets/Prefabs/WallPrefab.prefab
 - Assets/Prefabs/OpeningPrefab.prefab
-- Assets/Prefabs/move_handle.prefab
-- Assets/Prefabs/Widgets/Widget_WallElementSchedule.prefab
+- Assets/Prefabs/MoveHandle.prefab
 - Assets/Prefabs/SlabPrefab.prefab
 - Assets/Prefabs/notification.prefab
 Dependencies:
-- E:/github/design-platform/design-platform/Assets/StreamingAssets/materials
+- C:/Users/ander/Documents/GitHub/design-platform/design-platform/Assets/StreamingAssets/materials

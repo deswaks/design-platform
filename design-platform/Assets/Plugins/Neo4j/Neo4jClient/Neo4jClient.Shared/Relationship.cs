@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
-namespace Neo4jClient
-{
-    public abstract partial class Relationship
-    {
+namespace Neo4jClient {
+    public abstract partial class Relationship {
         readonly object data;
         readonly NodeReference otherNode;
 
         protected Relationship(NodeReference targetNode)
-            : this(targetNode, null)
-        {
+            : this(targetNode, null) {
         }
 
-        protected internal Relationship(NodeReference targetNode, object data)
-        {
+        protected internal Relationship(NodeReference targetNode, object data) {
             this.data = data;
             otherNode = targetNode;
 
@@ -26,22 +21,19 @@ namespace Neo4jClient
             Direction = RelationshipDirection.Automatic;
         }
 
-        public NodeReference OtherNode
-        {
+        public NodeReference OtherNode {
             get { return otherNode; }
         }
 
         public abstract string RelationshipTypeKey { get; }
 
-        public object Data
-        {
+        public object Data {
             get { return data; }
         }
 
         public RelationshipDirection Direction { get; set; }
 
-        internal static RelationshipDirection DetermineRelationshipDirection(Type baseNodeType, Relationship relationship)
-        {
+        internal static RelationshipDirection DetermineRelationshipDirection(Type baseNodeType, Relationship relationship) {
             if (relationship.Direction != RelationshipDirection.Automatic)
                 return relationship.Direction;
 
@@ -70,16 +62,14 @@ namespace Neo4jClient
             throw new AmbiguousRelationshipDirectionException();
         }
 
-        internal static IEnumerable<Type> GetAllowedNodeTypes(Type relationshipType, RelationshipEnd end)
-        {
+        internal static IEnumerable<Type> GetAllowedNodeTypes(Type relationshipType, RelationshipEnd end) {
             Type interfaceType;
-            switch (end)
-            {
+            switch (end) {
                 case RelationshipEnd.SourceNode:
-                    interfaceType = typeof (IRelationshipAllowingSourceNode<>);
+                    interfaceType = typeof(IRelationshipAllowingSourceNode<>);
                     break;
                 case RelationshipEnd.TargetNode:
-                    interfaceType = typeof (IRelationshipAllowingTargetNode<>);
+                    interfaceType = typeof(IRelationshipAllowingTargetNode<>);
                     break;
                 default:
                     throw new NotSupportedException(string.Format(

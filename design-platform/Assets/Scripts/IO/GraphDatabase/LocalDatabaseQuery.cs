@@ -137,8 +137,6 @@ namespace DesignPlatform.Database {
         {
             jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\WallElements.json";
 
-            Building.Instance.CreateVerticalInterfaces();
-
             List<WallElement> wallElements = Building.Instance.IdentifyWallElementsAndJointTypes();
 
             // Collects Unity room as RoomNodes
@@ -220,7 +218,7 @@ namespace DesignPlatform.Database {
         /// <param name="rooms">List of rooms</param>
         /// <returns>List of InterfaceNodes created.</returns>
         public static List<WallElementNode> AllRoomInterfacesToInterfaceNodes() {
-            List<Interface> allInterfaces = Building.Instance.Walls.Select(w => w.interFace).ToList();
+            List<Interface> allInterfaces = Building.Instance.Walls.Select(w => w.Interface).ToList();
             //List<Interface> allInterfaces = Building.Instance.interfaces.Where(i => i.GetOrientation() == Orientation.VERTICAL).ToList();
 
             //allInterfaces.ForEach(interFace => Debug.Log(interFace.GetStartPoint() + ", " + interFace.GetEndPoint()));
@@ -230,7 +228,7 @@ namespace DesignPlatform.Database {
             foreach (Interface iface in allInterfaces) {
 
                 WallElementNode node = new WallElementNode {
-                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { iface.GetStartPoint(), iface.GetEndPoint() })
+                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { iface.StartPoint, iface.EndPoint })
                 };
                 interfaceNodes.Add(node);
             }

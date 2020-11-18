@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using UnityEngine;
 using System.Linq;
+using System.Reflection;
 
 namespace DesignPlatform.Core {
     public static class ModuleLoader {
@@ -28,7 +24,7 @@ namespace DesignPlatform.Core {
 
             Assembly module = LoadModule(fullModulePath);
             MethodInfo Initializer = GetModuleInitalizer(module);
-            Initializer.Invoke(new object(), new object[] { (moduleFolderPath.Replace(@"\", "/")+"/")});
+            Initializer.Invoke(new object(), new object[] { (moduleFolderPath.Replace(@"\", "/") + "/") });
         }
 
         public static Assembly LoadModule(string modulePath) {

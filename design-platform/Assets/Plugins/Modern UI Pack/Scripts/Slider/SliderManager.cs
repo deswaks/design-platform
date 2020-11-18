@@ -1,13 +1,11 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using TMPro;
+using UnityEngine.UI;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class SliderManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class SliderManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
         // Resources
         public Slider mainSlider;
         public TextMeshProUGUI valueText;
@@ -34,14 +32,11 @@ namespace Michsky.UI.ModernUIPack
         Animator sliderAnimator;
         float saveValue;
 
-        void Start()
-        {
-            try
-            {
+        void Start() {
+            try {
                 sliderAnimator = gameObject.GetComponent<Animator>();
 
-                if (enableSaving == true)
-                {
+                if (enableSaving == true) {
                     if (PlayerPrefs.HasKey(sliderTag + "SliderValue") == false)
                         saveValue = mainSlider.value;
                     else
@@ -49,31 +44,25 @@ namespace Michsky.UI.ModernUIPack
 
                     mainSlider.value = saveValue;
 
-                    mainSlider.onValueChanged.AddListener(delegate
-                    {
+                    mainSlider.onValueChanged.AddListener(delegate {
                         saveValue = mainSlider.value;
                         PlayerPrefs.SetFloat(sliderTag + "SliderValue", saveValue);
                     });
                 }
 
-                mainSlider.onValueChanged.AddListener(delegate 
-                {
+                mainSlider.onValueChanged.AddListener(delegate {
                     sliderEvent.Invoke(mainSlider.value);
                 });
             }
 
-            catch
-            {
+            catch {
                 Debug.LogError("Slider - Cannot initalize the object due to missing components.");
             }
         }
 
-        void Update()
-        {
-            if (useRoundValue == true)
-            {
-                if (usePercent == true)
-                {
+        void Update() {
+            if (useRoundValue == true) {
+                if (usePercent == true) {
                     if (valueText != null)
                         valueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString() + "%";
 
@@ -81,8 +70,7 @@ namespace Michsky.UI.ModernUIPack
                         popupValueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString() + "%";
                 }
 
-                else
-                {
+                else {
                     if (valueText != null)
                         valueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString();
 
@@ -91,10 +79,8 @@ namespace Michsky.UI.ModernUIPack
                 }
             }
 
-            else
-            {
-                if (usePercent == true)
-                {
+            else {
+                if (usePercent == true) {
                     if (valueText != null)
                         valueText.text = mainSlider.value.ToString("F1") + "%";
 
@@ -102,8 +88,7 @@ namespace Michsky.UI.ModernUIPack
                         popupValueText.text = mainSlider.value.ToString("F1") + "%";
                 }
 
-                else
-                {
+                else {
                     if (valueText != null)
                         valueText.text = mainSlider.value.ToString("F1");
 
@@ -113,14 +98,12 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
+        public void OnPointerEnter(PointerEventData eventData) {
             if (showPopupValue == true)
                 sliderAnimator.Play("Value In");
         }
 
-        public void OnPointerExit(PointerEventData eventData)
-        {
+        public void OnPointerExit(PointerEventData eventData) {
             if (showPopupValue == true)
                 sliderAnimator.Play("Value Out");
         }

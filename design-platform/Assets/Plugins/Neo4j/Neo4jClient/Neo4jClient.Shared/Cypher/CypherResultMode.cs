@@ -1,7 +1,5 @@
-﻿namespace Neo4jClient.Cypher
-{
-    public enum CypherResultMode
-    {
+﻿namespace Neo4jClient.Cypher {
+    public enum CypherResultMode {
         /// <summary>
         /// In this mode, we expect the Cypher table to contain a single column. When deserializing it,
         /// instead of giving the developer a list of one-column rows, we'll just give them a list of objects.

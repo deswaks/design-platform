@@ -1,29 +1,23 @@
 ﻿using System.Linq.Expressions;
 //using Microsoft.VisualBasic.CompilerServices;
 
-namespace Neo4jClient.Cypher
-{
-    internal class VbCompareReplacer : ExpressionVisitor
-    {
-        public override Expression Visit(Expression node)
-        {
-            if (!(node is BinaryExpression))
-            {
+namespace Neo4jClient.Cypher {
+    internal class VbCompareReplacer : ExpressionVisitor {
+        public override Expression Visit(Expression node) {
+            if (!(node is BinaryExpression)) {
                 return base.Visit(node);
             }
 
-            var binaryExpression = (BinaryExpression) node;
+            var binaryExpression = (BinaryExpression)node;
 
-            if (!(binaryExpression.Left is MethodCallExpression))
-            {
+            if (!(binaryExpression.Left is MethodCallExpression)) {
                 return base.Visit(node);
             }
 
-            dynamic method = (MethodCallExpression) binaryExpression.Left;
+            dynamic method = (MethodCallExpression)binaryExpression.Left;
 
             //if (!(method.Method.DeclaringTypes == typeof (Operators) && method.Method.Name == "CompareString"))
-            if (!(method.Method.Name == "CompareString"))
-            {
+            if (!(method.Method.Name == "CompareString")) {
                 return base.Visit(node);
             }
 

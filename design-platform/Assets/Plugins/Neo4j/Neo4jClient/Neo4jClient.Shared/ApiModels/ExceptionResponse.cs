@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 
-namespace Neo4jClient.ApiModels
-{
-    internal class ExceptionResponse
-    {
+namespace Neo4jClient.ApiModels {
+    internal class ExceptionResponse {
         [JsonProperty("message")]
         public string Message { get; set; }
 

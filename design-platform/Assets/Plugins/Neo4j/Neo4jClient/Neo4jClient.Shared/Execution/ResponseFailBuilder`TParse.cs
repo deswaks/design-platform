@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 
-namespace Neo4jClient.Execution
-{
-    internal class ResponseFailBuilder<TParse> : IResponseFailBuilder<TParse> where TParse : new()
-    {
+namespace Neo4jClient.Execution {
+    internal class ResponseFailBuilder<TParse> : IResponseFailBuilder<TParse> where TParse : new() {
         private readonly HttpRequestMessage _request;
         private readonly ISet<HttpStatusCode> _expectedStatusCodes;
         private readonly ExecutionConfiguration _executionConfiguration;
@@ -17,8 +13,7 @@ namespace Neo4jClient.Execution
 
         public ResponseFailBuilder(HttpRequestMessage request, ISet<HttpStatusCode> expectedStatusCodes,
             ExecutionConfiguration executionConfiguration, IList<ErrorGenerator> errorGenerators,
-            Func<HttpResponseMessage, bool> condition)
-        {
+            Func<HttpResponseMessage, bool> condition) {
             _request = request;
             _expectedStatusCodes = expectedStatusCodes;
             _executionConfiguration = executionConfiguration;
@@ -26,8 +21,7 @@ namespace Neo4jClient.Execution
             _errorCondition = condition;
         }
 
-        public IResponseBuilder<TParse> WithError(Func<HttpResponseMessage, Exception> errorBuilder)
-        {
+        public IResponseBuilder<TParse> WithError(Func<HttpResponseMessage, Exception> errorBuilder) {
             var newGenerators = new List<ErrorGenerator>(_errorGenerators)
             {
                 new ErrorGenerator
@@ -39,8 +33,7 @@ namespace Neo4jClient.Execution
             return new ResponseBuilder<TParse>(_request, _expectedStatusCodes, _executionConfiguration, newGenerators);
         }
 
-        public IResponseBuilder<TParse> WithDefault()
-        {
+        public IResponseBuilder<TParse> WithDefault() {
             var newGenerators = new List<ErrorGenerator>(_errorGenerators)
             {
                 new ErrorGenerator

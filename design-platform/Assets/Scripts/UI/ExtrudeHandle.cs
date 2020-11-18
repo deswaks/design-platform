@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace DesignPlatform.Core {
-    public class EditHandle : MonoBehaviour {
+    public class ExtrudeHandle : MonoBehaviour {
         public Room parentRoom;
         public int wallIndex;
 
@@ -12,11 +12,10 @@ namespace DesignPlatform.Core {
             parentRoom = gameObject.transform.parent.gameObject.GetComponent<Room>();
             wallIndex = wall;
             wallNormal = parentRoom.GetWallNormals()[wallIndex];
-            gameObject.name = "edit handle";
+            gameObject.name = "Extrude handle";
             UpdateTransform(updateRotation: true);
             gameObject.AddComponent<BoxCollider>();
 
-            gameObject.GetComponent<SpriteRenderer>().sortingOrder = 100;
         }
 
         public void OnMouseDown() {
@@ -35,7 +34,7 @@ namespace DesignPlatform.Core {
             //transform.position = handleStartPosition + Distance;
             parentRoom.ExtrudeWall(wallIndex, extrusion);
 
-            foreach (EditHandle handle in parentRoom.GetComponentsInChildren<EditHandle>()) {
+            foreach (ExtrudeHandle handle in parentRoom.GetComponentsInChildren<ExtrudeHandle>()) {
                 handle.UpdateTransform();
             }
         }

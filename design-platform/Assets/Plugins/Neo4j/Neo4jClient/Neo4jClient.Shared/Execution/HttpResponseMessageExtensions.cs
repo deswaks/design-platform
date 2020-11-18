@@ -1,26 +1,21 @@
+using Neo4jClient.ApiModels;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using Neo4jClient.ApiModels;
-using Newtonsoft.Json;
 
-namespace Neo4jClient.Execution
-{
-    internal static class HttpResponseMessageExtensions
-    {
-        internal static void EnsureExpectedStatusCode(this HttpResponseMessage response, params HttpStatusCode[] expectedStatusCodes)
-        {
+namespace Neo4jClient.Execution {
+    internal static class HttpResponseMessageExtensions {
+        internal static void EnsureExpectedStatusCode(this HttpResponseMessage response, params HttpStatusCode[] expectedStatusCodes) {
             response.EnsureExpectedStatusCode(null, expectedStatusCodes);
         }
 
-        internal static void EnsureExpectedStatusCode(this HttpResponseMessage response, string commandDescription, params HttpStatusCode[] expectedStatusCodes)
-        {
+        internal static void EnsureExpectedStatusCode(this HttpResponseMessage response, string commandDescription, params HttpStatusCode[] expectedStatusCodes) {
             if (expectedStatusCodes.Contains(response.StatusCode))
                 return;
 
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
+            if (response.StatusCode == HttpStatusCode.BadRequest) {
                 var neoException = TryBuildNeoException(response);
                 if (neoException != null) throw neoException;
             }
@@ -30,8 +25,7 @@ namespace Neo4jClient.Execution
                 : commandDescription + "\r\n\r\n";
 
             var rawBody = string.Empty;
-            if (response.Content != null)
-            {
+            if (response.Content != null) {
                 var readTask = response.Content.ReadAsStringAsync();
                 readTask.Wait();
                 var rawContent = readTask.Result;
@@ -46,8 +40,7 @@ namespace Neo4jClient.Execution
                 rawBody));
         }
 
-        static NeoException TryBuildNeoException(HttpResponseMessage response)
-        {
+        static NeoException TryBuildNeoException(HttpResponseMessage response) {
             var isJson = response.Content.Headers.ContentType.MediaType.Equals("application/json", StringComparison.OrdinalIgnoreCase);
             if (!isJson) return null;
 

@@ -1,7 +1,5 @@
-﻿namespace Neo4jClient.Cypher
-{
-    public interface IFluentCypherResultItem
-    {
+﻿namespace Neo4jClient.Cypher {
+    public interface IFluentCypherResultItem {
         T CollectAs<T>();
     }
 }

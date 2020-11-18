@@ -1,14 +1,10 @@
-﻿namespace Neo4jClient.Execution
-{
-    internal class CypherTransactionExecutionPolicy : CypherExecutionPolicy
-    {
+﻿namespace Neo4jClient.Execution {
+    internal class CypherTransactionExecutionPolicy : CypherExecutionPolicy {
         public CypherTransactionExecutionPolicy(IGraphClient client)
-            : base(client)
-        {
+            : base(client) {
         }
 
-        public override TransactionExecutionPolicy TransactionExecutionPolicy
-        {
+        public override TransactionExecutionPolicy TransactionExecutionPolicy {
             get { return TransactionExecutionPolicy.Required; }
         }
     }

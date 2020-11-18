@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using DesignPlatform.Core;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using Xbim.Common;
-using Xbim.Common.Step21;
+using UnityEngine;
 using Xbim.Ifc;
-using Xbim.IO;
 using Xbim.Ifc4.ActorResource;
 using Xbim.Ifc4.DateTimeResource;
 using Xbim.Ifc4.ExternalReferenceResource;
-using Xbim.Ifc4.PresentationOrganizationResource;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
@@ -18,13 +13,13 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MaterialResource;
 using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.PresentationOrganizationResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
-using DesignPlatform.Core;
 
 namespace DesignPlatform.Export {
     public static class IfcConverter {
@@ -51,13 +46,13 @@ namespace DesignPlatform.Export {
 
             // Get data from wall
             string wallName = interFace.ToString();
-            Vector3 startPoint = interFace.GetStartPoint() * 1000;
-            Vector3 endPoint = interFace.GetEndPoint() * 1000;
+            Vector3 startPoint = interFace.StartPoint * 1000;
+            Vector3 endPoint = interFace.EndPoint * 1000;
             Vector3 midPoint = (endPoint - startPoint) / 2;
             Vector3 wallVector = (endPoint - startPoint).normalized;
             float length = (endPoint - startPoint).magnitude;
-            float height = interFace.attachedFaces[0].parentRoom.height * 1000;
-            float thickness = interFace.GetWallThickness() * 1000;
+            float height = interFace.Rooms[0].height * 1000;
+            float thickness = interFace.Thickness * 1000;
 
             //begin a transaction
             var transaction = model.BeginTransaction("Create Wall");

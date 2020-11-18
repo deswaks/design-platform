@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using UnityEngine;
 
 namespace DesignPlatform.Core {
@@ -19,7 +17,7 @@ namespace DesignPlatform.Core {
 
     public class WallElement {
         public (Vector3 point, WallJointType jointType) startPoint { get; private set; } = (new Vector3(), WallJointType.None);
-        public (Vector3 point, WallJointType jointType) endPoint { get; private set; }   = (new Vector3(), WallJointType.None );
+        public (Vector3 point, WallJointType jointType) endPoint { get; private set; } = (new Vector3(), WallJointType.None);
         public List<(Vector3 point, WallJointType jointType)> midpoints { get; private set; } = new List<(Vector3 point, WallJointType jointType)>();
 
         public double Height { get; private set; } = 3.0; // SKAL SUGES FRA NOGET
@@ -34,7 +32,7 @@ namespace DesignPlatform.Core {
         }
         public void SetEndPoint(Vector3 point, WallJointType jointType = WallJointType.None) {
             endPoint = (point, jointType);
-        }        
+        }
         public void SetStartPointJointType(WallJointType jointType) {
             startPoint = (startPoint.point, jointType);
         }
@@ -43,19 +41,19 @@ namespace DesignPlatform.Core {
         }
         public void SetMidPointJointType(Vector3 point, WallJointType jointType) {
             int index = midpoints.Select(p => p.point).ToList().IndexOf(point);
-            if(index == -1) {
+            if (index == -1) {
                 Debug.LogError("Trying to set midpoint joint of point not found among midpoints");
                 return;
             }
             midpoints[index] = (midpoints[index].point, jointType);
         }
         public void SetMidPoints(List<Vector3> points, List<WallJointType> jointTypes) {
-            if(points.Count != jointTypes.Count) {
+            if (points.Count != jointTypes.Count) {
                 Debug.LogError("Point- and jointtype lists not of equal size!");
                 return;
             }
 
-            for(int i = 0; i<points.Count; i++) {
+            for (int i = 0; i < points.Count; i++) {
                 midpoints.Add((points[i], jointTypes[i]));
             }
             midpoints = midpoints.OrderBy(p => Vector3.Distance(p.point, startPoint.point)).ToList();
@@ -68,8 +66,8 @@ namespace DesignPlatform.Core {
             midpoints = new List<(Vector3 point, WallJointType jointType)>();
             points.ForEach(p => midpoints.Add((p, WallJointType.None)));
 
-            midpoints = midpoints.OrderBy(p => Vector3.Distance(p.point, startPoint.point) ).ToList();
-        } 
+            midpoints = midpoints.OrderBy(p => Vector3.Distance(p.point, startPoint.point)).ToList();
+        }
 
         public List<Vector3> AllPoints() {
             List<Vector3> points = new List<Vector3>();
@@ -102,24 +100,24 @@ namespace DesignPlatform.Core {
 
                 // Finds wall elements that have an endpoint in the given point and elements with midpoint(s) in the given point
                 // In total, only two elements should always be found. 
-                List<WallElement> endJointWallElements = wallElements.Where( w => w.startPoint.point == point || w.endPoint.point == point ).ToList();
-                List<WallElement> midJointWallElements = wallElements.Where(w => w.midpoints.Select(p=>p.point).Contains(point)).ToList();
+                List<WallElement> endJointWallElements = wallElements.Where(w => w.startPoint.point == point || w.endPoint.point == point).ToList();
+                List<WallElement> midJointWallElements = wallElements.Where(w => w.midpoints.Select(p => p.point).Contains(point)).ToList();
 
                 // Finds vector of all walls joint in the given point
-                
+
                 // Cross-joint (two wallElement-midpoints) ////////////////// AS OF NOW, PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
-                if(midJointWallElements.Count == 2) {
-                    WallElement primaryElement   = midJointWallElements.OrderBy(e => e.Length()).Last();
+                if (midJointWallElements.Count == 2) {
+                    WallElement primaryElement = midJointWallElements.OrderBy(e => e.Length()).Last();
                     WallElement secondaryElement = midJointWallElements.OrderBy(e => e.Length()).First();
                     ////////////////// AS OF NOW, PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
-                    if (primaryElement.midpoints.Select(p=>p.point).Contains(point)) primaryElement.SetMidPointJointType(point, WallJointType.X_Primary);
+                    if (primaryElement.midpoints.Select(p => p.point).Contains(point)) primaryElement.SetMidPointJointType(point, WallJointType.X_Primary);
 
                     // The secondary element is identified now and will be cut into two elements after all joints are identified
                     if (secondaryElement.midpoints.Select(p => p.point).Contains(point)) secondaryElement.SetMidPointJointType(point, WallJointType.X_Secondary);
                 }
                 // T-joint
-                else if(midJointWallElements.Count == 1) {
-                    midJointWallElements.First().SetMidPointJointType( midJointWallElements.First().midpoints.First(p => p.point == point ).point , WallJointType.T_Primary);
+                else if (midJointWallElements.Count == 1) {
+                    midJointWallElements.First().SetMidPointJointType(midJointWallElements.First().midpoints.First(p => p.point == point).point, WallJointType.T_Primary);
                     if (point == endJointWallElements.First().startPoint.point) endJointWallElements.First().SetStartPointJointType(WallJointType.T_Secondary);
                     if (point == endJointWallElements.First().endPoint.point) endJointWallElements.First().SetEndPointJointType(WallJointType.T_Secondary);
                 }
@@ -137,20 +135,20 @@ namespace DesignPlatform.Core {
 
             }
 
-            foreach(WallElement wallElement in wallElements) {
+            foreach (WallElement wallElement in wallElements) {
                 // If a wall is a secondary part of an X-joint, it will be split into two wall elements
-                if (wallElement.midpoints.Select(p => p.jointType).Contains(WallJointType.X_Secondary)){
+                if (wallElement.midpoints.Select(p => p.jointType).Contains(WallJointType.X_Secondary)) {
 
-                    WallElement firstElement  = new WallElement();
+                    WallElement firstElement = new WallElement();
                     WallElement secondElement = new WallElement();
 
                     // Index of midpoint where X-joint is
                     int index = wallElement.midpoints.Select(p => p.jointType).ToList().IndexOf(WallJointType.X_Secondary);
-                    
-                    firstElement.SetStartPoint(wallElement.startPoint.point,wallElement.startPoint.jointType); 
+
+                    firstElement.SetStartPoint(wallElement.startPoint.point, wallElement.startPoint.jointType);
                     secondElement.SetStartPoint(wallElement.midpoints[index].point, wallElement.midpoints[index].jointType);
 
-                    if (! (wallElement.midpoints.Count == 1)) {
+                    if (!(wallElement.midpoints.Count == 1)) {
                         secondElement.SetMidPoints(wallElement.midpoints.GetRange(index, wallElement.midpoints.Count - index));
                         firstElement.SetMidPoints(wallElement.midpoints.GetRange(1, index - 1));
                     };
@@ -174,13 +172,13 @@ namespace DesignPlatform.Core {
         /// </summary>
         public void IdentifyInterfaceJointTypes() {
             // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = Interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
+            List<Interface> culledInterfaces = Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
 
             // Finds all joint points (unique points shared by all interfaces)
             List<Vector3> jointPoints = new List<Vector3>();
             culledInterfaces.ForEach(i => {
-                jointPoints.Add(i.GetEndPoint());
-                jointPoints.Add(i.GetStartPoint());
+                jointPoints.Add(i.EndPoint);
+                jointPoints.Add(i.StartPoint);
             });
 
             jointPoints = jointPoints.Distinct().ToList();
@@ -189,10 +187,10 @@ namespace DesignPlatform.Core {
 
             foreach (Vector3 point in jointPoints) {
                 // Finds interfaces that have an endpoint in the given point
-                List<Interface> jointInterfaces = culledInterfaces.Where(i => i.GetEndPoint() == point || i.GetStartPoint() == point).ToList();
+                List<Interface> jointInterfaces = culledInterfaces.Where(i => i.EndPoint == point || i.StartPoint == point).ToList();
 
                 // Finds vector of all interfaces joint in the given point
-                List<Vector3> wallVectors = jointInterfaces.Select(interFace => (interFace.GetStartPoint() - interFace.GetEndPoint()).normalized).ToList();
+                List<Vector3> wallVectors = jointInterfaces.Select(interFace => (interFace.StartPoint - interFace.EndPoint).normalized).ToList();
 
                 string jointType = ":(";
 
@@ -230,7 +228,7 @@ namespace DesignPlatform.Core {
         /// <returns>Returns full, un-split, wall elements with no joint information.</returns>
         private List<WallElement> JoinInterfacesToLongestWallElements() {
             // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = Interfaces.Where(i => i.GetEndPoint() != i.GetStartPoint()).ToList();
+            List<Interface> culledInterfaces = Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
 
             // Identifier ID (Integer) for each wall referring to its wall element
             List<int> wallIDs = Enumerable.Repeat(-1, culledInterfaces.Count).ToList();
@@ -238,8 +236,8 @@ namespace DesignPlatform.Core {
             // Finds all joint points (unique points shared by all interfaces)
             List<Vector3> jointPoints = new List<Vector3>();
             culledInterfaces.ForEach(i => {
-                jointPoints.Add(i.GetEndPoint());
-                jointPoints.Add(i.GetStartPoint());
+                jointPoints.Add(i.EndPoint);
+                jointPoints.Add(i.StartPoint);
             });
             jointPoints = jointPoints.Distinct().ToList();
 
@@ -274,14 +272,14 @@ namespace DesignPlatform.Core {
             foreach (List<Interface> wallInterfaces in wallGroups.Select(list => list.ToList()).ToList()) {
                 WallElement wallElement = new WallElement();
 
-                List<Vector3> currentWallVertices = wallInterfaces.SelectMany(i => new List<Vector3> { i.GetEndPoint(), i.GetStartPoint() }).Distinct().ToList();
+                List<Vector3> currentWallVertices = wallInterfaces.SelectMany(i => new List<Vector3> { i.EndPoint, i.StartPoint }).Distinct().ToList();
                 // X-values
                 List<float> xs = currentWallVertices.Select(p => p.x).ToList();
                 // Z-values
                 List<float> zs = currentWallVertices.Select(p => p.z).ToList();
                 // Endpoints are (Xmin,0,Zmin);(Xmax,0,Zmax) ////////////////// ONLY TRUE FOR WALLS LYING ALONG X-/Z-AXIS
                 wallElement.SetStartPoint(new Vector3(xs.Min(), 0, zs.Min()));
-                wallElement.SetEndPoint(  new Vector3(xs.Max(), 0, zs.Max()));
+                wallElement.SetEndPoint(new Vector3(xs.Max(), 0, zs.Max()));
                 // Removes endpoints from vertex-list so that only midpoints remain
                 currentWallVertices.RemoveAll(p => p == wallElement.startPoint.point || p == wallElement.endPoint.point);
                 wallElement.SetMidPoints(currentWallVertices);
@@ -295,19 +293,19 @@ namespace DesignPlatform.Core {
         }
 
         public List<Interface> GetParallelConnectedInterfaces(List<Interface> interfacesList, Interface interFace) {
-            Vector3 interfaceDirection = (interFace.GetStartPoint() - interFace.GetEndPoint()).normalized;
+            Vector3 interfaceDirection = (interFace.StartPoint - interFace.EndPoint).normalized;
 
             // Finds interfaces that have an endpoint in the given point
             List<Interface> jointInterfaces = new List<Interface>();
             jointInterfaces.AddRange(
                 interfacesList
-                .Where(i => i != interFace && (i.GetEndPoint() == interFace.GetEndPoint() || i.GetStartPoint() == interFace.GetEndPoint()))
-                .Where(i => System.Math.Abs(Vector3.Dot((i.GetStartPoint() - i.GetEndPoint()).normalized, interfaceDirection)) == 1)
+                .Where(i => i != interFace && (i.EndPoint == interFace.EndPoint || i.StartPoint == interFace.EndPoint))
+                .Where(i => System.Math.Abs(Vector3.Dot((i.StartPoint - i.EndPoint).normalized, interfaceDirection)) == 1)
                 .ToList());
             jointInterfaces.AddRange(
                 interfacesList
-                .Where(i => i != interFace && (i.GetEndPoint() == interFace.GetStartPoint() || i.GetStartPoint() == interFace.GetStartPoint()))
-                .Where(i => System.Math.Abs(Vector3.Dot((i.GetStartPoint() - i.GetEndPoint()).normalized, interfaceDirection)) == 1)
+                .Where(i => i != interFace && (i.EndPoint == interFace.StartPoint || i.StartPoint == interFace.StartPoint))
+                .Where(i => System.Math.Abs(Vector3.Dot((i.StartPoint - i.EndPoint).normalized, interfaceDirection)) == 1)
                 .ToList());
 
             return jointInterfaces;

@@ -1,4 +1,5 @@
 ﻿using DesignPlatform.Utils;
+using DesignPlatform.Geometry;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
@@ -47,18 +48,19 @@ namespace DesignPlatform.Core {
         private List<Vector3> controlPoints;
         public float height = 3.0f;
         public List<Face> Faces { get; private set; }
-        //public GameObject moveHandlePrefab;
-        private Vector3 moveModeOffset;
-        //private List<List<Vector3>> openingsMoveModeOffset;
+        public List<Interface> Interfaces {
+            get { return Faces.SelectMany(f => f.Interfaces).ToList(); }
+            private set {; }
+        }
+        public List<Opening> Openings {
+            get { return Faces.SelectMany(f => f.Openings).ToList(); }
+            private set {; }
+        }
 
+        private Vector3 moveModeOffset;
         private Material currentMaterial;
         public Material highlightMaterial;
         public string customProperty;
-
-
-        public List<Opening> openings { 
-        get { return Faces.SelectMany(f => f.openings).ToList(); }
-        }
 
 
         private readonly Dictionary<RoomType, string> RoomMaterialAsset = new Dictionary<RoomType, string> {
@@ -151,8 +153,6 @@ namespace DesignPlatform.Core {
                     gameObject.name = "Room(T-Shape)"; 
                     break;
             }
-            //if (Type == RoomType.PREVIEW) controlPoints = controlPoints.Select(p => p + Vector3.up * (5f)).ToList();
-
             InitFaces();
             InitRender3D();
             SetRoomType(type);
@@ -194,6 +194,7 @@ namespace DesignPlatform.Core {
             lr.loop = true;
             lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             lr.receiveShadows = false;
+            lr.sortingLayerName = "PLAN";
 
             // Update
             UpdateRender2D();
@@ -225,14 +226,22 @@ namespace DesignPlatform.Core {
             }
 
             // Update text tags
-            if (GetComponentInChildren<TMP_Text>()) Destroy(GetComponentInChildren<TMP_Text>().gameObject);
+            if (GetComponentInChildren<TMP_Text>()) {
+                foreach (TMP_Text text in GetComponentsInChildren<TMP_Text>()) {
+                    Destroy(text.gameObject);
+                }
+            }
             if (GlobalSettings.ShowRoomTags && Type != RoomType.PREVIEW) {
                 // Create tag object
                 GameObject tagObject = new GameObject("Tag");
                 TextMeshPro tag = tagObject.AddComponent<TextMeshPro>();
                 // Set position
-                tagObject.transform.SetParent(gameObject.transform, false);
-                tagObject.transform.position = GetTagLocation();
+                Vector3 tagPosition = GetTagLocation(localCoordinates: true);
+                tagObject.transform.SetParent(gameObject.transform, worldPositionStays: true);
+                tagObject.GetComponent<RectTransform>().anchoredPosition = tagPosition;
+                tagObject.transform.localPosition = new Vector3(tagObject.transform.localPosition.x,
+                                                           tagObject.transform.localPosition.y,
+                                                           tagPosition.z);
                 tagObject.transform.rotation = Quaternion.identity;
                 tagObject.transform.Rotate(new Vector3(90, 0, 0));
                 // Set text
@@ -240,9 +249,8 @@ namespace DesignPlatform.Core {
                 tag.fontSize = 5.0f;
                 tag.alignment = TextAlignmentOptions.Center;
                 tag.text = RoomTypeName[Type];
+                tag.sortingOrder = 300;
             }
-
-
         }
 
         /// <summary>
@@ -271,15 +279,17 @@ namespace DesignPlatform.Core {
                 point: centerPoint,
                 axis: new Vector3(0, 1, 0),
                 angle: degrees);
-            for (int i = 0; i < Faces.Count; i++) {
-                for (int j = 0; j < Faces[i].openings.Count; j++) {
-                    Faces[i].openings[j].gameObject.transform.RotateAround(
-                                            point: centerPoint,
-                                            axis: new Vector3(0, 1, 0),
-                                            angle: degrees);
-                    Faces[i].openings[j].SetAttachedFaces(Faces[i].openings[j].gameObject.transform.position);
+
+            if (Openings.Count > 0) {
+                foreach (Opening opening in Openings) {
+                    opening.gameObject.transform.RotateAround(
+                                                point: centerPoint,
+                                                axis: new Vector3(0, 1, 0),
+                                                angle: degrees);
+                    opening.AttachClosestFaces();
                 }
             }
+            
             UpdateRender3D();
             UpdateRender2D();
         }
@@ -338,6 +348,11 @@ namespace DesignPlatform.Core {
         /// Deletes the room
         /// </summary>
         public void Delete() {
+            if (Faces != null && Faces.Count > 0) {
+                foreach (Face face in Faces) {
+                    face.Delete();
+                }
+            }
             if (Building.Instance.Rooms.Contains(this)) {
                 ParentBuilding.RemoveRoom(this);
             }
@@ -414,10 +429,10 @@ namespace DesignPlatform.Core {
             controlPointsClone[point2Index] += localExtrusion;
 
             // Move openings with extrusion                   
-            foreach (Opening opening in Faces[wallToExtrude].openings) {
+            foreach (Opening opening in Faces[wallToExtrude].Openings) {
                 Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, Faces[wallToExtrude]);
                 opening.transform.position = openingPoint;
-                opening.SetAttachedFaces(opening.transform.position);
+                opening.AttachClosestFaces();
             }
 
             // Compare normals before and after extrusion element-wise 
@@ -529,15 +544,15 @@ namespace DesignPlatform.Core {
             if (State == RoomState.MOVING) {
                 Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
                 for (int i = 0; i < Faces.Count; i++) {
-                    for (int j = 0; j < Faces[i].openings.Count; j++) {
-                        Vector3 diff = gameObject.transform.position - Faces[i].openings[j].gameObject.transform.position;
-                        Faces[i].openings[j].gameObject.transform.position = (Grid.GetNearestGridpoint(curPosition)) - diff;
+                    for (int j = 0; j < Faces[i].Openings.Count; j++) {
+                        Vector3 diff = gameObject.transform.position - Faces[i].Openings[j].gameObject.transform.position;
+                        Faces[i].Openings[j].gameObject.transform.position = (Grid.GetNearestGridpoint(curPosition)) - diff;
                     }
                 }
                 transform.position = Grid.GetNearestGridpoint(curPosition);
                 
-                foreach (Opening opening in openings) {
-                    foreach (Face openingsAttachedFace in opening.attachedFaces) {
+                foreach (Opening opening in Openings) {
+                    foreach (Face openingsAttachedFace in opening.Faces) {
                         bool faceBelongsToThisRoom = (Faces.Contains(openingsAttachedFace));
                         if (!faceBelongsToThisRoom) openingsAttachedFace.RemoveOpening(opening);
                     }
@@ -545,8 +560,8 @@ namespace DesignPlatform.Core {
 
                 foreach (Room room in Building.Instance.Rooms) {
                     foreach (Face face in room.Faces) {
-                        foreach (Opening opening in face.openings) {
-                            opening.SetAttachedFaces(opening.transform.position);
+                        foreach (Opening opening in face.Openings) {
+                            opening.AttachClosestFaces();
                         }
                     }
                 }
