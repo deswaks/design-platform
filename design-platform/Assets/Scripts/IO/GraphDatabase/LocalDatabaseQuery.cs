@@ -36,9 +36,40 @@ namespace DesignPlatform.Database {
             foreach (RoomNode roomNode in roomNodes) {
                 CreateUnityRoomFromRoomNode(roomNode);
             }
-
         }
 
+        /// <summary>
+        /// Converts all Unity rooms to RoomNodes and then saves them to a json file at the specified path.
+        /// </summary>
+        /// <param name="savePath">Full path of json file, with backslashes.</param>
+        public static void SaveAllUnityRoomsAndOpeningsToJson(string jsonPath = null) {
+            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder();
+
+            // Collects Unity room as RoomNodes
+            List<RoomNode> roomNodes = UnityRoomsToRoomNodes(Building.Instance.Rooms);
+            List<OpeningNode> openingNodes = UnityOpeningsToOpeningNodes(Building.Instance.Openings);
+            
+
+            // Serializes RoomNodes to json format
+            string roomsJsonString = JsonConvert.SerializeObject(roomNodes);
+            string openingsJsonString = JsonConvert.SerializeObject(openingNodes);
+
+            // Saves file
+            File.WriteAllText(jsonPath + @"\RoomNodes.json", roomsJsonString);
+            File.WriteAllText(jsonPath + @"\OpeningNodes.json", openingsJsonString);
+
+
+            // Generates notification in corner of screen
+            string notificationTitle = "File saved";
+            string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
+
+            GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
+            Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
+            Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
+
+            GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
+
+        }
         /// <summary>
         /// Converts all Unity rooms to RoomNodes and then saves them to a json file at the specified path.
         /// </summary>
@@ -59,7 +90,6 @@ namespace DesignPlatform.Database {
             // Generates notification in corner of screen
             string notificationTitle = "File saved";
             string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
-
 
             GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
             Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
@@ -101,33 +131,6 @@ namespace DesignPlatform.Database {
             #endregion
         }
 
-        /// <summary>
-        /// Converts all Unity rooms to RoomNodes and then saves them to a json file at the specified path.
-        /// </summary>
-        /// <param name="savePath">Full path of json file, with backslashes.</param>
-        public static void SaveAllUnityInterfacesToJson(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\interfaces.json";
-
-            // Collects Unity room as RoomNodes
-            List<WallElementNode> interfaceNodes = AllRoomInterfacesToInterfaceNodes();
-
-            // Serializes RoomNodes to json format
-            string jsonString = JsonConvert.SerializeObject(interfaceNodes);
-
-            // Saves file
-            File.WriteAllText(jsonPath, jsonString);
-
-            // Generates notification in corner of screen
-            string notificationTitle = "File saved";
-            string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
-
-            GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
-            Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
-            Vector3 newLocation = new Vector3(parentRect.width / 2 - 410, -parentRect.height / 2 + 150, 0);
-
-            GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
-
-        }
 
         /// <summary>
         /// 
@@ -184,6 +187,21 @@ namespace DesignPlatform.Database {
             return JsonConvert.DeserializeObject<IEnumerable<RoomNode>>(jsonString);
         }
 
+        /// <summary>
+        /// Loads RoomNodes specified in the given json file.
+        /// </summary>
+        /// <param name="savePath">Full path of json file, with backslashes.</param>
+        /// <returns></returns>
+        public static IEnumerable<RoomNode> LoadOpeningNodesFromJson(string jsonPath = null) {
+            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSavePath();
+
+            // Reads json file
+            string jsonString = File.ReadAllText(jsonPath);
+
+            // Deserializes the json string into RoomNode objects
+            return JsonConvert.DeserializeObject<IEnumerable<RoomNode>>(jsonString);
+        }
+
 
         /// <summary>
         /// Creates a list of RoomNodes corresponding to the list of Unity Rooms
@@ -207,10 +225,32 @@ namespace DesignPlatform.Database {
                     vertices = GraphUtils.Vector3ListToStringList(room.GetControlPoints())
                 };
                 roomNodes.Add(roomNode);
-
             }
             return roomNodes;
         }
+
+        /// <summary>
+        /// Creates a list of OpeningNodes corresponding to the list of Unity Openings
+        /// </summary>
+        /// <param name="openings">Unity Rooms to convert.</param>
+        /// <returns>List of RoomNodes created</returns>
+        public static List<OpeningNode> UnityOpeningsToOpeningNodes(List<Opening> openings) {
+
+            List<OpeningNode> openingNodes = new List<OpeningNode>();
+
+            foreach (Opening opening in openings) {
+                OpeningNode roomNode = new OpeningNode {
+                    openingShape = opening.Shape,
+                    height = opening.Height,
+                    width = opening.Width,
+                    position = GraphUtils.Vector3ToString(opening.CenterPoint),
+                    rotation = GraphUtils.Vector3ToString(opening.transform.rotation.eulerAngles),
+                };
+                openingNodes.Add(roomNode);
+            }
+            return openingNodes;
+        }
+
 
         /// <summary>
         /// Using input list of rooms, finds all interfaces belonging to those rooms and returns them as InterfaceNodes.
