@@ -45,7 +45,7 @@ namespace DesignPlatform.Core {
 
             gameObject.layer = 13; // Wall layer
 
-            Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "wallMaterial");
+            Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
             gameObject.name = "CLT Wall";
 
             wallControlPoints = new List<Vector3> {

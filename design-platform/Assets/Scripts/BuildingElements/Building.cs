@@ -230,7 +230,6 @@ namespace DesignPlatform.Core {
                 // Attach to existing interface or create new
                 if (duplicateInterface == null) {
                     new Interface(face, splitParameters[i], splitParameters[i + 1]);
-                    if (Interfaces.Count > 7) Debug.Log(Interfaces.Count);
                 }
                 else {
                     duplicateInterface.AttachFace(face, splitParameters[i], splitParameters[i + 1]);
