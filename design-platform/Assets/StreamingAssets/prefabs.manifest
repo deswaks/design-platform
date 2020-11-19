@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2341123249
+CRC: 3442659311
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0097929eda140eda185bfd5332b15eed
+    Hash: cf316bbaf8e8886902b1cdcaa733a7b8
   TypeTreeHash:
     serializedVersion: 2
     Hash: baf1e72f20257746b4155fbc92b997c6
@@ -85,8 +85,8 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Prefabs/RoomPrefab.prefab
-- Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab
 - Assets/Prefabs/Widgets/Widget_RoomSchedule.prefab
+- Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab
 - Assets/Prefabs/ExtrudeHandle.prefab
 - Assets/Prefabs/WallPrefab.prefab
 - Assets/Prefabs/OpeningPrefab.prefab
