@@ -42,11 +42,11 @@ namespace DesignPlatform.Core {
         }
 
         public float WindowWidth = 1.6f;
-        public float WindowHeight = 1.2f;
+        public float WindowHeight = 1.05f;
 
-        public float DoorWidth = 1f;
-        public float DoorHeight = 2.4f;
-        public float Doorstep = 0.1f;
+        public float DoorWidth = 0.9f;
+        public float DoorHeight = 2.1f;
+        public float Doorstep = 0.05f;
 
         public float OpeningDepth = 0.051f;
         public float SillHeight;

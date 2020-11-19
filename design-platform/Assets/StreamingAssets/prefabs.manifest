@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2161692608
+CRC: 1806171083
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7f62b159a334ed486c429d58aaa174ee
+    Hash: afa716f592b002f631433a1b9e28891f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1f37d3601e9ea143d5f598cc81005bce
+    Hash: baf1e72f20257746b4155fbc92b997c6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -91,6 +91,7 @@ Assets:
 - Assets/Prefabs/WallPrefab.prefab
 - Assets/Prefabs/OpeningPrefab.prefab
 - Assets/Prefabs/MoveHandle.prefab
+- Assets/Prefabs/Widgets/Widget_WallElementSchedule.prefab
 - Assets/Prefabs/SlabPrefab.prefab
 - Assets/Prefabs/notification.prefab
 Dependencies:

@@ -20,7 +20,7 @@ namespace DesignPlatform.Core {
             get { return Interface.Openings; }
         }
 
-        public float Thickness = 0.2f;
+        public float Thickness = 0.1f;
 
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace DesignPlatform.Core {
             Interface = interFace;
 
             gameObject.layer = 14; // Slab layer
-            Material slabMaterial = AssetUtil.LoadAsset<Material>("materials", "slabMaterial");
+            Material slabMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
             gameObject.name = "CLT Slab";
 
             List<Vector3> slabControlPoints = Rooms[0].GetControlPoints(localCoordinates: true);
