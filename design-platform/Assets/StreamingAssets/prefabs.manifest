@@ -1,17 +1,9 @@
 ManifestFileVersion: 0
-<<<<<<< HEAD
-CRC: 856575755
+CRC: 3442659311
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 40ea2320157ed5d8ea98c8044435e1f7
-=======
-CRC: 1806171083
-Hashes:
-  AssetFileHash:
-    serializedVersion: 2
-    Hash: afa716f592b002f631433a1b9e28891f
->>>>>>> 7e93f5c6fb94632fc327c635a75be55a8162b213
+    Hash: cf316bbaf8e8886902b1cdcaa733a7b8
   TypeTreeHash:
     serializedVersion: 2
     Hash: baf1e72f20257746b4155fbc92b997c6
@@ -93,8 +85,8 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Prefabs/RoomPrefab.prefab
-- Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab
 - Assets/Prefabs/Widgets/Widget_RoomSchedule.prefab
+- Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab
 - Assets/Prefabs/ExtrudeHandle.prefab
 - Assets/Prefabs/WallPrefab.prefab
 - Assets/Prefabs/OpeningPrefab.prefab
@@ -103,8 +95,4 @@ Assets:
 - Assets/Prefabs/SlabPrefab.prefab
 - Assets/Prefabs/notification.prefab
 Dependencies:
-<<<<<<< HEAD
-- C:/Users/Sebastian/git/design-platform/design-platform/Assets/StreamingAssets/materials
-=======
-- C:/Users/ander/Documents/GitHub/design-platform/design-platform/Assets/StreamingAssets/materials
->>>>>>> 7e93f5c6fb94632fc327c635a75be55a8162b213
+- E:/github/design-platform/design-platform/Assets/StreamingAssets/materials

@@ -64,12 +64,12 @@ namespace DesignPlatform.Core {
 
                 List<string> rowData = new List<string>
                 {
-                "Wall " + elementIndex.ToString(),
-                e.Length().ToString()+"m",
-                "DVQ",    //Domestic visual (DVQ), Industrial (IVQ), Non visual (NVQ)
-                e.Height.ToString()+"m",
-                (e.Width*1000).ToString()+"mm",
-                e.Area.ToString()+"m²"
+                    "Wall " + elementIndex.ToString(),
+                    "DVQ",                                      //Domestic visual quality (DVQ), Industrial visual quality (IVQ), Non visual quality (NVQ)
+                    e.Length().ToString()+"m",
+                    e.Height.ToString()+"m",
+                    (e.Width*1000).ToString()+"mm",
+                    e.Area.ToString()+"m²"
                 };
 
                 for (int i = 0; i < columnCount; i++) {
