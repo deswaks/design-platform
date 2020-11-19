@@ -79,6 +79,7 @@ namespace DesignPlatform.Core {
             }
             return walls;
         }
+
         /// <summary>
         /// Build
         /// </summary>
