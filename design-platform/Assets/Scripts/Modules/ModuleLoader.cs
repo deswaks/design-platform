@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 
 namespace DesignPlatform.Core {
     public static class ModuleLoader {
@@ -13,7 +14,13 @@ namespace DesignPlatform.Core {
 
             // Go through all modules and load them
             foreach (string modulePath in FindModules(moduleFolderPath)) {
-                InitModule(modulePath);
+                try {
+                    InitModule(modulePath);
+                }
+                catch (Exception) {
+                    Debug.Log("Failed to load module at: " + modulePath);
+                }
+                
             }
         }
 
