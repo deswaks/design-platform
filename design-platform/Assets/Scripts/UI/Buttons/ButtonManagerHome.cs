@@ -10,6 +10,7 @@ namespace DesignPlatform.Core {
         }
         public void LoadLocal() {
             LocalDatabase.CreateAllUnityRoomsFromJson();
+            LocalDatabase.CreateAllUnityOpeningsFromJson();
         }
         public void SaveToGraph() {
             GraphDatabase.Instance.PushAllUnityRoomsToGraph();

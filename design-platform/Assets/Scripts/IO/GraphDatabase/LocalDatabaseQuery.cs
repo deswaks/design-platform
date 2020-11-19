@@ -13,7 +13,6 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="RoomNode">RoomNode to create as a Room in Unity</param>
         public static void CreateUnityRoomFromRoomNode(RoomNode RoomNode) {
-            Debug.Log("RoomType of loaded room: "+((int)RoomNode.type).ToString());
             // Builds room
             Room newRoom = Building.Instance.BuildRoom(RoomNode.shape);
             //Gets control points from graph data
@@ -22,6 +21,19 @@ namespace DesignPlatform.Database {
             newRoom.SetControlPoints(controlPoints);
             newRoom.SetRoomType(RoomNode.type);
             newRoom.UpdateRender2D();
+        }
+
+        /// <summary>
+        /// Creates a single Room in Unity corresponding to the given RoomNode
+        /// </summary>
+        /// <param name="RoomNode">RoomNode to create as a Room in Unity</param>
+        public static void CreateUnityOpeningFromOpeningNode(OpeningNode openingNode) {
+            // Builds opening
+            Opening newOpening = Building.Instance.BuildOpening(
+                openingNode.openingShape, 
+                GraphUtils.StringToVector3(openingNode.position), 
+                Quaternion.Euler(GraphUtils.StringToVector3(openingNode.rotation))
+                );
         }
 
         /// <summary>
@@ -35,6 +47,20 @@ namespace DesignPlatform.Database {
             // Loops through room nodes and creates correponding Unity rooms
             foreach (RoomNode roomNode in roomNodes) {
                 CreateUnityRoomFromRoomNode(roomNode);
+            }
+        }
+
+        /// <summary>
+        /// Reads a .json file with room node definitions and creates correponding Rooms in Unity
+        /// </summary>
+        /// <param name="jsonPath">Full path of json file, with backslashes.</param>
+        public static void CreateAllUnityOpeningsFromJson(string jsonPath = null) {
+            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder();
+
+            IEnumerable<OpeningNode> openingNodes = LoadOpeningNodesFromJson(jsonPath);
+            // Loops through room nodes and creates correponding Unity rooms
+            foreach (OpeningNode openingNode in openingNodes) {
+                CreateUnityOpeningFromOpeningNode(openingNode);
             }
         }
 
@@ -192,14 +218,14 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         /// <returns></returns>
-        public static IEnumerable<RoomNode> LoadOpeningNodesFromJson(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSavePath();
+        public static IEnumerable<OpeningNode> LoadOpeningNodesFromJson(string jsonPath = null) {
+            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder();
 
             // Reads json file
-            string jsonString = File.ReadAllText(jsonPath);
+            string jsonString = File.ReadAllText(jsonPath + @"\OpeningNodes.json");
 
             // Deserializes the json string into RoomNode objects
-            return JsonConvert.DeserializeObject<IEnumerable<RoomNode>>(jsonString);
+            return JsonConvert.DeserializeObject<IEnumerable<OpeningNode>>(jsonString);
         }
 
 

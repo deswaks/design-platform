@@ -275,6 +275,19 @@ namespace DesignPlatform.Core {
             else newOpening.InitializeOpening(shape: shape, state: OpeningState.PLACED);
 
             return newOpening;
+        }        
+        
+        public Opening BuildOpening(OpeningShape shape, Vector3 position, Quaternion rotation) {
+            // Create game object
+            GameObject newOpeningGameObject = new GameObject("Opening");
+            newOpeningGameObject.transform.position = position;
+            newOpeningGameObject.transform.rotation = rotation;
+
+            // Create opening component
+            Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
+            newOpening.InitializeOpening(shape: shape, state: OpeningState.PLACED);
+
+            return newOpening;
         }
 
 
