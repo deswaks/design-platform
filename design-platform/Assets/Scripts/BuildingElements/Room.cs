@@ -84,6 +84,9 @@ namespace DesignPlatform.Core {
             { RoomType.KITCHEN,  "Kitchen"},
             { RoomType.BATHROOM,  "Bathroom"},
         };
+        public string TypeName {
+            get { return RoomTypeName[Type]; }
+        }
 
         /// <summary>
         /// 
@@ -249,7 +252,7 @@ namespace DesignPlatform.Core {
                 tag.color = Color.black;
                 tag.fontSize = 5.0f;
                 tag.alignment = TextAlignmentOptions.Center;
-                tag.text = RoomTypeName[Type];
+                tag.text = TypeName;
                 tag.sortingOrder = 300;
             }
         }
