@@ -40,6 +40,7 @@ namespace DesignPlatform.PdfExport {
 
             // Save the document
             document.Save("Exports/Plan.pdf");
+            UnityEngine.Debug.Log("Successfully exported gbxml to: ~Exports/Plan.pdf");
             Process.Start("Exports\\Plan.pdf"); //Start viewer
         }
 

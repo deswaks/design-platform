@@ -164,7 +164,7 @@ namespace DesignPlatform.Core {
         }
 
         public override string ToString() {
-            return gameObject.name.ToString() +" "+ Type.ToString();
+            return gameObject.name.ToString() +" "+ TypeName;
         }
 
         private void InitFaces() {

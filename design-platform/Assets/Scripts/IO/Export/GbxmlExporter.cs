@@ -39,7 +39,8 @@ namespace DesignPlatform.Export {
 
             // Save and open file
             string result = gs.BasicSerialization.CreateXML("Exports/building.gbxml", gbx);
-            Process.Start("Exports\\building.gbxml"); //Start viewer
+            //Process.Start("Exports\\building.gbxml"); //Start viewer
+            UnityEngine.Debug.Log("Successfully exported gbxml to: ~Exports/building.gbxml");
         }
 
 
