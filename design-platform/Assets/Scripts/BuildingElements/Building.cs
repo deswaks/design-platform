@@ -35,7 +35,6 @@ namespace DesignPlatform.Core {
 
             if (preview) {
                 newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.PREVIEW);
-                newRoomGameObject.name = "Preview room";
             }
             else {
                 newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.DEFAULT);

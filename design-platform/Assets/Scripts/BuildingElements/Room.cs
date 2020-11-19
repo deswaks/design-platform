@@ -153,6 +153,7 @@ namespace DesignPlatform.Core {
                     gameObject.name = "Room(T-Shape)"; 
                     break;
             }
+            if(Type == RoomType.PREVIEW) gameObject.name = "Preview " + gameObject.name;
             InitFaces();
             InitRender3D();
             SetRoomType(type);
