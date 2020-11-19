@@ -79,6 +79,7 @@ namespace DesignPlatform.Core {
             }
             return walls;
         }
+
         /// <summary>
         /// Build
         /// </summary>
@@ -94,6 +95,7 @@ namespace DesignPlatform.Core {
 
             return newWall;
         }
+
         /// <summary>
         /// Removes a wall from the managed building list
         /// </summary>
@@ -101,6 +103,7 @@ namespace DesignPlatform.Core {
         public void RemoveWall(Wall wall) {
             if (walls.Contains(wall)) walls.Remove(wall);
         }
+
         /// <summary>
         /// Removes ALL walls
         /// </summary>
