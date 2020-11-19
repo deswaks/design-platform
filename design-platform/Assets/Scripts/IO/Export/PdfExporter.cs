@@ -40,6 +40,7 @@ namespace DesignPlatform.PdfExport {
 
             // Save the document
             document.Save("Exports/Plan.pdf");
+            UnityEngine.Debug.Log("Successfully exported gbxml to: ~Exports/Plan.pdf");
             Process.Start("Exports\\Plan.pdf"); //Start viewer
         }
 
@@ -79,9 +80,19 @@ namespace DesignPlatform.PdfExport {
 
         private static void WriteRoomName(XGraphics gfx, XFont tagFont, Room room, XStringFormat tagFormat) {
             XPoint tagLocation = WorldToPaper(gfx, room.GetTagLocation());
-            string roomText = room.gameObject.GetComponent<MeshRenderer>().material.ToString().Split(' ')[0].Split('_')[1];
-            string tagText = roomText.Substring(4, roomText.Length - 4);
-            gfx.DrawString(tagText, tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y - tagFont.Size / 2 - 2, tagFormat);
+            //string[] tagLines = room.TypeName.Split(new string[] { @"\n" }, StringSplitOptions.None);
+            //string[] tagLines = room.TypeName.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            List<string> tagLines = new List<string>();
+            using (System.IO.StringReader reader = new System.IO.StringReader(room.TypeName)) {
+                string line;
+                while ((line = reader.ReadLine()) != null) {
+                    tagLines.Add(line);
+                }
+            }
+            for (int i = 0; i < tagLines.Count; i++) {
+                double offset = (tagFont.Size / 2 - 2) + (tagFont.Size - 2) * (tagLines.Count - i - 1);
+                gfx.DrawString(tagLines[i], tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y - offset, tagFormat);
+            }
         }
 
         private static void WriteRoomArea(XGraphics gfx, XFont tagFont, Room room, XStringFormat tagFormat) {

@@ -178,6 +178,7 @@ namespace DesignPlatform.Core {
             if (Openings != null && Openings.Count > 0) {
                 foreach (Opening opening in Openings) {
                     if (opening.Faces.Count == 1) opening.Delete();
+                    if (opening.Faces.Count > 1) opening.Faces.Remove(this);
                 }
             }
             if (Interfaces != null && Interfaces.Count > 0) {

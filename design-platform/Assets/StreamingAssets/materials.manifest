@@ -3,7 +3,11 @@ CRC: 61914420
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1d1cfb00c586796e4c5e002031bfcf53
+<<<<<<< HEAD
+    Hash: 6e5f7bc7bf1061b0113f8055f226e29b
+=======
+    Hash: 1940b49ce61872ceee5ff2d38e9eff3b
+>>>>>>> 7e93f5c6fb94632fc327c635a75be55a8162b213
   TypeTreeHash:
     serializedVersion: 2
     Hash: 21c99c86a43ad817b2cb7f65458ae090
