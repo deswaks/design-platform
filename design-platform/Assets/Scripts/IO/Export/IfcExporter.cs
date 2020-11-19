@@ -20,23 +20,23 @@ namespace DesignPlatform.Export {
 
         public static void Export() {
 
-            // Create model
-            model = CreateandInitModel("CLT House");
-            if (model == null) return;
-
-            // Create building
-            building = CreateBuilding(model, "Default Building");
-
-            // Create all elements
-            CreateWalls();
-
             // Save file
             try {
+                // Create model
+                model = CreateandInitModel("CLT House");
+                if (model == null) return;
+
+                // Create building
+                building = CreateBuilding(model, "Default Building");
+
+                // Create all elements
+                CreateWalls();
+
                 model.SaveAs("Exports/Building.ifc", StorageType.Ifc);
-                UnityEngine.Debug.Log("Building.ifc has been successfully written");
+                UnityEngine.Debug.Log("Successfully exported ifc to: ~Exports/Building.ifc");
             }
             catch (Exception e) {
-                UnityEngine.Debug.Log("Failed to save HelloWall.ifc");
+                UnityEngine.Debug.Log("Failed to export ifc");
                 UnityEngine.Debug.Log(e.Message);
             }
 
@@ -45,7 +45,10 @@ namespace DesignPlatform.Export {
         }
 
         private static void CreateWalls() {
-            foreach (Interface interFace in Building.Instance.Interfaces) {
+            if (Building.Instance.InterfacesVertical == null || Building.Instance.InterfacesVertical.Count == 0) {
+                Building.Instance.BuildAllInterfaces();
+            }
+            foreach (Interface interFace in Building.Instance.InterfacesVertical) {
                 IfcWallStandardCase wall = IfcConverter.CreateWall(model, interFace);
                 if (wall != null) IfcConverter.AddPropertiesToWall(model, wall);
 

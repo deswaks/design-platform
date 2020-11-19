@@ -19,7 +19,6 @@ namespace DesignPlatform.Core {
 
     public class Opening : MonoBehaviour {
 
-
         public List<Room> Rooms {
             get {
                 if (Faces != null && Faces.Count() > 0) {
@@ -41,12 +40,12 @@ namespace DesignPlatform.Core {
             private set {; }
         }
 
-        public float WindowWidth = 1.6f;
-        public float WindowHeight = 1.05f;
+        private float WindowWidth = 1.6f;
+        private float WindowHeight = 1.05f;
 
-        public float DoorWidth = 0.9f;
-        public float DoorHeight = 2.1f;
-        public float Doorstep = 0.05f;
+        private float DoorWidth = 0.9f;
+        private float DoorHeight = 2.1f;
+        private float Doorstep = 0.05f;
 
         public float OpeningDepth = 0.051f;
         public float SillHeight;

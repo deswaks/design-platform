@@ -79,6 +79,7 @@ namespace DesignPlatform.Core {
             }
             return walls;
         }
+
         /// <summary>
         /// Build
         /// </summary>
@@ -94,6 +95,7 @@ namespace DesignPlatform.Core {
 
             return newWall;
         }
+
         /// <summary>
         /// Removes a wall from the managed building list
         /// </summary>
@@ -101,6 +103,7 @@ namespace DesignPlatform.Core {
         public void RemoveWall(Wall wall) {
             if (walls.Contains(wall)) walls.Remove(wall);
         }
+
         /// <summary>
         /// Removes ALL walls
         /// </summary>
@@ -273,6 +276,19 @@ namespace DesignPlatform.Core {
             Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
             if (preview) newOpening.InitializeOpening(shape: shape, state: OpeningState.PREVIEW);
             else newOpening.InitializeOpening(shape: shape, state: OpeningState.PLACED);
+
+            return newOpening;
+        }        
+        
+        public Opening BuildOpening(OpeningShape shape, Vector3 position, Quaternion rotation) {
+            // Create game object
+            GameObject newOpeningGameObject = new GameObject("Opening");
+            newOpeningGameObject.transform.position = position;
+            newOpeningGameObject.transform.rotation = rotation;
+
+            // Create opening component
+            Opening newOpening = (Opening)newOpeningGameObject.AddComponent(typeof(Opening));
+            newOpening.InitializeOpening(shape: shape, state: OpeningState.PLACED);
 
             return newOpening;
         }

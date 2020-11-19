@@ -123,8 +123,8 @@ namespace DesignPlatform.Core {
                 }
                 // Corner joint ///////////////////////////////// AS OF NOW, PRIMARY ROLE IS ASSIGNED TO LONGEST ELEMENT
                 else if (endJointWallElements.Count == 2) {
-                    WallElement primaryElement = midJointWallElements.OrderBy(e => e.Length()).Last();
-                    WallElement secondaryElement = midJointWallElements.OrderBy(e => e.Length()).First();
+                    WallElement primaryElement = endJointWallElements.OrderBy(e => e.Length()).Last();
+                    WallElement secondaryElement = endJointWallElements.OrderBy(e => e.Length()).First();
 
                     if (point == primaryElement.startPoint.point) primaryElement.SetStartPointJointType(WallJointType.Corner_Primary);
                     if (point == primaryElement.endPoint.point) primaryElement.SetEndPointJointType(WallJointType.Corner_Primary);                    
@@ -229,7 +229,7 @@ namespace DesignPlatform.Core {
         private List<WallElement> JoinInterfacesToLongestWallElements() {
             // Culls interfaces with same start- and endpoint
             List<Interface> culledInterfaces = Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
-
+            
             // Identifier ID (Integer) for each wall referring to its wall element
             List<int> wallIDs = Enumerable.Repeat(-1, culledInterfaces.Count).ToList();
 
