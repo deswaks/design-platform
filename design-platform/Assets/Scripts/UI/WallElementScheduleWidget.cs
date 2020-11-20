@@ -55,21 +55,21 @@ namespace DesignPlatform.Core {
             DeleteContentRows();
             int elementIndex = 0;
 
-            List<WallElement> wallElements = Building.Instance.IdentifyWallElementsAndJointTypes();
+            List<CLTElement> wallElements = CLTElementGenerator.IdentifyWallElementsAndJointTypes();
 
-            foreach (WallElement e in wallElements) {
+            foreach (CLTElement e in wallElements) {
                 GameObject currentRow = GameObject.Instantiate(contentTemplate, contentTemplate.transform.parent);
                 currentRow.name = "Row" + elementIndex.ToString();
                 contentRows.Add(currentRow);
 
                 List<string> rowData = new List<string>
                 {
-                    "Wall " + elementIndex.ToString(),
-                    "DVQ",                                      //Domestic visual quality (DVQ), Industrial visual quality (IVQ), Non visual quality (NVQ)
-                    e.Length().ToString()+"m",
-                    e.Height.ToString()+"m",
-                    (e.Width*1000).ToString()+"mm",
-                    e.Area.ToString()+"m²"
+                "Wall " + elementIndex.ToString(),
+                e.Length.ToString()+"m",
+                e.Quality,    
+                e.Height.ToString()+"m",
+                (e.Thickness*1000).ToString()+"mm",
+                e.Area.ToString()+"m²"
                 };
 
                 for (int i = 0; i < columnCount; i++) {

@@ -27,8 +27,8 @@ namespace DesignPlatform.Core {
         SINGLEROOM = 11,
         LIVINGROOM = 12,
         KITCHEN = 13,
-        BATHROOM = 14
-        //HALLWAY = 15
+        BATHROOM = 14,
+        CORRIDOR = 15
     }
 
     public enum RoomShape {
@@ -73,7 +73,7 @@ namespace DesignPlatform.Core {
             { RoomType.LIVINGROOM,  "plan_room_livingroom"},
             { RoomType.KITCHEN,  "plan_room_kitchen"},
             { RoomType.BATHROOM,  "plan_room_bathroom"},
-            //{ RoomType.BATHROOM,  "plan_room_hallway"},
+            { RoomType.CORRIDOR,  "plan_room_corridor"}
         };
 
         private readonly Dictionary<RoomType, string> RoomTypeName = new Dictionary<RoomType, string> {
@@ -85,7 +85,7 @@ namespace DesignPlatform.Core {
             { RoomType.LIVINGROOM,  "Living\nRoom"},
             { RoomType.KITCHEN,  "Kitchen"},
             { RoomType.BATHROOM,  "Bathroom"},
-            //{ RoomType.BATHROOM,  "Hallway"},
+            { RoomType.CORRIDOR,  "Corridor"}
         };
         public string TypeName {
             get { return RoomTypeName[Type]; }
