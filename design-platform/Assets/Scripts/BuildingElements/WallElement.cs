@@ -8,16 +8,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
 
-    public enum WallJointType {
-        None,
-        Corner_Primary,     // Element is extended to side of other element
-        Corner_Secondary,   // Element is shortened
-        T_Primary,          // Element going through (element has midpoint in T-joint)
-        T_Secondary,        // Element ends onto primary element (endpoint in T-joint)
-        X_Primary,          // Element going through (element has midpoint in X-joint)
-        X_Secondary,        // Element ends onto primary element (endpoint in X-joint)
-        Parallel
-    }
+
     public class CLTElement {
         public (Vector3 point, WallJointType jointType) startPoint { get; private set; } = (new Vector3(), WallJointType.None);
         public (Vector3 point, WallJointType jointType) endPoint { get; private set; } = (new Vector3(), WallJointType.None);
