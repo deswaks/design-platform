@@ -1,11 +1,9 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
-namespace Neo4jClient.Transactions
-{
-    internal interface ITransactionExecutionEnvironmentBolt
-    {
+namespace Neo4jClient.Transactions {
+    internal interface ITransactionExecutionEnvironmentBolt {
         Guid TransactionId { get; }
         IEnumerable<JsonConverter> JsonConverters { get; set; }
         string Username { get; set; }
@@ -14,8 +12,7 @@ namespace Neo4jClient.Transactions
         Neo4j.Driver.V1.ITransaction DriverTransaction { get; set; }
     }
 
-    internal interface ITransactionExecutionEnvironment
-    {
+    internal interface ITransactionExecutionEnvironment {
         Uri TransactionBaseEndpoint { get; }
         int TransactionId { get; }
         bool UseJsonStreaming { get; set; }

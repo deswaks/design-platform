@@ -1,11 +1,9 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CreateAssetMenu(fileName = "New UI Manager", menuName = "Modern UI Pack/New UI Manager")]
-    public class UIManager : ScriptableObject
-    {
+    public class UIManager : ScriptableObject {
         [HideInInspector] public bool enableDynamicUpdate = true;
         [HideInInspector] public bool enableExtendedColorPicker = true;
         [HideInInspector] public bool editorHints = true;
@@ -117,45 +115,38 @@ namespace Michsky.UI.ModernUIPack
         public Color tooltipTextColor = new Color(255, 255, 255, 255);
         public Color tooltipBackgroundColor = new Color(255, 255, 255, 255);
 
-        public enum ButtonThemeType
-        {
+        public enum ButtonThemeType {
             BASIC,
             CUSTOM
         }
 
-        public enum DropdownThemeType
-        {
+        public enum DropdownThemeType {
             BASIC,
             CUSTOM
         }
 
-        public enum DropdownAnimationType
-        {
+        public enum DropdownAnimationType {
             FADING,
             SLIDING,
             STYLISH
         }
 
-        public enum ModalWindowThemeType
-        {
+        public enum ModalWindowThemeType {
             BASIC,
             CUSTOM
         }
 
-        public enum NotificationThemeType
-        {
+        public enum NotificationThemeType {
             BASIC,
             CUSTOM
         }
 
-        public enum SliderThemeType
-        {
+        public enum SliderThemeType {
             BASIC,
             CUSTOM
         }
 
-        public enum ToggleThemeType
-        {
+        public enum ToggleThemeType {
             BASIC,
             CUSTOM
         }

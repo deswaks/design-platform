@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace DesignPlatform.Core {
+﻿namespace DesignPlatform.Core {
     public abstract class Mode {
         public abstract void Tick();
 

@@ -1,17 +1,13 @@
+using Neo4jClient.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using Neo4jClient.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
-namespace Neo4jClient.Cypher
-{
-    internal class CypherWhereExpressionVisitor : ExpressionVisitor
-    {
+namespace Neo4jClient.Cypher {
+    internal class CypherWhereExpressionVisitor : ExpressionVisitor {
         private const string NotEqual = " <> ";
         private const string Equal = " = ";
         private const string GreaterThan = " > ";
@@ -29,8 +25,7 @@ namespace Neo4jClient.Cypher
 
         public StringBuilder TextOutput { get; private set; }
 
-        public CypherWhereExpressionVisitor(Func<object, string> createParameterCallback, CypherCapabilities capabilities, bool camelCaseProperties)
-        {
+        public CypherWhereExpressionVisitor(Func<object, string> createParameterCallback, CypherCapabilities capabilities, bool camelCaseProperties) {
             this.createParameterCallback = createParameterCallback;
             this.capabilities = capabilities;
             this.camelCaseProperties = camelCaseProperties;
@@ -46,19 +41,16 @@ namespace Neo4jClient.Cypher
             };
         }
 
-        protected override Expression VisitMethodCall(MethodCallExpression node)
-        {
+        protected override Expression VisitMethodCall(MethodCallExpression node) {
             Func<MethodCallExpression, Expression> visitMethod;
-            if (supportedMethodCalls.TryGetValue(node.Method.Name, out visitMethod))
-            {
+            if (supportedMethodCalls.TryGetValue(node.Method.Name, out visitMethod)) {
                 return visitMethod(node);
             }
 
             return base.VisitMethodCall(node);
         }
 
-        private Expression VisitInMethod(MethodCallExpression node)
-        {
+        private Expression VisitInMethod(MethodCallExpression node) {
             TextOutput.Append("(");
             Visit(node.Arguments[0]);
             TextOutput.Append(" IN ");
@@ -68,8 +60,7 @@ namespace Neo4jClient.Cypher
             return node;
         }
 
-        private Expression VisitNotInMethod(MethodCallExpression node)
-        {
+        private Expression VisitNotInMethod(MethodCallExpression node) {
             TextOutput.Append("NOT (");
             Visit(node.Arguments[0]);
             TextOutput.Append(" IN ");
@@ -79,18 +70,15 @@ namespace Neo4jClient.Cypher
             return node;
         }
 
-        private Expression VisitStartsWithMethod(MethodCallExpression node)
-        {
-            if (capabilities.SupportsStartsWith)
-            {
+        private Expression VisitStartsWithMethod(MethodCallExpression node) {
+            if (capabilities.SupportsStartsWith) {
                 TextOutput.Append("(");
                 Visit(node.Object);
                 TextOutput.Append(" STARTS WITH ");
                 Visit(node.Arguments[0]);
                 TextOutput.Append(")");
             }
-            else
-            {
+            else {
                 throw new NotSupportedException("Neo4j doesn't support STARTS WITH in versions lower than 2.3.0. Instead you have to use a Lucene query like: WHERE n.Property =~ 'Tob.*'.");
             }
 
@@ -98,18 +86,15 @@ namespace Neo4jClient.Cypher
             return node;
         }
 
-        private Expression VisitContainsMethod(MethodCallExpression node)
-        {
-            if (capabilities.SupportsStartsWith)
-            {
+        private Expression VisitContainsMethod(MethodCallExpression node) {
+            if (capabilities.SupportsStartsWith) {
                 TextOutput.Append("(");
                 Visit(node.Object);
                 TextOutput.Append(" CONTAINS ");
                 Visit(node.Arguments[0]);
                 TextOutput.Append(")");
             }
-            else
-            {
+            else {
                 throw new NotSupportedException("Neo4j doesn't support CONTAINS in versions lower than 2.3.0. Instead you have to use a Lucene query like: WHERE n.Property =~ 'Tob.*'.");
             }
 
@@ -117,18 +102,15 @@ namespace Neo4jClient.Cypher
             return node;
         }
 
-        private Expression VisitEndsWithMethod(MethodCallExpression node)
-        {
-            if (capabilities.SupportsStartsWith)
-            {
+        private Expression VisitEndsWithMethod(MethodCallExpression node) {
+            if (capabilities.SupportsStartsWith) {
                 TextOutput.Append("(");
                 Visit(node.Object);
                 TextOutput.Append(" ENDS WITH ");
                 Visit(node.Arguments[0]);
                 TextOutput.Append(")");
             }
-            else
-            {
+            else {
                 throw new NotSupportedException("Neo4j doesn't support ENDS WITH in versions lower than 2.3.0. Instead you have to use a Lucene query like: WHERE n.Property =~ 'Tob.*'.");
             }
 
@@ -136,13 +118,11 @@ namespace Neo4jClient.Cypher
             return node;
         }
 
-        protected override Expression VisitBinary(BinaryExpression node)
-        {
+        protected override Expression VisitBinary(BinaryExpression node) {
             TextOutput.Append("(");
             Visit(node.Left);
 
-            switch (node.NodeType)
-            {
+            switch (node.NodeType) {
                 case ExpressionType.And:
                 case ExpressionType.AndAlso:
                     TextOutput.Append(" AND ");
@@ -182,51 +162,41 @@ namespace Neo4jClient.Cypher
             return node;
         }
 
-        protected override Expression VisitConstant(ConstantExpression node)
-        {
+        protected override Expression VisitConstant(ConstantExpression node) {
             var text = TextOutput.ToString();
-            if (node.Value == null && text.EndsWith(NotEqual))
-            {
+            if (node.Value == null && text.EndsWith(NotEqual)) {
                 TextOutput.Remove(TextOutput.ToString().LastIndexOf(NotEqual, StringComparison.Ordinal), NotEqual.Length);
-                if (capabilities.SupportsNullComparisonsWithIsOperator)
-                {
+                if (capabilities.SupportsNullComparisonsWithIsOperator) {
                     TextOutput.Append(" is not null");
                 }
-                else if (capabilities.SupportsHasFunction)
-                {
+                else if (capabilities.SupportsHasFunction) {
                     TextOutput.Remove(TextOutput.ToString().LastIndexOf(lastWrittenMemberName, StringComparison.Ordinal), lastWrittenMemberName.Length);
                     TextOutput.Append(string.Format("has({0})", lastWrittenMemberName));
                 }
-                else
-                {
+                else {
                     TextOutput.Remove(TextOutput.ToString().LastIndexOf(lastWrittenMemberName, StringComparison.Ordinal), lastWrittenMemberName.Length);
                     TextOutput.Append(string.Format("exists({0})", lastWrittenMemberName));
                 }
                 return node;
             }
 
-            if (node.Value == null && text.EndsWith(Equal))
-            {
+            if (node.Value == null && text.EndsWith(Equal)) {
                 TextOutput.Remove(TextOutput.ToString().LastIndexOf(Equal, StringComparison.Ordinal), Equal.Length);
-                if (capabilities.SupportsNullComparisonsWithIsOperator)
-                {
+                if (capabilities.SupportsNullComparisonsWithIsOperator) {
                     TextOutput.Append(" is null");
                 }
-                else if (capabilities.SupportsHasFunction)
-                {
+                else if (capabilities.SupportsHasFunction) {
                     TextOutput.Remove(TextOutput.ToString().LastIndexOf(lastWrittenMemberName, StringComparison.Ordinal), lastWrittenMemberName.Length);
                     TextOutput.Append(string.Format("not(has({0}))", lastWrittenMemberName));
                 }
-                else
-                {
+                else {
                     TextOutput.Remove(TextOutput.ToString().LastIndexOf(lastWrittenMemberName, StringComparison.Ordinal), lastWrittenMemberName.Length);
                     TextOutput.Append(string.Format("not(exists({0}))", lastWrittenMemberName));
                 }
                 return node;
             }
 
-            if (capabilities.SupportsPropertySuffixesForControllingNullComparisons && node.Value != null)
-            {
+            if (capabilities.SupportsPropertySuffixesForControllingNullComparisons && node.Value != null) {
                 SwapNullQualifierFromDefaultTrueToDefaultFalseIfTextEndsWithAny(new[]
                     {
                         Equal,
@@ -243,8 +213,7 @@ namespace Neo4jClient.Cypher
             return node;
         }
 
-        protected override Expression VisitMember(MemberExpression node)
-        {
+        protected override Expression VisitMember(MemberExpression node) {
             if (node.NodeType != ExpressionType.MemberAccess)
                 throw new InvalidOperationException(string.Format(
                     "Node was a MemberExpression but NodeType was {0} instead of MemberAccess (expected). Full node was: {1}",
@@ -252,8 +221,7 @@ namespace Neo4jClient.Cypher
                     node));
 
             var isStaticMember = node.Expression == null;
-            if (isStaticMember)
-            {
+            if (isStaticMember) {
                 VisitStaticMember(node);
                 return node;
             }
@@ -264,8 +232,7 @@ namespace Neo4jClient.Cypher
                 ((UnaryExpression)node.Expression).Operand.NodeType == ExpressionType.Parameter;
 
             if (isParameterExpression ||
-                isParameterExpressionWrappedInConvert)
-            {
+                isParameterExpressionWrappedInConvert) {
                 VisitParameterMember(node);
                 return node;
             }
@@ -276,8 +243,7 @@ namespace Neo4jClient.Cypher
                 ((MemberExpression)node.Expression).Expression.NodeType == ExpressionType.Constant;
 
             if (isConstantExpression ||
-                isConstantExpressionWrappedInMemberAccess)
-            {
+                isConstantExpressionWrappedInMemberAccess) {
                 VisitConstantMember(node);
                 return node;
             }
@@ -285,8 +251,7 @@ namespace Neo4jClient.Cypher
             throw new NotSupportedException(string.Format("Unhandled node type {0} in MemberExpression: {1}", node.NodeType, node));
         }
 
-        void VisitStaticMember(MemberExpression node)
-        {
+        void VisitStaticMember(MemberExpression node) {
             object value;
 
             FieldInfo fInfo = node.Member as FieldInfo;
@@ -296,8 +261,7 @@ namespace Neo4jClient.Cypher
                 value = fInfo.GetValue(null);
             else if (pInfo != null)
                 value = pInfo.GetValue(null, null);
-            else
-            {
+            else {
                 throw new NotSupportedException(string.Format(
                         "Unhandled member type in static member expression: {0}",
                         node));
@@ -307,8 +271,7 @@ namespace Neo4jClient.Cypher
             TextOutput.Append(valueWrappedInParameter);
         }
 
-        void VisitParameterMember(MemberExpression node)
-        {
+        void VisitParameterMember(MemberExpression node) {
             var identityExpression = node.Expression as ParameterExpression;
             if (identityExpression == null &&
                 node.Expression.NodeType == ExpressionType.Convert)
@@ -322,8 +285,7 @@ namespace Neo4jClient.Cypher
             var propertyParent = node.Member.DeclaringType;
             var propertyType = propertyParent.GetProperty(node.Member.Name).PropertyType;
 
-            if (capabilities.SupportsPropertySuffixesForControllingNullComparisons)
-            {
+            if (capabilities.SupportsPropertySuffixesForControllingNullComparisons) {
                 var isNullable = propertyType.GetTypeInfo().IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
                 if (isNullable || propertyType == typeof(string)) nullIdentifier = "?";
             }
@@ -334,28 +296,23 @@ namespace Neo4jClient.Cypher
         }
 
 
-        void VisitConstantMember(MemberExpression node)
-        {
+        void VisitConstantMember(MemberExpression node) {
             var value = GetConstantExpressionValue(node);
 
             // if the value is null, sending a parameter would return something we don't want.
             // A PropertyBag within the Neo4j server cannot have property with null value, that is, having a null
             // property is the same as not having the property.
             var text = TextOutput.ToString();
-            if (value == null && text.EndsWith(NotEqual))
-            {
+            if (value == null && text.EndsWith(NotEqual)) {
                 TextOutput.Remove(TextOutput.ToString().LastIndexOf(NotEqual, StringComparison.Ordinal), NotEqual.Length);
-                if (capabilities.SupportsNullComparisonsWithIsOperator)
-                {
+                if (capabilities.SupportsNullComparisonsWithIsOperator) {
                     TextOutput.Append(" is not null");
                 }
-                else if (capabilities.SupportsHasFunction)
-                {
+                else if (capabilities.SupportsHasFunction) {
                     TextOutput.Remove(TextOutput.ToString().LastIndexOf(lastWrittenMemberName, StringComparison.Ordinal), lastWrittenMemberName.Length);
                     TextOutput.Append(string.Format("has({0})", lastWrittenMemberName));
                 }
-                else
-                {
+                else {
                     TextOutput.Remove(TextOutput.ToString().LastIndexOf(lastWrittenMemberName, StringComparison.Ordinal), lastWrittenMemberName.Length);
                     TextOutput.Append(string.Format("exists({0})", lastWrittenMemberName));
                 }
@@ -364,20 +321,16 @@ namespace Neo4jClient.Cypher
                 return;
             }
 
-            if (value == null && text.EndsWith(Equal))
-            {
+            if (value == null && text.EndsWith(Equal)) {
                 TextOutput.Remove(TextOutput.ToString().LastIndexOf(Equal, StringComparison.Ordinal), Equal.Length);
-                if (capabilities.SupportsNullComparisonsWithIsOperator)
-                {
+                if (capabilities.SupportsNullComparisonsWithIsOperator) {
                     TextOutput.Append(" is null");
                 }
-                else if(capabilities.SupportsHasFunction)
-                {
+                else if (capabilities.SupportsHasFunction) {
                     TextOutput.Remove(TextOutput.ToString().LastIndexOf(lastWrittenMemberName, StringComparison.Ordinal), lastWrittenMemberName.Length);
                     TextOutput.Append(string.Format("not(has({0}))", lastWrittenMemberName));
                 }
-                else
-                {
+                else {
                     TextOutput.Remove(TextOutput.ToString().LastIndexOf(lastWrittenMemberName, StringComparison.Ordinal), lastWrittenMemberName.Length);
                     TextOutput.Append(string.Format("not(exists({0}))", lastWrittenMemberName));
                 }
@@ -386,8 +339,7 @@ namespace Neo4jClient.Cypher
                 return;
             }
 
-            if (capabilities.SupportsPropertySuffixesForControllingNullComparisons && value != null)
-            {
+            if (capabilities.SupportsPropertySuffixesForControllingNullComparisons && value != null) {
                 SwapNullQualifierFromDefaultTrueToDefaultFalseIfTextEndsWithAny(new[]
                     {
                         Equal,
@@ -402,32 +354,28 @@ namespace Neo4jClient.Cypher
             TextOutput.Append(valueWrappedInParameter);
         }
 
-        static object GetConstantExpressionValue(MemberExpression node)
-        {
+        static object GetConstantExpressionValue(MemberExpression node) {
             if (node.Expression == null)
                 return null;
 
             return Expression.Lambda(node).Compile().DynamicInvoke();
         }
 
-        static bool IsConstantExpression(MemberExpression node)
-        {
+        static bool IsConstantExpression(MemberExpression node) {
             if (node == null || node.Expression == null)
                 return false;
 
             return node.Expression.NodeType == ExpressionType.Constant || IsConstantExpression(node.Expression as MemberExpression);
         }
 
-        protected override Expression VisitUnary(UnaryExpression node)
-        {
+        protected override Expression VisitUnary(UnaryExpression node) {
             if (node.NodeType == ExpressionType.Convert)
                 return base.VisitUnary(node);
 
             throw new NotSupportedException("Unary expressions, like Where(f => !f.Foo), are not supported because these become ambiguous between C# and Cypher based on how Neo4j handles null values. Use a comparison instead, like Where(f => f.Foo == false).");
         }
 
-        void SwapNullQualifierFromDefaultTrueToDefaultFalseIfTextEndsWithAny(params string[] operators)
-        {
+        void SwapNullQualifierFromDefaultTrueToDefaultFalseIfTextEndsWithAny(params string[] operators) {
             if (!capabilities.SupportsPropertySuffixesForControllingNullComparisons)
                 throw new InvalidOperationException();
 
@@ -439,8 +387,7 @@ namespace Neo4jClient.Cypher
             TextOutput.Append(@operator);
         }
 
-        void SwapNullQualifierFromDefaultTrueToDefaultFalse(StringBuilder text)
-        {
+        void SwapNullQualifierFromDefaultTrueToDefaultFalse(StringBuilder text) {
             if (!capabilities.SupportsPropertySuffixesForControllingNullComparisons)
                 throw new InvalidOperationException();
 

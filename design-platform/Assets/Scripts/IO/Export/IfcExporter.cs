@@ -1,31 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using DesignPlatform.Core;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using Xbim.Common;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
-using Xbim.IO;
-using Xbim.Ifc4.ActorResource;
-using Xbim.Ifc4.DateTimeResource;
-using Xbim.Ifc4.ExternalReferenceResource;
-using Xbim.Ifc4.PresentationOrganizationResource;
 using Xbim.Ifc4.GeometricConstraintResource;
-using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.MaterialResource;
-using Xbim.Ifc4.MeasureResource;
 using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.ProfileResource;
-using Xbim.Ifc4.PropertyResource;
-using Xbim.Ifc4.QuantityResource;
-using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
-using DesignPlatform.Core;
+using Xbim.IO;
 
 namespace DesignPlatform.Export {
     public static class IfcExporter {
@@ -34,23 +20,23 @@ namespace DesignPlatform.Export {
 
         public static void Export() {
 
-            // Create model
-            model = CreateandInitModel("CLT House");
-            if (model == null) return;
-
-            // Create building
-            building = CreateBuilding(model, "Default Building");
-
-            // Create all elements
-            CreateWalls();
-
             // Save file
             try {
+                // Create model
+                model = CreateandInitModel("CLT House");
+                if (model == null) return;
+
+                // Create building
+                building = CreateBuilding(model, "Default Building");
+
+                // Create all elements
+                CreateWalls();
+
                 model.SaveAs("Exports/Building.ifc", StorageType.Ifc);
-                UnityEngine.Debug.Log("Building.ifc has been successfully written");
+                UnityEngine.Debug.Log("Successfully exported ifc to: ~Exports/Building.ifc");
             }
             catch (Exception e) {
-                UnityEngine.Debug.Log("Failed to save HelloWall.ifc");
+                UnityEngine.Debug.Log("Failed to export ifc");
                 UnityEngine.Debug.Log(e.Message);
             }
 
@@ -59,11 +45,10 @@ namespace DesignPlatform.Export {
         }
 
         private static void CreateWalls() {
-
-            // Create the interfaces that are the basis for walls
-            Building.Instance.CreateVerticalInterfaces();
-
-            foreach (Interface interFace in Building.Instance.Interfaces) {
+            if (Building.Instance.InterfacesVertical == null || Building.Instance.InterfacesVertical.Count == 0) {
+                Building.Instance.BuildAllInterfaces();
+            }
+            foreach (Interface interFace in Building.Instance.InterfacesVertical) {
                 IfcWallStandardCase wall = IfcConverter.CreateWall(model, interFace);
                 if (wall != null) IfcConverter.AddPropertiesToWall(model, wall);
 

@@ -9,13 +9,11 @@
 namespace Neo4jClient
 // ReSharper restore CheckNamespace
 {
-    public partial class Relationship
-    {
+    public partial class Relationship {
         /// <summary>
         /// Used for Cypher <code>START</code> clauses, like <code>Start(new { foo = Relationship.ByIndexLookup(…) })</code>
         /// </summary>
-        public static StartBit ByIndexLookup(string indexName, string propertyName, object value)
-        {
+        public static StartBit ByIndexLookup(string indexName, string propertyName, object value) {
             return new StartBit(createParameterCallback =>
                 string.Format(
                     "relationship:`{0}`({1} = {2})",
@@ -27,8 +25,7 @@ namespace Neo4jClient
         /// <summary>
         /// Used for Cypher <code>START</code> clauses, like <code>Start(new { foo = Relationship.ByIndexQuery(…) })</code>
         /// </summary>
-        public static StartBit ByIndexQuery(string indexName, string query)
-        {
+        public static StartBit ByIndexQuery(string indexName, string query) {
             return new StartBit(createParameterCallback =>
                 string.Format(
                     "relationship:`{0}`({1})",

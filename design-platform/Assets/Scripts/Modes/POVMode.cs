@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
+using Michsky.UI.ModernUIPack;
 
 namespace DesignPlatform.Core {
     public class POVMode : Mode {
@@ -55,22 +55,21 @@ namespace DesignPlatform.Core {
             PlanCamera = GameObject.Find("Plan Camera").GetComponent<Camera>();
             POVCamera = player.GetComponentInChildren<Camera>(true);
 
-            //ShowWallLines = GameObject.Find("Toggle - Standard(Regular)").GetComponent<UnityEngine.UI.Toggle>().isOn;
-            //ShowOpeningLines = GameObject.Find("Toggle - Standard(Regular)").GetComponent<UnityEngine.UI.Toggle>().isOn; ;
-            //GameObject.Find("Toggle - Standard(Regular)").GetComponent<UnityEngine.UI.Toggle>().isOn = false;
-
-            //foreach (Room room in Building.Instance.rooms) {
-            //    room.UpdateRender2D();
-            //}
-            //foreach (Opening opening in Building.Instance.openings) {
-            //    opening.UpdateRender2D();
-            //}
+            GlobalSettings.ShowWallLines = false;
+            GlobalSettings.ShowOpeningLines = false;
+            
+            foreach (Room room in Building.Instance.Rooms) {
+                room.UpdateRender2D();
+            }
+            foreach (Opening opening in Building.Instance.Openings) {
+                opening.UpdateRender2D();
+            }
 
             POVCamera.gameObject.SetActive(true);
             PlanCamera.gameObject.SetActive(false);
 
             // Delete preexisting interfaces and walls build new ones
-            Building.Instance.UpdatePOVElements();
+            Building.Instance.RebuildPOVElements();
 
             // Generates notification in corner of screen
             GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "UIPanel3D").First().gameObject;
@@ -87,14 +86,15 @@ namespace DesignPlatform.Core {
             POVCamera.gameObject.SetActive(false);
             PlanCamera.gameObject.SetActive(true);
 
-            //GlobalSettings.ShowWallLines = ShowWallLines;
-            //GlobalSettings.ShowOpeningLines = ShowOpeningLines;
-            //foreach (Room room in Building.Instance.rooms) {
-            //    room.UpdateRender2D();
-            //}
-            //foreach (Opening opening in Building.Instance.openings) {
-            //    opening.UpdateRender2D();
-            //}
+            GlobalSettings.ShowWallLines = true;
+            GlobalSettings.ShowOpeningLines = true;
+
+            foreach (Room room in Building.Instance.Rooms) {
+                room.UpdateRender2D();
+            }
+            foreach (Opening opening in Building.Instance.Openings) {
+                opening.UpdateRender2D();
+            }
 
             NotificationHandler.DestroyNotification(notificationObject);
             notificationObject = null;

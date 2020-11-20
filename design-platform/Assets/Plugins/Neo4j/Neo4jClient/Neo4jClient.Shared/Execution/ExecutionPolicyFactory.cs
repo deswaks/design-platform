@@ -1,29 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Neo4jClient.Execution
-{
-    class ExecutionPolicyFactory : IExecutionPolicyFactory
-    {
+namespace Neo4jClient.Execution {
+    class ExecutionPolicyFactory : IExecutionPolicyFactory {
         private IGraphClient _client;
 
-        public ExecutionPolicyFactory(IGraphClient client)
-        {
+        public ExecutionPolicyFactory(IGraphClient client) {
             _client = client;
         }
 
-        public IExecutionPolicy GetPolicy(PolicyType type)
-        {
-            if (!_client.IsConnected)
-            {
+        public IExecutionPolicy GetPolicy(PolicyType type) {
+            if (!_client.IsConnected) {
                 throw new InvalidOperationException("Client has not connected to the Neo4j server");
             }
 
             // todo: this should be a prototype-based object creation
-            switch (type)
-            {
+            switch (type) {
                 case PolicyType.Cypher:
                     return new CypherExecutionPolicy(_client);
                 case PolicyType.Gremlin:

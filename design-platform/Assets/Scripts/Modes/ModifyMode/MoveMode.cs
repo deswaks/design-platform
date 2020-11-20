@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DesignPlatform.Utils;
 using UnityEngine;
-using DesignPlatform.Utils;
 
 namespace DesignPlatform.Core {
     public class MoveMode : Mode {
@@ -17,7 +15,7 @@ namespace DesignPlatform.Core {
         }
 
         MoveMode() {
-            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "move_handle");
+            HandlePrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "MoveHandle");
         }
 
 

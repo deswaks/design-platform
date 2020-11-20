@@ -1,16 +1,13 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Neo4jClient.Cypher
-{
-    public class CypherWhereExpressionBuilder
-    {
+namespace Neo4jClient.Cypher {
+    public class CypherWhereExpressionBuilder {
         public static string BuildText(
             LambdaExpression expression,
             Func<object, string> createParameterCallback,
-            CypherCapabilities capabilities = null, 
-            bool camelCaseProperties = false)
-        {
+            CypherCapabilities capabilities = null,
+            bool camelCaseProperties = false) {
             capabilities = capabilities ?? CypherCapabilities.Default;
 
             if (expression.NodeType == ExpressionType.Lambda &&

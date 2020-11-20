@@ -1,22 +1,18 @@
-﻿using System;
-using Neo4jClient.Execution;
+﻿using Neo4jClient.Execution;
+using System;
 
-namespace Neo4jClient
-{
-    public class GraphClientFactory : IGraphClientFactory
-    {
+namespace Neo4jClient {
+    public class GraphClientFactory : IGraphClientFactory {
         private readonly NeoServerConfiguration _configuration;
 
-        public GraphClientFactory(NeoServerConfiguration configuration)
-        {
+        public GraphClientFactory(NeoServerConfiguration configuration) {
             if (configuration == null)
                 throw new ArgumentNullException("configuration", "Neo server configuration is null");
 
             _configuration = configuration;
         }
 
-        public IGraphClient Create()
-        {
+        public IGraphClient Create() {
             var client = new GraphClient(
                 _configuration.RootUri,
                 _configuration.Username,
@@ -27,8 +23,7 @@ namespace Neo4jClient
             return client;
         }
 
-        public IGraphClient Create(IHttpClient httpClient)
-        {
+        public IGraphClient Create(IHttpClient httpClient) {
             var client = new GraphClient(_configuration.RootUri, httpClient);
 
             client.Connect(_configuration);

@@ -1,7 +1,5 @@
-namespace Neo4jClient
-{
-    public enum IndexProvider
-    {
+namespace Neo4jClient {
+    public enum IndexProvider {
         lucene
     }
 }

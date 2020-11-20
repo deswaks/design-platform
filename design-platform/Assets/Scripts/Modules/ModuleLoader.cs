@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using System.Linq;
 
 namespace DesignPlatform.Core {
     public static class ModuleLoader {
@@ -17,7 +14,13 @@ namespace DesignPlatform.Core {
 
             // Go through all modules and load them
             foreach (string modulePath in FindModules(moduleFolderPath)) {
-                InitModule(modulePath);
+                try {
+                    InitModule(modulePath);
+                }
+                catch (Exception) {
+                    Debug.Log("Failed to load module at: " + modulePath);
+                }
+                
             }
         }
 
@@ -28,7 +31,7 @@ namespace DesignPlatform.Core {
 
             Assembly module = LoadModule(fullModulePath);
             MethodInfo Initializer = GetModuleInitalizer(module);
-            Initializer.Invoke(new object(), new object[] { (moduleFolderPath.Replace(@"\", "/")+"/")});
+            Initializer.Invoke(new object(), new object[] { (moduleFolderPath.Replace(@"\", "/") + "/") });
         }
 
         public static Assembly LoadModule(string modulePath) {

@@ -1,6 +1,5 @@
 ﻿using DesignPlatform.Core;
 using gbXMLSerializer;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using gbs = gbXMLSerializer;

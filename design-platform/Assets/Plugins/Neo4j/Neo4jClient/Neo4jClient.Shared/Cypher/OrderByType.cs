@@ -1,4 +1,3 @@
-namespace Neo4jClient.Cypher
-{
-    public enum OrderByType {Ascending, Descending}
+namespace Neo4jClient.Cypher {
+    public enum OrderByType { Ascending, Descending }
 }

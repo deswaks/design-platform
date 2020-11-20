@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace Neo4jClient.Transactions
-{
+namespace Neo4jClient.Transactions {
     /// <summary>
     /// Describes the options for a transaction scope when calling ITransactionalGraphClient.BeginTransaction
     /// </summary>
-    public enum TransactionScopeOption
-    {
+    public enum TransactionScopeOption {
         Join,
         RequiresNew,
         Suppress
@@ -17,8 +15,7 @@ namespace Neo4jClient.Transactions
     /// Expands the capabilities of a <c>IGraphClient</c> interface to support a transactional model 
     /// for Neo4j HTTP Cypher endpoint.
     /// </summary>
-    public interface ITransactionalGraphClient : IGraphClient
-    {
+    public interface ITransactionalGraphClient : IGraphClient {
         /// <summary>
         /// Scopes the next cypher queries within a transaction, or joins an existing one.
         /// </summary>

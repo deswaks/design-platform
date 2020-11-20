@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 
-namespace Neo4jClient.ApiModels
-{
-    class RootApiResponse
-    {
+namespace Neo4jClient.ApiModels {
+    class RootApiResponse {
         [JsonProperty("transaction")]
         public string Transaction { get; set; }
 
@@ -20,7 +18,7 @@ namespace Neo4jClient.ApiModels
 
         [JsonProperty("relationship")]
         public string Relationship { get; set; }
-        
+
         [JsonProperty("node_index")]
         public string NodeIndex { get; set; }
 
@@ -47,8 +45,7 @@ namespace Neo4jClient.ApiModels
         [JsonIgnore]
         public Version Version => GetVersion(Neo4jVersion);
 
-        internal static Version GetVersion(string version)
-        {
+        internal static Version GetVersion(string version) {
             if (string.IsNullOrEmpty(version))
                 return new Version(0, 0);
 

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using Neo4jClient;
+﻿using DesignPlatform.Core;
 using Neo4jClient.Extension.Cypher;
-using Neo4jClient.Extensions;
 using Neo4jClient.Extension.Cypher.Attributes;
-using DesignPlatform.Core;
-
+using System;
+using System.Collections.Generic;
 using UnitsNet;
-using Neo4j.Driver.V1;
-using Neo4j.Driver;
 using UnityEngine;
 //using System.Numerics;
 
@@ -37,7 +31,15 @@ namespace DesignPlatform.Database {
             return GraphUtils.StringListToVector3List(vertices);
         }
     }
-    
+
+    public class OpeningNode {
+        public OpeningShape openingShape { get; set; } // Door or window
+        public string position { get; set; }
+        public string rotation { get; set; }
+        public float width { get; set; }
+        public float height { get; set; }
+    }
+
     public class WallElementNode {
         public string[] vertices { get; set; }
         public string startJointType { get; set; }

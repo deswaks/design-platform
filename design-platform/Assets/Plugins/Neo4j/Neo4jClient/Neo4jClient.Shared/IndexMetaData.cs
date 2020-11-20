@@ -1,9 +1,7 @@
 using Newtonsoft.Json;
 
-namespace Neo4jClient
-{
-    public class IndexMetaData
-    {
+namespace Neo4jClient {
+    public class IndexMetaData {
         [JsonProperty("to_lower_case")]
         public bool ToLowerCase { get; set; }
 

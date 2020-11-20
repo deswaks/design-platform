@@ -2,26 +2,21 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Neo4jClient
-{
+namespace Neo4jClient {
     [DebuggerDisplay("Node {Id}")]
-    public class NodeReference<TNode> : NodeReference, ITypedNodeReference
-    {
+    public class NodeReference<TNode> : NodeReference, ITypedNodeReference {
         public NodeReference(long id)
-            : base(id)
-        {
+            : base(id) {
             CheckTNode();
         }
 
         public NodeReference(long id, IGraphClient client)
-            : base(id, client)
-        {
+            : base(id, client) {
             CheckTNode();
         }
 
-        static void CheckTNode()
-        {
-            var type = typeof (TNode);
+        static void CheckTNode() {
+            var type = typeof(TNode);
             if (!type.GetTypeInfo().IsGenericType) return;
             if (type.GetGenericTypeDefinition() != typeof(Node<>)) return;
 
@@ -31,13 +26,11 @@ namespace Neo4jClient
             ));
         }
 
-        Type ITypedNodeReference.NodeType
-        {
-            get { return typeof (TNode); }
+        Type ITypedNodeReference.NodeType {
+            get { return typeof(TNode); }
         }
 
-        public static implicit operator NodeReference<TNode>(long nodeId)
-        {
+        public static implicit operator NodeReference<TNode>(long nodeId) {
             return new NodeReference<TNode>(nodeId);
         }
     }

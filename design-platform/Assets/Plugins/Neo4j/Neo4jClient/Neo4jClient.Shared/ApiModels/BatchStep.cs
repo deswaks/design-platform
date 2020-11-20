@@ -1,18 +1,15 @@
-﻿using System.Diagnostics;
+﻿using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Net.Http;
-using Newtonsoft.Json;
 
-namespace Neo4jClient.ApiModels
-{
+namespace Neo4jClient.ApiModels {
     [DebuggerDisplay("{Id}: {Method} {To}")]
-    class BatchStep
-    {
+    class BatchStep {
         [JsonIgnore]
         public HttpMethod Method { get; set; }
 
         [JsonProperty("method")]
-        public string MethodAsString
-        {
+        public string MethodAsString {
             get { return Method.Method; }
         }
 

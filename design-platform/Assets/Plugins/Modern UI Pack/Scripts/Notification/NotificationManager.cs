@@ -1,13 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class NotificationManager : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class NotificationManager : MonoBehaviour {
         // CONTENT
         public Sprite icon;
         public string title = "Notification Title";
@@ -26,37 +23,30 @@ namespace Michsky.UI.ModernUIPack
         public bool useStacking = false;
         public NotificationStyle notificationStyle;
 
-        public enum NotificationStyle
-        {
+        public enum NotificationStyle {
             FADING,
             POPUP,
             SLIDING
         }
 
-        void Start()
-        {
-            try
-            {
+        void Start() {
+            try {
                 if (notificationAnimator == null)
                     notificationAnimator = gameObject.GetComponent<Animator>();
 
-                if (useCustomContent == false)
-                {
+                if (useCustomContent == false) {
                     iconObj.sprite = icon;
                     titleObj.text = title;
                     descriptionObj.text = description;
                 }
             }
 
-            catch
-            {
+            catch {
                 Debug.LogError("Notification - Cannot initalize the object due to missing components.", this);
             }
 
-            if (useStacking == true)
-            {
-                try
-                {
+            if (useStacking == true) {
+                try {
                     var stacking = (NotificationStacking)GameObject.FindObjectsOfType(typeof(NotificationStacking))[0];
                     stacking.notifications.Add(this);
                     stacking.enableUpdating = true;
@@ -94,8 +84,7 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        IEnumerator StartTimer()
-        {
+        IEnumerator StartTimer() {
             //Dette tidspunkt er lige når den dukker op
             yield return new WaitForSeconds(timer);
             notificationAnimator.Play("Out");
@@ -104,8 +93,7 @@ namespace Michsky.UI.ModernUIPack
             Destroy(gameObject); // <- indsat af Niklas
         }
 
-        public void OpenNotification()
-        {
+        public void OpenNotification() {
             notificationAnimator.Play("In");
 
             if (enableTimer == true)
@@ -116,23 +104,19 @@ namespace Michsky.UI.ModernUIPack
             notificationAnimator.Play("In");
         }
 
-        public void CloseNotification()
-        {
+        public void CloseNotification() {
             notificationAnimator.Play("Out");
 
         }
 
-        public void UpdateUI()
-        {
-            try
-            {
+        public void UpdateUI() {
+            try {
                 iconObj.sprite = icon;
                 titleObj.text = title;
                 descriptionObj.text = description;
             }
 
-            catch
-            {
+            catch {
                 Debug.LogError("Notification - Cannot update the object due to missing components.", this);
             }
         }

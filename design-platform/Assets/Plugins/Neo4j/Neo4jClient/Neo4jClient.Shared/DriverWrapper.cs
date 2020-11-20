@@ -1,10 +1,9 @@
+using Neo4j.Driver.V1;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Neo4j.Driver.V1;
 
-namespace Neo4jClient
-{
+namespace Neo4jClient {
     /*
      *
      private IDriver CreateDriverWithCustomResolver(string virtualUri, IAuthToken token,
@@ -45,25 +44,21 @@ private class ListAddressResolver : IServerAddressResolver
      *
      */
 
-    internal class DriverWrapper : IDriver
-    {
+    internal class DriverWrapper : IDriver {
         private readonly IDriver driver;
-        public string Username { get;  }
+        public string Username { get; }
         public string Password { get; }
         public string Realm { get; }
 
-        public DriverWrapper(IDriver driver)
-        {
+        public DriverWrapper(IDriver driver) {
             this.driver = driver;
         }
 
         public DriverWrapper(string uri, IServerAddressResolver addressResolver, string username, string pass, string realm)
-            :this(new Uri(uri), addressResolver, username, pass, realm)
-        {
+            : this(new Uri(uri), addressResolver, username, pass, realm) {
         }
 
-        public DriverWrapper(Uri uri, IServerAddressResolver addressResolver, string username, string pass, string realm)
-        {
+        public DriverWrapper(Uri uri, IServerAddressResolver addressResolver, string username, string pass, string realm) {
             Uri = uri;
             Username = username;
             Password = pass;
@@ -71,47 +66,39 @@ private class ListAddressResolver : IServerAddressResolver
 
             var authToken = GetAuthToken(username, pass, realm);
             this.driver = addressResolver == null
-                ? Neo4j.Driver.V1.GraphDatabase.Driver(uri, authToken) 
+                ? Neo4j.Driver.V1.GraphDatabase.Driver(uri, authToken)
                 : Neo4j.Driver.V1.GraphDatabase.Driver(uri, authToken, new Config { Resolver = addressResolver });
         }
-        
-        public ISession Session()
-        {
+
+        public ISession Session() {
             return driver.Session();
         }
 
-        public ISession Session(AccessMode defaultMode)
-        {
+        public ISession Session(AccessMode defaultMode) {
             return driver.Session(defaultMode);
         }
 
-        public ISession Session(string bookmark)
-        {
+        public ISession Session(string bookmark) {
             return driver.Session(bookmark);
         }
 
-        public ISession Session(AccessMode defaultMode, string bookmark)
-        {
+        public ISession Session(AccessMode defaultMode, string bookmark) {
             return driver.Session(defaultMode, bookmark);
         }
 
-        public ISession Session(AccessMode defaultMode, IEnumerable<string> bookmarks)
-        {
+        public ISession Session(AccessMode defaultMode, IEnumerable<string> bookmarks) {
             return driver.Session(defaultMode, bookmarks);
         }
 
-        public ISession Session(IEnumerable<string> bookmarks)
-        {
+        public ISession Session(IEnumerable<string> bookmarks) {
             return driver.Session(bookmarks);
         }
 
-        public void Close()
-        {
+        public void Close() {
             driver.Close();
         }
 
-        public Task CloseAsync()
-        {
+        public Task CloseAsync() {
             return driver.CloseAsync();
         }
 
@@ -119,14 +106,12 @@ private class ListAddressResolver : IServerAddressResolver
 
         public IServerAddressResolver AddressResolver { get; }
 
-        private static IAuthToken GetAuthToken(string username, string password, string realm)
-        {
+        private static IAuthToken GetAuthToken(string username, string password, string realm) {
             return string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)
                 ? AuthTokens.None
                 : AuthTokens.Basic(username, password, realm);
         }
-        public void Dispose()
-        {
+        public void Dispose() {
             driver?.Dispose();
         }
     }

@@ -1,25 +1,19 @@
 ﻿using Neo4jClient.Cypher;
 using Newtonsoft.Json.Serialization;
 
-namespace Neo4jClient.Extension.Cypher
-{
-    public interface ICypherExtensionContext
-    {
+namespace Neo4jClient.Extension.Cypher {
+    public interface ICypherExtensionContext {
         IContractResolver JsonContractResolver { get; set; }
     }
 
-    public class CypherExtensionContext : ICypherExtensionContext
-    {
-        public static CypherExtensionContext Create(ICypherFluentQuery query)
-        {
-            return new CypherExtensionContext
-            {
+    public class CypherExtensionContext : ICypherExtensionContext {
+        public static CypherExtensionContext Create(ICypherFluentQuery query) {
+            return new CypherExtensionContext {
                 JsonContractResolver = query.Query.JsonContractResolver
             };
         }
 
-        public CypherExtensionContext()
-        {
+        public CypherExtensionContext() {
             JsonContractResolver = new CamelCasePropertyNamesContractResolver();
         }
 

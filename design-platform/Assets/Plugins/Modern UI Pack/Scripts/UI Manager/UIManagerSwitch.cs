@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [ExecuteInEditMode]
-    public class UIManagerSwitch : MonoBehaviour
-    {
+    public class UIManagerSwitch : MonoBehaviour {
         [Header("SETTINGS")]
         public UIManager UIManagerAsset;
 
@@ -17,35 +15,27 @@ namespace Michsky.UI.ModernUIPack
 
         bool dynamicUpdateEnabled;
 
-        void OnEnable()
-        {
-            if (UIManagerAsset == null)
-            {
-                try
-                {
+        void OnEnable() {
+            if (UIManagerAsset == null) {
+                try {
                     UIManagerAsset = Resources.Load<UIManager>("MUIP Manager");
                 }
 
-                catch
-                {
+                catch {
                     Debug.LogWarning("No UI Manager found. Assign it manually, otherwise you'll get errors about it.", this);
                 }
             }
         }
 
-        void Awake()
-        {
-            if (dynamicUpdateEnabled == false)
-            {
+        void Awake() {
+            if (dynamicUpdateEnabled == false) {
                 this.enabled = true;
                 UpdateDropdown();
             }
         }
 
-        void LateUpdate()
-        {
-            if (UIManagerAsset != null)
-            {
+        void LateUpdate() {
+            if (UIManagerAsset != null) {
                 if (UIManagerAsset.enableDynamicUpdate == true)
                     dynamicUpdateEnabled = true;
                 else
@@ -56,10 +46,8 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        void UpdateDropdown()
-        {
-            try
-            {
+        void UpdateDropdown() {
+            try {
                 border.color = new Color(UIManagerAsset.switchBorderColor.r, UIManagerAsset.switchBorderColor.g, UIManagerAsset.switchBorderColor.b, border.color.a);
                 background.color = new Color(UIManagerAsset.switchBackgroundColor.r, UIManagerAsset.switchBackgroundColor.g, UIManagerAsset.switchBackgroundColor.b, background.color.a);
                 handleOn.color = new Color(UIManagerAsset.switchHandleOnColor.r, UIManagerAsset.switchHandleOnColor.g, UIManagerAsset.switchHandleOnColor.b, handleOn.color.a);

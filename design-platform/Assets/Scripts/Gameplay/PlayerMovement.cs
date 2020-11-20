@@ -1,7 +1,4 @@
-﻿using gbXMLSerializer;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DesignPlatform.Core {
     public class PlayerMovement : MonoBehaviour {

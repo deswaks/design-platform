@@ -1,11 +1,8 @@
-namespace Neo4jClient.Cypher
-{
-    public class CypherCapabilities
-    {
-        public CypherCapabilities(){ }
+namespace Neo4jClient.Cypher {
+    public class CypherCapabilities {
+        public CypherCapabilities() { }
 
-        public CypherCapabilities(CypherCapabilities cypherCapabilities)
-        {
+        public CypherCapabilities(CypherCapabilities cypherCapabilities) {
             SupportsStartsWith = cypherCapabilities.SupportsStartsWith;
             SupportsPlanner = cypherCapabilities.SupportsPlanner;
             SupportsNullComparisonsWithIsOperator = cypherCapabilities.SupportsNullComparisonsWithIsOperator;
@@ -13,24 +10,21 @@ namespace Neo4jClient.Cypher
             AutoRollsBackOnError = cypherCapabilities.AutoRollsBackOnError;
         }
 
-        public static readonly CypherCapabilities Cypher19 = new CypherCapabilities
-        {
+        public static readonly CypherCapabilities Cypher19 = new CypherCapabilities {
             SupportsPropertySuffixesForControllingNullComparisons = true,
             SupportsNullComparisonsWithIsOperator = true,
         };
 
-        public static readonly CypherCapabilities Cypher20 = new CypherCapabilities
-        {
+        public static readonly CypherCapabilities Cypher20 = new CypherCapabilities {
             SupportsPropertySuffixesForControllingNullComparisons = false,
             SupportsNullComparisonsWithIsOperator = false,
             SupportsHasFunction = true
         };
 
-        public static readonly CypherCapabilities Cypher22 = new CypherCapabilities(Cypher20){SupportsPlanner = true};
+        public static readonly CypherCapabilities Cypher22 = new CypherCapabilities(Cypher20) { SupportsPlanner = true };
         public static readonly CypherCapabilities Cypher226 = new CypherCapabilities(Cypher22) { AutoRollsBackOnError = true };
-        public static readonly CypherCapabilities Cypher23 = new CypherCapabilities(Cypher226) {SupportsStartsWith = true};
-        public static readonly CypherCapabilities Cypher30 = new CypherCapabilities(Cypher23)
-        {
+        public static readonly CypherCapabilities Cypher23 = new CypherCapabilities(Cypher226) { SupportsStartsWith = true };
+        public static readonly CypherCapabilities Cypher30 = new CypherCapabilities(Cypher23) {
             SupportsStoredProcedures = true,
             SupportsHasFunction = false
         };

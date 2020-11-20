@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace DesignPlatform.Utils {
@@ -50,6 +48,10 @@ namespace DesignPlatform.Utils {
             var vClosestPoint = lineStart + vVector3;
 
             return vClosestPoint;
+        }
+
+        public static Vector3 Rotate90ClockwiseXZ(Vector3 vector) {
+            return new Vector3(-vector.z, 0, vector.x);
         }
     }
 }

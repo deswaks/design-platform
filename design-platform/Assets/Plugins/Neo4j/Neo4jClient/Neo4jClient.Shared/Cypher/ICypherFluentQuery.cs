@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Neo4jClient.Cypher
-{
-    public partial interface ICypherFluentQuery
-    {
+namespace Neo4jClient.Cypher {
+    public partial interface ICypherFluentQuery {
         CypherQuery Query { get; }
         void ExecuteWithoutResults();
         Task ExecuteWithoutResultsAsync();
@@ -16,7 +13,7 @@ namespace Neo4jClient.Cypher
         ICypherFluentQueryAdvanced Advanced { get; }
 
         ICypherFluentQuery WithParam(string key, object value);
-        ICypherFluentQuery WithParams(IDictionary<string,object> parameters);
+        ICypherFluentQuery WithParams(IDictionary<string, object> parameters);
         ICypherFluentQuery WithParams(object parameters);
 
         ICypherFluentQuery ParserVersion(string version);
@@ -131,7 +128,7 @@ namespace Neo4jClient.Cypher
         ICypherFluentQuery<TResult> Return<TResult>(Expression<Func<ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, ICypherResultItem, TResult>> expression);
 
         ICypherFluentQuery<TResult> ReturnDistinct<TResult>(string identity);
-//        ICypherFluentQuery<TResult> ReturnDistinct<TResult>(Expression<Func<TResult>> expression);
+        //        ICypherFluentQuery<TResult> ReturnDistinct<TResult>(Expression<Func<TResult>> expression);
         ICypherFluentQuery<TResult> ReturnDistinct<TResult>(Expression<Func<ICypherResultItem, TResult>> expression);
         ICypherFluentQuery<TResult> ReturnDistinct<TResult>(Expression<Func<ICypherResultItem, ICypherResultItem, TResult>> expression);
         ICypherFluentQuery<TResult> ReturnDistinct<TResult>(Expression<Func<ICypherResultItem, ICypherResultItem, ICypherResultItem, TResult>> expression);

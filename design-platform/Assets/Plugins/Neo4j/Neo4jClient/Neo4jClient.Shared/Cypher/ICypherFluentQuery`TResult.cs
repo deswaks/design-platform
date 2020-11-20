@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Neo4jClient.Cypher
-{
-    public interface ICypherFluentQuery<TResult> : ICypherFluentQuery
-    {
+namespace Neo4jClient.Cypher {
+    public interface ICypherFluentQuery<TResult> : ICypherFluentQuery {
         IEnumerable<TResult> Results { get; }
         Task<IEnumerable<TResult>> ResultsAsync { get; }
 

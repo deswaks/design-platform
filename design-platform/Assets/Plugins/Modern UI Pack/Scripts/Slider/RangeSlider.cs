@@ -1,12 +1,10 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class RangeSlider : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class RangeSlider : MonoBehaviour {
         [Header("SETTINGS")]
-        [Range(0,2)] public int DecimalPlaces = 0;
+        [Range(0, 2)] public int DecimalPlaces = 0;
         public float minValue = 0;
         public float maxValue = 1;
         public bool useWholeNumbers = false;
@@ -21,28 +19,23 @@ namespace Michsky.UI.ModernUIPack
         public TextMeshProUGUI maxSliderLabel;
 
         // Properties
-        public float CurrentLowerValue
-        {
+        public float CurrentLowerValue {
             get { return minSlider.value; }
         }
-        public float CurrentUpperValue
-        {
+        public float CurrentUpperValue {
             get { return maxSlider.realValue; }
         }
 
-        void Awake()
-        {
+        void Awake() {
             // Define if we use indicators
-            if (showLabels)
-            {
+            if (showLabels) {
                 minSlider.label = minSliderLabel;
                 minSlider.numberFormat = "n" + DecimalPlaces;
                 maxSlider.label = maxSliderLabel;
                 maxSlider.numberFormat = "n" + DecimalPlaces;
             }
 
-            else
-            {
+            else {
                 minSliderLabel.gameObject.SetActive(false);
                 maxSliderLabel.gameObject.SetActive(false);
             }

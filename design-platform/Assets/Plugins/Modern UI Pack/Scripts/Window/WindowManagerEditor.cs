@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(WindowManager))]
     [System.Serializable]
-    public class WindowManagerEditor : Editor
-    {
+    public class WindowManagerEditor : Editor {
         // Variables
         private WindowManager wmTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             wmTarget = (WindowManager)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variables
             GUISkin customSkin;
 
@@ -75,8 +71,7 @@ namespace Michsky.UI.ModernUIPack
             var buttonFadeOut = serializedObject.FindProperty("buttonFadeOut");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("CONTENT", customSkin.FindStyle("Header"));
@@ -125,8 +120,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (wmTarget.windows.Count != 0)
-                    {
+                    if (wmTarget.windows.Count != 0) {
                         GUILayout.BeginVertical(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Selected Window:"), customSkin.FindStyle("Text"), GUILayout.Width(120));

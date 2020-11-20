@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 //using System.Numerics;
 
@@ -34,17 +34,28 @@ namespace DesignPlatform.Database {
         /// <returns>List of strings signifying the points</returns>
         public static string[] Vector3ListToStringList(IEnumerable<Vector3> points) {
             List<string> stringPoints = new List<string>();
-            points.ToList().ForEach(v => stringPoints.Add(
+            points.ToList().ForEach(v => stringPoints.Add( Vector3ToString(v) ));
+
+            return stringPoints.ToArray();
+        }        
+        
+        /// <summary>
+        /// Converts a Vector3 to a string signifying the point
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns>A single string signifying the point</returns>
+        public static string Vector3ToString(Vector3 v) {
+
+            string point =
                "(" +
                ((int)Math.Round(v.x)).ToString().Replace(",", ".") +
                ";" +
                ((int)Math.Round(v.y)).ToString().Replace(",", ".") +
                ";" +
                ((int)Math.Round(v.z)).ToString().Replace(",", ".") +
-               ")"
-               )
-            );
-            return stringPoints.ToArray();
+               ")";
+
+            return point;
         }
 
         /// <summary>

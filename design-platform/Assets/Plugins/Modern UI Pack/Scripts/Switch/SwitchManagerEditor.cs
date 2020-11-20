@@ -2,17 +2,14 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(SwitchManager))]
     [System.Serializable]
-    public class SwitchManagerEditor : Editor
-    {
+    public class SwitchManagerEditor : Editor {
         // Variables
         private int currentTab;
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -74,8 +71,7 @@ namespace Michsky.UI.ModernUIPack
             var isOn = serializedObject.FindProperty("isOn");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("EVENTS", customSkin.FindStyle("Header"));
@@ -97,8 +93,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (saveValue.boolValue == true)
-                    {
+                    if (saveValue.boolValue == true) {
                         EditorGUI.indentLevel = 2;
                         GUILayout.BeginHorizontal();
 

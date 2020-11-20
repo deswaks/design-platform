@@ -1,13 +1,10 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
-namespace Neo4jClient.Execution
-{
-    public class ExecutionConfiguration
-    {
-        public ExecutionConfiguration()
-        {
+namespace Neo4jClient.Execution {
+    public class ExecutionConfiguration {
+        public ExecutionConfiguration() {
             ResourceManagerId = new Guid("{BB792575-FAA7-4C72-A6B1-A69876CC3E1E}");
         }
 
