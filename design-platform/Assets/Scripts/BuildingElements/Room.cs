@@ -78,8 +78,8 @@ namespace DesignPlatform.Core {
 
         private readonly Dictionary<RoomType, string> RoomTypeName = new Dictionary<RoomType, string> {
             { RoomType.PREVIEW,  "Preview"},
-            { RoomType.DEFAULT,  "Room"},
-            { RoomType.SELECTED, "Selected\nRoom" },
+            { RoomType.DEFAULT,  ""},
+            { RoomType.SELECTED, "Selected\nSpace" },
             { RoomType.SINGLEROOM,  "Single Bed\nRoom"},
             { RoomType.DOUBLEROOM,  "Double Bed\nRoom"},
             { RoomType.LIVINGROOM,  "Living\nRoom"},
@@ -87,6 +87,9 @@ namespace DesignPlatform.Core {
             { RoomType.BATHROOM,  "Bathroom"},
             { RoomType.CORRIDOR,  "Corridor"}
         };
+        public string TypeName {
+            get { return RoomTypeName[Type]; }
+        }
 
         /// <summary>
         /// 
@@ -109,7 +112,7 @@ namespace DesignPlatform.Core {
                                                    new Vector3(0, 0, 3),
                                                    new Vector3(3, 0, 3),
                                                    new Vector3(3, 0, 0)};
-                    gameObject.name = "Room(Rectangle)";
+                    gameObject.name = "Space(Rectangle)";
                     break;
                 case RoomShape.LSHAPE:
                     controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
@@ -118,7 +121,7 @@ namespace DesignPlatform.Core {
                                                           new Vector3(3, 0, 3),
                                                           new Vector3(5, 0, 3),
                                                           new Vector3(5, 0, 0)};
-                    gameObject.name = "Room(L-Shape)";
+                    gameObject.name = "Space(L-Shape)";
                     break;
                 case RoomShape.USHAPE:
                     controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
@@ -129,7 +132,7 @@ namespace DesignPlatform.Core {
                                                           new Vector3(5, 0, 5),
                                                           new Vector3(8, 0, 5),
                                                           new Vector3(8, 0, 0)};
-                    gameObject.name = "Room(U-Shape)"; 
+                    gameObject.name = "Space(U-Shape)"; 
                     break;       
                 case RoomShape.SSHAPE:
                     controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
@@ -141,7 +144,7 @@ namespace DesignPlatform.Core {
                                                           new Vector3(3, 0, -2),
                                                           new Vector3(3, 0, 0),
                     };
-                    gameObject.name = "Room(S-Shape)"; 
+                    gameObject.name = "Space(S-Shape)"; 
                     break;
                 case RoomShape.TSHAPE:
                     controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
@@ -153,7 +156,7 @@ namespace DesignPlatform.Core {
                                                           new Vector3(3, 0, -3),
                                                           new Vector3(0, 0, -3),
                     };
-                    gameObject.name = "Room(T-Shape)"; 
+                    gameObject.name = "Space(T-Shape)"; 
                     break;
             }
             if(Type == RoomType.PREVIEW) gameObject.name = "Preview " + gameObject.name;
@@ -164,7 +167,7 @@ namespace DesignPlatform.Core {
         }
 
         public override string ToString() {
-            return gameObject.name.ToString() +" "+ Type.ToString();
+            return gameObject.name.ToString() +" "+ TypeName;
         }
 
         private void InitFaces() {
@@ -252,7 +255,7 @@ namespace DesignPlatform.Core {
                 tag.color = Color.black;
                 tag.fontSize = 5.0f;
                 tag.alignment = TextAlignmentOptions.Center;
-                tag.text = RoomTypeName[Type];
+                tag.text = TypeName;
                 tag.sortingOrder = 300;
             }
         }

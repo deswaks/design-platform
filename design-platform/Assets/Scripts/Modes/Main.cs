@@ -23,19 +23,21 @@ namespace DesignPlatform.Core {
             Utils.AssetUtil.LoadBundle("prefabs");
 
             ///////////////////////////////////////////////////////////////// WIDGET TEST ///////////////////////////
+            RoomScheduleWidget widgey = new RoomScheduleWidget();
+            widgey.RequestDraw();
             WallElementScheduleWidget wallElementwidget = new WallElementScheduleWidget();
             wallElementwidget.RequestDraw();
             StructuralWidget strucWidget = new StructuralWidget();
             strucWidget.RequestDraw();
-            RoomScheduleWidget widgey = new RoomScheduleWidget();
-            widgey.RequestDraw();
             Widget_CircleDiagram circle = new Widget_CircleDiagram();
             circle.RequestDraw();
+
             ///////////////////////////////////////////////////////////////// WIDGET TEST - SLUT ///////////////////////////
 
 
 
-            //ModuleLoader.LoadModules();
+            ModuleLoader.LoadModules();
+
 
         }
 

@@ -111,8 +111,8 @@ namespace DesignPlatform.Core {
 
         public override string ToString() {
             string textString = "Interface attached to:";
-            if (Faces[0] != null) textString += " [0] " + Faces[0].ToString();
-            if (Faces[1] != null) textString += " and [1] " + Faces[1].ToString();
+            if (Faces != null && Faces.Count > 0) textString += Faces[0].ToString();
+            if (Faces != null && Faces.Count > 1) textString += Faces[1].ToString();
             return textString;
         }
 

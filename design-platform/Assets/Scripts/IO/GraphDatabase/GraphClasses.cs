@@ -32,6 +32,14 @@ namespace DesignPlatform.Database {
         }
     }
 
+    public class OpeningNode {
+        public OpeningShape openingShape { get; set; } // Door or window
+        public string position { get; set; }
+        public string rotation { get; set; }
+        public float width { get; set; }
+        public float height { get; set; }
+    }
+
     public class WallElementNode {
         public string[] vertices { get; set; }
         public string startJointType { get; set; }

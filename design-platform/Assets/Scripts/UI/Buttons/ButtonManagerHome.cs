@@ -6,10 +6,11 @@ using UnityEngine;
 namespace DesignPlatform.Core {
     public class ButtonManagerHome : MonoBehaviour {
         public void SaveLocal() {
-            LocalDatabase.SaveAllUnityRoomsToJson();
+            LocalDatabase.SaveAllUnityRoomsAndOpeningsToJson();
         }
         public void LoadLocal() {
             LocalDatabase.CreateAllUnityRoomsFromJson();
+            LocalDatabase.CreateAllUnityOpeningsFromJson();
         }
         public void SaveToGraph() {
             GraphDatabase.Instance.PushAllUnityRoomsToGraph();
