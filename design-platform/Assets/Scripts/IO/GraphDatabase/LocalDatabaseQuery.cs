@@ -217,8 +217,8 @@ namespace DesignPlatform.Database {
         /// <param name="rooms">List of rooms</param>
         /// <returns>List of InterfaceNodes created.</returns>
         public static List<WallElementNode> AllRoomInterfacesToInterfaceNodes() {
-            List<Interface> allInterfaces = Building.Instance.Walls.Select(w => w.Interface).ToList();
-            //List<Interface> allInterfaces = Building.Instance.interfaces.Where(i => i.GetOrientation() == Orientation.VERTICAL).ToList();
+            //List<Interface> allInterfaces = Building.Instance.Walls.Select(w => w.Interface).ToList();
+            List<Interface> allInterfaces = Building.Instance.Interfaces.Where(i => i.Orientation== Orientation.VERTICAL).ToList();
 
             //allInterfaces.ForEach(interFace => Debug.Log(interFace.GetStartPoint() + ", " + interFace.GetEndPoint()));
 

@@ -12,12 +12,13 @@ namespace DesignPlatform.Core {
             get { return Faces.Select(f => f.Room).ToList(); }
         }
         public List<Face> Faces {
-            get { return Interface.Faces; }
+            get { return Interfaces.SelectMany(iface => iface.Faces).ToList(); }
         }
-        public Interface Interface { get; private set; }
+        //public Interface Interface { get; private set; }
+        public List<Interface> Interfaces { get; private set; }
 
         public List<Opening> Openings {
-            get { return Interface.Openings; }
+            get { return Interfaces.SelectMany(iface => iface.Openings).ToList(); }
         }
 
         private List<Vector3> wallControlPoints { get; set; }
@@ -27,13 +28,10 @@ namespace DesignPlatform.Core {
             get { return Rooms[0].GetWallNormals()[Faces[0].FaceIndex]; }
         }
         public float Length {
-            get { return (Interface.StartPoint - Interface.EndPoint).magnitude; }
+            get { return (wallControlPoints[0] - wallControlPoints[2]).magnitude; }
         }
         public float Height {
             get { return Rooms[0].height; }
-        }
-        public Vector3 CenterPoint {
-            get { return Interface.CenterPoint; }
         }
 
 
@@ -41,7 +39,8 @@ namespace DesignPlatform.Core {
         /// Construct walls.
         /// </summary>
         public void InitializeWall(Interface interFace) {
-            Interface = interFace;
+            //Interface = interFace;
+            Interfaces.Add(interFace);
 
             gameObject.layer = 13; // Wall layer
 
@@ -49,12 +48,12 @@ namespace DesignPlatform.Core {
             gameObject.name = "Generic Wall";
 
             wallControlPoints = new List<Vector3> {
-                    new Vector3 (Length/2,0,0),
-                    new Vector3 (Length/2,0,Height-0.01f),
-                    new Vector3 (-Length/2,0,Height-0.01f),
-                    new Vector3 (-Length/2,0,0) };
+                    new Vector3 (interFace.Length/2,0,0),
+                    new Vector3 (interFace.Length/2,0,Height-0.01f),
+                    new Vector3 (-interFace.Length/2,0,Height-0.01f),
+                    new Vector3 (-interFace.Length/2,0,0) };
 
-            gameObject.transform.position = CenterPoint;
+            gameObject.transform.position = interFace.CenterPoint;
             gameObject.transform.rotation = Quaternion.LookRotation(Vector3.up, Normal);
 
             gameObject.AddComponent<MeshCollider>();
@@ -76,6 +75,8 @@ namespace DesignPlatform.Core {
         /// Construct wall elements based on CLT element information
         /// </summary>
         public void InitializeWall(CLTElement wallElement) {
+            Interfaces = wallElement.interfaces;
+
             gameObject.layer = 13; // Wall layer
 
             Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
