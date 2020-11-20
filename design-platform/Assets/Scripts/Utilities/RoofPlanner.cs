@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ProceduralToolkit.Buildings;
 using ProceduralToolkit;
+using System.Linq;
 
 namespace DesignPlatform.Core {
     public class ProceduralRoofPlanner : RoofPlanner {
@@ -38,6 +39,19 @@ namespace DesignPlatform.Core {
     }
 
     public static class RoofUtils {
+        public static int NumberOfSharedVertices(Vector3[] triangle1, Vector3[] triangle2) {
+            return triangle1.ToList().SelectMany(v1 => triangle2.Where(v2 => Vector3.Distance(v1, v2) < 0.01)).Count();
+        }
+
+        public static List<Vector3> IdentifyBoundaryVertices(List<Vector3> vertices) {
+
+            List<int> vertexCounts = vertices.Select(v1 => vertices.Where(v2 => Vector3.Distance(v1, v2) < 0.01).Count()).ToList();
+
+            string nums = string.Join(",", vertexCounts);
+
+            return vertices;
+        }
+
         public static List<List<T>> SplitList<T>(this List<T> me, int size = 50) {
             var list = new List<List<T>>();
             for (int i = 0; i < me.Count; i += size)

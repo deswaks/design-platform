@@ -7,8 +7,6 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
-
-
     public class CLTElement {
         public (Vector3 point, WallJointType jointType) startPoint { get; private set; } = (new Vector3(), WallJointType.None);
         public (Vector3 point, WallJointType jointType) endPoint { get; private set; } = (new Vector3(), WallJointType.None);
@@ -91,11 +89,9 @@ namespace DesignPlatform.Core {
         public void SetInterfaces(List<Interface> interfaces) {
             this.interfaces = interfaces;
         }
-
     }
 
     public static class CLTElementGenerator {
-
         /// <summary>
         /// Finds all wall elements from interfaces and identifies the joints between them. 
         /// </summary>

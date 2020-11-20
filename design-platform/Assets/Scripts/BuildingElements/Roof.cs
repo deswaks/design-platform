@@ -15,7 +15,7 @@ namespace DesignPlatform.Core {
         public Material roofMaterial;
         public float RoofPitch = 25;
 
-        void Start() {
+        void Awake() {
             List<Vector2> foundationPolygon = new List<Vector2> {
                 new Vector2(0, 0),
                 new Vector2(-2, 0),
@@ -38,10 +38,10 @@ namespace DesignPlatform.Core {
             IConstructible<MeshDraft> constructible = roofPlanner.Plan(foundationPolygon, config);
             var draft = constructible.Construct(Vector2.zero);
 
-            var meshFilter = gameObject.AddComponent<MeshFilter>();
+            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
             meshFilter.mesh = draft.ToMesh();
 
-            var meshRenderer = gameObject.AddComponent<MeshRenderer>();
+            MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
             meshRenderer.material = roofMaterial;
             //////////////////////////////////////////////
 
@@ -50,7 +50,7 @@ namespace DesignPlatform.Core {
             // COMBINING TRIANGLES TO FACES /////////////////////////////////////
             Mesh roofMesh = draft.ToMesh();
             roofMesh.RecalculateNormals();
-            
+
 
             // Roof mesh triangle indices and vertices. 
             int[] allTriangleIndices = roofMesh.triangles;
@@ -58,57 +58,71 @@ namespace DesignPlatform.Core {
             Vector3[] normals = roofMesh.normals;
 
             // List for each individual triangle made up by vertices (a,b,c)
-            List<(Vector3 a, Vector3 b, Vector3 c)> triangleVertices = new List<(Vector3 a, Vector3 b, Vector3 c)>();
-            List<(Vector3 a, Vector3 b, Vector3 c)> triangleNormals = new List<(Vector3 a, Vector3 b, Vector3 c)>();
-
+            List<Vector3[]> triangleVertices = new List<Vector3[]>();
+            List<Vector3[]> triangleNormals = new List<Vector3[]>();
 
             // Splits index-list into chunks of three (providing the three vertex-indices of each triangle) and adds triangles to list
-            RoofUtils.SplitList(allTriangleIndices.ToList(), 3).ForEach(t => triangleVertices.Add((vertices[t[0]], vertices[t[1]], vertices[t[2]])));
-            RoofUtils.SplitList(allTriangleIndices.ToList(), 3).ForEach(t => triangleNormals.Add((normals[t[0]], normals[t[1]], normals[t[2]])));
-
+            RoofUtils.SplitList(allTriangleIndices.ToList(), 3).ForEach(t => triangleVertices.Add(new Vector3[] { vertices[t[0]], vertices[t[1]], vertices[t[2]] }));
+            RoofUtils.SplitList(allTriangleIndices.ToList(), 3).ForEach(t => triangleNormals.Add(new Vector3[] { normals[t[0]], normals[t[1]], normals[t[2]] }));
 
             List<int> indicesToKeep = new List<int>();
 
             // Removes faulty triangles, where two vertices have the same coordiates
-            triangleVertices.Where(t => !(Vector3.Distance(t.a, t.b) < 0.01 || Vector3.Distance(t.a, t.c) < 0.01 || Vector3.Distance(t.c, t.b) < 0.01)).ToList().ForEach(t=> indicesToKeep.Add(triangleVertices.IndexOf(t)));
+            triangleVertices.Where(t => !(Vector3.Distance(t[0], t[1]) < 0.01 || Vector3.Distance(t[0], t[2]) < 0.01 || Vector3.Distance(t[2], t[1]) < 0.01)).ToList().ForEach(t => indicesToKeep.Add(triangleVertices.IndexOf(t)));
             triangleVertices = indicesToKeep.Select(j => triangleVertices[j]).ToList();
             triangleNormals = indicesToKeep.Select(j => triangleNormals[j]).ToList();
 
             // Rounds normals to nearest 1 digit
-            triangleNormals = triangleNormals.Select(t =>(
-                new Vector3(Mathf.Round(t.a.x * 10) / 10, Mathf.Round(t.a.y * 10) / 10, Mathf.Round(t.a.z * 10) / 10),
-                new Vector3(Mathf.Round(t.b.x * 10) / 10, Mathf.Round(t.b.y * 10) / 10, Mathf.Round(t.b.z * 10) / 10),
-                new Vector3(Mathf.Round(t.c.x * 10) / 10, Mathf.Round(t.c.y * 10) / 10, Mathf.Round(t.c.z * 10) / 10)
-            )).ToList();
+            triangleNormals = triangleNormals.Select(t => new Vector3[] { 
+                new Vector3(Mathf.Round(t[0].x * 10) / 10, Mathf.Round(t[0].y * 10) / 10, Mathf.Round(t[0].z * 10) / 10),
+                new Vector3(Mathf.Round(t[1].x * 10) / 10, Mathf.Round(t[1].y * 10) / 10, Mathf.Round(t[1].z * 10) / 10),
+                new Vector3(Mathf.Round(t[2].x * 10) / 10, Mathf.Round(t[2].y * 10) / 10, Mathf.Round(t[2].z * 10) / 10)
+            }).ToList();
 
 
             // Identifier ID (Integer) for each roof triangle referring to its roof element
             List<int> roofIDs = Enumerable.Repeat(-1, triangleVertices.Count).ToList();
 
+            List<int> indices = Enumerable.Range(0, triangleVertices.Count).ToList();
+
             for (int j = 0; j < roofIDs.Count; j++){
 
-                //List<(Vector3 a, Vector3 b, Vector3 c)> parallelTriangles = triangleVertices.Where();
+                List<Vector3[]> parallelAndConnectedTriangles = new List<Vector3[]>();
+                for (int k = 0; k < roofIDs.Count; k++) {
+                    if (j == k) continue;
+                    // Finds parallel triangles:
+                    if(Vector3.Distance(triangleNormals[j][0], triangleNormals[k][0]) < 0.01) {
+                        // Tests if parallel triangle is connect to current by more than one vertex
+                        if( RoofUtils.NumberOfSharedVertices( triangleVertices[j], triangleVertices[k])>1 )
+                            parallelAndConnectedTriangles.Add(triangleVertices[k]);
+                    }
+                }
+
+                // Sees if one of parallel interfaces belongs to a wall and saves its ID
+                int? currentID = parallelAndConnectedTriangles.Select(i => roofIDs[triangleVertices.IndexOf(i)]).Where(wg => wg != -1)?.FirstOrDefault();
+
+                // If one interface already had an ID attached, all identified parallel walls gets this ID
+                if (currentID != 0) {
+                    parallelAndConnectedTriangles.ForEach(i => roofIDs[triangleVertices.IndexOf(i)] = currentID.Value);
+                    roofIDs[j] = currentID.Value;
+                }
+                else // A new ID is created for the set of parallel walls
+                {
+                    currentID = roofIDs.Max() + 1;
+                    parallelAndConnectedTriangles.ForEach(i => roofIDs[triangleVertices.IndexOf(i)] = currentID.Value);
+                    roofIDs[j] = currentID.Value;
+                }
+
             }
 
+            string ids2 = string.Join(" ; ", roofIDs.Distinct().Select(n => n.ToString()+", ant. :"+ roofIDs.Count(id => id == n).ToString() ));
+            string ids = string.Join(" ; ", roofIDs.OrderBy(n=>n).Select(n => n.ToString()) );
 
+            Debug.Log(ids);
 
+            //IEnumerable<IGrouping<int, Vector3[]>> roofFaceGroups = triangleVertices.GroupBy(i => roofIDs[triangleVertices.IndexOf(i)]);
 
-
-                //Debug.Log(triangleNormals.Count + "   " + triangleVertices.Count);
-                //for (int i = 0; i < triangleVertices.Count(); i++)
-                //{
-                //    Debug.Log("(" + triangleVertices[i].a.ToString() + ";" + triangleVertices[i].b.ToString() + ";" + triangleVertices[i].c.ToString() + ") N: (" +
-                //        triangleNormals[i].a.ToString() + ";" + triangleNormals[i].b.ToString() + ";" + triangleNormals[i].c.ToString());
-
-                //    List<Vector3> vx = new List<Vector3> { triangleVertices[i].a, triangleVertices[i].b, triangleVertices[i].c };
-                //    vx.ForEach(v =>
-                //    {
-                //        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                //        sphere.name = "gable " + i.ToString();
-                //        sphere.transform.position = v;
-                //        sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                //    });
-                //}
-            }
+            //RoofUtils.IdentifyBoundaryVertices( roofFaceGroups.  )
+        }
         }
 }
