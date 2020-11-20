@@ -48,6 +48,7 @@ namespace DesignPlatform.Core {
 
             return newRoom;
         }
+
         /// <summary>
         /// Removes a room from the managed building list
         /// </summary>
@@ -56,15 +57,13 @@ namespace DesignPlatform.Core {
             if (Rooms.Contains(room)) { Rooms.Remove(room); }
         }
 
-
-
         /// <summary>
         /// All walls of this building
         /// </summary>
         private List<Wall> walls;
         public List<Wall> Walls {
             get {
-                if (walls == null || walls.Count == 0) BuildAllWalls();
+                if (walls == null || walls.Count == 0) BuildAllWallsAsCLTElements();
                 return walls;
             }
             private set {; }
@@ -79,6 +78,15 @@ namespace DesignPlatform.Core {
             }
             return walls;
         }
+
+        public List<Wall> BuildAllWallsAsCLTElements() {
+            foreach (Opening opening in Openings) {
+                opening.AttachClosestFaces();
+            }
+            CLTElementGenerator.IdentifyWallElementsAndJointTypes().ForEach(clt => BuildWall(clt));
+            return walls;
+        }
+
 
         /// <summary>
         /// Build
@@ -95,6 +103,23 @@ namespace DesignPlatform.Core {
 
             return newWall;
         }
+
+        /// <summary>
+        /// Build 3D wall representation using CLT element information
+        /// </summary>
+        /// <param name="cltElement"></param>
+        /// <returns></returns>
+        public Wall BuildWall(CLTElement cltElement) {
+            GameObject newWallGameObject = new GameObject("Wall");
+            Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
+
+            newWall.InitializeWall(cltElement);
+
+            walls.Add(newWall);
+
+            return newWall;
+        }
+
         /// <summary>
         /// Removes a wall from the managed building list
         /// </summary>
@@ -158,7 +183,6 @@ namespace DesignPlatform.Core {
                 }
             }
         }
-
 
         /// <summary>
         /// All the interfaces of this building
@@ -289,7 +313,7 @@ namespace DesignPlatform.Core {
             DeleteAllInterfaces();
             // Build new
             BuildAllInterfaces();
-            BuildAllWalls();
+            BuildAllWallsAsCLTElements();
             BuildAllSlabs();
         }
 

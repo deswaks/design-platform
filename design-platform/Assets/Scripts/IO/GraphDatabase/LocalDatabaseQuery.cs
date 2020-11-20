@@ -13,7 +13,6 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="RoomNode">RoomNode to create as a Room in Unity</param>
         public static void CreateUnityRoomFromRoomNode(RoomNode RoomNode) {
-            Debug.Log("RoomType of loaded room: "+((int)RoomNode.type).ToString());
             // Builds room
             Room newRoom = Building.Instance.BuildRoom(RoomNode.shape);
             //Gets control points from graph data
@@ -137,12 +136,12 @@ namespace DesignPlatform.Database {
         {
             jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\WallElements.json";
 
-            List<WallElement> wallElements = Building.Instance.IdentifyWallElementsAndJointTypes();
+            List<CLTElement> wallElements = CLTElementGenerator.IdentifyWallElementsAndJointTypes();
 
             // Collects Unity room as RoomNodes
             List<WallElementNode> wallElementNodes = new List<WallElementNode>();
 
-            foreach (WallElement element in wallElements) {
+            foreach (CLTElement element in wallElements) {
                 wallElementNodes.Add(new WallElementNode {
                     vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { element.startPoint.point, element.endPoint.point}),
                     startJointType = element.startPoint.jointType.ToString(),

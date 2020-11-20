@@ -49,5 +49,9 @@ namespace DesignPlatform.Utils {
 
             return vClosestPoint;
         }
+
+        public static Vector3 Rotate90ClockwiseXZ(Vector3 vector) {
+            return new Vector3(-vector.z, 0, vector.x);
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace DesignPlatform.Core {
             gameObject.layer = 13; // Wall layer
 
             Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
-            gameObject.name = "CLT Wall";
+            gameObject.name = "Generic Wall";
 
             wallControlPoints = new List<Vector3> {
                     new Vector3 (Length/2,0,0),
@@ -67,6 +67,57 @@ namespace DesignPlatform.Core {
             }
 
             if (interFace.OpeningsVertical.Count < 1) {
+                mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false);
+            }
+            mesh.GetComponent<MeshRenderer>().material = wallMaterial;
+        }
+
+        /// <summary>
+        /// Construct wall elements based on CLT element information
+        /// </summary>
+        public void InitializeWall(CLTElement wallElement) {
+            gameObject.layer = 13; // Wall layer
+
+            Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
+            gameObject.name = "CLT Wall";
+
+            List<Vector3> wallControlPoints = new List<Vector3> {
+                    new Vector3 (wallElement.Length/2, 0, 0),
+                    new Vector3 (wallElement.Length/2, 0, wallElement.Height-0.01f),
+                    new Vector3 (-wallElement.Length/2, 0, wallElement.Height-0.01f),
+                    new Vector3 (-wallElement.Length/2, 0, 0) };
+
+            // Adjust end points according to joint types
+            if (wallElement.startPoint.jointType.ToString().Contains("Secondary")) {
+                wallControlPoints[0] -= new Vector3(wallThickness / 2, 0, 0);
+                wallControlPoints[1] -= new Vector3(wallThickness / 2, 0, 0);
+            }
+            if (wallElement.startPoint.jointType.ToString().Contains("Primary")) {
+                wallControlPoints[0] += new Vector3(wallThickness / 2, 0, 0);
+                wallControlPoints[1] += new Vector3(wallThickness / 2, 0, 0);
+            }
+            if (wallElement.endPoint.jointType.ToString().Contains("Secondary")) {
+                wallControlPoints[2] += new Vector3(wallThickness / 2, 0, 0);
+                wallControlPoints[3] += new Vector3(wallThickness / 2, 0, 0);
+            }
+            if (wallElement.endPoint.jointType.ToString().Contains("Primary")) {
+                wallControlPoints[2] -= new Vector3(wallThickness / 2, 0, 0);
+                wallControlPoints[3] -= new Vector3(wallThickness / 2, 0, 0);
+            }
+
+
+            gameObject.transform.position = wallElement.CenterPoint;
+            gameObject.transform.rotation = Quaternion.LookRotation(Vector3.up, -VectorFunctions.Rotate90ClockwiseXZ(wallElement.GetDirection()));
+
+            gameObject.AddComponent<MeshCollider>();
+            ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
+
+            List<Vector3> wallMeshControlPoints = wallControlPoints.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList();
+
+            if (wallElement.interfaces.Any(interFace => interFace.OpeningsVertical.Count > 0)) {
+                mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false, GetHoleVertices());
+            }
+            else {
                 mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false);
             }
             mesh.GetComponent<MeshRenderer>().material = wallMaterial;
