@@ -6,6 +6,9 @@ using ProceduralToolkit.Buildings;
 using ProceduralToolkit;
 using static ProceduralToolkit.Buildings.BuildingGenerator;
 using ProceduralToolkit.Skeleton;
+using DesignPlatform.Utils;
+using UnityEngine.ProBuilder;
+using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
     
@@ -38,11 +41,11 @@ namespace DesignPlatform.Core {
             IConstructible<MeshDraft> constructible = roofPlanner.Plan(foundationPolygon, config);
             var draft = constructible.Construct(Vector2.zero);
 
-            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-            meshFilter.mesh = draft.ToMesh();
+            //MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
+            //meshFilter.mesh = draft.ToMesh();
 
-            MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
-            meshRenderer.material = roofMaterial;
+            //MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+            //meshRenderer.material = roofMaterial;
             //////////////////////////////////////////////
 
 
@@ -83,8 +86,6 @@ namespace DesignPlatform.Core {
             // Identifier ID (Integer) for each roof triangle referring to its roof element
             List<int> roofIDs = Enumerable.Repeat(-1, triangleVertices.Count).ToList();
 
-            List<int> indices = Enumerable.Range(0, triangleVertices.Count).ToList();
-
             for (int j = 0; j < roofIDs.Count; j++){
 
                 List<Vector3[]> parallelAndConnectedTriangles = new List<Vector3[]>();
@@ -112,17 +113,71 @@ namespace DesignPlatform.Core {
                     parallelAndConnectedTriangles.ForEach(i => roofIDs[triangleVertices.IndexOf(i)] = currentID.Value);
                     roofIDs[j] = currentID.Value;
                 }
-
             }
 
-            string ids2 = string.Join(" ; ", roofIDs.Distinct().Select(n => n.ToString()+", ant. :"+ roofIDs.Count(id => id == n).ToString() ));
-            string ids = string.Join(" ; ", roofIDs.OrderBy(n=>n).Select(n => n.ToString()) );
+            // Groups vertices and normals by roofIDs
+            IEnumerable<IGrouping<int, Vector3[]>> roofFaceGroups = triangleVertices.GroupBy(i => roofIDs[triangleVertices.IndexOf(i)]);
+            IEnumerable<IGrouping<int, Vector3[]>> roofFaceNormalsGroups = triangleNormals.GroupBy(i => roofIDs[triangleNormals.IndexOf(i)]);
 
-            Debug.Log(ids);
+            // Converts groupings to lists
+            List<List<Vector3>> roofFaceVertices = roofFaceGroups.Select(fg => fg.SelectMany(g => g.ToList()).ToList()).ToList();
+            List<Vector3> roofFaceNormals = roofFaceNormalsGroups.Select(fg => fg.SelectMany(triNorms => triNorms.ToList()).ToList()[0]).ToList();
 
-            //IEnumerable<IGrouping<int, Vector3[]>> roofFaceGroups = triangleVertices.GroupBy(i => roofIDs[triangleVertices.IndexOf(i)]);
+            // List for distinct, ordered roof face vertices
+            List<List<Vector3>> finalVertices = new List<List<Vector3>>();
 
-            //RoofUtils.IdentifyBoundaryVertices( roofFaceGroups.  )
+            int index = 0;
+            foreach (List<Vector3> vs in roofFaceVertices)
+            {
+                finalVertices.Add(RoofUtils.OrderClockwise(RoofUtils.DistinctVertices(vs),roofFaceNormals[index]) );
+
+                InitializeRoof(finalVertices.Last(), roofFaceNormals[index]);
+
+                index++;
+            }
+
+
+
+            ////////////////////////////////////
+            // Visualization of vertices
+            foreach (List<Vector3> vs in finalVertices)
+            {
+
+                foreach (Vector3 v in vs)
+                {
+                    GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    sphere.transform.position = v;
+                    sphere.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                    sphere.name = finalVertices.IndexOf(vs).ToString();
+
+                }
+            }
         }
+
+        /// <summary>
+        /// Construct walls.
+        /// </summary>
+        public void InitializeRoof(List<Vector3> controlPoints, Vector3 Normal)
+        {
+            GameObject game = new GameObject("roof");
+
+            float wallThickness = 0.2f;
+            game.layer = 13; // Wall layer
+
+            Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
+            game.name = "Roof";
+
+            //game.transform.position = RoofUtils.Midpoint(controlPoints);
+            //game.transform.rotation = Quaternion.LookRotation(Vector3.up, Normal);
+
+            game.AddComponent<MeshCollider>();
+            ProBuilderMesh mesh = game.AddComponent<ProBuilderMesh>();
+
+            List<Vector3> wallMeshControlPoints = controlPoints.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList();
+
+            mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false);
+
+            mesh.GetComponent<MeshRenderer>().material = wallMaterial;
         }
+    }
 }
