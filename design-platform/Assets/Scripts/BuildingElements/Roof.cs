@@ -33,7 +33,7 @@ namespace DesignPlatform.Core {
             Config config = new Config();
             config.roofConfig.thickness = 0.01f;
             config.roofConfig.overhang = 0.0f;
-            config.roofConfig.type = RoofType.Gabled;
+            config.roofConfig.type = RoofType.Hipped  ;
 
             // ROOF CREATION ////////////////////////////
             ProceduralRoofPlanner roofPlanner = new ProceduralRoofPlanner();
@@ -175,7 +175,7 @@ namespace DesignPlatform.Core {
 
             List<Vector3> wallMeshControlPoints = controlPoints.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList();
 
-            mesh.CreateShapeFromPolygon(wallMeshControlPoints, wallThickness, false);
+            mesh.CreateShapeFromPolygon(wallMeshControlPoints, -wallThickness, false);
 
             mesh.GetComponent<MeshRenderer>().material = wallMaterial;
         }
