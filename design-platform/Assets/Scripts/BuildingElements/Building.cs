@@ -328,6 +328,8 @@ namespace DesignPlatform.Core {
             // Build new
             BuildAllInterfaces();
             BuildAllWallsAsCLTElements();
+            RoofGenerator roof = new RoofGenerator();
+            roof.CreateRoof();
             BuildAllSlabs();
         }
 

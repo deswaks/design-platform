@@ -1253,7 +1253,7 @@ MonoBehaviour:
     m_Bits: 256
   wallMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8192
 --- !u!1 &134845581
 GameObject:
   m_ObjectHideFlags: 0

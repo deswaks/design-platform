@@ -5,55 +5,35 @@ using UnityEngine;
 using ProceduralToolkit.Buildings;
 using ProceduralToolkit;
 using static ProceduralToolkit.Buildings.BuildingGenerator;
-using ProceduralToolkit.Skeleton;
 using DesignPlatform.Utils;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
     
-    public class Roof : MonoBehaviour {
+    public class RoofGenerator{
 
-        public ProceduralToolkit.RendererProperties rendererProperties;
-        public Material roofMaterial;
         public float RoofPitch = 25;
+        public float wallThickness = 0.2f;
+        public float overhang = 0.4f;
 
-        void Awake() {
-            List<Vector2> foundationPolygon = new List<Vector2> {
-                new Vector2(0, 0),
-                new Vector2(-2, 0),
-                new Vector2(-2, 3),
-                new Vector2(5, 3),
-                new Vector2(5, 0),
-                new Vector2(3, 0),
-                new Vector2(3, -3),
-                new Vector2(0, -3),
-            };
+        public void CreateRoof() {
+
+            List<Vector2> roofPolygon = RoofUtils.GetBuildingOutline().Select(v => v.ToVector2XZ()).ToList();
+
+            roofPolygon = RoofUtils.OffsetPolyline2D(roofPolygon, wallThickness / 2);
 
             Config config = new Config();
-            config.roofConfig.thickness = 0.01f;
-            config.roofConfig.overhang = 0.0f;
-            config.roofConfig.type = RoofType.Hipped  ;
+            config.roofConfig.thickness = 0.00f;
+            config.roofConfig.overhang = overhang = 0.4f;
+            config.roofConfig.type = RoofType.Gabled;
 
-            // ROOF CREATION ////////////////////////////
-            ProceduralRoofPlanner roofPlanner = new ProceduralRoofPlanner();
-
-            IConstructible<MeshDraft> constructible = roofPlanner.Plan(foundationPolygon, config);
-            var draft = constructible.Construct(Vector2.zero);
-
-            //MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-            //meshFilter.mesh = draft.ToMesh();
-
-            //MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
-            //meshRenderer.material = roofMaterial;
-            //////////////////////////////////////////////
+            // Creates base roof mesh using ProceduralToolkit
+            IConstructible<MeshDraft> constructible = RoofUtils.GenerateRoofPlan(roofPolygon, config);
 
 
-
-            // COMBINING TRIANGLES TO FACES /////////////////////////////////////
-            Mesh roofMesh = draft.ToMesh();
+            Mesh roofMesh = constructible.Construct(Vector2.zero).ToMesh();
             roofMesh.RecalculateNormals();
-
 
             // Roof mesh triangle indices and vertices. 
             int[] allTriangleIndices = roofMesh.triangles;
@@ -93,21 +73,21 @@ namespace DesignPlatform.Core {
                     if (j == k) continue;
                     // Finds parallel triangles:
                     if(Vector3.Distance(triangleNormals[j][0], triangleNormals[k][0]) < 0.01) {
-                        // Tests if parallel triangle is connect to current by more than one vertex
+                        // Tests if parallel triangle is connect to current by more than one vertex (thus picking only fully attached neighbouring triangles)
                         if( RoofUtils.NumberOfSharedVertices( triangleVertices[j], triangleVertices[k])>1 )
                             parallelAndConnectedTriangles.Add(triangleVertices[k]);
                     }
                 }
 
-                // Sees if one of parallel interfaces belongs to a wall and saves its ID
+                // Sees if one of parallel triangles belongs to a roof face and saves its ID
                 int? currentID = parallelAndConnectedTriangles.Select(i => roofIDs[triangleVertices.IndexOf(i)]).Where(wg => wg != -1)?.FirstOrDefault();
 
-                // If one interface already had an ID attached, all identified parallel walls gets this ID
+                // If one triangle already had an ID attached, all identified parallel triangles gets this ID
                 if (currentID != 0) {
                     parallelAndConnectedTriangles.ForEach(i => roofIDs[triangleVertices.IndexOf(i)] = currentID.Value);
                     roofIDs[j] = currentID.Value;
                 }
-                else // A new ID is created for the set of parallel walls
+                else // Or, a new ID is created for the set of parallel triangles
                 {
                     currentID = roofIDs.Max() + 1;
                     parallelAndConnectedTriangles.ForEach(i => roofIDs[triangleVertices.IndexOf(i)] = currentID.Value);
@@ -120,64 +100,77 @@ namespace DesignPlatform.Core {
             IEnumerable<IGrouping<int, Vector3[]>> roofFaceNormalsGroups = triangleNormals.GroupBy(i => roofIDs[triangleNormals.IndexOf(i)]);
 
             // Converts groupings to lists
-            List<List<Vector3>> roofFaceVertices = roofFaceGroups.Select(fg => fg.SelectMany(g => g.ToList()).ToList()).ToList();
             List<Vector3> roofFaceNormals = roofFaceNormalsGroups.Select(fg => fg.SelectMany(triNorms => triNorms.ToList()).ToList()[0]).ToList();
 
             // List for distinct, ordered roof face vertices
             List<List<Vector3>> finalVertices = new List<List<Vector3>>();
 
             int index = 0;
-            foreach (List<Vector3> vs in roofFaceVertices)
-            {
-                finalVertices.Add(RoofUtils.OrderClockwise(RoofUtils.DistinctVertices(vs),roofFaceNormals[index]) );
+            foreach (var face in roofFaceGroups) {
+                // List of triangles in current face. ( Vector3[] is one triangle )
+                List<Vector3[]> trianglesInFace = face.Select(g => g).ToList();
+                // Gets outline (unordered) from group of triangles
+                List<List<Vector3>> segments = RoofUtils.GetMeshOutline(trianglesInFace);
+                // Find ordered polyline vertices from unordered segments 
+                List<Vector3> outline = RoofUtils.SegmentsToPolyline(segments);
 
-                InitializeRoof(finalVertices.Last(), roofFaceNormals[index]);
-
-                index++;
-            }
-
-
-
-            ////////////////////////////////////
-            // Visualization of vertices
-            foreach (List<Vector3> vs in finalVertices)
-            {
-
-                foreach (Vector3 v in vs)
-                {
-                    GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    sphere.transform.position = v;
-                    sphere.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-                    sphere.name = finalVertices.IndexOf(vs).ToString();
-
+                // Moves vertical roof faces (gables) in towards the building, if there is overhang
+                Vector3 normal = roofFaceNormals[index];
+                if (Mathf.Abs(Vector3.Dot(Vector3.up, normal)) < 0.01) {
+                    outline = outline.Select(v => v + -overhang * normal).ToList();
                 }
+
+                finalVertices.Add(outline);
+
+                InitializeRoof(finalVertices.Last(), normal);
+                index++;
             }
         }
 
         /// <summary>
-        /// Construct walls.
+        /// Construct roof.
         /// </summary>
-        public void InitializeRoof(List<Vector3> controlPoints, Vector3 Normal)
+        public void InitializeRoof(List<Vector3> roofFaceVertices, Vector3 Normal)
         {
-            GameObject game = new GameObject("roof");
+            Vector3 midpoint = RoofUtils.Midpoint(roofFaceVertices);
+            Vector3 rotationAxis = Vector3.Cross(Vector3.up, Normal).normalized;
+            float rotationAngle = Vector3.Angle(Vector3.up, Normal);
+            Vector3 rotationVector = -rotationAxis * rotationAngle;
+
+            List<Vector3> transformedPoints = new List<Vector3>();
+            foreach(Vector3 v in roofFaceVertices) {
+                transformedPoints.Add(RotatePointAroundPivot(v, midpoint, rotationVector));
+            }
+            roofFaceVertices = transformedPoints;
+            roofFaceVertices = roofFaceVertices.Select(v => v - midpoint).ToList();
+
+            GameObject gameObject = new GameObject("roof");
 
             float wallThickness = 0.2f;
-            game.layer = 13; // Wall layer
+            gameObject.layer = 13; // Wall layer
 
-            Material wallMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
-            game.name = "Roof";
+            Material roofMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
+            gameObject.name = "Roof";
 
-            //game.transform.position = RoofUtils.Midpoint(controlPoints);
-            //game.transform.rotation = Quaternion.LookRotation(Vector3.up, Normal);
+            gameObject.transform.position += new Vector3(0, 3.08f,0);
 
-            game.AddComponent<MeshCollider>();
-            ProBuilderMesh mesh = game.AddComponent<ProBuilderMesh>();
+            gameObject.AddComponent<MeshCollider>();
+            ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
-            List<Vector3> wallMeshControlPoints = controlPoints.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList();
+            List<Vector3> wallMeshControlPoints = roofFaceVertices.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList();
 
             mesh.CreateShapeFromPolygon(wallMeshControlPoints, -wallThickness, false);
 
-            mesh.GetComponent<MeshRenderer>().material = wallMaterial;
+            mesh.GetComponent<MeshRenderer>().material = roofMaterial;
+
+
+            gameObject.transform.position = midpoint + new Vector3(0,3,0);
+            gameObject.transform.rotation = Quaternion.Euler( -rotationVector );
         }
+
+        public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
+            return Quaternion.Euler(angles) * (point - pivot) + pivot;
+        }
+
     }
 }

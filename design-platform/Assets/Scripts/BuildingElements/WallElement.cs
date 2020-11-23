@@ -183,37 +183,40 @@ namespace DesignPlatform.Core {
             // Culls interfaces with same start- and endpoint
             List<Interface> culledInterfaces = Building.Instance.Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
 
-            // Identifier ID (Integer) for each wall referring to its wall element
-            List<int> wallIDs = Enumerable.Repeat(-1, culledInterfaces.Count).ToList();
 
-            // Finds all joint points (unique points shared by all interfaces)
-            List<Vector3> jointPoints = new List<Vector3>();
-            culledInterfaces.ForEach(i => {
-                jointPoints.Add(i.EndPoint);
-                jointPoints.Add(i.StartPoint);
-            });
-            jointPoints = jointPoints.Distinct().ToList();
+            List<int> wallIDs = GroupParallelJoinedInterfaces(culledInterfaces);
 
-            // Loops through all interfaces
-            for (int j = 0; j < culledInterfaces.Count; j++) {
-                // Finds parallel-joint interfaces of current interface
-                List<Interface> parallelJointInterfaces = GetParallelConnectedInterfaces(culledInterfaces, culledInterfaces[j]);
+            //// Identifier ID (Integer) for each wall referring to its wall element
+            //List<int> wallIDs = Enumerable.Repeat(-1, culledInterfaces.Count).ToList();
 
-                // Sees if one of parallel interfaces belongs to a wall and saves its ID
-                int? currentID = parallelJointInterfaces.Select(i => wallIDs[culledInterfaces.IndexOf(i)]).Where(wg => wg != -1)?.FirstOrDefault();
+            //// Finds all joint points (unique points shared by all interfaces)
+            //List<Vector3> jointPoints = new List<Vector3>();
+            //culledInterfaces.ForEach(i => {
+            //    jointPoints.Add(i.EndPoint);
+            //    jointPoints.Add(i.StartPoint);
+            //});
+            //jointPoints = jointPoints.Distinct().ToList();
 
-                // If one interface already had an ID attached, all identified parallel walls gets this ID
-                if (currentID != 0) {
-                    parallelJointInterfaces.ForEach(i => wallIDs[culledInterfaces.IndexOf(i)] = currentID.Value);
-                    wallIDs[j] = currentID.Value;
-                }
-                else // A new ID is created for the set of parallel walls
-                {
-                    currentID = wallIDs.Max() + 1;
-                    parallelJointInterfaces.ForEach(i => wallIDs[culledInterfaces.IndexOf(i)] = currentID.Value);
-                    wallIDs[j] = currentID.Value;
-                }
-            }
+            //// Loops through all interfaces
+            //for (int j = 0; j < culledInterfaces.Count; j++) {
+            //    // Finds parallel-joint interfaces of current interface
+            //    List<Interface> parallelJointInterfaces = GetParallelConnectedInterfaces(culledInterfaces, culledInterfaces[j]);
+
+            //    // Sees if one of parallel interfaces belongs to a wall and saves its ID
+            //    int? currentID = parallelJointInterfaces.Select(i => wallIDs[culledInterfaces.IndexOf(i)]).Where(wg => wg != -1)?.FirstOrDefault();
+
+            //    // If one interface already had an ID attached, all identified parallel walls gets this ID
+            //    if (currentID != 0) {
+            //        parallelJointInterfaces.ForEach(i => wallIDs[culledInterfaces.IndexOf(i)] = currentID.Value);
+            //        wallIDs[j] = currentID.Value;
+            //    }
+            //    else // A new ID is created for the set of parallel walls
+            //    {
+            //        currentID = wallIDs.Max() + 1;
+            //        parallelJointInterfaces.ForEach(i => wallIDs[culledInterfaces.IndexOf(i)] = currentID.Value);
+            //        wallIDs[j] = currentID.Value;
+            //    }
+            //}
 
             // Each group consists of interfaces making up an entire wall
             IEnumerable<IGrouping<int, Interface>> wallGroups = culledInterfaces.GroupBy(i => wallIDs[culledInterfaces.IndexOf(i)]);
@@ -245,6 +248,43 @@ namespace DesignPlatform.Core {
             }
 
             return wallElements;
+        }
+
+        public static List<int> GroupParallelJoinedInterfaces(List<Interface> interfaces) {
+
+            // Identifier ID (Integer) for each wall referring to its wall element
+            List<int> wallIDs = Enumerable.Repeat(-1, interfaces.Count).ToList();
+
+            // Finds all joint points (unique points shared by all interfaces)
+            List<Vector3> jointPoints = new List<Vector3>();
+            interfaces.ForEach(i => {
+                jointPoints.Add(i.EndPoint);
+                jointPoints.Add(i.StartPoint);
+            });
+            jointPoints = jointPoints.Distinct().ToList();
+
+            // Loops through all interfaces
+            for (int j = 0; j < interfaces.Count; j++) {
+                // Finds parallel-joint interfaces of current interface
+                List<Interface> parallelJointInterfaces = GetParallelConnectedInterfaces(interfaces, interfaces[j]);
+
+                // Sees if one of parallel interfaces belongs to a wall and saves its ID
+                int? currentID = parallelJointInterfaces.Select(i => wallIDs[interfaces.IndexOf(i)]).Where(wg => wg != -1)?.FirstOrDefault();
+
+                // If one interface already had an ID attached, all identified parallel walls gets this ID
+                if (currentID != 0) {
+                    parallelJointInterfaces.ForEach(i => wallIDs[interfaces.IndexOf(i)] = currentID.Value);
+                    wallIDs[j] = currentID.Value;
+                }
+                else // A new ID is created for the set of parallel walls
+                {
+                    currentID = wallIDs.Max() + 1;
+                    parallelJointInterfaces.ForEach(i => wallIDs[interfaces.IndexOf(i)] = currentID.Value);
+                    wallIDs[j] = currentID.Value;
+                }
+            }
+
+            return wallIDs;
         }
 
         public static List<Interface> GetParallelConnectedInterfaces(List<Interface> interfacesList, Interface interFace) {
