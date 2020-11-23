@@ -130,29 +130,36 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Construct roof.
         /// </summary>
-        public void InitializeRoof(List<Vector3> roofFaceVertices, Vector3 Normal)
-        {
+        public void InitializeRoof(List<Vector3> roofFaceVertices, Vector3 Normal) {
             Vector3 midpoint = RoofUtils.Midpoint(roofFaceVertices);
+
+
+            //Vector3 midpoint = new Vector3(roofFaceVertices[0].x, roofFaceVertices[0].y, roofFaceVertices[0].z);
             Vector3 rotationAxis = Vector3.Cross(Vector3.up, Normal).normalized;
             float rotationAngle = Vector3.Angle(Vector3.up, Normal);
-            Vector3 rotationVector = -rotationAxis * rotationAngle;
+            Vector3 rotationVector = (-rotationAxis * rotationAngle);
+
+            roofFaceVertices = roofFaceVertices.Select(v => v - midpoint).ToList();
+
+            Debug.Log(RotatePointAroundPivot(Normal, new Vector3(0,0,0), rotationVector).ToString());
 
             List<Vector3> transformedPoints = new List<Vector3>();
-            foreach(Vector3 v in roofFaceVertices) {
-                transformedPoints.Add(RotatePointAroundPivot(v, midpoint, rotationVector));
+            foreach (Vector3 v in roofFaceVertices) {
+                transformedPoints.Add(RotatePointAroundPivot(v, new Vector3(0,0,0), rotationVector));
             }
+
             roofFaceVertices = transformedPoints;
-            roofFaceVertices = roofFaceVertices.Select(v => v - midpoint).ToList();
+            //roofFaceVertices = roofFaceVertices.Select(v => v - midpoint).ToList();
+
 
             GameObject gameObject = new GameObject("roof");
 
-            float wallThickness = 0.2f;
             gameObject.layer = 13; // Wall layer
 
             Material roofMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
             gameObject.name = "Roof";
 
-            gameObject.transform.position += new Vector3(0, 3.08f,0);
+            gameObject.transform.position += new Vector3(0, 3.08f, 0);
 
             gameObject.AddComponent<MeshCollider>();
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
@@ -163,9 +170,6 @@ namespace DesignPlatform.Core {
 
             mesh.GetComponent<MeshRenderer>().material = roofMaterial;
 
-
-            gameObject.transform.position = midpoint + new Vector3(0,3,0);
-            gameObject.transform.rotation = Quaternion.Euler( -rotationVector );
         }
 
         public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
