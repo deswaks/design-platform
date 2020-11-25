@@ -316,6 +316,13 @@ namespace DesignPlatform.Core {
             return newOpening;
         }
 
+        public void BuildRoof()
+        {
+
+            RoofGenerator roof = new RoofGenerator();
+            roof.CreateRoofOutlines();
+
+        }
 
         /// <summary>
         /// Destroys and rebuilds all elements visible in POV mode.
@@ -328,8 +335,9 @@ namespace DesignPlatform.Core {
             // Build new
             BuildAllInterfaces();
             BuildAllWallsAsCLTElements();
-            RoofGenerator roof = new RoofGenerator();
-            roof.CreateRoof();
+
+            BuildRoof();
+
             BuildAllSlabs();
         }
 

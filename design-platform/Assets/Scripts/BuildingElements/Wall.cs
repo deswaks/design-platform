@@ -84,8 +84,8 @@ namespace DesignPlatform.Core {
 
             List<Vector3> wallControlPoints = new List<Vector3> {
                     new Vector3 (wallElement.Length/2, 0, 0),
-                    new Vector3 (wallElement.Length/2, 0, wallElement.Height-0.01f),
-                    new Vector3 (-wallElement.Length/2, 0, wallElement.Height-0.01f),
+                    new Vector3 (wallElement.Length/2, 0, wallElement.Height),//-0.01f),
+                    new Vector3 (-wallElement.Length/2, 0, wallElement.Height),//-0.01f),
                     new Vector3 (-wallElement.Length/2, 0, 0) };
 
             // Adjust end points according to joint types
