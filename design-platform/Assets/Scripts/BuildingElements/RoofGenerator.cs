@@ -11,13 +11,20 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
     
-    public static class RoofGenerator{
+    public class RoofGenerator{
 
-        //public float RoofPitch = 25;
-        //public float wallThickness = 0.2f;
-        //public float overhang = 0.4f;
+        private static RoofGenerator instance;
+        public static RoofGenerator Instance
+        {
+            get { return instance ?? (instance = new RoofGenerator()); }
+        }
 
-        public static List<List<Vector3>> CreateRoofOutlines(float RoofPitch = 20, float wallThickness = 0.2f, float overhang = 0.0f) {
+        public float RoofPitch = 25;
+        public float wallThickness = 0.2f;
+        public float overhang = 0.0f;
+        public RoofType roofType = RoofType.Gabled;
+
+        public List<List<Vector3>> CreateRoofOutlines() {
 
             List<Vector2> roofPolygon = RoofUtils.GetBuildingOutline().Select(v => v.ToVector2XZ()).ToList();
 
@@ -26,45 +33,35 @@ namespace DesignPlatform.Core {
             Config config = new Config();
             config.roofConfig.thickness = 0.00f;
             config.roofConfig.overhang = overhang;
-            config.roofConfig.type = RoofType.Gabled;
+            config.roofConfig.type = roofType;
 
             // Creates base roof mesh using ProceduralToolkit
             IConstructible<MeshDraft> constructible = RoofUtils.GenerateRoofPlan(roofPolygon, config);
 
             Mesh roofMesh = constructible.Construct(Vector2.zero).ToMesh();
+            //Mesh roofMesh = ((ProceduralGabledRoof)constructible).ConstructWithPitch(Vector2.zero,15f).ToMesh();
+
             roofMesh.RecalculateNormals();
 
             // Roof mesh triangle indices and vertices. 
             int[] allTriangleIndices = roofMesh.triangles;
             Vector3[] vertices = roofMesh.vertices;
-            Vector3[] normals = roofMesh.normals;
 
             // List for each individual triangle made up by vertices (a,b,c)
             List<Vector3[]> triangleVertices = new List<Vector3[]>();
-            List<Vector3[]> triangleNormals = new List<Vector3[]>();
 
             // Splits index-list into chunks of three (providing the three vertex-indices of each triangle) and adds triangles to list
             RoofUtils.SplitList(allTriangleIndices.ToList(), 3).ForEach(t => triangleVertices.Add(new Vector3[] { vertices[t[0]], vertices[t[1]], vertices[t[2]] }));
-            RoofUtils.SplitList(allTriangleIndices.ToList(), 3).ForEach(t => triangleNormals.Add(new Vector3[] { normals[t[0]], normals[t[1]], normals[t[2]] }));
 
-            List<int> indicesToKeep = new List<int>();
+            // Removes faulty triangles, where two vertices have the same coordinates
+            triangleVertices = triangleVertices.Where(t => !(Vector3.Distance(t[0], t[1]) < 0.01 || Vector3.Distance(t[0], t[2]) < 0.01 || Vector3.Distance(t[2], t[1]) < 0.01)).ToList();
 
-            // Removes faulty triangles, where two vertices have the same coordiates
-            triangleVertices.Where(t => !(Vector3.Distance(t[0], t[1]) < 0.01 || Vector3.Distance(t[0], t[2]) < 0.01 || Vector3.Distance(t[2], t[1]) < 0.01)).ToList().ForEach(t => indicesToKeep.Add(triangleVertices.IndexOf(t)));
-            triangleVertices = indicesToKeep.Select(j => triangleVertices[j]).ToList();
-            triangleNormals = indicesToKeep.Select(j => triangleNormals[j]).ToList();
-
-            // Rounds normals to nearest 1 digit
-            triangleNormals = triangleNormals.Select(t => new Vector3[] { 
-                new Vector3(Mathf.Round(t[0].x * 10) / 10, Mathf.Round(t[0].y * 10) / 10, Mathf.Round(t[0].z * 10) / 10),
-                new Vector3(Mathf.Round(t[1].x * 10) / 10, Mathf.Round(t[1].y * 10) / 10, Mathf.Round(t[1].z * 10) / 10),
-                new Vector3(Mathf.Round(t[2].x * 10) / 10, Mathf.Round(t[2].y * 10) / 10, Mathf.Round(t[2].z * 10) / 10)
-            }).ToList();
-            List<Vector3> culledNormals = triangleNormals.Select(ns => ns[0]).ToList();
+            // Calculates normals of each triangle
+            List<Vector3> triangleNormals = triangleVertices.Select(t => Vector3.Cross(t[2] - t[1], t[0] - t[1]).normalized).ToList();
 
             // Removes horizontal faces (horizontal triangles are created when choosing an overhang length >0 )
-            triangleVertices = triangleVertices.Where((vs, i) => !(Mathf.Abs(Mathf.Abs(culledNormals[i].y) - 1.00f) < 0.01f)).ToList();
-            culledNormals = culledNormals.Where(n => !(Mathf.Abs(Mathf.Abs(n.y) - 1.00f) < 0.01f)).ToList();
+            triangleVertices = triangleVertices.Where((vs, i) => triangleNormals[i].y >= -0.1f).ToList();
+            triangleNormals = triangleNormals.Where(n => n.y >= -0.1f).ToList();
 
             // Identifier ID (Integer) for each roof triangle referring to its roof element
             List<int> roofIDs = Enumerable.Repeat(-1, triangleVertices.Count).ToList();
@@ -75,7 +72,7 @@ namespace DesignPlatform.Core {
                 for (int k = 0; k < roofIDs.Count; k++){
                     if (j == k) continue;
                     // Finds parallel triangles:
-                    if (Vector3.Distance(culledNormals[j], culledNormals[k]) < 0.01){
+                    if (Vector3.Distance(triangleNormals[j], triangleNormals[k]) < 0.01){
                         // Tests if parallel triangle is connect to current by more than one vertex (thus picking only fully attached neighbouring triangles)
                         if (RoofUtils.NumberOfSharedVertices(triangleVertices[j], triangleVertices[k]) > 1){
                             parallelAndConnectedTriangles.Add(triangleVertices[k]);
@@ -109,7 +106,6 @@ namespace DesignPlatform.Core {
             // List for distinct, ordered roof face vertices
             List<List<Vector3>> finalPanelOutlines = new List<List<Vector3>>();
 
-            int index = 0;
             foreach (var face in roofFaceGroups) {
                 // List of triangles in current face. ( Vector3[] is one triangle )
                 List<Vector3[]> trianglesInFace = face.Select(g => g).ToList();
@@ -119,9 +115,6 @@ namespace DesignPlatform.Core {
                 List<Vector3> outline = RoofUtils.SegmentsToPolyline(segments);
 
                 finalPanelOutlines.Add(outline);
-
-                InitializeRoof(outline);
-                index++;
             }
 
             return finalPanelOutlines;
@@ -134,8 +127,7 @@ namespace DesignPlatform.Core {
             Vector3 Normal = Vector3.Cross(roofFaceVertices[2] - roofFaceVertices[1], roofFaceVertices[0] - roofFaceVertices[1]).normalized;
 
             // Moves vertical roof faces (gables) in towards the building, if there is overhang
-            if (Mathf.Abs(Vector3.Dot(Vector3.up, Normal)) < 0.01)
-            {
+            if (Mathf.Abs(Vector3.Dot(Vector3.up, Normal)) < 0.01){
                 roofFaceVertices = roofFaceVertices.Select(v => v + -overhang * Normal).ToList();
             }
 
@@ -146,10 +138,6 @@ namespace DesignPlatform.Core {
             Vector3 rotationVector = (-rotationAxis * rotationAngle);
 
             roofFaceVertices = roofFaceVertices.Select(v => v - midpoint).ToList();
-
-            //Debug.Log("Normal: " + (RotatePointAroundPivot(Normal, new Vector3(0, 0, 0), rotationVector) * 10000).ToString());
-            //Debug.Log("Raw: " + string.Join(" ; ", roofFaceVertices.Select(v => (v*10000).ToString())));
-
 
             List<Vector3> transformedPoints = new List<Vector3>();
             foreach (Vector3 v in roofFaceVertices){
@@ -169,13 +157,14 @@ namespace DesignPlatform.Core {
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
             mesh.CreateShapeFromPolygon(roofFaceVertices, -wallThickness, false);
+            mesh.CreateShapeFromPolygon(roofFaceVertices, -0.2f, false);
             mesh.GetComponent<MeshRenderer>().material = roofMaterial;
 
             gameObject.transform.position = midpoint + new Vector3(0, 3.0f, 0);
             gameObject.transform.rotation = Quaternion.Euler(-rotationVector);
         }
 
-        public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
+        public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
             return Quaternion.Euler(angles) * (point - pivot) + pivot;
         }
 

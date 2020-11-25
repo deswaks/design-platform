@@ -130,7 +130,7 @@ namespace ProceduralToolkit.Buildings
 
     public class ProceduralHippedRoof : ProceduralRoof
     {
-        private const float RoofPitch = 25;
+        private const float RoofPitch = 5;
 
         public ProceduralHippedRoof(List<Vector2> foundationPolygon, RoofConfig roofConfig, Color roofColor)
             : base(foundationPolygon, roofConfig, roofColor)
@@ -159,7 +159,7 @@ namespace ProceduralToolkit.Buildings
 
     public class ProceduralGabledRoof : ProceduralRoof
     {
-        private const float RoofPitch = 25;
+        private const float RoofPitch = 5;
 
         public ProceduralGabledRoof(List<Vector2> foundationPolygon, RoofConfig roofConfig, Color roofColor)
             : base(foundationPolygon, roofConfig, roofColor)
@@ -186,6 +186,32 @@ namespace ProceduralToolkit.Buildings
                 }
             }
             roofTop.Move(Vector3.up*roofConfig.thickness);
+
+            roofDraft.Add(roofTop)
+                .Paint(roofColor);
+            return roofDraft;
+        }
+
+        public MeshDraft ConstructWithPitch(Vector2 parentLayoutOrigin, float RoofPitch = 25)
+        {
+            var roofDraft = ConstructRoofBase(out List<Vector2> roofPolygon2, out List<Vector3> roofPolygon3);
+
+            var skeletonGenerator = new StraightSkeletonGenerator();
+            var skeleton = skeletonGenerator.Generate(roofPolygon2);
+
+            var roofTop = new MeshDraft();
+            foreach (var skeletonPolygon2 in skeleton.polygons)
+            {
+                if (skeletonPolygon2.Count == 3)
+                {
+                    roofTop.Add(ConstructGableDraft(skeletonPolygon2, RoofPitch));
+                }
+                else
+                {
+                    roofTop.Add(ConstructContourDraft(skeletonPolygon2, RoofPitch));
+                }
+            }
+            roofTop.Move(Vector3.up * roofConfig.thickness);
 
             roofDraft.Add(roofTop)
                 .Paint(roofColor);

@@ -318,10 +318,12 @@ namespace DesignPlatform.Core {
 
         public void BuildRoof()
         {
-
-            RoofGenerator roof = new RoofGenerator();
-            roof.CreateRoofOutlines();
-
+            //RoofGenerator roof = new RoofGenerator();
+            List<List<Vector3>> roofOutlines = RoofGenerator.Instance.CreateRoofOutlines();
+            foreach(List<Vector3> outline in roofOutlines)
+            {
+                RoofGenerator.Instance.InitializeRoof(outline);
+            }
         }
 
         /// <summary>
