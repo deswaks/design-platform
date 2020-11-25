@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using DesignPlatform.Core;
+using DesignPlatform.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Structural {
+namespace StructuralAnalysis {
 
     public static class LoadDistribution {
 
@@ -16,7 +17,7 @@ namespace Structural {
             List<Vector3> controlPoints = room.GetControlPoints(localCoordinates: true, closed: true);
             List<float> spans = new List<float>() { 0.0f, 0.0f, 0.0f };
             for (int i = 0; i < controlPoints.Count - 1; i++) {
-                Vector3 wallVector = (controlPoints[i] - controlPoints[i + 1]);
+                Vector3 wallVector = controlPoints[i] - controlPoints[i + 1];
                 spans[0] += Mathf.Abs(wallVector[0]);
                 spans[1] += Mathf.Abs(wallVector[1]);
                 spans[2] += Mathf.Abs(wallVector[2]);
@@ -78,7 +79,7 @@ namespace Structural {
                 Vector3 endPoint = points[wallIndex + 1];
 
                 // Find aksen som væggen spænder
-                Vector3 wallVector = (startPoint - endPoint);
+                Vector3 wallVector = startPoint - endPoint;
                 int wallAxis = VectorFunctions.IndexAbsLargestComponent(wallVector);
 
                 // Find unikke værdier på denne akse og reparameteriser disse over væggens længde
@@ -89,7 +90,7 @@ namespace Structural {
 
                 // Tilføj en load for denne væg mellem hver unik værdi på væggens akse
                 WallLoads.Add(wallIndex, new List<Load>());
-                for (int i = 0; i < (lengthParameters.Count - 1); i++) {
+                for (int i = 0; i < lengthParameters.Count - 1; i++) {
                     float startParam = lengthParameters[i];
                     float endParam = lengthParameters[i + 1];
                     if (startParam >= 0.0f && endParam <= 1.0f) {

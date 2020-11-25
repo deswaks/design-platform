@@ -1,13 +1,11 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using TMPro;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class RadialSlider : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class RadialSlider : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler {
         private const string PREFS_UI_SAVE_NAME = "Radial";
 
         // Content
@@ -42,55 +40,47 @@ namespace Michsky.UI.ModernUIPack
         private float currentAngleOnPointerDown;
         private float valueDisplayPrecision;
 
-        public float SliderAngle
-        {
+        public float SliderAngle {
             get { return currentAngle; }
             set { currentAngle = Mathf.Clamp(value, 0.0f, 360.0f); }
         }
 
         // Slider value with applied display precision, i.e. the number of decimals to show.
-        public float SliderValue
-        {
+        public float SliderValue {
             get { return (long)(SliderValueRaw * valueDisplayPrecision) / valueDisplayPrecision; }
             set { SliderValueRaw = value; }
         }
 
         // Raw slider value, i.e. without any display precision applied to its value.
-        public float SliderValueRaw
-        {
+        public float SliderValueRaw {
             get { return SliderAngle / 360.0f * maxValue; }
             set { SliderAngle = value * 360.0f / maxValue; }
         }
 
-        private void Awake()
-        {
+        private void Awake() {
             graphicRaycaster = GetComponentInParent<GraphicRaycaster>();
 
-            if (graphicRaycaster == null)
-            {
+            if (graphicRaycaster == null) {
                 Debug.LogWarning("Could not find GraphicRaycaster component in parent of this GameObject: " + name);
                 Destroy(gameObject);
             }
         }
 
-        private void Start()
-        {
+        private void Start() {
             valueDisplayPrecision = Mathf.Pow(10, decimals);
             LoadState();
             SliderAngle = currentValue * 3.6f;
             UpdateUI();
         }
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
+        public void OnPointerDown(PointerEventData eventData) {
             hitRectTransform = eventData.pointerCurrentRaycast.gameObject.GetComponent<RectTransform>();
             isPointerDown = true;
             currentAngleOnPointerDown = SliderAngle;
             HandleSliderMouseInput(eventData, true);
         }
 
-        public void OnPointerUp(PointerEventData eventData)
-        {
+        public void OnPointerUp(PointerEventData eventData) {
             if (HasValueChanged())
                 SaveState();
 
@@ -98,40 +88,34 @@ namespace Michsky.UI.ModernUIPack
             isPointerDown = false;
         }
 
-        public void OnDrag(PointerEventData eventData)
-        {
+        public void OnDrag(PointerEventData eventData) {
             HandleSliderMouseInput(eventData, false);
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
+        public void OnPointerEnter(PointerEventData eventData) {
             onPointerEnter.Invoke();
         }
 
-        public void OnPointerExit(PointerEventData eventData)
-        {
+        public void OnPointerExit(PointerEventData eventData) {
             onPointerExit.Invoke();
         }
 
-        public void LoadState()
-        {
+        public void LoadState() {
             if (!rememberValue)
                 return;
 
             currentAngle = PlayerPrefs.GetFloat(sliderTag + PREFS_UI_SAVE_NAME);
         }
 
-        public void SaveState()
-        {
+        public void SaveState() {
             if (!rememberValue)
                 return;
 
             PlayerPrefs.SetFloat(sliderTag + PREFS_UI_SAVE_NAME, currentAngle);
         }
 
-        public void UpdateUI()
-        {
-            float normalizedAngle = SliderAngle / 360.0f; 
+        public void UpdateUI() {
+            float normalizedAngle = SliderAngle / 360.0f;
             indicatorPivot.transform.localEulerAngles = new Vector3(180.0f, 0.0f, SliderAngle);
             sliderImage.fillAmount = normalizedAngle;
 
@@ -139,13 +123,11 @@ namespace Michsky.UI.ModernUIPack
             currentValue = SliderValue;
         }
 
-        private bool HasValueChanged()
-        {
+        private bool HasValueChanged() {
             return SliderAngle != currentAngleOnPointerDown;
         }
 
-        private void HandleSliderMouseInput(PointerEventData eventData, bool allowValueWrap)
-        {
+        private void HandleSliderMouseInput(PointerEventData eventData, bool allowValueWrap) {
             if (!isPointerDown)
                 return;
 
@@ -153,8 +135,7 @@ namespace Michsky.UI.ModernUIPack
             RectTransformUtility.ScreenPointToLocalPointInRectangle(hitRectTransform, eventData.position, eventData.pressEventCamera, out localPos);
             float newAngle = Mathf.Atan2(-localPos.y, localPos.x) * Mathf.Rad2Deg + 180f;
 
-            if (!allowValueWrap)
-            {
+            if (!allowValueWrap) {
                 float currentAngle = SliderAngle;
                 bool needsClamping = Mathf.Abs(newAngle - currentAngle) >= 180;
 

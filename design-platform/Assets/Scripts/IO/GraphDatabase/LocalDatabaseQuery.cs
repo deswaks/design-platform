@@ -14,11 +14,13 @@ namespace DesignPlatform.Database {
         /// <param name="RoomNode">RoomNode to create as a Room in Unity</param>
         public static void CreateUnityRoomFromRoomNode(RoomNode RoomNode) {
             // Builds room
-            Room newRoom = Building.Instance.BuildRoom(buildShape: RoomNode.shape, buildType: RoomNode.type);
+            Room newRoom = Building.Instance.BuildRoom(RoomNode.shape);
             //Gets control points from graph data
             
             List<Vector3> controlPoints = GraphUtils.StringListToVector3List(RoomNode.vertices);
             newRoom.SetControlPoints(controlPoints);
+            newRoom.SetRoomType(RoomNode.type);
+            newRoom.UpdateRender2D();
         }
 
         /// <summary>
@@ -164,12 +166,12 @@ namespace DesignPlatform.Database {
         {
             jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\WallElements.json";
 
-            List<WallElement> wallElements = Building.Instance.IdentifyWallElementsAndJointTypes();
+            List<CLTElement> wallElements = CLTElementGenerator.IdentifyWallElementsAndJointTypes();
 
             // Collects Unity room as RoomNodes
             List<WallElementNode> wallElementNodes = new List<WallElementNode>();
 
-            foreach (WallElement element in wallElements) {
+            foreach (CLTElement element in wallElements) {
                 wallElementNodes.Add(new WallElementNode {
                     vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { element.startPoint.point, element.endPoint.point}),
                     startJointType = element.startPoint.jointType.ToString(),
@@ -282,8 +284,8 @@ namespace DesignPlatform.Database {
         /// <param name="rooms">List of rooms</param>
         /// <returns>List of InterfaceNodes created.</returns>
         public static List<WallElementNode> AllRoomInterfacesToInterfaceNodes() {
-            List<Interface> allInterfaces = Building.Instance.Walls.Select(w => w.Interface).ToList();
-            //List<Interface> allInterfaces = Building.Instance.interfaces.Where(i => i.GetOrientation() == Orientation.VERTICAL).ToList();
+            //List<Interface> allInterfaces = Building.Instance.Walls.Select(w => w.Interface).ToList();
+            List<Interface> allInterfaces = Building.Instance.Interfaces.Where(i => i.Orientation== Orientation.VERTICAL).ToList();
 
             //allInterfaces.ForEach(interFace => Debug.Log(interFace.GetStartPoint() + ", " + interFace.GetEndPoint()));
 

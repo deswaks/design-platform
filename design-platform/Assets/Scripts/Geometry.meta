@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 7552df4a1bcbe364aac4c5e9335c533f
+<<<<<<< HEAD:design-platform/Assets/Scripts/Geometry.meta
+guid: 020d6bd10a7cbb94fa9523e8db980406
+=======
+guid: 8c8bb1851a523554ca9565fd947f8748
+>>>>>>> master:design-platform/Assets/Plugins/Vectrosity.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

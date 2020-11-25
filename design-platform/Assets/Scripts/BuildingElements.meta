@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:design-platform/Assets/Libraries/Neo4jClient.Extension/Neo4jClient.Extension.csproj.meta
+guid: 95b3adaf4b9c2bc438aa21d48c566a56
+=======
 guid: 059b05a479595764baafe1b297004e07
 folderAsset: yes
+>>>>>>> c21da272c3b19d713ba937b43d3190007d66a6b8:design-platform/Assets/Scripts/BuildingElements.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

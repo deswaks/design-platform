@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+CRC: 3492227927
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5e5eeda6ad03fa8139c3d2664d9c13ae
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 21c99c86a43ad817b2cb7f65458ae090
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Materials/plan_room_wall.mat
+- Assets/Materials/plan_room_doubleroom.mat
+- Assets/Materials/slabMaterial.mat
+- Assets/Materials/OpeningWindow.mat
+- Assets/Materials/CLT/CLT.mat
+- Assets/Materials/plan_room_kitchen.mat
+- Assets/Materials/plan_room_livingroom.mat
+- Assets/Materials/wallMaterial.mat
+- Assets/Materials/openingMaterial.mat
+- Assets/Materials/plan_room_corridor.mat
+- Assets/Materials/plan_opening.mat
+- Assets/Materials/plan_room_bathroom.mat
+- Assets/Materials/plan_room_highlight.mat
+- Assets/Materials/plan_room_singleRoom.mat
+- Assets/Materials/plan_room_default.mat
+- Assets/Materials/OpeningDoor.mat
+Dependencies: []

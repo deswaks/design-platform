@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class WindowManager : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class WindowManager : MonoBehaviour {
         // Content
         public List<WindowItem> windows = new List<WindowItem>();
 
@@ -29,15 +26,13 @@ namespace Michsky.UI.ModernUIPack
         private Animator nextButtonAnimator;
 
         [System.Serializable]
-        public class WindowItem
-        {
+        public class WindowItem {
             public string windowName = "My Window";
             public GameObject windowObject;
             public GameObject buttonObject;
         }
 
-        void Start()
-        {
+        void Start() {
             currentButton = windows[currentWindowIndex].buttonObject;
             currentButtonAnimator = currentButton.GetComponent<Animator>();
             currentButtonAnimator.Play(buttonFadeIn);
@@ -47,10 +42,8 @@ namespace Michsky.UI.ModernUIPack
             currentWindowAnimator.Play(windowFadeIn);
         }
 
-        public void OpenFirstTab()
-        {
-            if (currentWindowIndex != 0)
-            {
+        public void OpenFirstTab() {
+            if (currentWindowIndex != 0) {
                 currentWindow = windows[currentWindowIndex].windowObject;
                 currentWindowAnimator = currentWindow.GetComponent<Animator>();
                 currentWindowAnimator.Play(windowFadeOut);
@@ -71,8 +64,7 @@ namespace Michsky.UI.ModernUIPack
                 currentButtonAnimator.Play(buttonFadeIn);
             }
 
-            else if (currentWindowIndex == 0)
-            {
+            else if (currentWindowIndex == 0) {
                 currentWindow = windows[currentWindowIndex].windowObject;
                 currentWindowAnimator = currentWindow.GetComponent<Animator>();
                 currentWindowAnimator.Play(windowFadeIn);
@@ -83,15 +75,14 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void OpenPanel(string newPanel)
-        {
-            for (int i = 0; i < windows.Count; i++)
-            {
+        public void OpenPanel(string newPanel) {
+            for (int i = 0; i < windows.Count; i++) {
                 if (windows[i].windowName == newPanel)
                     newWindowIndex = i;
             }
 
-            if (newWindowIndex != currentWindowIndex)
+
+            if (true) // newWindowIndex != currentWindowIndex) /////////////// NIKLAS
             {
                 currentWindow = windows[currentWindowIndex].windowObject;
                 currentButton = windows[currentWindowIndex].buttonObject;
@@ -115,10 +106,8 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void NextPage()
-        {
-            if (currentWindowIndex <= windows.Count - 2)
-            {
+        public void NextPage() {
+            if (currentWindowIndex <= windows.Count - 2) {
                 currentWindow = windows[currentWindowIndex].windowObject;
                 currentButton = windows[currentButtonIndex].buttonObject;
                 nextButton = windows[currentButtonIndex + 1].buttonObject;
@@ -140,10 +129,8 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void PrevPage()
-        {
-            if (currentWindowIndex >= 1)
-            {
+        public void PrevPage() {
+            if (currentWindowIndex >= 1) {
                 currentWindow = windows[currentWindowIndex].windowObject;
                 currentButton = windows[currentButtonIndex].buttonObject;
                 nextButton = windows[currentButtonIndex - 1].buttonObject;
@@ -165,8 +152,7 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
-        public void AddNewItem()
-        {
+        public void AddNewItem() {
             WindowItem window = new WindowItem();
             windows.Add(window);
         }

@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class TooltipManager : MonoBehaviour
-    {
+namespace Michsky.UI.ModernUIPack {
+    public class TooltipManager : MonoBehaviour {
         // Resources
         public Canvas mainCanvas;
         public GameObject tooltipObject;
@@ -26,8 +24,7 @@ namespace Michsky.UI.ModernUIPack
         Vector3 contentPos = new Vector3(0, 0, 0);
         Vector3 tooltipVelocity = Vector3.zero;
 
-        void Start()
-        {
+        void Start() {
             if (mainCanvas == null)
                 mainCanvas = gameObject.GetComponentInParent<Canvas>();
 
@@ -37,51 +34,42 @@ namespace Michsky.UI.ModernUIPack
             gameObject.transform.SetAsLastSibling();
         }
 
-        void Update()
-        {
-            if (allowUpdating == true)
-            {
+        void Update() {
+            if (allowUpdating == true) {
                 cursorPos = Input.mousePosition;
-                cursorPos.z = tooltipZHelper.position.z;       
+                //cursorPos.z = tooltipZHelper.position.z;       
                 uiPos = tooltipRect.anchoredPosition;
                 CheckForBounds();
 
-                if (mainCanvas.renderMode == RenderMode.ScreenSpaceCamera || mainCanvas.renderMode == RenderMode.WorldSpace)
-                {
+                if (mainCanvas.renderMode == RenderMode.ScreenSpaceCamera || mainCanvas.renderMode == RenderMode.WorldSpace) {
                     tooltipRect.position = Camera.main.ScreenToWorldPoint(cursorPos);
                     tooltipContent.transform.localPosition = Vector3.SmoothDamp(tooltipContent.transform.localPosition, contentPos, ref tooltipVelocity, tooltipSmoothness);
                 }
 
-                else if (mainCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
-                {
+                else if (mainCanvas.renderMode == RenderMode.ScreenSpaceOverlay) {
                     tooltipRect.position = cursorPos;
                     tooltipContent.transform.position = Vector3.SmoothDamp(tooltipContent.transform.position, cursorPos + contentPos, ref tooltipVelocity, tooltipSmoothness);
                 }
             }
         }
 
-        public void CheckForBounds()
-        {
-            if (uiPos.x <= -400)
-            {
+        public void CheckForBounds() {
+            if (uiPos.x <= -400) {
                 contentPos = new Vector3(hBorderLeft, contentPos.y, 0);
                 tooltipContent.GetComponent<RectTransform>().pivot = new Vector2(0f, tooltipContent.GetComponent<RectTransform>().pivot.y);
             }
 
-            if (uiPos.x >= 400)
-            {
+            if (uiPos.x >= 400) {
                 contentPos = new Vector3(hBorderRight, contentPos.y, 0);
                 tooltipContent.GetComponent<RectTransform>().pivot = new Vector2(1f, tooltipContent.GetComponent<RectTransform>().pivot.y);
             }
 
-            if (uiPos.y <= -325)
-            {
+            if (uiPos.y <= -325) {
                 contentPos = new Vector3(contentPos.x, vBorderBottom, 0);
                 tooltipContent.GetComponent<RectTransform>().pivot = new Vector2(tooltipContent.GetComponent<RectTransform>().pivot.x, 0f);
             }
 
-            if (uiPos.y >= 325)
-            {
+            if (uiPos.y >= 325) {
                 contentPos = new Vector3(contentPos.x, vBorderTop, 0);
                 tooltipContent.GetComponent<RectTransform>().pivot = new Vector2(tooltipContent.GetComponent<RectTransform>().pivot.x, 1f);
             }

@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(NotificationManager))]
     [System.Serializable]
-    public class NotificationManagerEditor : Editor
-    {
+    public class NotificationManagerEditor : Editor {
         // Variables
         private NotificationManager ntfTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             ntfTarget = (NotificationManager)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -87,8 +83,7 @@ namespace Michsky.UI.ModernUIPack
             var useStacking = serializedObject.FindProperty("useStacking");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("CONTENT", customSkin.FindStyle("Header"));
@@ -103,10 +98,8 @@ namespace Michsky.UI.ModernUIPack
                     if (ntfTarget.iconObj != null)
                         ntfTarget.iconObj.sprite = ntfTarget.icon;
 
-                    else
-                    {
-                        if (ntfTarget.iconObj == null)
-                        {
+                    else {
+                        if (ntfTarget.iconObj == null) {
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("'Icon Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();
@@ -123,10 +116,8 @@ namespace Michsky.UI.ModernUIPack
                     if (ntfTarget.titleObj != null)
                         ntfTarget.titleObj.text = title.stringValue;
 
-                    else
-                    {
-                        if (ntfTarget.titleObj == null)
-                        {
+                    else {
+                        if (ntfTarget.titleObj == null) {
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("'Title Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();
@@ -143,10 +134,8 @@ namespace Michsky.UI.ModernUIPack
                     if (ntfTarget.descriptionObj != null)
                         ntfTarget.descriptionObj.text = description.stringValue;
 
-                    else
-                    {
-                        if (ntfTarget.descriptionObj == null)
-                        {
+                    else {
+                        if (ntfTarget.descriptionObj == null) {
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("'Description Object' is not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();
@@ -204,8 +193,7 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (enableTimer.boolValue == true)
-                    {
+                    if (enableTimer.boolValue == true) {
                         GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                         EditorGUILayout.LabelField(new GUIContent("Timer"), customSkin.FindStyle("Text"), GUILayout.Width(120));

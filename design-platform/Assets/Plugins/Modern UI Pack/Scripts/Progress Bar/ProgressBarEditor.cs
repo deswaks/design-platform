@@ -2,24 +2,20 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     [CustomEditor(typeof(ProgressBar))]
     [System.Serializable]
-    public class ProgressBarEditor : Editor
-    {
+    public class ProgressBarEditor : Editor {
         // Variables
         private ProgressBar pbTarget;
         private int currentTab;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             // Set target
             pbTarget = (ProgressBar)target;
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             // GUI skin variable
             GUISkin customSkin;
 
@@ -82,8 +78,7 @@ namespace Michsky.UI.ModernUIPack
             var invert = serializedObject.FindProperty("invert");
 
             // Draw content depending on tab index
-            switch (currentTab)
-            {
+            switch (currentTab) {
                 case 0:
                     GUILayout.Space(20);
                     GUILayout.Label("CONTENT", customSkin.FindStyle("Header"));
@@ -95,16 +90,13 @@ namespace Michsky.UI.ModernUIPack
 
                     GUILayout.EndHorizontal();
 
-                    if (pbTarget.loadingBar != null && pbTarget.textPercent != null)
-                    {
+                    if (pbTarget.loadingBar != null && pbTarget.textPercent != null) {
                         pbTarget.loadingBar.fillAmount = pbTarget.currentPercent / 100;
                         pbTarget.textPercent.text = ((int)pbTarget.currentPercent).ToString("F0") + "%";
                     }
 
-                    else
-                    {
-                        if (pbTarget.loadingBar == null || pbTarget.textPercent == null)
-                        {
+                    else {
+                        if (pbTarget.loadingBar == null || pbTarget.textPercent == null) {
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.HelpBox("Some resources are not assigned. Go to Resources tab and assign the correct variable.", MessageType.Error);
                             GUILayout.EndHorizontal();
@@ -149,7 +141,7 @@ namespace Michsky.UI.ModernUIPack
                     isOn.boolValue = GUILayout.Toggle(isOn.boolValue, new GUIContent("Is On"), customSkin.FindStyle("Toggle"));
                     isOn.boolValue = GUILayout.Toggle(isOn.boolValue, new GUIContent(""), customSkin.FindStyle("Toggle Helper"));
 
-                    GUILayout.EndHorizontal();                 
+                    GUILayout.EndHorizontal();
                     GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
                     restart.boolValue = GUILayout.Toggle(restart.boolValue, new GUIContent("Restart"), customSkin.FindStyle("Toggle"));

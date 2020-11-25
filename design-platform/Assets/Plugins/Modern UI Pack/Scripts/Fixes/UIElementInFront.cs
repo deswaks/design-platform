@@ -1,14 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-namespace Michsky.UI.ModernUIPack
-{
-    public class UIElementInFront : MonoBehaviour
-    {
-        void Start()
-        {
+namespace Michsky.UI.ModernUIPack {
+    public class UIElementInFront : MonoBehaviour {
+        void Start() {
             transform.SetAsLastSibling();
         }
     }

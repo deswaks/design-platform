@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Text>Design Platform Plugin</Text>
+		<AllowLoadingIntoExistingSession>true</AllowLoadingIntoExistingSession>
+		<ClientId>D06FD36E-3290-417C-87FB-60A93FB5555E</ClientId>
+		<Name>Design Platform</Name>
+		<FullClassName>Ribbon.Ribbons</FullClassName>
+		<Assembly>DesignPlatform.dll</Assembly>
+		<VendorId>DESWAKS</VendorId>
+		<VendorDescription>Your Company Info</VendorDescription>
+	</AddIn>
+</RevitAddIns>

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Structural {
+﻿namespace StructuralAnalysis {
     public struct Load {
         public float pStart;
         public float pEnd;

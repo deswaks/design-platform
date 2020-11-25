@@ -241,18 +241,5 @@ namespace DesignPlatform.Core {
             Faces = closestFaces;
         }
 
-
-        public List<Vector2> GetLocalNormalVertices(bool closed = false) {
-            List<Vector2> localNormalVertices = new List<Vector2> {
-                    new Vector2 ( Width/2, SillHeight),
-                    new Vector2 ( Width/2, SillHeight + Height),
-                    new Vector2 ( Width/2, SillHeight + Height),
-                    new Vector2 ( Width/2, SillHeight),
-                    new Vector2 ( Width/2, SillHeight)
-                };
-            if (!closed) return localNormalVertices.GetRange(0, localNormalVertices.Count - 1).ToList();
-            else return localNormalVertices;
-        }
-
     }
 }

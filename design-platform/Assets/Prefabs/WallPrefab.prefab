@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallThickness: 10
-  wallMaterial: {fileID: 2100000, guid: be732c24d8851314f9e67c3e6d3d3873, type: 2}
+  wallMaterial: {fileID: 2100000, guid: bdd421c4380a01840ab9810aff0be0b1, type: 2}
 --- !u!114 &8193709700841667738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,7 +82,7 @@ MeshRenderer:
   m_GameObject: {fileID: 2315267628937713451}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1

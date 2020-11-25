@@ -1,22 +1,17 @@
-﻿using UnityEngine;
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using UnityEditor;
 
-namespace UnityEngine.UI
-{
-    namespace Michsky.UI.ModernUIPack
-    {
+namespace UnityEngine.UI {
+    namespace Michsky.UI.ModernUIPack {
         [CustomEditor(typeof(UIGradient))]
         [System.Serializable]
-        public class UIGradientEditor : Editor
-        {
+        public class UIGradientEditor : Editor {
             // Variables
             private int currentTab;
 
-            public override void OnInspectorGUI()
-            {
+            public override void OnInspectorGUI() {
                 // GUI skin variables
-                GUISkin customSkin;   
+                GUISkin customSkin;
 
                 // Select GUI skin depending on the editor theme
                 if (EditorGUIUtility.isProSkin == true)
@@ -63,8 +58,7 @@ namespace UnityEngine.UI
                 var _offset = serializedObject.FindProperty("_offset");
 
                 // Draw content depending on tab index
-                switch (currentTab)
-                {
+                switch (currentTab) {
                     case 0:
                         GUILayout.Space(20);
                         GUILayout.Label("SETTINGS", customSkin.FindStyle("Header"));
@@ -89,7 +83,7 @@ namespace UnityEngine.UI
                         GUILayout.EndHorizontal();
                         EditorGUILayout.HelpBox("Remember that the colors are applied per-vertex, so if you have multiple points on your gradient where the color changes and there aren't enough vertices, you won't see all of the colors.", MessageType.Info);
                         GUILayout.Space(4);
-                        break;              
+                        break;
                 }
 
                 // Apply the changes

@@ -16,14 +16,14 @@ TagManager:
   - 
   - 
   - Rooms
-  - MoveHandle
+  - Handle
   - Sketchplane
   - Ground
   - FirstPerson
   - Wall
-  - 
-  - 
-  - 
+  - Slab
+  - Door
+  - Window
   - 
   - 
   - 
@@ -42,4 +42,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: 3D
+    uniqueID: 2555739033
+    locked: 0
+  - name: PLAN
+    uniqueID: 3958829973
+    locked: 0
+  - name: HUD
+    uniqueID: 1720880125
     locked: 0
