@@ -62,11 +62,16 @@ namespace DesignPlatform.Core {
                 new Vector3(Mathf.Round(t[2].x * 10) / 10, Mathf.Round(t[2].y * 10) / 10, Mathf.Round(t[2].z * 10) / 10)
             }).ToList();
 
+            triangleNormals.ForEach(ns => Debug.Log("Normal: "+string.Join(" ; ", ns.ToList().Select(n=>(n*100000).ToString()))));
+
+            List<Vector3> normals = triangleNormals.Select(ns => ns[0]).ToList();
 
             // Identifier ID (Integer) for each roof triangle referring to its roof element
             List<int> roofIDs = Enumerable.Repeat(-1, triangleVertices.Count).ToList();
 
             for (int j = 0; j < roofIDs.Count; j++){
+
+                RoofUtils.VisualizePointsAsSpheres(triangleVertices[j].ToList(),j.ToString());
 
                 List<Vector3[]> parallelAndConnectedTriangles = new List<Vector3[]>();
                 for (int k = 0; k < roofIDs.Count; k++) {
@@ -95,6 +100,8 @@ namespace DesignPlatform.Core {
                 }
             }
 
+            Debug.Log("IDs: " + string.Join(";", roofIDs.OrderBy(n => n)));
+
             // Groups vertices and normals by roofIDs
             IEnumerable<IGrouping<int, Vector3[]>> roofFaceGroups = triangleVertices.GroupBy(i => roofIDs[triangleVertices.IndexOf(i)]);
             IEnumerable<IGrouping<int, Vector3[]>> roofFaceNormalsGroups = triangleNormals.GroupBy(i => roofIDs[triangleNormals.IndexOf(i)]);
@@ -122,7 +129,7 @@ namespace DesignPlatform.Core {
 
                 finalVertices.Add(outline);
 
-                InitializeRoof(finalVertices.Last(), normal);
+                //InitializeRoof(finalVertices.Last(), normal);
                 index++;
             }
         }
@@ -130,26 +137,35 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Construct roof.
         /// </summary>
-        public void InitializeRoof(List<Vector3> roofFaceVertices, Vector3 Normal) {
-            Vector3 midpoint = RoofUtils.Midpoint(roofFaceVertices);
+        public void InitializeRoof(List<Vector3> roofFaceVertices, Vector3 n) {
 
+            //Vector3 Normal = new Vector3(Mathf.Abs(n.x), Mathf.Abs(n.y), Mathf.Abs(n.z));
 
-            //Vector3 midpoint = new Vector3(roofFaceVertices[0].x, roofFaceVertices[0].y, roofFaceVertices[0].z);
-            Vector3 rotationAxis = Vector3.Cross(Vector3.up, Normal).normalized;
-            float rotationAngle = Vector3.Angle(Vector3.up, Normal);
-            Vector3 rotationVector = (-rotationAxis * rotationAngle);
+            //Vector3 midpoint = RoofUtils.Midpoint(roofFaceVertices);
+            //midpoint = new Vector3(roofFaceVertices[0].x, roofFaceVertices[0].y, roofFaceVertices[0].z);
+            
+            //Vector3 rotationAxis = Vector3.Cross(Vector3.up, Normal).normalized;
+            //float rotationAngle  = Vector3.Angle(Vector3.up, Normal);
+            //Vector3 rotationVector = (-rotationAxis * rotationAngle);
 
-            roofFaceVertices = roofFaceVertices.Select(v => v - midpoint).ToList();
-
-            Debug.Log(RotatePointAroundPivot(Normal, new Vector3(0,0,0), rotationVector).ToString());
-
-            List<Vector3> transformedPoints = new List<Vector3>();
-            foreach (Vector3 v in roofFaceVertices) {
-                transformedPoints.Add(RotatePointAroundPivot(v, new Vector3(0,0,0), rotationVector));
-            }
-
-            roofFaceVertices = transformedPoints;
             //roofFaceVertices = roofFaceVertices.Select(v => v - midpoint).ToList();
+
+            //Debug.Log("Normal: "+(RotatePointAroundPivot(Normal, new Vector3(0, 0, 0), rotationVector)*10000).ToString());
+
+            //List<Vector3> transformedPoints = new List<Vector3>();
+            //foreach (Vector3 v in roofFaceVertices) {
+            //    transformedPoints.Add(RotatePointAroundPivot(v, new Vector3(0,0,0), rotationVector));
+            //}
+
+            //roofFaceVertices = transformedPoints;
+
+            //Debug.Log("Raw: "+string.Join(" ; ", roofFaceVertices.Select(v=>v.ToString()) )) ;
+            //foreach (Vector3 v in roofFaceVertices)
+            //{
+            //    GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //    sphere.transform.position = v;
+            //    sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            //}
 
 
             GameObject gameObject = new GameObject("roof");
@@ -159,16 +175,22 @@ namespace DesignPlatform.Core {
             Material roofMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
             gameObject.name = "Roof";
 
-            gameObject.transform.position += new Vector3(0, 3.08f, 0);
+
+            //gameObject.transform.position += new Vector3(0, 3.08f, 0);
 
             gameObject.AddComponent<MeshCollider>();
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
-            List<Vector3> wallMeshControlPoints = roofFaceVertices.Select(p => p -= Vector3.up * (wallThickness / 2)).ToList();
+            List<Vector3> wallMeshControlPoints = roofFaceVertices;//.Select(p => p += Vector3.up * (wallThickness / 2)).ToList();
 
             mesh.CreateShapeFromPolygon(wallMeshControlPoints, -wallThickness, false);
 
             mesh.GetComponent<MeshRenderer>().material = roofMaterial;
+            //Debug.Log("Control: " + string.Join(" ; ", wallMeshControlPoints.Select(v => v.ToString())));
+
+
+            //gameObject.transform.position += midpoint;
+            //gameObject.transform.rotation = Quaternion.Euler(-rotationVector);
 
         }
 

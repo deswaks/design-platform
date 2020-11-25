@@ -50,6 +50,17 @@ namespace DesignPlatform.Core {
             return outline;
         }
 
+        public static void VisualizePointsAsSpheres(List<Vector3> vertices,string name = "vertex")
+        {
+            foreach (Vector3 v in vertices)
+            {
+                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sphere.transform.position = v;
+                sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                sphere.name = name;
+            }
+        }
+
         public static List<List<Vector3>> GetMeshOutline(List<Vector3[]> trianglesInface) {
             List<List<Vector3>> allSegments = new List<List<Vector3>>();
             foreach (Vector3[] tri in trianglesInface) {
