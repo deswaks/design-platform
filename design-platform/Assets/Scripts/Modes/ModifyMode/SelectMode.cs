@@ -53,12 +53,26 @@ public class SelectMode : Mode {
         }
     }
 
+<<<<<<< Updated upstream
     private void Select() {
         // Abort if UI object is under cursor
         bool overGO = EventSystem.current.IsPointerOverGameObject();
         if (overGO) {
             return;
         }
+=======
+            // Check if any number key was pressed
+            if (Input.GetKeyDown(KeyCode.Alpha0)) {
+                if (selection != null) selection.Type = RoomType.DEFAULT;
+            }
+            for (int i = (int)KeyCode.Alpha1; i <= (int)KeyCode.Alpha6; i++) {
+                if (Input.GetKeyDown((KeyCode)i)) {
+                    if (selection != null) {
+                        selection.Type = ((RoomType) i - (int)KeyCode.Alpha1 + 10);
+                    }
+                }
+            }
+>>>>>>> Stashed changes
 
         // Set new room selection
         Room clickedRoom = GetClickedRoom();

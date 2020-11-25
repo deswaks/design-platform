@@ -24,6 +24,7 @@ public class Building {
         interfaces = new List<Interface>();
     }
 
+<<<<<<< Updated upstream
     // Returns a list of all the rooms in the building
     public List<Room> GetRooms() {
         return rooms;
@@ -37,6 +38,30 @@ public class Building {
     public void RemoveInterface(Interface interFace) {
         if (interfaces.Contains(interFace)) { interfaces.Remove(interFace); }
     }
+=======
+        /// <summary>
+        /// All Rooms of this building
+        /// </summary>
+        public List<Room> Rooms { get; private set; }
+
+        /// <summary>
+        /// Builds a new room and adds it to the managed building list
+        /// </summary>
+        /// <param name="buildShape"></param>
+        /// <param name="preview"></param>
+        /// <param name="templateRoom"></param>
+        /// <returns></returns>
+        public Room BuildRoom(RoomShape buildShape = RoomShape.RECTANGLE, RoomType buildType = RoomType.DEFAULT, Room templateRoom = null) {
+            GameObject newRoomGameObject = new GameObject("Room");
+            Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
+
+            newRoom.InitRoom(shape: buildShape, type: buildType);
+            if (templateRoom != null) {
+                newRoomGameObject.transform.position = templateRoom.transform.position;
+                newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
+            }
+            if (buildType != RoomType.PREVIEW) { Rooms.Add(newRoom); }
+>>>>>>> Stashed changes
 
 
     /// <summary>
@@ -173,6 +198,7 @@ public class Building {
                         existingInterface.attachedFaces[1] = face;
                         face.AddInterface(existingInterface, splitParameters[i], splitParameters[i + 1]);
                     }
+<<<<<<< Updated upstream
 
                     // Create new interface
                     else {
@@ -180,6 +206,26 @@ public class Building {
                         interFace.attachedFaces[0] = face;
                         interfaces.Add(interFace);
                         face.AddInterface(interFace, splitParameters[i], splitParameters[i + 1]);
+=======
+                }
+            }
+            // Sort splitpoints between startpoint and endpoint
+            splitPoints = splitPoints.OrderBy(p => face.Line.Parameter(p)).Distinct().ToList();
+            List<float> splitParameters = splitPoints.Select(p => face.Line.Parameter(p)).ToList();
+
+            // Hvert interface-sted
+            for (int i = 0; i < splitParameters.Count - 1; i++) {
+                Line newInterfaceLine = new Line(splitPoints[i], splitPoints[i + 1]);
+
+                // Check if an interface exists with the same points
+                Interface duplicateInterface = null;
+                foreach (Interface buildingInterface in Interfaces.Where(inte => inte.Orientation == Orientation.VERTICAL)) {
+                    if (Vector3.Distance(buildingInterface.StartPoint, newInterfaceLine.StartPoint) < 0.001
+                        && Vector3.Distance(buildingInterface.EndPoint, newInterfaceLine.EndPoint) < 0.001
+                        || Vector3.Distance(buildingInterface.StartPoint, newInterfaceLine.EndPoint) < 0.001
+                        && Vector3.Distance(buildingInterface.EndPoint, newInterfaceLine.StartPoint) < 0.001) {
+                        duplicateInterface = buildingInterface;
+>>>>>>> Stashed changes
                     }
                 }
                 

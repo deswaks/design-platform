@@ -10,6 +10,7 @@ public class Room : MonoBehaviour {
 
     public List<Face> faces { get; private set; }
 
+<<<<<<< Updated upstream
     private RoomShape shape;
     private Material currentMaterial;
     public Material defaultMaterial;
@@ -35,6 +36,24 @@ public class Room : MonoBehaviour {
     private GameObject editHandle;
     public GameObject editHandlePrefab;
     public List<GameObject> activeEditHandles;
+=======
+    public enum RoomType {
+        //Til senere implementering
+        NULL = -10,
+        DELETED = -3,
+        HIDDEN = -2,
+        SELECTED = -1,
+        //------------------
+        PREVIEW = 0,
+        DEFAULT = 1,
+        DOUBLEROOM = 10,
+        SINGLEROOM = 11,
+        LIVINGROOM = 12,
+        KITCHEN = 13,
+        BATHROOM = 14
+        //HALLWAY = 15
+    }
+>>>>>>> Stashed changes
 
     public GameObject moveHandlePrefab;
     private Vector3 moveModeOffset;
@@ -50,15 +69,28 @@ public class Room : MonoBehaviour {
 
     public bool isCurrentlyColliding = false;
 
+<<<<<<< Updated upstream
     // Construct room of type 0 (Rectangle) or 1 (L-shape)
     public void InitializeRoom(RoomShape buildShape = RoomShape.RECTANGLE, Building building = null) {
         // Set constant values
         parentBuilding = building;
         gameObject.layer = 8; // Rooom layer
+=======
+        public Building ParentBuilding { get; private set; }
+        public RoomShape Shape { get; private set; }
+
+        private RoomType _type;
+        public RoomType Type {
+            get { return _type; }
+            set { _type = value; UpdateRender2D(); UpdateRender3D(); }
+        }
+        public RoomState State { get; set; }
+>>>>>>> Stashed changes
 
         shape = buildShape;
         roomState = RoomStates.Preview;
 
+<<<<<<< Updated upstream
         // Get relevant properties from prefab object
         GameObject prefabObject = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/RoomPrefab.prefab");
 
@@ -74,22 +106,200 @@ public class Room : MonoBehaviour {
                 break;
             case RoomShape.LSHAPE:
                 controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
+=======
+        private Vector3 moveModeOffset;
+
+        public string Note {
+            get { return Note; }
+            set { if (!string.IsNullOrEmpty(value)) Note = value; }
+        }
+
+        public bool IsSelected {
+            get { return (SelectMode.Instance.selection == this); }
+        }
+
+        public bool IsColliding {
+            get {
+                RoomCollider[] colliders = gameObject.GetComponentsInChildren<RoomCollider>();
+                return (colliders.Select(rc => rc.isCurrentlyColliding).Contains(true));
+            }
+        }
+
+
+        private readonly Dictionary<RoomType, string> RoomMaterialAsset = new Dictionary<RoomType, string> {
+            { RoomType.PREVIEW,  "plan_room_default"},
+            { RoomType.DEFAULT,  "plan_room_default"},
+            { RoomType.SELECTED, "plan_room_highlight" },
+            { RoomType.SINGLEROOM,  "plan_room_singleroom"},
+            { RoomType.DOUBLEROOM,  "plan_room_doubleroom"},
+            { RoomType.LIVINGROOM,  "plan_room_livingroom"},
+            { RoomType.KITCHEN,  "plan_room_kitchen"},
+            { RoomType.BATHROOM,  "plan_room_bathroom"},
+            //{ RoomType.BATHROOM,  "plan_room_hallway"},
+        };
+
+        private readonly Dictionary<RoomType, string> RoomTypeName = new Dictionary<RoomType, string> {
+            { RoomType.PREVIEW,  "Preview"},
+            { RoomType.DEFAULT,  ""},
+            { RoomType.SELECTED, "Selected\nSpace" },
+            { RoomType.SINGLEROOM,  "Single Bed\nRoom"},
+            { RoomType.DOUBLEROOM,  "Double Bed\nRoom"},
+            { RoomType.LIVINGROOM,  "Living\nRoom"},
+            { RoomType.KITCHEN,  "Kitchen"},
+            { RoomType.BATHROOM,  "Bathroom"},
+            //{ RoomType.BATHROOM,  "Hallway"},
+        };
+        public string TypeName {
+            get { return RoomTypeName[Type]; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="building"></param>
+        public void InitRoom(RoomShape shape = RoomShape.RECTANGLE,
+                             RoomType type = RoomType.DEFAULT) {
+            
+            // Set constant values
+            ParentBuilding = Building.Instance;
+            gameObject.layer = 8;       // 8 = Rooom layer
+            Shape = shape;
+            _type = type;
+            State = RoomState.STATIONARY;
+
+            // Controlpoints
+            switch (Shape) {
+                case RoomShape.RECTANGLE:
+                    controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
+                                                   new Vector3(0, 0, 3),
+                                                   new Vector3(3, 0, 3),
+                                                   new Vector3(3, 0, 0)};
+                    gameObject.name = "Rectangular space";
+                    break;
+                case RoomShape.LSHAPE:
+                    controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
+>>>>>>> Stashed changes
                                                           new Vector3(0, 0, 5),
                                                           new Vector3(3, 0, 5),
                                                           new Vector3(3, 0, 3),
                                                           new Vector3(5, 0, 3),
                                                           new Vector3(5, 0, 0)};
+<<<<<<< Updated upstream
                 gameObject.name = "Room(L-Shape)";
                 break;
         }
         faces = new List<Face>();
         for (int i = 0; i < controlPoints.Count+2; i++) {
             faces.Add(new Face(this, i));
+=======
+                    gameObject.name = "L-Shaped space";
+                    break;
+                case RoomShape.USHAPE:
+                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                                                          new Vector3(0, 0, 5),
+                                                          new Vector3(3, 0, 5),
+                                                          new Vector3(3, 0, 3),
+                                                          new Vector3(5, 0, 3),
+                                                          new Vector3(5, 0, 5),
+                                                          new Vector3(8, 0, 5),
+                                                          new Vector3(8, 0, 0)};
+                    gameObject.name = "U-Shaped space";
+                    break;
+                case RoomShape.SSHAPE:
+                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                                                          new Vector3(0, 0, 5),
+                                                          new Vector3(3, 0, 5),
+                                                          new Vector3(3, 0, 3),
+                                                          new Vector3(6, 0, 3),
+                                                          new Vector3(6, 0, -2),
+                                                          new Vector3(3, 0, -2),
+                                                          new Vector3(3, 0, 0),
+                    };
+                    gameObject.name = "S-Shaped space";
+                    break;
+                case RoomShape.TSHAPE:
+                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                                                          new Vector3(-2, 0, 0),
+                                                          new Vector3(-2, 0, 3),
+                                                          new Vector3(5, 0, 3),
+                                                          new Vector3(5, 0, 0),
+                                                          new Vector3(3, 0, 0),
+                                                          new Vector3(3, 0, -3),
+                                                          new Vector3(0, 0, -3),
+                    };
+                    gameObject.name = "T-Shaped space";
+                    break;
+            }
+            if (Type == RoomType.PREVIEW) gameObject.name = "Preview " + gameObject.name;
+            InitFaces();
+            InitRender3D();
+            InitRender2D();
+        }
+
+        public override string ToString() {
+            return (gameObject.name.ToString() + " " + TypeName).Trim();
+>>>>>>> Stashed changes
         }
 
         // Create and attach collider objects
         gameObject.AddComponent<MeshCollider>();
 
+<<<<<<< Updated upstream
+=======
+        public void UpdateRender3D() {
+            // Mesh
+            PolyShape polyshape = gameObject.GetComponent<PolyShape>();
+            polyshape.SetControlPoints(controlPoints);
+            polyshape.extrude = height;
+            polyshape.CreateShapeFromPolygon();
+            gameObject.GetComponent<ProBuilderMesh>().Refresh();
+            gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().mesh;
+
+            // Set material
+            gameObject.GetComponent<MeshRenderer>().material
+                = AssetUtil.LoadAsset<Material>("materials", RoomMaterialAsset[Type]); ;
+
+            // Collider
+            RoomCollider.GiveCollider(this);
+        }
+        private void InitRender2D() {
+            // Init line render
+            LineRenderer lr = gameObject.AddComponent<LineRenderer>();
+            lr.loop = true;
+            lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            lr.receiveShadows = false;
+            lr.sortingLayerName = "PLAN";
+
+            // Update
+            UpdateRender2D();
+        }
+        public void UpdateRender2D(bool highlighted = false, bool colliding = false) {
+            LineRenderer lr = gameObject.GetComponent<LineRenderer>();
+
+            // Update lines
+            lr.positionCount = 0;
+            if (GlobalSettings.ShowWallLines) {
+                // Set controlpoints
+                lr.useWorldSpace = false;
+                List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up * (height + 0.001f)).ToList();
+                lr.positionCount = points.Count;
+                lr.SetPositions(points.ToArray());
+
+                // Style
+                lr.materials = Enumerable.Repeat(AssetUtil.LoadAsset<Material>("materials", "plan_room_wall"), lr.positionCount).ToArray();
+                float width = 0.2f;
+                Color color = Color.black;
+                lr.sortingOrder = 0;
+                if (highlighted) { lr.sortingOrder = 1; width = 0.3f; color = Color.yellow; }
+                if (colliding) { lr.sortingOrder = 1; color = Color.red; }
+
+                lr.startWidth = width; lr.endWidth = width;
+                foreach (Material material in lr.materials) {
+                    material.color = color;
+                }
+            }
+>>>>>>> Stashed changes
 
         // Set room visualization geometry
         gameObject.AddComponent<PolyShape>();
@@ -103,6 +313,7 @@ public class Room : MonoBehaviour {
         RefreshView();
     }
 
+<<<<<<< Updated upstream
     public void RefreshView() {
         PolyShape polyshape = gameObject.GetComponent<PolyShape>();
         polyshape.SetControlPoints(controlPoints);
@@ -112,6 +323,27 @@ public class Room : MonoBehaviour {
         gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().mesh;
         RoomCollider.GiveCollider(this);
     }
+=======
+            // Rotation
+            gameObject.transform.RotateAround(
+                point: centerPoint,
+                axis: new Vector3(0, 1, 0),
+                angle: degrees);
+
+            if (Openings.Count > 0) {
+                foreach (Opening opening in Openings) {
+                    opening.gameObject.transform.RotateAround(
+                                                point: centerPoint,
+                                                axis: new Vector3(0, 1, 0),
+                                                angle: degrees);
+                    opening.AttachClosestFaces();
+                }
+            }
+
+            UpdateRender3D();
+            UpdateRender2D();
+        }
+>>>>>>> Stashed changes
 
     public RoomShape GetRoomShape() {
         return shape;
@@ -255,6 +487,7 @@ public class Room : MonoBehaviour {
         return midPoints;
     }
 
+<<<<<<< Updated upstream
     /// <summary>
     /// Gets a list of normals. They are in same order as controlpoints (clockwise). localCoordinates : true (for local coordinates, Sherlock)
     /// </summary>
@@ -263,6 +496,15 @@ public class Room : MonoBehaviour {
         List<Vector3> circularControlpoints = GetControlPoints(localCoordinates: localCoordinates, closed: true);
         for (int i = 0; i < controlPoints.Count; i++) {
             wallNormals.Add(Vector3.Cross((circularControlpoints[i + 1] - circularControlpoints[i]), Vector3.up).normalized);
+=======
+        /// <summary>
+        /// Moves the room to the given position
+        /// </summary>
+        public void Move(Vector3 exactPosition) {
+            Vector3 gridPosition = Grid.GetNearestGridpoint(exactPosition);
+            gameObject.transform.position = gridPosition;
+            UpdateRender2D();
+>>>>>>> Stashed changes
         }
         return wallNormals;
     }
@@ -293,11 +535,18 @@ public class Room : MonoBehaviour {
                 normalsAreIdentical = false;
             }
         }
+<<<<<<< Updated upstream
 
         // If normals did not change: Make extruded points the real control points 
         if (normalsAreIdentical) {
             controlPoints = controlPointsClone;
             RefreshView();
+=======
+        public void SetControlPoints(List<Vector3> newControlPoints) {
+            controlPoints = newControlPoints;
+            UpdateRender3D();
+            UpdateRender2D();
+>>>>>>> Stashed changes
         }
 
     }
@@ -443,8 +692,39 @@ public class Room : MonoBehaviour {
             else { // if there is one or more collision(s)
                 //Debug.Log("Is colliding");
 
+<<<<<<< Updated upstream
                 isCurrentlyColliding = true;
                 gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+=======
+        /// <summary>
+        /// 
+        /// </summary>
+        void OnMouseDrag() {
+            if (State == RoomState.MOVING) {
+                Vector3 curPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + moveModeOffset;
+                for (int i = 0; i < Faces.Count; i++) {
+                    for (int j = 0; j < Faces[i].Openings.Count; j++) {
+                        Vector3 diff = gameObject.transform.position - Faces[i].Openings[j].gameObject.transform.position;
+                        Faces[i].Openings[j].gameObject.transform.position = (Grid.GetNearestGridpoint(curPosition)) - diff;
+                    }
+                }
+                transform.position = Grid.GetNearestGridpoint(curPosition);
+
+                foreach (Opening opening in Openings) {
+                    foreach (Face openingsAttachedFace in opening.Faces) {
+                        bool faceBelongsToThisRoom = (Faces.Contains(openingsAttachedFace));
+                        if (!faceBelongsToThisRoom) openingsAttachedFace.RemoveOpening(opening);
+                    }
+                }
+
+                foreach (Room room in Building.Instance.Rooms) {
+                    foreach (Face face in room.Faces) {
+                        foreach (Opening opening in face.Openings) {
+                            opening.AttachClosestFaces();
+                        }
+                    }
+                }
+>>>>>>> Stashed changes
             }
         }
     }
@@ -452,6 +732,7 @@ public class Room : MonoBehaviour {
         this.roomState = roomState;
     }
 
+<<<<<<< Updated upstream
     /// <summary>
     /// 
     /// </summary>
@@ -501,6 +782,12 @@ public class Room : MonoBehaviour {
     public void SetRoomNote(string value) {
         if (!string.IsNullOrEmpty(value)) {
             customProperty = value;
+=======
+        public void SetIsRoomCurrentlyColliding() {
+            if (Type == RoomType.PREVIEW || State == RoomState.MOVING) { 
+                UpdateRender2D(highlighted: IsSelected, colliding: IsColliding);
+            }
+>>>>>>> Stashed changes
         }
     }
 

@@ -1,7 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+<<<<<<< Updated upstream
 using System.Linq;
+=======
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using UnityEngine.UI;
+using Michsky.UI.ModernUIPack;
+>>>>>>> Stashed changes
 
 public class POVMode : Mode {
 

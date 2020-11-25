@@ -37,16 +37,29 @@ public class BuildMode : Mode {
             previewRoom.Rotate(); //remember to tell this to the user when implementing tooltips
         }
 
+<<<<<<< Updated upstream
         if (Input.GetKeyDown(KeyCode.Escape)) {
             Main.Instance.SetMode(SelectMode.Instance);
+=======
+        public override void OnModeResume() {
+            if (previewRoom == null) {
+                previewRoom = Building.Instance.BuildRoom(buildShape: SelectedShape, buildType: RoomType.PREVIEW);
+            }
+>>>>>>> Stashed changes
         }
 
         if (previewRoom) { UpdatePreviewLocation(); }
     }
 
+<<<<<<< Updated upstream
     public override void OnModeResume() {
         if (previewRoom == null) {
             previewRoom = Building.Instance.BuildRoom(buildShape: selectedShape, preview: true);
+=======
+        public void RebuildPreview(RoomShape SelectedShape = RoomShape.RECTANGLE) {
+            if (previewRoom != null) previewRoom.Delete();
+            previewRoom = Building.Instance.BuildRoom(buildShape: SelectedShape, buildType: RoomType.PREVIEW);
+>>>>>>> Stashed changes
         }
     }
 

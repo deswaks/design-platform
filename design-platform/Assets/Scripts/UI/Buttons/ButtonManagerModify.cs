@@ -8,6 +8,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 using JetBrains.Annotations;
 using TMPro;
 
+<<<<<<< Updated upstream
 public class ButtonManagerModify : MonoBehaviour {
     public Main main;
 
@@ -29,6 +30,38 @@ public class ButtonManagerModify : MonoBehaviour {
     public void Delete() {
         if (SelectMode.Instance.selection != null) {
             SelectMode.Instance.selection.Delete();
+=======
+namespace DesignPlatform.Core {
+    public class ButtonManagerModify : MonoBehaviour {
+        public void Move() {
+            SelectMode.Instance.SetMode(MoveMode.Instance);
+        }
+        public void Rotate() {
+            if (SelectMode.Instance.selection != null) {
+                SelectMode.Instance.selection.Rotate();
+            }
+        }
+        public void Modify() {
+            SelectMode.Instance.SetMode(ExtrudeMode.Instance);
+        }
+        public void Properties() {
+            SelectMode.Instance.SetMode(null);
+        }
+        public void Delete() {
+            if (SelectMode.Instance.selection != null) {
+                SelectMode.Instance.selection.Delete();
+            }
+        }
+        public void PublishRoomType(int buildType) {
+            SelectMode.Instance.selection.Type = (RoomType)buildType;
+        }
+        public void PublishRoomNote() {
+            //GameObject myInputGO = GameObject.Find("InputField Room Note");
+            TMP_InputField myInputIF = GameObject.Find("InputProperty").GetComponent<TMP_InputField>();
+            SelectMode.Instance.selection.Note = myInputIF.text;
+            myInputIF.text = "";
+            Debug.Log(SelectMode.Instance.selection.Note);
+>>>>>>> Stashed changes
         }
     }
 

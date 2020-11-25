@@ -7,8 +7,15 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 using UnityEditor.ProBuilder;
 
+<<<<<<< Updated upstream
 public class RoomCollider : MonoBehaviour {
     public bool isCurrentlyColliding = false;
+=======
+namespace DesignPlatform.Core {
+    public class RoomCollider : MonoBehaviour {
+        
+        public bool isCurrentlyColliding = false;
+>>>>>>> Stashed changes
 
     //Detects collision with other rooms when placing them
     void OnCollisionEnter(Collision other) {
