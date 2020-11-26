@@ -78,8 +78,8 @@ namespace DesignPlatform.Core {
                 case OpeningShape.WINDOW:
                     gameObject.layer = 16; // Window layer
                     Width = WindowWidth;
-                    Height = WindowHeight;
-                    SillHeight = 1.1f;
+                    Height = DoorHeight;// WindowHeight;
+                    SillHeight = Doorstep;// 1.1f;
                     material = AssetUtil.LoadAsset<Material>("materials", "openingWindow");
                     gameObject.name = "Window";
 
