@@ -194,7 +194,6 @@ namespace DesignPlatform.Core {
                 for (int i = 0; i < amount; i++) {
                     roofs[0].DeleteRoof();
                 }
-                Debug.Log("Roofs deleted - Current count: "+roofs.Count);
             }
         }
 

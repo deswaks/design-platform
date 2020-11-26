@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 1676250052
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 68b609caf59ac458562674cb56e15932
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 789385c49fb2dcba6c71ec3d3d78d149
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Plugins/Modern UI Pack/Fonts/OpenSans-Light SDF.asset
+- Assets/Plugins/Modern UI Pack/Fonts/OpenSans-LightItalic SDF.asset
+Dependencies: []
