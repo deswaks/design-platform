@@ -5,8 +5,9 @@ using ProceduralToolkit.Buildings;
 using ProceduralToolkit;
 using System.Linq;
 using System;
+using DesignPlatform.Core;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.Utils {
     public static class RoofUtils {
         public static IConstructible<MeshDraft> GenerateRoofPlan(List<Vector2> foundationPolygon, BuildingGenerator.Config config) {
             switch (config.roofConfig.type) {
@@ -52,13 +53,37 @@ namespace DesignPlatform.Core {
 
         public static void VisualizePointsAsSpheres(List<Vector3> vertices,string name = "vertex")
         {
-            foreach (Vector3 v in vertices)
-            {
+            foreach (Vector3 v in vertices){
                 GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 sphere.transform.position = v;
                 sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 sphere.name = name;
             }
+        }
+
+        public static List<Vector3> TransformPointsToXZ(List<Vector3> vertices, out Vector3 midpoint, out Vector3 rotationVector) {
+            // Normal is calculated assuming all vertices is in the same plane
+            Vector3 Normal = Vector3.Cross(vertices[2] - vertices[1], vertices[0] - vertices[1]).normalized;
+
+            // Calculates midpoint from vertices
+            Vector3 midpointTemp = RoofUtils.Midpoint(vertices);
+
+            // Finds rotation vector that rotates points from current global position to xz-plane
+            Vector3 rotationAxis = Vector3.Cross(Vector3.up, Normal).normalized;
+            float rotationAngle = Vector3.Angle(Vector3.up, Normal);
+            rotationVector = (-rotationAxis * rotationAngle);
+
+            // Moves vertices to be located around (0,0,0)
+            vertices = vertices.Select(v => v - midpointTemp).ToList();
+
+            // Rotates all points around (0,0,0) according to rotation vector
+            List<Vector3> transformedPoints = new List<Vector3>();
+            foreach (Vector3 v in vertices) {
+                transformedPoints.Add(RoofUtils.RotatePointAroundPivot(v, new Vector3(0, 0, 0), rotationVector));
+            }
+            midpoint = midpointTemp;
+
+            return transformedPoints;
         }
 
         public static List<List<Vector3>> GetMeshOutline(List<Vector3[]> trianglesInface) {
@@ -92,9 +117,7 @@ namespace DesignPlatform.Core {
                 // Point of current segment that is not the current point is added to polyline vertices
                 if (Vector3.Distance(segment[0], currentPoint) < 0.01) outlineVertices.Add(segment[1]);
                 if (Vector3.Distance(segment[1], currentPoint) < 0.01) outlineVertices.Add(segment[0]);
-
             }
-
             return outlineVertices;
         }
 
@@ -133,6 +156,10 @@ namespace DesignPlatform.Core {
             extrudedPolygon[extrudedPolygon.Count - 1] += last_normal * offset;
 
             return extrudedPolygon;
+        }
+
+        public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
+            return Quaternion.Euler(angles) * (point - pivot) + pivot;
         }
     }
 

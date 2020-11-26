@@ -155,6 +155,23 @@ namespace ProceduralToolkit.Buildings
                 .Paint(roofColor);
             return roofDraft;
         }
+        public MeshDraft ConstructWithPitch(Vector2 parentLayoutOrigin, float RoofPitch = 20) {
+            var roofDraft = ConstructRoofBase(out List<Vector2> roofPolygon2, out List<Vector3> roofPolygon3);
+
+            var skeletonGenerator = new StraightSkeletonGenerator();
+            var skeleton = skeletonGenerator.Generate(roofPolygon2);
+
+            var roofTop = new MeshDraft();
+            foreach (var skeletonPolygon2 in skeleton.polygons)
+            {
+                roofTop.Add(ConstructContourDraft(skeletonPolygon2, RoofPitch));
+            }
+            roofTop.Move(Vector3.up*roofConfig.thickness);
+
+            roofDraft.Add(roofTop)
+                .Paint(roofColor);
+            return roofDraft;
+        }
     }
 
     public class ProceduralGabledRoof : ProceduralRoof
@@ -192,7 +209,7 @@ namespace ProceduralToolkit.Buildings
             return roofDraft;
         }
 
-        public MeshDraft ConstructWithPitch(Vector2 parentLayoutOrigin, float RoofPitch = 25)
+        public MeshDraft ConstructWithPitch(Vector2 parentLayoutOrigin, float RoofPitch = 20)
         {
             var roofDraft = ConstructRoofBase(out List<Vector2> roofPolygon2, out List<Vector3> roofPolygon3);
 

@@ -16,7 +16,6 @@ namespace DesignPlatform.Core {
             overhangSlider = sliders.First(s => s.gameObject.name.ToLower().Contains("overhang"));
         }
 
-
         public void ChangeRoofType(int i) {
             RoofGenerator.Instance.roofType = (ProceduralToolkit.Buildings.RoofType) i;
         }
@@ -24,7 +23,7 @@ namespace DesignPlatform.Core {
             RoofGenerator.Instance.RoofPitch = pitchSlider.value;
         }
         public void SetRoofOverhang() {
-            RoofGenerator.Instance.overhang = overhangSlider.value;
+            RoofGenerator.Instance.overhang = overhangSlider.value/1000;
         }
     }
 }

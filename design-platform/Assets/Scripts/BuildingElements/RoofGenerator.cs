@@ -10,18 +10,16 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
-    
     public class RoofGenerator{
 
         private static RoofGenerator instance;
-        public static RoofGenerator Instance
-        {
+        public static RoofGenerator Instance{
             get { return instance ?? (instance = new RoofGenerator()); }
         }
 
-        public float RoofPitch = 25;
+        public float RoofPitch = 15;
         public float wallThickness = 0.2f;
-        public float overhang = 0.0f;
+        public float overhang = 0.15f;
         public RoofType roofType = RoofType.Gabled;
 
         public List<List<Vector3>> CreateRoofOutlines() {
@@ -38,8 +36,18 @@ namespace DesignPlatform.Core {
             // Creates base roof mesh using ProceduralToolkit
             IConstructible<MeshDraft> constructible = RoofUtils.GenerateRoofPlan(roofPolygon, config);
 
-            Mesh roofMesh = constructible.Construct(Vector2.zero).ToMesh();
-            //Mesh roofMesh = ((ProceduralGabledRoof)constructible).ConstructWithPitch(Vector2.zero,15f).ToMesh();
+            Mesh roofMesh;
+            //Mesh roofMesh = constructible.Construct(Vector2.zero).ToMesh();
+            if(roofType == RoofType.Gabled) {
+                roofMesh = ((ProceduralGabledRoof)constructible).ConstructWithPitch(Vector2.zero, RoofPitch).ToMesh();
+            }
+            else if(roofType == RoofType.Hipped) {
+                roofMesh = ((ProceduralHippedRoof)constructible).ConstructWithPitch(Vector2.zero, RoofPitch).ToMesh();
+            }
+            else {
+                roofMesh = constructible.Construct(Vector2.zero).ToMesh();
+            }
+
 
             roofMesh.RecalculateNormals();
 
@@ -59,9 +67,11 @@ namespace DesignPlatform.Core {
             // Calculates normals of each triangle
             List<Vector3> triangleNormals = triangleVertices.Select(t => Vector3.Cross(t[2] - t[1], t[0] - t[1]).normalized).ToList();
 
-            // Removes horizontal faces (horizontal triangles are created when choosing an overhang length >0 )
-            triangleVertices = triangleVertices.Where((vs, i) => triangleNormals[i].y >= -0.1f).ToList();
-            triangleNormals = triangleNormals.Where(n => n.y >= -0.1f).ToList();
+            if (roofType != RoofType.Flat) {
+                // Removes horizontal faces (horizontal triangles are created when choosing an overhang length >0 )
+                triangleVertices = triangleVertices.Where((vs, i) => triangleNormals[i].y >= -0.1f).ToList();
+                triangleNormals = triangleNormals.Where(n => n.y >= -0.1f).ToList();
+            }
 
             // Identifier ID (Integer) for each roof triangle referring to its roof element
             List<int> roofIDs = Enumerable.Repeat(-1, triangleVertices.Count).ToList();
@@ -114,59 +124,15 @@ namespace DesignPlatform.Core {
                 // Find ordered polyline vertices from unordered segments 
                 List<Vector3> outline = RoofUtils.SegmentsToPolyline(segments);
 
+                RoofUtils.VisualizePointsAsSpheres(outline,"generator output");
+
                 finalPanelOutlines.Add(outline);
             }
 
+            Debug.Log("Panels created: " + finalPanelOutlines.Count);
+
+
             return finalPanelOutlines;
         }
-
-        /// <summary>
-        /// Construct roof.
-        /// </summary>
-        public void InitializeRoof(List<Vector3> roofFaceVertices) {
-            Vector3 Normal = Vector3.Cross(roofFaceVertices[2] - roofFaceVertices[1], roofFaceVertices[0] - roofFaceVertices[1]).normalized;
-
-            // Moves vertical roof faces (gables) in towards the building, if there is overhang
-            if (Mathf.Abs(Vector3.Dot(Vector3.up, Normal)) < 0.01){
-                roofFaceVertices = roofFaceVertices.Select(v => v + -overhang * Normal).ToList();
-            }
-
-            Vector3 midpoint = RoofUtils.Midpoint(roofFaceVertices);
-
-            Vector3 rotationAxis = Vector3.Cross(Vector3.up, Normal).normalized;
-            float rotationAngle = Vector3.Angle(Vector3.up, Normal);
-            Vector3 rotationVector = (-rotationAxis * rotationAngle);
-
-            roofFaceVertices = roofFaceVertices.Select(v => v - midpoint).ToList();
-
-            List<Vector3> transformedPoints = new List<Vector3>();
-            foreach (Vector3 v in roofFaceVertices){
-                transformedPoints.Add(RotatePointAroundPivot(v, new Vector3(0, 0, 0), rotationVector));
-            }
-            roofFaceVertices = transformedPoints;
-
-            GameObject gameObject = new GameObject("roof");
-
-            gameObject.layer = 13; // Wall layer
-
-            Material roofMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
-            gameObject.name = "Roof";
-
-            // Creates roof mesh
-            gameObject.AddComponent<MeshCollider>();
-            ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
-
-            mesh.CreateShapeFromPolygon(roofFaceVertices, -wallThickness, false);
-            mesh.CreateShapeFromPolygon(roofFaceVertices, -0.2f, false);
-            mesh.GetComponent<MeshRenderer>().material = roofMaterial;
-
-            gameObject.transform.position = midpoint + new Vector3(0, 3.0f, 0);
-            gameObject.transform.rotation = Quaternion.Euler(-rotationVector);
-        }
-
-        public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
-            return Quaternion.Euler(angles) * (point - pivot) + pivot;
-        }
-
     }
 }
