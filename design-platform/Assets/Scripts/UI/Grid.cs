@@ -24,9 +24,9 @@ namespace DesignPlatform.Core {
             float zCount = Mathf.RoundToInt(position.z / subSize);
 
             Vector3 result = new Vector3(
-                (xCount * subSize),
-                (yCount * subSize),
-                (zCount * subSize));
+                xCount * subSize,
+                yCount * subSize,
+                zCount * subSize);
 
             return result;
         }

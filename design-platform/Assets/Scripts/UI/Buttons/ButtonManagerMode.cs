@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using DesignPlatform.Core;
+using DesignPlatform.Modes;
+using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class ButtonManagerMode : MonoBehaviour {
         public void StartSelectMode() {
             Main.Instance.SetMode(SelectMode.Instance);

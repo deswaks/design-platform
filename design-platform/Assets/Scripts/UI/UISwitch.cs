@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class UISwitch : MonoBehaviour {
         // Events
         public UnityEvent OnEvents;

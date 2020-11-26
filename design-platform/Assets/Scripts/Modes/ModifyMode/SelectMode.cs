@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using DesignPlatform.Core;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.Modes {
     public class SelectMode : Mode {
 
         private static SelectMode instance;

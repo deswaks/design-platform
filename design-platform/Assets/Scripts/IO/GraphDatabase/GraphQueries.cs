@@ -87,7 +87,7 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         public void ImportJsonRoomNodesToGraph(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSavePath();
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath+"RoomNodes.json";
 
             IEnumerable<RoomNode> roomNodes = LocalDatabase.LoadRoomNodesFromJson(jsonPath);
 

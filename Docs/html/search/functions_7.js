@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['hitpointonplane_642',['hitPointOnPlane',['../class_design_platform_1_1_core_1_1_opening_mode.html#a9b9470ac7b7a06bb1c825c4031a45604',1,'DesignPlatform::Core::OpeningMode']]],
+  ['homeaddressrelationship_643',['HomeAddressRelationship',['../class_design_platform_1_1_database_1_1_home_address_relationship.html#af414878a6540338e0ebd16ad8f24efbf',1,'DesignPlatform.Database.HomeAddressRelationship.HomeAddressRelationship(DateTimeOffset effective, string from=&quot;agent&quot;, string to=&quot;address&quot;)'],['../class_design_platform_1_1_database_1_1_home_address_relationship.html#aa5bf85a50cbe491ded7c18de7a5e3c3d',1,'DesignPlatform.Database.HomeAddressRelationship.HomeAddressRelationship(string from=&quot;person&quot;, string to=&quot;address&quot;)'],['../class_design_platform_1_1_database_1_1_home_address_relationship.html#a4ddba7f1e5464053eaa3db5ab917aaee',1,'DesignPlatform.Database.HomeAddressRelationship.HomeAddressRelationship(string relationshipIdentifier, string from, string to)']]]
+];

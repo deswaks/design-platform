@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class SelectWidgetsWindow : MonoBehaviour {
 
         GameObject rowTemplate = null;
@@ -26,7 +26,7 @@ namespace DesignPlatform.Core {
             // Finds all widgets and puts them in dictionary
             widgets = Dashboard.Instance.widgets;
 
-            widgetToggles.ForEach(t => GameObject.Destroy(t));
+            widgetToggles.ForEach(t => Destroy(t));
             widgetToggles = new List<GameObject>();
 
 

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 using DesignPlatform.Core;
+using DesignPlatform.UI;
 
 namespace DesignPlatform.Database {
     public class LocalDatabase {
@@ -20,6 +21,7 @@ namespace DesignPlatform.Database {
             List<Vector3> controlPoints = GraphUtils.StringListToVector3List(RoomNode.vertices);
             newRoom.SetControlPoints(controlPoints);
             newRoom.SetRoomType(RoomNode.type);
+            newRoom.UpdateRender3D(); 
             newRoom.UpdateRender2D();
         }
 
@@ -41,7 +43,7 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="jsonPath">Full path of json file, with backslashes.</param>
         public static void CreateAllUnityRoomsFromJson(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSavePath();
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath + "RoomNodes.json";
 
             IEnumerable<RoomNode> roomNodes = LoadRoomNodesFromJson(jsonPath);
             // Loops through room nodes and creates correponding Unity rooms
@@ -55,7 +57,7 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="jsonPath">Full path of json file, with backslashes.</param>
         public static void CreateAllUnityOpeningsFromJson(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder();
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath;
 
             IEnumerable<OpeningNode> openingNodes = LoadOpeningNodesFromJson(jsonPath);
             // Loops through room nodes and creates correponding Unity rooms
@@ -69,7 +71,7 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         public static void SaveAllUnityRoomsAndOpeningsToJson(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder();
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath;
 
             // Collects Unity room as RoomNodes
             List<RoomNode> roomNodes = UnityRoomsToRoomNodes(Building.Instance.Rooms);
@@ -81,13 +83,13 @@ namespace DesignPlatform.Database {
             string openingsJsonString = JsonConvert.SerializeObject(openingNodes);
 
             // Saves file
-            File.WriteAllText(jsonPath + @"\RoomNodes.json", roomsJsonString);
-            File.WriteAllText(jsonPath + @"\OpeningNodes.json", openingsJsonString);
+            File.WriteAllText(jsonPath + "RoomNodes.json", roomsJsonString);
+            File.WriteAllText(jsonPath + "OpeningNodes.json", openingsJsonString);
 
 
             // Generates notification in corner of screen
             string notificationTitle = "File saved";
-            string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
+            string notificationText = "The file has been saved at " + Settings.SaveFolderPath + "RoomNodes.json";
 
             GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
             Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
@@ -101,7 +103,7 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         public static void SaveAllUnityRoomsToJson(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSavePath();
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath + "RoomNodes.json";
 
             // Collects Unity room as RoomNodes
             List<RoomNode> roomNodes = UnityRoomsToRoomNodes(Building.Instance.Rooms);
@@ -115,7 +117,7 @@ namespace DesignPlatform.Database {
 
             // Generates notification in corner of screen
             string notificationTitle = "File saved";
-            string notificationText = "The file has been saved at " + GlobalSettings.GetSavePath();
+            string notificationText = "The file has been saved at " + Settings.SaveFolderPath + "RoomNodes.json";
 
             GameObject notificationParent = Object.FindObjectsOfType<Canvas>().Where(c => c.gameObject.name == "UI").First().gameObject;
             Rect parentRect = notificationParent.GetComponent<RectTransform>().rect;
@@ -164,7 +166,7 @@ namespace DesignPlatform.Database {
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         public static void SaveAllWallElementsToJson(string jsonPath = null)
         {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder() + @"\WallElements.json";
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath + "WallElements.json";
 
             List<WallElement> wallElements = Building.Instance.IdentifyWallElementsAndJointTypes();
 
@@ -204,7 +206,7 @@ namespace DesignPlatform.Database {
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         /// <returns></returns>
         public static IEnumerable<RoomNode> LoadRoomNodesFromJson(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSavePath();
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath + "RoomNodes.json";
 
             // Reads json file
             string jsonString = File.ReadAllText(jsonPath);
@@ -219,10 +221,10 @@ namespace DesignPlatform.Database {
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         /// <returns></returns>
         public static IEnumerable<OpeningNode> LoadOpeningNodesFromJson(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : GlobalSettings.GetSaveFolder();
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath;
 
             // Reads json file
-            string jsonString = File.ReadAllText(jsonPath + @"\OpeningNodes.json");
+            string jsonString = File.ReadAllText(jsonPath + "OpeningNodes.json");
 
             // Deserializes the json string into RoomNode objects
             return JsonConvert.DeserializeObject<IEnumerable<OpeningNode>>(jsonString);

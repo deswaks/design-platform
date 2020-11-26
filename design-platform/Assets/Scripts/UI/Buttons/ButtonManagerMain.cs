@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class ButtonManagerMain : MonoBehaviour {
 
         public void QuitApplication() {

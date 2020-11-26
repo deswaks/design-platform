@@ -1,17 +1,15 @@
-﻿namespace DesignPlatform.Core {
+﻿
+
+namespace DesignPlatform.Core {
+
+    /// <summary>
+    /// Describes the orientation, eg. of interfaces and faces.
+    /// </summary>
     public enum Orientation {
+        /// <summary> For elements oriented horizontally </summary>
         HORIZONTAL,
+        /// <summary> For elements oriented vertically </summary>
         VERTICAL
     }
 
-    public enum Axis {
-        X,
-        Y,
-        Z
-    }
-
-    public enum WallType {
-        STANDARD = 0,
-        LOADCARRYING = 1
-    }
 }
