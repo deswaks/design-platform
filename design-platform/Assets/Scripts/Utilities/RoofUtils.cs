@@ -8,7 +8,18 @@ using System;
 using DesignPlatform.Core;
 
 namespace DesignPlatform.Utils {
+
+    /// <summary>
+    /// Helper functions for the creation of roofs
+    /// </summary>
     public static class RoofUtils {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="foundationPolygon"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public static IConstructible<MeshDraft> GenerateRoofPlan(List<Vector2> foundationPolygon, BuildingGenerator.Config config) {
             switch (config.roofConfig.type) {
                 case RoofType.Flat:
@@ -22,6 +33,10 @@ namespace DesignPlatform.Utils {
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public static List<Vector3> GetBuildingOutline(){
             // Grabs external interfaces (1 attached face) and culls out interfaces with 0 length
             List<Interface> culledInterfaces = Building.Instance.InterfacesVertical.Where(i => i.EndPoint != i.StartPoint).Where(iface => iface.Faces.Count == 1).ToList();
@@ -51,6 +66,11 @@ namespace DesignPlatform.Utils {
             return outline;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="name"></param>
         public static void VisualizePointsAsSpheres(List<Vector3> vertices,string name = "vertex")
         {
             foreach (Vector3 v in vertices){
@@ -61,6 +81,13 @@ namespace DesignPlatform.Utils {
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="midpoint"></param>
+        /// <param name="rotationVector"></param>
+        /// <returns></returns>
         public static List<Vector3> TransformPointsToXZ(List<Vector3> vertices, out Vector3 midpoint, out Vector3 rotationVector) {
             // Normal is calculated assuming all vertices is in the same plane
             Vector3 Normal = Vector3.Cross(vertices[2] - vertices[1], vertices[0] - vertices[1]).normalized;
@@ -86,6 +113,11 @@ namespace DesignPlatform.Utils {
             return transformedPoints;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="trianglesInface"></param>
+        /// <returns></returns>
         public static List<List<Vector3>> GetMeshOutline(List<Vector3[]> trianglesInface) {
             List<List<Vector3>> allSegments = new List<List<Vector3>>();
             foreach (Vector3[] tri in trianglesInface) {
@@ -100,6 +132,11 @@ namespace DesignPlatform.Utils {
             return allSegments;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lineSegments"></param>
+        /// <returns></returns>
         public static List<Vector3> SegmentsToPolyline(List<List<Vector3>> lineSegments) {
             List<Vector3> outlineVertices = new List<Vector3>();
             outlineVertices.Add(lineSegments[0][0]);
@@ -121,10 +158,21 @@ namespace DesignPlatform.Utils {
             return outlineVertices;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="triangle1"></param>
+        /// <param name="triangle2"></param>
+        /// <returns></returns>
         public static int NumberOfSharedVertices(Vector3[] triangle1, Vector3[] triangle2) {
             return triangle1.ToList().SelectMany(v1 => triangle2.Where(v2 => Vector3.Distance(v1, v2) < 0.01)).Count();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <returns></returns>
         public static Vector3 Midpoint(List<Vector3> vertices){
             Vector3 midpoint = new Vector3();
             vertices.ForEach(v => midpoint += v);
@@ -133,6 +181,13 @@ namespace DesignPlatform.Utils {
             return midpoint;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="me"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
         public static List<List<T>> SplitList<T>(this List<T> me, int size = 50){
             var list = new List<List<T>>();
             for (int i = 0; i < me.Count; i += size)
@@ -140,6 +195,12 @@ namespace DesignPlatform.Utils {
             return list;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="polyline"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         public static List<Vector2> OffsetPolyline2D(List<Vector2> polyline, float offset) {
             List<Vector2> extrudedPolygon = new List<Vector2>();
             extrudedPolygon.Add(polyline[0]);
@@ -158,6 +219,13 @@ namespace DesignPlatform.Utils {
             return extrudedPolygon;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="pivot"></param>
+        /// <param name="angles"></param>
+        /// <returns></returns>
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
             return Quaternion.Euler(angles) * (point - pivot) + pivot;
         }

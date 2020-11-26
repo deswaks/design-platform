@@ -8,14 +8,14 @@ namespace DesignPlatform.UI {
             Main.Instance.SetMode(SelectMode.Instance);
         }
         public void StartBuildMode(int buildShape) {
-            BuildMode.Instance.SelectedShape = (RoomShape)buildShape;
+            BuildMode.Instance.SelectedShape = (SpaceShape)buildShape;
             Main.Instance.SetMode(BuildMode.Instance);
         }
         public void StartPOVMode() {
             Main.Instance.SetMode(POVMode.Instance);
         }
         public void StartOpeningMode(int openingShape) {
-            OpeningMode.Instance.SelectedShape = (OpeningShape)openingShape;
+            OpeningMode.Instance.SelectedShape = (OpeningFunction)openingShape;
             Main.Instance.SetMode(OpeningMode.Instance);
         }
     }

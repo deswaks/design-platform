@@ -1,7 +1,15 @@
 var searchData=
 [
-  ['gravity_698',['gravity',['../class_design_platform_1_1_core_1_1_player_movement.html#acc2be7de0d2b60f33720c591e49bd73a',1,'DesignPlatform::Core::PlayerMovement']]],
-  ['groundchech_699',['groundChech',['../class_design_platform_1_1_core_1_1_player_movement.html#a855d8061d06756896a968c8764c4a8c1',1,'DesignPlatform::Core::PlayerMovement']]],
-  ['grounddistance_700',['groundDistance',['../class_design_platform_1_1_core_1_1_player_movement.html#ab14e4b31b7fd5f0e70a9727941e9e124',1,'DesignPlatform::Core::PlayerMovement']]],
-  ['groundmask_701',['groundMask',['../class_design_platform_1_1_core_1_1_player_movement.html#a782f2c737f24e7c78ec5a3cbca734110',1,'DesignPlatform::Core::PlayerMovement']]]
+  ['closestpoint_1035',['closestPoint',['../class_design_platform_1_1_modes_1_1_opening_mode.html#abec9f805a8573696dba82c3c8f1232df',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['collidingspaces_1036',['collidingSpaces',['../class_design_platform_1_1_modes_1_1_opening_mode.html#a6fbbc1e883ee82b3e4765ab4ed38d67e',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['columncount_1037',['columnCount',['../class_design_platform_1_1_u_i_1_1_space_schedule_widget.html#a6b8ac1d419aff6ef65413b80213d3f2d',1,'DesignPlatform.UI.SpaceScheduleWidget.columnCount()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a00a8654bd3c665f993e217a0f642ec45',1,'DesignPlatform.UI.WallElementScheduleWidget.columnCount()']]],
+  ['contentrows_1038',['contentRows',['../class_design_platform_1_1_u_i_1_1_space_schedule_widget.html#a6136b9abf35a941244f3ea66adc374c2',1,'DesignPlatform.UI.SpaceScheduleWidget.contentRows()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a1f2607c4f7f0b4466a7e513a4dfe59d6',1,'DesignPlatform.UI.WallElementScheduleWidget.contentRows()']]],
+  ['contenttemplate_1039',['contentTemplate',['../class_design_platform_1_1_u_i_1_1_space_schedule_widget.html#a7ebfd52f5df5406105708dbd613fc7f3',1,'DesignPlatform.UI.SpaceScheduleWidget.contentTemplate()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a75bd0019452c0e41595d58453096305f',1,'DesignPlatform.UI.WallElementScheduleWidget.contentTemplate()']]],
+  ['contenttemplatename_1040',['ContentTemplateName',['../class_design_platform_1_1_u_i_1_1_space_schedule_widget.html#abf79702bc0b09e230ac8df063ad5faac',1,'DesignPlatform.UI.SpaceScheduleWidget.ContentTemplateName()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a1696ae7dc2d40c7c63f097c76ca73b70',1,'DesignPlatform.UI.WallElementScheduleWidget.ContentTemplateName()']]],
+  ['controller_1041',['controller',['../class_design_platform_1_1_u_i_1_1_player_movement.html#a3ce12f9ef2744bd9803a98ad0118248c',1,'DesignPlatform::UI::PlayerMovement']]],
+  ['controlpoints_1042',['controlPoints',['../class_design_platform_1_1_core_1_1_space.html#aa3e10ce13fb4273e7bfa57d5d0aaad8b',1,'DesignPlatform::Core::Space']]],
+  ['currentmaterial_1043',['currentMaterial',['../class_design_platform_1_1_core_1_1_space.html#a147afe037f8175fd3d6e1d9bad8a2e5f',1,'DesignPlatform::Core::Space']]],
+  ['currentmode_1044',['currentMode',['../class_design_platform_1_1_modes_1_1_main.html#adc10d71f5a898cae2369a24fb5ee220d',1,'DesignPlatform.Modes.Main.currentMode()'],['../class_design_platform_1_1_modes_1_1_select_mode.html#afe1ea059863fb378f19b70c22140922e',1,'DesignPlatform.Modes.SelectMode.currentMode()']]],
+  ['currentmodetype_1045',['currentModeType',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#acca231487f66b5705331b704d18bced9',1,'DesignPlatform::Modes::POVMode']]],
+  ['customproperty_1046',['customProperty',['../class_design_platform_1_1_core_1_1_space.html#aa0e8e7e74515ff2baacaaa27bd4d070b',1,'DesignPlatform::Core::Space']]]
 ];

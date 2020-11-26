@@ -2,7 +2,7 @@
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// Contains settings for the database.
+    /// Contains settings for the UI.
     /// </summary>
     public static class Settings {
 
@@ -14,7 +14,7 @@ namespace DesignPlatform.UI {
         /// <summary>
         /// Defines whether the tags of rooms are shown in plan mode.
         /// </summary>
-        public static bool ShowRoomTags = true;
+        public static bool ShowSpaceTags = true;
 
         /// <summary>
         /// Defines whether openings are shown as lines in plan mode.

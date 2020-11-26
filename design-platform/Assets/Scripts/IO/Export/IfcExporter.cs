@@ -104,7 +104,7 @@ namespace DesignPlatform.Export {
 
         private static void CreateSpaces() {
             Building.Instance.RebuildPOVElements();
-            foreach (Room room in Building.Instance.Rooms) {
+            foreach (Core.Space room in Building.Instance.Spaces) {
                 using (var transaction = ifcModel.BeginTransaction("Create Space")) {
                     IfcConverter.CreateIfcSpace(room);
                     transaction.Commit();

@@ -49,7 +49,7 @@ namespace DesignPlatform.Database {
 
             // Room class configuration
             FluentConfig.Config()
-               .With<RoomNode>("Room") //With<Class>("Label")
+               .With<SpaceNode>("Room") //With<Class>("Label")
                .Match(x => x.id)
                .Merge(x => x.id)
                .MergeOnCreate(p => p.id)
@@ -63,7 +63,7 @@ namespace DesignPlatform.Database {
 
             // Adjacency relationship configuration
             FluentConfig.Config()
-               .With<AdjacentRoomRelationship>()
+               .With<AdjacentSpaceRelationship>()
                .Set();
         }
     }

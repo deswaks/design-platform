@@ -6,7 +6,13 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
+
+    /// <summary>
+    /// Represents the roof of the building
+    /// </summary>
     public class Roof : MonoBehaviour {
+
+
         public float RoofThickness { get; private set; } = 0.2f;
         public List<Vector3> RoofControlPoints { get; private set; }
         public float RoofPitch { get {

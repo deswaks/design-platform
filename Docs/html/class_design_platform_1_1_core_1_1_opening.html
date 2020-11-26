@@ -73,11 +73,16 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_design_platform_1_1_core_1_1_opening-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">DesignPlatform.Core.Opening Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents an opening in the walls of a building This includes external building openings such as windows and internal building openings such as doors between rooms.  
+ <a href="class_design_platform_1_1_core_1_1_opening.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for DesignPlatform.Core.Opening:</div>
 <div class="dyncontent">
@@ -87,8 +92,8 @@ Inheritance diagram for DesignPlatform.Core.Opening:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9cfce13aabf0049c1709ac2e9119854b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a9cfce13aabf0049c1709ac2e9119854b">InitializeOpening</a> (<a class="el" href="namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449e">OpeningShape</a> shape=<a class="el" href="namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449ea37ce845535b7c13f529505fdfdb04942">OpeningShape.WINDOW</a>, <a class="el" href="namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3f">OpeningState</a> state=<a class="el" href="namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3fa0a4373ca716769f93112e16e251bb8a1">OpeningState.PREVIEW</a>)</td></tr>
-<tr class="separator:a9cfce13aabf0049c1709ac2e9119854b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c5c4e565f32df92986e2dd465469f00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a2c5c4e565f32df92986e2dd465469f00">InitializeOpening</a> (<a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0">OpeningFunction</a> shape=<a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0a37ce845535b7c13f529505fdfdb04942">OpeningFunction.WINDOW</a>, <a class="el" href="namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3f">OpeningState</a> state=<a class="el" href="namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3fa0a4373ca716769f93112e16e251bb8a1">OpeningState.PREVIEW</a>)</td></tr>
+<tr class="separator:a2c5c4e565f32df92986e2dd465469f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f3a4848285045a802536a68aa8462b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a6f3a4848285045a802536a68aa8462b6">UpdateRender3D</a> ()</td></tr>
 <tr class="separator:a6f3a4848285045a802536a68aa8462b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e78681f9bc42a3ca0a37f45afab42d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a7e78681f9bc42a3ca0a37f45afab42d4">UpdateRender2D</a> (float width=0.2f)</td></tr>
@@ -117,40 +122,64 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a909724bc95b3430d8aa00d579a03d48f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a909724bc95b3430d8aa00d579a03d48f">OpeningDepth</a> = 0.051f</td></tr>
-<tr class="separator:a909724bc95b3430d8aa00d579a03d48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa88798acb718b253769f40c901857088"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#aa88798acb718b253769f40c901857088">SillHeight</a></td></tr>
-<tr class="separator:aa88798acb718b253769f40c901857088"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87c04ea7133166056d032fd24b4a6d47"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a87c04ea7133166056d032fd24b4a6d47">Width</a></td></tr>
 <tr class="separator:a87c04ea7133166056d032fd24b4a6d47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7eba911b80abdfc2efc011e1f445424"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#ac7eba911b80abdfc2efc011e1f445424">Height</a></td></tr>
 <tr class="separator:ac7eba911b80abdfc2efc011e1f445424"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa88798acb718b253769f40c901857088"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#aa88798acb718b253769f40c901857088">SillHeight</a></td></tr>
+<tr class="separator:aa88798acb718b253769f40c901857088"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51d038131344ef8e51cd881da8371032"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a51d038131344ef8e51cd881da8371032">Depth</a> = 0.051f</td></tr>
+<tr class="separator:a51d038131344ef8e51cd881da8371032"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a1c7fed805a61d38ce56b39b7156c7e01"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_room.html">Room</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a1c7fed805a61d38ce56b39b7156c7e01">Rooms</a><code> [get, set]</code></td></tr>
-<tr class="separator:a1c7fed805a61d38ce56b39b7156c7e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0f7b7ac8cacbd58c3761b16f7fb6dd0"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_face.html">Face</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#aa0f7b7ac8cacbd58c3761b16f7fb6dd0">Faces</a><code> [get]</code></td></tr>
+<tr class="memitem:a4240c43aa6aaddfd9c318d4a41002e96"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_space.html">Space</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a4240c43aa6aaddfd9c318d4a41002e96">Spaces</a><code> [get, set]</code></td></tr>
+<tr class="separator:a4240c43aa6aaddfd9c318d4a41002e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0f7b7ac8cacbd58c3761b16f7fb6dd0"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_face.html">Face</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#aa0f7b7ac8cacbd58c3761b16f7fb6dd0">Faces</a><code> [get, private set]</code></td></tr>
 <tr class="separator:aa0f7b7ac8cacbd58c3761b16f7fb6dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99645496ee2d3f28aff4277063ff3ba6"><td class="memItemLeft" align="right" valign="top">List&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a99645496ee2d3f28aff4277063ff3ba6">Parameters</a><code> [get]</code></td></tr>
+<tr class="memitem:a99645496ee2d3f28aff4277063ff3ba6"><td class="memItemLeft" align="right" valign="top">List&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a99645496ee2d3f28aff4277063ff3ba6">Parameters</a><code> [get, private set]</code></td></tr>
 <tr class="separator:a99645496ee2d3f28aff4277063ff3ba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12695ca51c39b4daee2f25c2fbad7f3c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a12695ca51c39b4daee2f25c2fbad7f3c">Interface</a><code> [get]</code></td></tr>
+<tr class="memitem:a12695ca51c39b4daee2f25c2fbad7f3c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a12695ca51c39b4daee2f25c2fbad7f3c">Interface</a><code> [get, private set]</code></td></tr>
 <tr class="separator:a12695ca51c39b4daee2f25c2fbad7f3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1149dd2a3a13996290c686c065e8b36f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a1149dd2a3a13996290c686c065e8b36f">RoomHeight</a><code> [get]</code></td></tr>
-<tr class="separator:a1149dd2a3a13996290c686c065e8b36f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7516f99a74a03b45fbbd91e36599513f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449e">OpeningShape</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a7516f99a74a03b45fbbd91e36599513f">Shape</a><code> [get]</code></td></tr>
-<tr class="separator:a7516f99a74a03b45fbbd91e36599513f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac686481b0675248dcc2ae7e296189b39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3f">OpeningState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#ac686481b0675248dcc2ae7e296189b39">State</a><code> [get]</code></td></tr>
-<tr class="separator:ac686481b0675248dcc2ae7e296189b39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a864e716bceb1c400874569960ccfdb60"><td class="memItemLeft" align="right" valign="top">List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a864e716bceb1c400874569960ccfdb60">ControlPoints</a><code> [get]</code></td></tr>
-<tr class="separator:a864e716bceb1c400874569960ccfdb60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fa85aa790d93f367889361d0b1b99c8"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a2fa85aa790d93f367889361d0b1b99c8">CenterPoint</a><code> [get]</code></td></tr>
+<tr class="memitem:a8f0b96dbfac05c88239cd502c9a83d5e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a8f0b96dbfac05c88239cd502c9a83d5e">SpaceHeight</a><code> [get]</code></td></tr>
+<tr class="separator:a8f0b96dbfac05c88239cd502c9a83d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fa85aa790d93f367889361d0b1b99c8"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a2fa85aa790d93f367889361d0b1b99c8">CenterPoint</a><code> [get, private set]</code></td></tr>
 <tr class="separator:a2fa85aa790d93f367889361d0b1b99c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a21a40d2945d20c7602e100df9684a6"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a3a21a40d2945d20c7602e100df9684a6">PlacementPoint</a><code> [get]</code></td></tr>
+<tr class="memitem:aa1f3c17c7ca3a240b0d0c2e227164f0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0">OpeningFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#aa1f3c17c7ca3a240b0d0c2e227164f0f">Shape</a><code> [get, private set]</code></td></tr>
+<tr class="separator:aa1f3c17c7ca3a240b0d0c2e227164f0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac686481b0675248dcc2ae7e296189b39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3f">OpeningState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#ac686481b0675248dcc2ae7e296189b39">State</a><code> [get, private set]</code></td></tr>
+<tr class="separator:ac686481b0675248dcc2ae7e296189b39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a864e716bceb1c400874569960ccfdb60"><td class="memItemLeft" align="right" valign="top">List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a864e716bceb1c400874569960ccfdb60">ControlPoints</a><code> [get, private set]</code></td></tr>
+<tr class="separator:a864e716bceb1c400874569960ccfdb60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a21a40d2945d20c7602e100df9684a6"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a3a21a40d2945d20c7602e100df9684a6">PlacementPoint</a><code> [get, private set]</code></td></tr>
 <tr class="memdesc:a3a21a40d2945d20c7602e100df9684a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The placement point of the opening on the wall (bottom) placement line.  <a href="class_design_platform_1_1_core_1_1_opening.html#a3a21a40d2945d20c7602e100df9684a6">More...</a><br /></td></tr>
 <tr class="separator:a3a21a40d2945d20c7602e100df9684a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aa558d54043c0aa710b7c01af4633a025"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#aa558d54043c0aa710b7c01af4633a025">InitRender3D</a> ()</td></tr>
+<tr class="separator:aa558d54043c0aa710b7c01af4633a025"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a282bae1f7a572384a983bfe505435575"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a282bae1f7a572384a983bfe505435575">InitRender2D</a> ()</td></tr>
+<tr class="separator:a282bae1f7a572384a983bfe505435575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a95c6c2e07d1225118983e1bcb2115f50"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a95c6c2e07d1225118983e1bcb2115f50">WindowWidth</a> = 1.6f</td></tr>
+<tr class="separator:a95c6c2e07d1225118983e1bcb2115f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1f6902d93c9301d0fcd6d60e8e3c6f9"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#af1f6902d93c9301d0fcd6d60e8e3c6f9">WindowHeight</a> = 1.05f</td></tr>
+<tr class="separator:af1f6902d93c9301d0fcd6d60e8e3c6f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb2de07d40d8760111a19dad4ad4baba"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#acb2de07d40d8760111a19dad4ad4baba">WindowSillHeight</a> = 1.1f</td></tr>
+<tr class="separator:acb2de07d40d8760111a19dad4ad4baba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeb38c9936f57cdc329ca1e46b1de16e"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#afeb38c9936f57cdc329ca1e46b1de16e">DoorWidth</a> = 0.9f</td></tr>
+<tr class="separator:afeb38c9936f57cdc329ca1e46b1de16e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af043f8277297d49acc8965318958b6fe"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#af043f8277297d49acc8965318958b6fe">DoorHeight</a> = 2.1f</td></tr>
+<tr class="separator:af043f8277297d49acc8965318958b6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cea1686616a0cf44014b7ee4f034a4d"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_opening.html#a8cea1686616a0cf44014b7ee4f034a4d">DoorSillHeight</a> = 0.05f</td></tr>
+<tr class="separator:a8cea1686616a0cf44014b7ee4f034a4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents an opening in the walls of a building This includes external building openings such as windows and internal building openings such as doors between rooms. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0a5ddc7564fcdc091da7cab1838b4878"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0a5ddc7564fcdc091da7cab1838b4878">&#9670;&nbsp;</a></span>AttachClosestFaces()</h2>
 
@@ -285,8 +314,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a9cfce13aabf0049c1709ac2e9119854b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cfce13aabf0049c1709ac2e9119854b">&#9670;&nbsp;</a></span>InitializeOpening()</h2>
+<a id="a2c5c4e565f32df92986e2dd465469f00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c5c4e565f32df92986e2dd465469f00">&#9670;&nbsp;</a></span>InitializeOpening()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -294,8 +323,8 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void DesignPlatform.Core.Opening.InitializeOpening </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449e">OpeningShape</a>&#160;</td>
-          <td class="paramname"><em>shape</em> = <code><a class="el" href="namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449ea37ce845535b7c13f529505fdfdb04942">OpeningShape.WINDOW</a></code>, </td>
+          <td class="paramtype"><a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0">OpeningFunction</a>&#160;</td>
+          <td class="paramname"><em>shape</em> = <code><a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0a37ce845535b7c13f529505fdfdb04942">OpeningFunction.WINDOW</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -309,6 +338,56 @@ Properties</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a282bae1f7a572384a983bfe505435575"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a282bae1f7a572384a983bfe505435575">&#9670;&nbsp;</a></span>InitRender2D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DesignPlatform.Core.Opening.InitRender2D </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa558d54043c0aa710b7c01af4633a025"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa558d54043c0aa710b7c01af4633a025">&#9670;&nbsp;</a></span>InitRender3D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DesignPlatform.Core.Opening.InitRender3D </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -405,6 +484,86 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a51d038131344ef8e51cd881da8371032"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51d038131344ef8e51cd881da8371032">&#9670;&nbsp;</a></span>Depth</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float DesignPlatform.Core.Opening.Depth = 0.051f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af043f8277297d49acc8965318958b6fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af043f8277297d49acc8965318958b6fe">&#9670;&nbsp;</a></span>DoorHeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float DesignPlatform.Core.Opening.DoorHeight = 2.1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8cea1686616a0cf44014b7ee4f034a4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cea1686616a0cf44014b7ee4f034a4d">&#9670;&nbsp;</a></span>DoorSillHeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float DesignPlatform.Core.Opening.DoorSillHeight = 0.05f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afeb38c9936f57cdc329ca1e46b1de16e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afeb38c9936f57cdc329ca1e46b1de16e">&#9670;&nbsp;</a></span>DoorWidth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float DesignPlatform.Core.Opening.DoorWidth = 0.9f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac7eba911b80abdfc2efc011e1f445424"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7eba911b80abdfc2efc011e1f445424">&#9670;&nbsp;</a></span>Height</h2>
 
@@ -413,20 +572,6 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float DesignPlatform.Core.Opening.Height</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a909724bc95b3430d8aa00d579a03d48f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a909724bc95b3430d8aa00d579a03d48f">&#9670;&nbsp;</a></span>OpeningDepth</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float DesignPlatform.Core.Opening.OpeningDepth = 0.051f</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -461,6 +606,72 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="af1f6902d93c9301d0fcd6d60e8e3c6f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1f6902d93c9301d0fcd6d60e8e3c6f9">&#9670;&nbsp;</a></span>WindowHeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float DesignPlatform.Core.Opening.WindowHeight = 1.05f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acb2de07d40d8760111a19dad4ad4baba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb2de07d40d8760111a19dad4ad4baba">&#9670;&nbsp;</a></span>WindowSillHeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float DesignPlatform.Core.Opening.WindowSillHeight = 1.1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a95c6c2e07d1225118983e1bcb2115f50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95c6c2e07d1225118983e1bcb2115f50">&#9670;&nbsp;</a></span>WindowWidth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float DesignPlatform.Core.Opening.WindowWidth = 1.6f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
 <a id="a2fa85aa790d93f367889361d0b1b99c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2fa85aa790d93f367889361d0b1b99c8">&#9670;&nbsp;</a></span>CenterPoint</h2>
@@ -477,7 +688,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -499,7 +710,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -521,7 +732,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -543,7 +754,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -565,7 +776,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -587,7 +798,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -596,8 +807,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a1149dd2a3a13996290c686c065e8b36f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1149dd2a3a13996290c686c065e8b36f">&#9670;&nbsp;</a></span>RoomHeight</h2>
+<a id="aa1f3c17c7ca3a240b0d0c2e227164f0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1f3c17c7ca3a240b0d0c2e227164f0f">&#9670;&nbsp;</a></span>Shape</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -606,7 +817,29 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float DesignPlatform.Core.Opening.RoomHeight</td>
+          <td class="memname"><a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0">OpeningFunction</a> DesignPlatform.Core.Opening.Shape</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8f0b96dbfac05c88239cd502c9a83d5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f0b96dbfac05c88239cd502c9a83d5e">&#9670;&nbsp;</a></span>SpaceHeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float DesignPlatform.Core.Opening.SpaceHeight</td>
         </tr>
       </table>
   </td>
@@ -618,8 +851,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a1c7fed805a61d38ce56b39b7156c7e01"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c7fed805a61d38ce56b39b7156c7e01">&#9670;&nbsp;</a></span>Rooms</h2>
+<a id="a4240c43aa6aaddfd9c318d4a41002e96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4240c43aa6aaddfd9c318d4a41002e96">&#9670;&nbsp;</a></span>Spaces</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -628,34 +861,12 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_room.html">Room</a>&gt; DesignPlatform.Core.Opening.Rooms</td>
+          <td class="memname">List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_space.html">Space</a>&gt; DesignPlatform.Core.Opening.Spaces</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7516f99a74a03b45fbbd91e36599513f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7516f99a74a03b45fbbd91e36599513f">&#9670;&nbsp;</a></span>Shape</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449e">OpeningShape</a> DesignPlatform.Core.Opening.Shape</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -677,7 +888,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

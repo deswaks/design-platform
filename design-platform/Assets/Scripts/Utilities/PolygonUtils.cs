@@ -3,6 +3,10 @@ using System.Linq;
 using UnityEngine;
 
 namespace DesignPlatform.Utils {
+
+    /// <summary>
+    /// Helper functions for polygon objects
+    /// </summary>
     public static class PolygonUtils {
 
         /// <summary>

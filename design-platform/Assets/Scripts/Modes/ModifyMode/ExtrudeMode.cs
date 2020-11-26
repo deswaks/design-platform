@@ -26,14 +26,14 @@ namespace DesignPlatform.Modes {
         public override void Tick() {
         }
         public override void OnModeResume() {
-            Room selectedRoom = SelectMode.Instance.selection;
+            Core.Space selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
                 CreateHandles(selectedRoom);
             }
         }
         public override void OnModePause() {
             RemoveHandles();
-            Room selectedRoom = SelectMode.Instance.selection;
+            Core.Space selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
                 selectedRoom.ResetOrigin();
             }
@@ -43,7 +43,7 @@ namespace DesignPlatform.Modes {
         /// 
         /// </summary>
         /// <param name="room"></param>
-        public void CreateHandles(Room room) {
+        public void CreateHandles(Core.Space room) {
             for (int i = 0; i < room.GetControlPoints().Count; i++) {
                 GameObject HandleGO = Object.Instantiate(HandlePrefab);
                 HandleGO.transform.SetParent(room.gameObject.transform, true);

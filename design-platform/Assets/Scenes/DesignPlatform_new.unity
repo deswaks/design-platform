@@ -1379,9 +1379,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 2048
-  roomMask:
+  spaceMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
   wallMask:
     serializedVersion: 2
     m_Bits: 8192
@@ -11851,7 +11851,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1771547549}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -14115,7 +14115,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1545366493}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}

@@ -27,18 +27,18 @@ namespace DesignPlatform.Database {
             // Sets up the data model, defining how the C# classes should be handled as Nodes in the graph
             NeoConfig.ConfigureDataModel();
 
-            //db.DeleteAllNodesWithLabel("Room");
+            //db.DeleteAllNodesWithLabel("Space");
 
-            //db.PushAllUnityRoomsToGraph();
+            //db.PushAllUnitySpacesToGraph();
 
 
             //db.GetAllGraphEntities();
 
-            LocalDatabase.CreateAllUnityRoomsFromJson(@"C:\Users\Administrator\Desktop\RoomNodes.json");
+            LocalDatabase.CreateAllUnitySpacesFromJson(@"C:\Users\Administrator\Desktop\SpaceNodes.json");
             // LOAD AND BUILD ALL ROOMS FROM GRAPH
-            //foreach(int id in db.GetAllRoomIdsInGraph()) {
-            //    RoomNode RoomNode = db.GetRoomById(id);
-            //GraphUtils.CreateRoomFromGraph(RoomNode);
+            //foreach(int id in db.GetAllSpaceIdsInGraph()) {
+            //    SpaceNode SpaceNode = db.GetSpaceById(id);
+            //GraphUtils.CreateSpaceFromGraph(SpaceNode);
             //}
 
 
@@ -74,25 +74,25 @@ namespace DesignPlatform.Database {
         }
 
 
-        public void LoadAndBuildUnityRoomsFromGraph() {
+        public void LoadAndBuildUnitySpacesFromGraph() {
             // LOAD AND BUILD ALL ROOMS FROM GRAPH
-            foreach (int id in GetAllRoomIdsInGraph()) {
-                RoomNode RoomNode = GetRoomNodeById(id);
-                LocalDatabase.CreateUnityRoomFromRoomNode(RoomNode);
+            foreach (int id in GetAllSpaceIdsInGraph()) {
+                SpaceNode SpaceNode = GetSpaceNodeById(id);
+                LocalDatabase.CreateUnitySpaceFromSpaceNode(SpaceNode);
             }
         }
 
         /// <summary>
-        /// Reads RoomNodes specified in the json file and merges them into graph
+        /// Reads SpaceNodes specified in the json file and merges them into graph
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
-        public void ImportJsonRoomNodesToGraph(string jsonPath = null) {
-            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath+"RoomNodes.json";
+        public void ImportJsonSpaceNodesToGraph(string jsonPath = null) {
+            jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath+"SpaceNodes.json";
 
-            IEnumerable<RoomNode> roomNodes = LocalDatabase.LoadRoomNodesFromJson(jsonPath);
+            IEnumerable<SpaceNode> spaceNodes = LocalDatabase.LoadSpaceNodesFromJson(jsonPath);
 
-            foreach (RoomNode roomNode in roomNodes) {
-                CreateOrMergeRoomNode(roomNode);
+            foreach (SpaceNode spaceNode in spaceNodes) {
+                CreateOrMergeSpaceNode(spaceNode);
             }
 
             #region oldCode
@@ -103,52 +103,52 @@ namespace DesignPlatform.Database {
             //CREATE(i: Item(name: item.name, id: item.id)
             //_graphClient.Cypher
             //    .Call("apoc.load.json(\"file:///C:/Users/Administrator/Desktop/FromUnity.json \")")
-            //    .Yield("value AS room")
-            //    .Merge("(p:Room {name: value.name, id: value.id, vertices: value.vertices, shape: value.shape, type: value.type})")
+            //    .Yield("value AS space")
+            //    .Merge("(p:Space {name: value.name, id: value.id, vertices: value.vertices, shape: value.shape, type: value.type})")
             //    .ExecuteWithoutResults();
 
             ////CALL apoc.load.json("file:///C:/Users/Administrator/Desktop/FromUnity.json")
             ////YIELD value
-            ////MERGE (p:Room {name: value.name, id: value.id, vertices: value.vertices, shape: value.shape, type: value.type})
+            ////MERGE (p:Space {name: value.name, id: value.id, vertices: value.vertices, shape: value.shape, type: value.type})
 
             //_graphClient.Cypher
-            //    .MergeEntity(room, "room")
+            //    .MergeEntity(space, "space")
             //    .ExecuteWithoutResults();
             #endregion
         }
-        public List<RoomNode> GetAllRoomNodes() {
+        public List<SpaceNode> GetAllSpaceNodes() {
 
-            List<RoomNode> RoomNodes = _graphClient.Cypher
-                .Match("(room:Room)")
-                .Return(room => room.As<RoomNode>())
+            List<SpaceNode> SpaceNodes = _graphClient.Cypher
+                .Match("(space:Space)")
+                .Return(space => space.As<SpaceNode>())
                 .Results
                 .ToList();
 
-            return RoomNodes;
+            return SpaceNodes;
 
             #region old_code
             ////////////////// VIRKER SEMI //////////////////////////////////////
 
             // DENNE METODE VIRKER
             //var query = _graphClient.Cypher
-            //        .Match("(p:Room)")
+            //        .Match("(p:Space)")
             //        .Return(p => new { 
-            //            ID = p.As<Room>().id,
-            //            V = p.As<Room>().vertices 
+            //            ID = p.As<Space>().id,
+            //            V = p.As<Space>().vertices 
             //        });
 
             //var results = query.Results.ToList();
 
             // DENNE METODE VIRKER OG RETURNERER NYE RUM MED EGENSKABER FRA GRAF
             //var query2 = _graphClient.Cypher
-            //    .Match("(p:Room)")
+            //    .Match("(p:Space)")
             //    .Return(p => 
-            //    new Room { 
-            //        id = p.As<Room>().id,
-            //        name = p.As<Room>().name,
-            //        type = p.As<Room>().type,
-            //        area = p.As<Room>().area,
-            //        vertices = p.As<Room>().vertices,
+            //    new Space { 
+            //        id = p.As<Space>().id,
+            //        name = p.As<Space>().name,
+            //        type = p.As<Space>().type,
+            //        area = p.As<Space>().area,
+            //        vertices = p.As<Space>().vertices,
 
             //});
             //var results2 = query2.Results.ToList();
@@ -159,23 +159,23 @@ namespace DesignPlatform.Database {
             //    //nNodes.Add(JsonConvert.DeserializeObject(result.N.Properties) );
             //}
 
-            //.Match("( room:Room)")
-            //.Return(room => room.As<Room>())
+            //.Match("( space:Space)")
+            //.Return(space => space.As<Space>())
             //.Results
             //.ToList();
             #endregion
         }
 
         /// <summary>
-        /// Finds and returns list of IDs for all rooms in graph
+        /// Finds and returns list of IDs for all spaces in graph
         /// </summary>
-        /// <returns>List of IDs of all rooms in graph</returns>
-        public List<int> GetAllRoomIdsInGraph() {
+        /// <returns>List of IDs of all spaces in graph</returns>
+        public List<int> GetAllSpaceIdsInGraph() {
 
             var query = _graphClient.Cypher
-                        .Match("(p:Room)")
+                        .Match("(p:Space)")
                         .Return(p =>
-                            p.As<RoomNode>().id
+                            p.As<SpaceNode>().id
             );
             var results = query.Results.ToList();
 
@@ -183,66 +183,66 @@ namespace DesignPlatform.Database {
         }
 
         /// <summary>
-        /// Saves/inserts all rooms from Unity into graph database
+        /// Saves/inserts all spaces from Unity into graph database
         /// </summary>
-        public void PushAllUnityRoomsToGraph() {
-            // Finds all rooms currently in Unity project
-            Debug.Log(Building.Instance.Rooms.Count);
+        public void PushAllUnitySpacesToGraph() {
+            // Finds all spaces currently in Unity project
+            Debug.Log(Building.Instance.Spaces.Count);
 
-            foreach (Room room in Building.Instance.Rooms) {
+            foreach (Core.Space space in Building.Instance.Spaces) {
                 System.Random rd = new System.Random();
-                RoomNode RoomNode = new RoomNode {
+                SpaceNode SpaceNode = new SpaceNode {
                     id = rd.Next(0, 5000),                              /////////////////////////// SKAL OPDATERES
-                    name = room.Shape.ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
+                    name = space.Shape.ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
                     area = 17.5f,                                       /////////////////////////// SKAL OPDATERES
-                    type = room.Type,
-                    shape = room.Shape,
-                    vertices = GraphUtils.Vector3ListToStringList(room.GetControlPoints())
+                    type = space.Type,
+                    shape = space.Shape,
+                    vertices = GraphUtils.Vector3ListToStringList(space.GetControlPoints())
                 };
 
-                CreateOrMergeRoomNode(RoomNode);
+                CreateOrMergeSpaceNode(SpaceNode);
             }
         }
 
 
         /// <summary>
-        /// Create room in graph (or merge with existing: overwriting its parameters)  
+        /// Create space in graph (or merge with existing: overwriting its parameters)  
         /// </summary>
-        public void CreateOrMergeRoomNode(RoomNode room) {
+        public void CreateOrMergeSpaceNode(SpaceNode space) {
 
             _graphClient.Cypher
-                .MergeEntity(room, "room")
+                .MergeEntity(space, "space")
                 .ExecuteWithoutResults();
         }
 
 
         /// <summary>
-        /// Create adjacency relationship between two rooms
+        /// Create adjacency relationship between two spaces
         /// </summary>
-        public void CreateOrMergeAdjacentRelationship(RoomNode room, RoomNode secondRoom) {
+        public void CreateOrMergeAdjacentRelationship(SpaceNode space, SpaceNode secondSpace) {
             _graphClient.Cypher
-                .MergeEntity(room, "room")
-                .MergeEntity(secondRoom, "secondRoom")
-                .MergeRelationship(new AdjacentRoomRelationship("room", "secondRoom"))
+                .MergeEntity(space, "space")
+                .MergeEntity(secondSpace, "secondSpace")
+                .MergeRelationship(new AdjacentSpaceRelationship("space", "secondSpace"))
                 .ExecuteWithoutResults();
         }
 
 
         /// <summary>
-        /// Finds a room in the graph based on its Id
+        /// Finds a space in the graph based on its Id
         /// </summary>
         /// <param name="Id">Id to search for</param>
-        /// <returns>RoomNode with given id</returns>
-        public RoomNode GetRoomNodeById(int Id) {
+        /// <returns>SpaceNode with given id</returns>
+        public SpaceNode GetSpaceNodeById(int Id) {
             //string queryId = Id.ToString();
 
-            RoomNode foundRoom = _graphClient.Cypher
-                .Match("( room:Room)")
-                .Where<RoomNode>(room => room.id == Id)
-                .Return(room => room.As<RoomNode>())
+            SpaceNode foundSpace = _graphClient.Cypher
+                .Match("( space:Space)")
+                .Where<SpaceNode>(space => space.id == Id)
+                .Return(space => space.As<SpaceNode>())
                 .Results
                 .First();
-            return foundRoom;
+            return foundSpace;
         }
 
         /// <summary>

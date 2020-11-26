@@ -5,17 +5,17 @@ using UnityEngine;
 namespace DesignPlatform.UI {
     public class ButtonManagerHome : MonoBehaviour {
         public void SaveLocal() {
-            LocalDatabase.SaveAllUnityRoomsAndOpeningsToJson();
+            LocalDatabase.SaveAllUnitySpacesAndOpeningsToJson();
         }
         public void LoadLocal() {
-            LocalDatabase.CreateAllUnityRoomsFromJson();
+            LocalDatabase.CreateAllUnitySpacesFromJson();
             LocalDatabase.CreateAllUnityOpeningsFromJson();
         }
         public void SaveToGraph() {
-            GraphDatabase.Instance.PushAllUnityRoomsToGraph();
+            GraphDatabase.Instance.PushAllUnitySpacesToGraph();
         }
         public void LoadFromGraph() {
-            GraphDatabase.Instance.LoadAndBuildUnityRoomsFromGraph();
+            GraphDatabase.Instance.LoadAndBuildUnitySpacesFromGraph();
         }
         public void ExportPDF() {
             PdfExporter.ExportPlan();

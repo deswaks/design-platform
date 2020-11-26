@@ -1,5 +1,5 @@
-﻿using DesignPlatform.Core;
-using DesignPlatform.UI;
+﻿using DesignPlatform.UI;
+using DesignPlatform.Utils;
 using StructuralAnalysis;
 using UnityEngine;
 
@@ -25,7 +25,7 @@ namespace DesignPlatform.Modes {
             Utils.AssetUtil.LoadBundle("prefabs");
 
             // WIDGET TEST
-            RoomScheduleWidget widgey = new RoomScheduleWidget();
+            SpaceScheduleWidget widgey = new SpaceScheduleWidget();
             widgey.RequestDraw();
             WallElementScheduleWidget wallElementwidget = new WallElementScheduleWidget();
             wallElementwidget.RequestDraw();

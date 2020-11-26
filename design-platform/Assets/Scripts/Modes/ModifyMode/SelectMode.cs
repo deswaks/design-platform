@@ -7,7 +7,7 @@ namespace DesignPlatform.Modes {
 
         private static SelectMode instance;
         private Mode currentMode;
-        public Room selection;
+        public Core.Space selection;
 
         public static SelectMode Instance {
             // Use the ?? operator, to return 'instance' if 'instance' does not equal null
@@ -47,13 +47,13 @@ namespace DesignPlatform.Modes {
 
             // Check if any number key was pressed
             if (Input.GetKeyDown(KeyCode.Alpha0)) {
-                if (selection != null) selection.SetRoomType(RoomType.DEFAULT);
+                if (selection != null) selection.SetSpaceType(SpaceFunction.DEFAULT);
                 selection.UpdateRender2D();
             }
             for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha9; i++) {
                 if (Input.GetKeyDown((KeyCode)i)) {
                     if (selection != null) {
-                        selection.SetRoomType((RoomType)i - (int)KeyCode.Alpha1 + 10);
+                        selection.SetSpaceType((SpaceFunction)i - (int)KeyCode.Alpha1 + 10);
                         selection.UpdateRender2D();
                     }
                 }
@@ -88,8 +88,8 @@ namespace DesignPlatform.Modes {
                 return;
             }
 
-            // Set new room selection
-            Room clickedRoom = GetClickedRoom();
+            // Set new space selection
+            Core.Space clickedRoom = GetClickedSpace();
             if (clickedRoom != null) {
                 if (clickedRoom == selection) {
                     return;
@@ -111,23 +111,23 @@ namespace DesignPlatform.Modes {
 
             if (selection != null) {
                 selection.UpdateRender2D(highlighted: false);
-                selection.State = RoomState.STATIONARY;
+                selection.State = SpaceState.STATIONARY;
             }
             selection = null;
 
         }
 
-        private Room GetClickedRoom() {
-            Room clickedRoom = null;
+        private Core.Space GetClickedSpace() {
+            Core.Space clickedRoom = null;
             Ray ray = Camera.main.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-            int roomMask = 1 << 8 | 1 << 9;
-            if (Physics.Raycast(ray: ray, maxDistance: 1000f, hitInfo: out RaycastHit hitInfo, layerMask: roomMask)) {
-                // if the hit game object is a room (ie. it is on layer 8)
+            int spaceMask = 1 << 8 | 1 << 9;
+            if (Physics.Raycast(ray: ray, maxDistance: 1000f, hitInfo: out RaycastHit hitInfo, layerMask: spaceMask)) {
+                // if the hit game object is a space (ie. it is on layer 8)
                 if (hitInfo.collider.gameObject.layer == 8) {
-                    clickedRoom = hitInfo.collider.gameObject.GetComponent<Room>();
+                    clickedRoom = hitInfo.collider.gameObject.GetComponent<Core.Space>();
                 }
                 else {
-                    clickedRoom = hitInfo.collider.gameObject.GetComponentInParent<Room>();
+                    clickedRoom = hitInfo.collider.gameObject.GetComponentInParent<Core.Space>();
                 }
             }
             return clickedRoom;

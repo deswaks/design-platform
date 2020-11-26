@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zoom2d_490',['Zoom2D',['../class_design_platform_1_1_core_1_1_zoom2_d.html',1,'DesignPlatform::Core']]]
+  ['zoom2d_680',['Zoom2D',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html',1,'DesignPlatform::UI']]]
 ];

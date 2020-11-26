@@ -6,10 +6,14 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
+
+    /// <summary>
+    /// Represents building wall as a vertical space-dividing building elements.
+    /// </summary>
     public class Wall : MonoBehaviour {
 
-        public List<Room> Rooms {
-            get { return Faces.Select(f => f.Room).ToList(); }
+        public List<Space> Spaces {
+            get { return Faces.Select(f => f.Space).ToList(); }
         }
         public List<Face> Faces {
             get { return Interfaces.SelectMany(iface => iface.Faces).ToList(); }
@@ -25,13 +29,13 @@ namespace DesignPlatform.Core {
 
         public float wallThickness = 0.2f;
         public Vector3 Normal {
-            get { return Rooms[0].GetWallNormals()[Faces[0].FaceIndex]; }
+            get { return Spaces[0].GetWallNormals()[Faces[0].FaceIndex]; }
         }
         public float Length {
             get { return (wallControlPoints[0] - wallControlPoints[2]).magnitude; }
         }
         public float Height {
-            get { return Rooms[0].height; }
+            get { return Spaces[0].height; }
         }
 
 

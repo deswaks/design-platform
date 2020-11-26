@@ -8,24 +8,39 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
 
-    public enum OpeningShape {
+    /// <summary>
+    /// Describes the function of an opening.
+    /// </summary>
+    public enum OpeningFunction {
+        /// <summary> Opening is a door </summary>
         DOOR,
+        /// <summary> Opening is a window </summary>
         WINDOW
     }
 
+    /// <summary>
+    /// Describes the state of an opening.
+    /// </summary>
     public enum OpeningState {
+        /// <summary> Opening has been placed in the model. </summary>
         PLACED,
+        /// <summary> Opening is used for preview and has not been placed in the model. </summary>
         PREVIEW
     }
 
+    /// <summary>
+    /// Represents an opening in the walls of a building
+    /// This includes external building openings such as windows and
+    /// internal building openings such as doors between rooms.
+    /// </summary>
     public class Opening : MonoBehaviour {
 
-        public List<Room> Rooms {
+        public List<Space> Spaces {
             get {
                 if (Faces != null && Faces.Count() > 0) {
-                    return Faces.Select(f => f.Room).ToList();
+                    return Faces.Select(f => f.Space).ToList();
                 }
-                else return new List<Room>();
+                else return new List<Space>();
             }
             set {; }
         }
@@ -41,31 +56,35 @@ namespace DesignPlatform.Core {
             private set {; }
         }
 
-        private float WindowWidth = 1.6f;
-        private float WindowHeight = 1.05f;
-
-        private float DoorWidth = 0.9f;
-        private float DoorHeight = 2.1f;
-        private float Doorstep = 0.05f;
-
-        public float OpeningDepth = 0.051f;
-        public float SillHeight;
-        public float Width;
-        public float Height;
-        public float RoomHeight {
-            get { if (Faces != null && Faces.Count > 0) return Faces[0].Room.height;
+        public float SpaceHeight {
+            get {
+                if (Faces != null && Faces.Count > 0) return Faces[0].Space.height;
                 else return 3.0f;
             }
         }
-
-        public OpeningShape Shape { get; private set; }
-        public OpeningState State { get; private set; }
-        public List<Vector3> ControlPoints { get; private set; }
 
         public Vector3 CenterPoint {
             get { return gameObject.transform.position; }
             private set {; }
         }
+
+
+        private readonly float WindowWidth = 1.6f;
+        private readonly float WindowHeight = 1.05f;
+        private readonly float WindowSillHeight = 1.1f;
+
+        private readonly float DoorWidth = 0.9f;
+        private readonly float DoorHeight = 2.1f;
+        private readonly float DoorSillHeight = 0.05f;
+
+        public float Width;
+        public float Height;
+        public float SillHeight;
+        public readonly float Depth = 0.051f;
+
+        public OpeningFunction Shape { get; private set; }
+        public OpeningState State { get; private set; }
+        public List<Vector3> ControlPoints { get; private set; }
 
         /// <summary>
         /// The placement point of the opening on the wall (bottom) placement line.
@@ -76,7 +95,7 @@ namespace DesignPlatform.Core {
         }
 
 
-        public void InitializeOpening(OpeningShape shape = OpeningShape.WINDOW,
+        public void InitializeOpening(OpeningFunction shape = OpeningFunction.WINDOW,
                                       OpeningState state = OpeningState.PREVIEW) {
             Shape = shape;
             State = state;
@@ -85,20 +104,20 @@ namespace DesignPlatform.Core {
             Material material = AssetUtil.LoadAsset<Material>("materials", "openingMaterial"); ;
 
             switch (Shape) {
-                case OpeningShape.WINDOW:
+                case OpeningFunction.WINDOW:
                     gameObject.layer = 16; // Window layer
                     Width = WindowWidth;
-                    Height = DoorHeight;// WindowHeight;
-                    SillHeight = Doorstep;// 1.1f;
+                    Height = WindowHeight;
+                    SillHeight = WindowSillHeight;
                     material = AssetUtil.LoadAsset<Material>("materials", "openingWindow");
                     gameObject.name = "Window";
 
                     break;
-                case OpeningShape.DOOR:
+                case OpeningFunction.DOOR:
                     gameObject.layer = 15; // Door layer
                     Width = DoorWidth;
                     Height = DoorHeight;
-                    SillHeight = Doorstep;
+                    SillHeight = DoorSillHeight;
                     material = AssetUtil.LoadAsset<Material>("materials", "openingDoor");
                     gameObject.name = "Door";
                     break;
@@ -117,11 +136,11 @@ namespace DesignPlatform.Core {
             gameObject.AddComponent<ProBuilderMesh>();
 
             List<Vector3> openingMeshControlPoints = ControlPoints
-                .Select(p => p -= Vector3.forward * (OpeningDepth / 2)).ToList();
+                .Select(p => p -= Vector3.forward * (Depth / 2)).ToList();
 
             PolyShape polyshape = gameObject.GetComponent<PolyShape>();
             polyshape.SetControlPoints(ControlPoints);
-            polyshape.extrude = OpeningDepth;
+            polyshape.extrude = Depth;
             polyshape.CreateShapeFromPolygon();
 
             gameObject.GetComponent<ProBuilderMesh>().Refresh();
@@ -154,14 +173,14 @@ namespace DesignPlatform.Core {
             // Set controlpoints
             lr.useWorldSpace = false;
             List<Vector3> points = GetControlPoints2D().Select(p =>
-                p + Vector3.up * (RoomHeight + 0.001f)).ToList();
+                p + Vector3.up * (SpaceHeight + 0.001f)).ToList();
             lr.positionCount = points.Count;
             lr.SetPositions(points.ToArray());
 
             // Style
             lr.startWidth = width; lr.endWidth = width;
             foreach (Material material in lr.materials) {
-                if (Shape == OpeningShape.DOOR) material.color = Color.gray;
+                if (Shape == OpeningFunction.DOOR) material.color = Color.gray;
                 else material.color = Color.blue;
             }
         }
@@ -210,6 +229,7 @@ namespace DesignPlatform.Core {
             float parameterOnFace = Faces[0].Line.Parameter(CenterPoint);
             return Faces[0].GetInterfaceAtParameter(parameterOnFace);
         }
+
         /// <summary>
         /// Gets a list of controlpoints - in local coordinates. The controlpoints are the vertices of the underlying polyshape of the opening.
         /// </summary>
@@ -236,8 +256,8 @@ namespace DesignPlatform.Core {
             }
             // Find the two closest faces in the building
             List<Face> closestFaces = new List<Face>();
-            foreach (Room room in Building.Instance.Rooms) {
-                foreach (Face face in room.Faces.Where(f => f.Orientation == Orientation.VERTICAL)) {
+            foreach (Space space in Building.Instance.Spaces) {
+                foreach (Face face in space.Faces.Where(f => f.Orientation == Orientation.VERTICAL)) {
                     if (face.Line.IsOnLine(CenterPoint)) {
                         closestFaces.Add(face);
                     }
