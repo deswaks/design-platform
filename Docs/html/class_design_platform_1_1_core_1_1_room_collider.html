@@ -72,6 +72,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="class_design_platform_1_1_core_1_1_room_collider-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">DesignPlatform.Core.RoomCollider Class Reference</div>  </div>
@@ -93,8 +94,55 @@ Static Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a1c5606c6d235d88e261b12ff97af52df"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_room_collider.html#a1c5606c6d235d88e261b12ff97af52df">isCurrentlyColliding</a> = false</td></tr>
 <tr class="separator:a1c5606c6d235d88e261b12ff97af52df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a4d558a70eb5f2f7e563a717adac5504b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_room_collider.html#a4d558a70eb5f2f7e563a717adac5504b">OnCollisionEnter</a> (Collision other)</td></tr>
+<tr class="separator:a4d558a70eb5f2f7e563a717adac5504b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80d6ef5b30923f30c2728716a807b1f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_room_collider.html#a80d6ef5b30923f30c2728716a807b1f4">OnCollisionStay</a> (Collision other)</td></tr>
+<tr class="separator:a80d6ef5b30923f30c2728716a807b1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1601315fbd052233600b2c73d564fae5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_room_collider.html#a1601315fbd052233600b2c73d564fae5">OnCollisionExit</a> (Collision other)</td></tr>
+<tr class="separator:a1601315fbd052233600b2c73d564fae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07a698a9f3ba1bb127cd84ac96d5e6ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_room_collider.html#a07a698a9f3ba1bb127cd84ac96d5e6ff">CheckCollisionWithRoomColliders</a> (Collision other, bool isColliding)</td></tr>
+<tr class="separator:a07a698a9f3ba1bb127cd84ac96d5e6ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a07a698a9f3ba1bb127cd84ac96d5e6ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07a698a9f3ba1bb127cd84ac96d5e6ff">&#9670;&nbsp;</a></span>CheckCollisionWithRoomColliders()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DesignPlatform.Core.RoomCollider.CheckCollisionWithRoomColliders </td>
+          <td>(</td>
+          <td class="paramtype">Collision&#160;</td>
+          <td class="paramname"><em>other</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isColliding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad9e8847a07c4e2300b3b2a9270381f50"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad9e8847a07c4e2300b3b2a9270381f50">&#9670;&nbsp;</a></span>GiveCollider()</h2>
 
@@ -115,6 +163,84 @@ Public Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d558a70eb5f2f7e563a717adac5504b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d558a70eb5f2f7e563a717adac5504b">&#9670;&nbsp;</a></span>OnCollisionEnter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DesignPlatform.Core.RoomCollider.OnCollisionEnter </td>
+          <td>(</td>
+          <td class="paramtype">Collision&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1601315fbd052233600b2c73d564fae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1601315fbd052233600b2c73d564fae5">&#9670;&nbsp;</a></span>OnCollisionExit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DesignPlatform.Core.RoomCollider.OnCollisionExit </td>
+          <td>(</td>
+          <td class="paramtype">Collision&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a80d6ef5b30923f30c2728716a807b1f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80d6ef5b30923f30c2728716a807b1f4">&#9670;&nbsp;</a></span>OnCollisionStay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DesignPlatform.Core.RoomCollider.OnCollisionStay </td>
+          <td>(</td>
+          <td class="paramtype">Collision&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

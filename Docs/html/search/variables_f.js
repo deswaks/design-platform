@@ -1,8 +1,19 @@
 var searchData=
 [
-  ['wallindex_742',['wallIndex',['../class_design_platform_1_1_u_i_1_1_extrude_handle.html#a4c6338230c6e4a0f732005a3a61a290d',1,'DesignPlatform::UI::ExtrudeHandle']]],
-  ['wallmask_743',['wallMask',['../class_design_platform_1_1_core_1_1_player_movement.html#a18b343d2fbf6ff987480afd571ca97fd',1,'DesignPlatform::Core::PlayerMovement']]],
-  ['wallnormal_744',['wallNormal',['../class_design_platform_1_1_u_i_1_1_extrude_handle.html#a500a286572e54a8f2ea7b91dd2903db1',1,'DesignPlatform::UI::ExtrudeHandle']]],
-  ['wallthickness_745',['wallThickness',['../class_design_platform_1_1_core_1_1_wall.html#afb3041cc4b92fccad776e894bcf1e988',1,'DesignPlatform::Core::Wall']]],
-  ['width_746',['width',['../class_design_platform_1_1_u_i_1_1_widget.html#aa54013350ef4e8251ec05fc84bd0c4c2',1,'DesignPlatform.UI.Widget.width()'],['../class_design_platform_1_1_core_1_1_opening.html#a87c04ea7133166056d032fd24b4a6d47',1,'DesignPlatform.Core.Opening.Width()']]]
+  ['savefolderpath_1122',['saveFolderPath',['../class_design_platform_1_1_database_1_1_settings.html#ad341e861cb58d24571e1fa692628ffbf',1,'DesignPlatform::Database::Settings']]],
+  ['scale_1123',['scale',['../class_design_platform_1_1_export_1_1_pdf_exporter.html#a4f5befa6705b6f9f33e524db7a5a2ff6',1,'DesignPlatform::Export::PdfExporter']]],
+  ['scales_1124',['Scales',['../class_design_platform_1_1_export_1_1_pdf_exporter.html#a10c1418256522722f40c38ac9c921ad7',1,'DesignPlatform::Export::PdfExporter']]],
+  ['scroll_1125',['scroll',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#ad951083f13e1bb8261a1a781beee1975',1,'DesignPlatform::UI::Zoom2D']]],
+  ['selectedshape_1126',['selectedShape',['../class_design_platform_1_1_modes_1_1_build_mode.html#a866738d5b28ce6499ccbfc27eed5bafb',1,'DesignPlatform.Modes.BuildMode.selectedShape()'],['../class_design_platform_1_1_modes_1_1_opening_mode.html#a6dd3bcd8d44cfcfda30cd10b5c1e75ff',1,'DesignPlatform.Modes.OpeningMode.selectedShape()']]],
+  ['selection_1127',['selection',['../class_design_platform_1_1_modes_1_1_select_mode.html#a522ebbff1e272d1e8e06ba46f0f5cbea',1,'DesignPlatform::Modes::SelectMode']]],
+  ['showopeninglines_1128',['ShowOpeningLines',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a9c306acb60dd19da51c867e20a9c13db',1,'DesignPlatform.Modes.POVMode.ShowOpeningLines()'],['../class_design_platform_1_1_u_i_1_1_settings.html#a22a5c518a8c3c2824229f581f4ab2f50',1,'DesignPlatform.UI.Settings.ShowOpeningLines()']]],
+  ['showroomtags_1129',['ShowRoomTags',['../class_design_platform_1_1_u_i_1_1_settings.html#a253994ddc3323e4b89b44ea03f3a85ec',1,'DesignPlatform::UI::Settings']]],
+  ['showwalllines_1130',['ShowWallLines',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a743e1a20af1adce3e0a0cc4d0cea33b9',1,'DesignPlatform.Modes.POVMode.ShowWallLines()'],['../class_design_platform_1_1_u_i_1_1_settings.html#a40bd566887281a6b64109a52febd31af',1,'DesignPlatform.UI.Settings.ShowWallLines()']]],
+  ['sillheight_1131',['SillHeight',['../class_design_platform_1_1_core_1_1_opening.html#aa88798acb718b253769f40c901857088',1,'DesignPlatform::Core::Opening']]],
+  ['size_1132',['Size',['../class_design_platform_1_1_u_i_1_1_widget.html#a3f00f1a56246804ab9730221fcb1bd58',1,'DesignPlatform.UI.Widget.Size()'],['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#a62997fa07b58596bba28a7da7fe53291',1,'DesignPlatform.UI.Zoom2D.size()'],['../class_design_platform_1_1_core_1_1_grid.html#adf7385c30281e3f383013795851d24b5',1,'DesignPlatform.Core.Grid.size()']]],
+  ['slabs_1133',['slabs',['../class_design_platform_1_1_core_1_1_building.html#ab95b112e6f677932a0dc9c9814f16de0',1,'DesignPlatform::Core::Building']]],
+  ['speed_1134',['speed',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#acd369ac6589dd79a2489a2bf5aecbf28',1,'DesignPlatform.UI.Zoom2D.speed()'],['../class_design_platform_1_1_core_1_1_player_movement.html#a76afe22dbb85f0553c41360ed3719cee',1,'DesignPlatform.Core.PlayerMovement.speed()']]],
+  ['subsize_1135',['subSize',['../class_design_platform_1_1_core_1_1_grid.html#adce8c1d02d3d940d5ced50c719f642ea',1,'DesignPlatform::Core::Grid']]],
+  ['switchanimator_1136',['switchAnimator',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#acc51c6b1cc0d27da3877fc8186efa3a4',1,'DesignPlatform::UI::UISwitch']]],
+  ['switchbutton_1137',['switchButton',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#a220428e9993ee3046ea3f1b8450f83b9',1,'DesignPlatform::UI::UISwitch']]]
 ];

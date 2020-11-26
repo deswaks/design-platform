@@ -1,8 +1,28 @@
 var searchData=
 [
-  ['name_209',['name',['../class_design_platform_1_1_database_1_1_room_node.html#a1504125d73d85b7aff40f84ed49a9f1d',1,'DesignPlatform.Database.RoomNode.name()'],['../class_design_platform_1_1_u_i_1_1_widget.html#ac159df175117b1868a69dd9a74d630a9',1,'DesignPlatform.UI.Widget.Name()']]],
-  ['neoconfig_210',['NeoConfig',['../class_design_platform_1_1_database_1_1_neo_config.html',1,'DesignPlatform::Database']]],
-  ['none_211',['None',['../namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa6adf97f83acf6453d4a6a4b1070f3754',1,'DesignPlatform::Core']]],
-  ['normal_212',['Normal',['../class_design_platform_1_1_core_1_1_face.html#a940e1aa021edfc0ef90b3baf8f85ff24',1,'DesignPlatform.Core.Face.Normal()'],['../class_design_platform_1_1_core_1_1_wall.html#af01e19cd835ef3fcfc080584ec7589a1',1,'DesignPlatform.Core.Wall.Normal()']]],
-  ['notificationgenerator_2ecs_213',['NotificationGenerator.cs',['../_notification_generator_8cs.html',1,'']]]
+  ['magnitude_301',['magnitude',['../struct_structural_analysis_1_1_load.html#ae952ee73fa3a981f5580ec67ee81a592',1,'StructuralAnalysis::Load']]],
+  ['main_302',['Main',['../class_design_platform_1_1_modes_1_1_main.html',1,'DesignPlatform::Modes']]],
+  ['main_2ecs_303',['Main.cs',['../_main_8cs.html',1,'']]],
+  ['maxsize_304',['maxSize',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#ae8beb3614baa18f203dd80c0c7b6d9e9',1,'DesignPlatform::UI::Zoom2D']]],
+  ['menu_305',['MENU',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a9896a7aab41782886b429368f73429a0a3ed53fbeb1eab0443561b68ca0c0b5cf',1,'DesignPlatform::Modes::POVMode']]],
+  ['midpoint_306',['Midpoint',['../class_design_platform_1_1_geometry_1_1_line.html#adc58876dfb5e97742177e7d8a6d1878d',1,'DesignPlatform.Geometry.Line.Midpoint()'],['../class_design_platform_1_1_utils_1_1_roof_utils.html#a09a05f354ef581894d74eba85bc02bac',1,'DesignPlatform.Utils.RoofUtils.Midpoint()']]],
+  ['midpointjointtypes_307',['midPointJointTypes',['../class_design_platform_1_1_database_1_1_wall_element_node.html#aab375c0f4df1f849bb807a043faf5098',1,'DesignPlatform::Database::WallElementNode']]],
+  ['midpoints_308',['midpoints',['../class_design_platform_1_1_core_1_1_c_l_t_element.html#a94f785600cdd0f7b45e9e08199f43cb6',1,'DesignPlatform::Core::CLTElement']]],
+  ['minsize_309',['minSize',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#a82a70e1810a73cea90aa76322fbf6ce3',1,'DesignPlatform::UI::Zoom2D']]],
+  ['mode_310',['Mode',['../class_design_platform_1_1_modes_1_1_mode.html',1,'DesignPlatform::Modes']]],
+  ['mode_2ecs_311',['Mode.cs',['../_mode_8cs.html',1,'']]],
+  ['modetype_312',['ModeType',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a9896a7aab41782886b429368f73429a0',1,'DesignPlatform::Modes::POVMode']]],
+  ['modify_313',['Modify',['../class_design_platform_1_1_u_i_1_1_button_manager_modify.html#a03fb9e217c364906117c03499a985d6d',1,'DesignPlatform::UI::ButtonManagerModify']]],
+  ['modulefolderpath_314',['ModuleFolderPath',['../class_design_platform_1_1_core_1_1_module_loader.html#a4cd23de84ce23be1318d0951b29c67b7',1,'DesignPlatform::Core::ModuleLoader']]],
+  ['moduleloader_315',['ModuleLoader',['../class_design_platform_1_1_core_1_1_module_loader.html',1,'DesignPlatform::Core']]],
+  ['moduleloader_2ecs_316',['ModuleLoader.cs',['../_module_loader_8cs.html',1,'']]],
+  ['mousepositioncollidingrooms_317',['MousePositionCollidingRooms',['../class_design_platform_1_1_modes_1_1_opening_mode.html#a9c9a6c1e96b79b827c396e534bdbb7d8',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['mousesensitivity_318',['mouseSensitivity',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a28cb46d82d758346af5bc42a8b33cd73',1,'DesignPlatform::Modes::POVMode']]],
+  ['move_319',['Move',['../class_design_platform_1_1_core_1_1_opening.html#a7513ed7ce8ef931f3a97dc6b0c071516',1,'DesignPlatform.Core.Opening.Move()'],['../class_design_platform_1_1_core_1_1_room.html#a52f40950c20bf4c07b08d2c2f8cd1b1c',1,'DesignPlatform.Core.Room.Move()'],['../class_design_platform_1_1_u_i_1_1_button_manager_modify.html#a20309595d16854bb1c029ad99373c859',1,'DesignPlatform.UI.ButtonManagerModify.Move()']]],
+  ['movemode_320',['MoveMode',['../class_design_platform_1_1_modes_1_1_move_mode.html',1,'DesignPlatform.Modes.MoveMode'],['../class_design_platform_1_1_modes_1_1_move_mode.html#aef903dc2c9f415b7b9b871ebfd9578b6',1,'DesignPlatform.Modes.MoveMode.MoveMode()']]],
+  ['movemode_2ecs_321',['MoveMode.cs',['../_move_mode_8cs.html',1,'']]],
+  ['movemodeoffset_322',['moveModeOffset',['../class_design_platform_1_1_core_1_1_room.html#a6020e50c7a4bfb94f9316fca7eff686d',1,'DesignPlatform::Core::Room']]],
+  ['movespeed_323',['moveSpeed',['../class_design_platform_1_1_u_i_1_1_pan2_d.html#a0679c594221fb4404f13ffbe8a6c8f1e',1,'DesignPlatform::UI::Pan2D']]],
+  ['moving_324',['MOVING',['../namespace_design_platform_1_1_core.html#ae204d84c71f5340b03efa867c1f7fc8caaf5a690fd5ec6f789dbfc51ec6a891ba',1,'DesignPlatform::Core']]],
+  ['widget_2ecs_325',['Widget.cs',['../_modules_2_structural_01_analysis_2_widget_2_widget_8cs.html',1,'']]]
 ];

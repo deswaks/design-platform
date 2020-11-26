@@ -1,8 +1,11 @@
 var searchData=
 [
-  ['wallindex_736',['wallIndex',['../class_design_platform_1_1_u_i_1_1_extrude_handle.html#a4c6338230c6e4a0f732005a3a61a290d',1,'DesignPlatform::UI::ExtrudeHandle']]],
-  ['wallmask_737',['wallMask',['../class_design_platform_1_1_core_1_1_player_movement.html#a18b343d2fbf6ff987480afd571ca97fd',1,'DesignPlatform::Core::PlayerMovement']]],
-  ['wallnormal_738',['wallNormal',['../class_design_platform_1_1_u_i_1_1_extrude_handle.html#a500a286572e54a8f2ea7b91dd2903db1',1,'DesignPlatform::UI::ExtrudeHandle']]],
-  ['wallthickness_739',['wallThickness',['../class_design_platform_1_1_core_1_1_wall.html#afb3041cc4b92fccad776e894bcf1e988',1,'DesignPlatform::Core::Wall']]],
-  ['width_740',['Width',['../class_design_platform_1_1_core_1_1_opening.html#a87c04ea7133166056d032fd24b4a6d47',1,'DesignPlatform.Core.Opening.Width()'],['../class_design_platform_1_1_u_i_1_1_widget.html#aa54013350ef4e8251ec05fc84bd0c4c2',1,'DesignPlatform.UI.Widget.width()']]]
+  ['radius_1114',['radius',['../class_design_platform_1_1_modes_1_1_opening_mode.html#adceafdb228fdadc9a28d146205eb149b',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['roofpitch_1115',['RoofPitch',['../class_design_platform_1_1_core_1_1_roof_generator.html#a3e5c4d502b486c59a8ac815388762268',1,'DesignPlatform::Core::RoofGenerator']]],
+  ['roofs_1116',['roofs',['../class_design_platform_1_1_core_1_1_building.html#a8ba13c11500240bf273f252abcbcb20d',1,'DesignPlatform::Core::Building']]],
+  ['rooftype_1117',['roofType',['../class_design_platform_1_1_core_1_1_roof_generator.html#a7510f3eb5933b53884019516cefb600c',1,'DesignPlatform::Core::RoofGenerator']]],
+  ['roommask_1118',['roomMask',['../class_design_platform_1_1_core_1_1_player_movement.html#a68c6a7f421103d12709ad73a56b9069e',1,'DesignPlatform::Core::PlayerMovement']]],
+  ['roommaterialasset_1119',['RoomMaterialAsset',['../class_design_platform_1_1_core_1_1_room.html#acf3b2ad12d5f95bc7eb70589db57a55f',1,'DesignPlatform::Core::Room']]],
+  ['roomtypename_1120',['RoomTypeName',['../class_design_platform_1_1_core_1_1_room.html#a42c94f5a80ee628c895f3ed58e63fe78',1,'DesignPlatform::Core::Room']]],
+  ['rowtemplate_1121',['rowTemplate',['../class_design_platform_1_1_u_i_1_1_select_widgets_window.html#a93052332e683a2c809eaae38331cfc3c',1,'DesignPlatform::UI::SelectWidgetsWindow']]]
 ];

@@ -1,6 +1,10 @@
 var searchData=
 [
-  ['thickness_830',['Thickness',['../class_design_platform_1_1_core_1_1_interface.html#adc15817f87e79233e7c813524447a58e',1,'DesignPlatform::Core::Interface']]],
-  ['type_831',['type',['../class_design_platform_1_1_database_1_1_room_node.html#a116e64bee16c1f1a3030c0a3a953c8d2',1,'DesignPlatform.Database.RoomNode.type()'],['../class_design_platform_1_1_core_1_1_room.html#ad15635322d51b3b5ac4cd93c8cc6bd44',1,'DesignPlatform.Core.Room.Type()']]],
-  ['typename_832',['TypeName',['../class_design_platform_1_1_core_1_1_room.html#acf2f7dd44b8eef872a12310b2c370467',1,'DesignPlatform::Core::Room']]]
+  ['savefolderpath_1252',['SaveFolderPath',['../class_design_platform_1_1_database_1_1_settings.html#a7fb10c30af6514b1a0d8ccc499cb5057',1,'DesignPlatform::Database::Settings']]],
+  ['selectedshape_1253',['SelectedShape',['../class_design_platform_1_1_modes_1_1_build_mode.html#aff588454c83efcec8f214a33d6b86009',1,'DesignPlatform.Modes.BuildMode.SelectedShape()'],['../class_design_platform_1_1_modes_1_1_opening_mode.html#a2aa9323f17de612b828f5a0c79599e66',1,'DesignPlatform.Modes.OpeningMode.SelectedShape()']]],
+  ['shape_1254',['Shape',['../class_design_platform_1_1_core_1_1_opening.html#a7516f99a74a03b45fbbd91e36599513f',1,'DesignPlatform.Core.Opening.Shape()'],['../class_design_platform_1_1_core_1_1_room.html#a0ab66b5bf37bba626245263bb704ccaa',1,'DesignPlatform.Core.Room.Shape()'],['../class_design_platform_1_1_database_1_1_room_node.html#aa9a4892c15d20993b73021aa77f40bca',1,'DesignPlatform.Database.RoomNode.shape()']]],
+  ['slabs_1255',['Slabs',['../class_design_platform_1_1_core_1_1_building.html#a341224a41e35bf07c8c25eea1bcf08d1',1,'DesignPlatform::Core::Building']]],
+  ['startjointtype_1256',['startJointType',['../class_design_platform_1_1_database_1_1_wall_element_node.html#ab30a197d76ae5d4db435aa4853127845',1,'DesignPlatform::Database::WallElementNode']]],
+  ['startpoint_1257',['startPoint',['../class_design_platform_1_1_core_1_1_c_l_t_element.html#a28d0672fff4c21195f5f2da7346fc20b',1,'DesignPlatform.Core.CLTElement.startPoint()'],['../class_design_platform_1_1_core_1_1_face.html#adde992e64d00391f5d626bc48a993d92',1,'DesignPlatform.Core.Face.StartPoint()'],['../class_design_platform_1_1_core_1_1_interface.html#a7d2690b8dd0c1cf8bf62d569b34a77e8',1,'DesignPlatform.Core.Interface.StartPoint()'],['../class_design_platform_1_1_geometry_1_1_line.html#afcbb52c615ddbb26d55a9062a2e36a00',1,'DesignPlatform.Geometry.Line.StartPoint()']]],
+  ['state_1258',['State',['../class_design_platform_1_1_core_1_1_opening.html#ac686481b0675248dcc2ae7e296189b39',1,'DesignPlatform.Core.Opening.State()'],['../class_design_platform_1_1_core_1_1_room.html#aebc51092e4d9e6dadc6ffe5419ca2fba',1,'DesignPlatform.Core.Room.State()']]]
 ];

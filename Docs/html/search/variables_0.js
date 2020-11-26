@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['closestpoint_695',['closestPoint',['../class_design_platform_1_1_modes_1_1_opening_mode.html#abec9f805a8573696dba82c3c8f1232df',1,'DesignPlatform::Modes::OpeningMode']]],
-  ['controller_696',['controller',['../class_design_platform_1_1_core_1_1_player_movement.html#a265ecd8c8cda888f5d1371bdb6a0acb8',1,'DesignPlatform::Core::PlayerMovement']]],
-  ['customproperty_697',['customProperty',['../class_design_platform_1_1_core_1_1_room.html#aac3a4f05f112c2cb96aec621de30de17',1,'DesignPlatform::Core::Room']]]
+  ['_5fgraphclient_1036',['_graphClient',['../class_design_platform_1_1_database_1_1_graph_database.html#add9d4f327457f117fc6198a3d1e16223',1,'DesignPlatform::Database::GraphDatabase']]]
 ];

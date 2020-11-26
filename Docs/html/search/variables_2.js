@@ -1,7 +1,15 @@
 var searchData=
 [
-  ['height_702',['height',['../class_design_platform_1_1_core_1_1_room.html#a7b5907ac184a85877e35f7b1b8f5758c',1,'DesignPlatform.Core.Room.height()'],['../class_design_platform_1_1_core_1_1_opening.html#ac7eba911b80abdfc2efc011e1f445424',1,'DesignPlatform.Core.Opening.Height()']]],
-  ['highlightmaterial_703',['highlightMaterial',['../class_design_platform_1_1_core_1_1_room.html#a4e3a4697f9165b6df0182f5114930a07',1,'DesignPlatform::Core::Room']]],
-  ['hitpoint_704',['hitPoint',['../class_design_platform_1_1_modes_1_1_opening_mode.html#a37cc297c34c6ef6e053f555115d26926',1,'DesignPlatform::Modes::OpeningMode']]],
-  ['host_705',['Host',['../class_design_platform_1_1_u_i_1_1_widget.html#a41a761842f781ede76fce0910f60f46e',1,'DesignPlatform::UI::Widget']]]
+  ['closestpoint_1038',['closestPoint',['../class_design_platform_1_1_modes_1_1_opening_mode.html#abec9f805a8573696dba82c3c8f1232df',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['collidingrooms_1039',['collidingRooms',['../class_design_platform_1_1_modes_1_1_opening_mode.html#a4e539398813820f2267afd032865724e',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['columncount_1040',['columnCount',['../class_design_platform_1_1_u_i_1_1_room_schedule_widget.html#a819ac8e5c61af29f72b855c25018b4dc',1,'DesignPlatform.UI.RoomScheduleWidget.columnCount()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a00a8654bd3c665f993e217a0f642ec45',1,'DesignPlatform.UI.WallElementScheduleWidget.columnCount()']]],
+  ['contentrows_1041',['contentRows',['../class_design_platform_1_1_u_i_1_1_room_schedule_widget.html#a65ca8d48fc958d68f4fd64346f1beda8',1,'DesignPlatform.UI.RoomScheduleWidget.contentRows()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a1f2607c4f7f0b4466a7e513a4dfe59d6',1,'DesignPlatform.UI.WallElementScheduleWidget.contentRows()']]],
+  ['contenttemplate_1042',['contentTemplate',['../class_design_platform_1_1_u_i_1_1_room_schedule_widget.html#a40cb5951ae5f6ef3966f708befc50353',1,'DesignPlatform.UI.RoomScheduleWidget.contentTemplate()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a75bd0019452c0e41595d58453096305f',1,'DesignPlatform.UI.WallElementScheduleWidget.contentTemplate()']]],
+  ['contenttemplatename_1043',['ContentTemplateName',['../class_design_platform_1_1_u_i_1_1_room_schedule_widget.html#a466b42b61147e95a161c34f65cd1aa54',1,'DesignPlatform.UI.RoomScheduleWidget.ContentTemplateName()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a1696ae7dc2d40c7c63f097c76ca73b70',1,'DesignPlatform.UI.WallElementScheduleWidget.ContentTemplateName()']]],
+  ['controller_1044',['controller',['../class_design_platform_1_1_core_1_1_player_movement.html#a265ecd8c8cda888f5d1371bdb6a0acb8',1,'DesignPlatform::Core::PlayerMovement']]],
+  ['controlpoints_1045',['controlPoints',['../class_design_platform_1_1_core_1_1_room.html#a8ee5edda0eab5b63dd27f333d49bee2c',1,'DesignPlatform::Core::Room']]],
+  ['currentmaterial_1046',['currentMaterial',['../class_design_platform_1_1_core_1_1_room.html#a4fbe11896ca763f40b56901ab5204aea',1,'DesignPlatform::Core::Room']]],
+  ['currentmode_1047',['currentMode',['../class_design_platform_1_1_modes_1_1_main.html#adc10d71f5a898cae2369a24fb5ee220d',1,'DesignPlatform.Modes.Main.currentMode()'],['../class_design_platform_1_1_modes_1_1_select_mode.html#afe1ea059863fb378f19b70c22140922e',1,'DesignPlatform.Modes.SelectMode.currentMode()']]],
+  ['currentmodetype_1048',['currentModeType',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#acca231487f66b5705331b704d18bced9',1,'DesignPlatform::Modes::POVMode']]],
+  ['customproperty_1049',['customProperty',['../class_design_platform_1_1_core_1_1_room.html#aac3a4f05f112c2cb96aec621de30de17',1,'DesignPlatform::Core::Room']]]
 ];

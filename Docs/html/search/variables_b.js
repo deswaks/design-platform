@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['selection_731',['selection',['../class_design_platform_1_1_modes_1_1_select_mode.html#a522ebbff1e272d1e8e06ba46f0f5cbea',1,'DesignPlatform::Modes::SelectMode']]],
-  ['sillheight_732',['SillHeight',['../class_design_platform_1_1_core_1_1_opening.html#aa88798acb718b253769f40c901857088',1,'DesignPlatform::Core::Opening']]],
-  ['speed_733',['speed',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#acd369ac6589dd79a2489a2bf5aecbf28',1,'DesignPlatform.UI.Zoom2D.speed()'],['../class_design_platform_1_1_core_1_1_player_movement.html#a76afe22dbb85f0553c41360ed3719cee',1,'DesignPlatform.Core.PlayerMovement.speed()']]]
+  ['name_1094',['Name',['../class_design_platform_1_1_u_i_1_1_widget.html#ac159df175117b1868a69dd9a74d630a9',1,'DesignPlatform::UI::Widget']]],
+  ['notificationobject_1095',['notificationObject',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a25ee880da16fee1017c77d5332ea7092',1,'DesignPlatform::Modes::POVMode']]]
 ];

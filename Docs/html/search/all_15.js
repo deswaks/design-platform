@@ -1,7 +1,20 @@
 var searchData=
 [
-  ['vector3_375',['Vector3',['../class_design_platform_1_1_core_1_1_face.html#a6b89658030b2f7769a01e66cd4c15a28',1,'DesignPlatform::Core::Face']]],
-  ['vectorfunctions_2ecs_376',['VectorFunctions.cs',['../_vector_functions_8cs.html',1,'']]],
-  ['vertical_377',['VERTICAL',['../namespace_design_platform_1_1_core.html#a5888cab138bec0892d17b579e8ba3dafa3e1b74251c07310c5f1b968145bf00dc',1,'DesignPlatform::Core']]],
-  ['vertices_378',['vertices',['../class_design_platform_1_1_database_1_1_room_node.html#a672ac8776dfb0cc70d0b3c9e18883895',1,'DesignPlatform.Database.RoomNode.vertices()'],['../class_design_platform_1_1_database_1_1_wall_element_node.html#a1e4a14b07abe5f6ec3b18fa11ff32100',1,'DesignPlatform.Database.WallElementNode.vertices()']]]
+  ['settings_2ecs_547',['Settings.cs',['../_u_i_2_settings_8cs.html',1,'']]],
+  ['ui_548',['ui',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a5acb7f3581d015c44b271b74c6f77a1c',1,'DesignPlatform::Modes::POVMode']]],
+  ['uiswitch_549',['UISwitch',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html',1,'DesignPlatform::UI']]],
+  ['uiswitch_2ecs_550',['UISwitch.cs',['../_u_i_switch_8cs.html',1,'']]],
+  ['uniquecoordinates_551',['UniqueCoordinates',['../class_design_platform_1_1_core_1_1_room.html#a98e0584f83c2235415d45fd9e6624d18',1,'DesignPlatform::Core::Room']]],
+  ['unityopeningstoopeningnodes_552',['UnityOpeningsToOpeningNodes',['../class_design_platform_1_1_database_1_1_local_database.html#a341e04373b2ffcb085bd6f28c686d7bc',1,'DesignPlatform::Database::LocalDatabase']]],
+  ['unityroomstoroomnodes_553',['UnityRoomsToRoomNodes',['../class_design_platform_1_1_database_1_1_local_database.html#afec585677f77bff60a8741acaf9ee096',1,'DesignPlatform::Database::LocalDatabase']]],
+  ['update_554',['Update',['../class_design_platform_1_1_u_i_1_1_pan2_d.html#a1fdafb8da11d5ca5b6c5790a033bd662',1,'DesignPlatform.UI.Pan2D.Update()'],['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#a530368734d6a95fc906ecdb8e92379ef',1,'DesignPlatform.UI.Zoom2D.Update()'],['../class_design_platform_1_1_core_1_1_player_movement.html#ab6703514da029377f9d9681ec768ca4f',1,'DesignPlatform.Core.PlayerMovement.Update()'],['../class_design_platform_1_1_modes_1_1_main.html#a073e78476c8729f78311d8ea090e59a2',1,'DesignPlatform.Modes.Main.Update()']]],
+  ['updatecurrentwidgets_555',['UpdateCurrentWidgets',['../class_design_platform_1_1_u_i_1_1_dashboard.html#aa75fbbab96f6fcb734a4ae718e40d0b9',1,'DesignPlatform::UI::Dashboard']]],
+  ['updatepanel_556',['UpdatePanel',['../class_structural_analysis_1_1_structural_widget.html#a7532cacf4a5ddec374cbf22bf0e8a9d9',1,'StructuralAnalysis.StructuralWidget.UpdatePanel()'],['../class_design_platform_1_1_u_i_1_1_room_schedule_widget.html#a0500bdcf903d15ba8592ad735d54a04d',1,'DesignPlatform.UI.RoomScheduleWidget.UpdatePanel()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#a166799b38cedf1734d93cf8c31980e9d',1,'DesignPlatform.UI.WallElementScheduleWidget.UpdatePanel()'],['../class_design_platform_1_1_u_i_1_1_widget.html#acb1623ecfaeda1663d379a270a62ddcf',1,'DesignPlatform.UI.Widget.UpdatePanel()'],['../class_design_platform_1_1_u_i_1_1_widget___circle_diagram.html#a7c06d4717e8291e9bb39f871be901ebb',1,'DesignPlatform.UI.Widget_CircleDiagram.UpdatePanel()']]],
+  ['updatepovcamera_557',['UpdatePOVCamera',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a5be948ec0cf483f60e9dc420d7e1d259',1,'DesignPlatform::Modes::POVMode']]],
+  ['updatepreviewlocation_558',['UpdatePreviewLocation',['../class_design_platform_1_1_modes_1_1_build_mode.html#ab78fd33e64299696c0ade4ee470a877a',1,'DesignPlatform.Modes.BuildMode.UpdatePreviewLocation()'],['../class_design_platform_1_1_modes_1_1_opening_mode.html#a1d33a62f2bd4ae0259b00a2f7c264485',1,'DesignPlatform.Modes.OpeningMode.UpdatePreviewLocation()']]],
+  ['updaterender2d_559',['UpdateRender2D',['../class_design_platform_1_1_core_1_1_opening.html#a7e78681f9bc42a3ca0a37f45afab42d4',1,'DesignPlatform.Core.Opening.UpdateRender2D()'],['../class_design_platform_1_1_core_1_1_room.html#a42a59d00e6100eb23dcccc98c4b0766f',1,'DesignPlatform.Core.Room.UpdateRender2D()']]],
+  ['updaterender3d_560',['UpdateRender3D',['../class_design_platform_1_1_core_1_1_opening.html#a6f3a4848285045a802536a68aa8462b6',1,'DesignPlatform.Core.Opening.UpdateRender3D()'],['../class_design_platform_1_1_core_1_1_room.html#abb4245092aac8ed87abc3fb3bc99ffed',1,'DesignPlatform.Core.Room.UpdateRender3D()']]],
+  ['updatetransform_561',['UpdateTransform',['../class_design_platform_1_1_u_i_1_1_extrude_handle.html#ab50a0b1d003dcbb18ec085e09e12ef72',1,'DesignPlatform::UI::ExtrudeHandle']]],
+  ['ushape_562',['USHAPE',['../namespace_design_platform_1_1_core.html#ad372d7be12083d5c079089bae8984363a5b07bd1a91a843f848f8908bc3267f4d',1,'DesignPlatform::Core']]],
+  ['widget_2ecs_563',['Widget.cs',['../_u_i_2_widget_8cs.html',1,'']]]
 ];
