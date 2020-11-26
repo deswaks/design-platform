@@ -20,6 +20,7 @@ namespace DesignPlatform.Core {
             Rooms = new List<Room>();
             walls = new List<Wall>();
             slabs = new List<Slab>();
+            roofs = new List<Roof>();
         }
 
         /// <summary>
@@ -53,6 +54,7 @@ namespace DesignPlatform.Core {
 
             return newRoom;
         }
+
         /// <summary>
         /// Removes a room from the managed building list
         /// </summary>
@@ -61,16 +63,26 @@ namespace DesignPlatform.Core {
             if (Rooms.Contains(room)) { Rooms.Remove(room); }
         }
 
-
-
         /// <summary>
         /// All walls of this building
         /// </summary>
         private List<Wall> walls;
         public List<Wall> Walls {
             get {
-                if (walls == null || walls.Count == 0) BuildAllWalls();
+                if (walls == null || walls.Count == 0) BuildAllWallsAsCLTElements();
                 return walls;
+            }
+            private set {; }
+        }
+
+        /// <summary>
+        /// All roof elements of this building
+        /// </summary>
+        private List<Roof> roofs;
+        public List<Roof> Roofs{
+            get {
+                if (roofs == null || roofs.Count == 0) BuildAllRoofElements();
+                return roofs;
             }
             private set {; }
         }
@@ -83,6 +95,33 @@ namespace DesignPlatform.Core {
                 BuildWall(interFace);
             }
             return walls;
+        }
+
+        public List<Wall> BuildAllWallsAsCLTElements() {
+            foreach (Opening opening in Openings) {
+                opening.AttachClosestFaces();
+            }
+            CLTElementGenerator.IdentifyWallElementsAndJointTypes().ForEach(clt => BuildWall(clt));
+            return walls;
+        }
+
+        public Roof BuildRoofElement(List<Vector3> outline) {
+            GameObject newRoofGameObject = new GameObject("Roof");
+            Roof newRoof = (Roof)newRoofGameObject.AddComponent<Roof>();
+
+            newRoof.InitializeRoof(outline);
+
+            roofs.Add(newRoof);
+
+            return newRoof;
+        }
+
+        public List<Roof> BuildAllRoofElements() {
+            List<List<Vector3>> roofOutlines = RoofGenerator.Instance.CreateRoofOutlines();
+            foreach (List<Vector3> outline in roofOutlines) {
+                BuildRoofElement(outline);
+            }
+            return roofs;
         }
 
         /// <summary>
@@ -102,11 +141,36 @@ namespace DesignPlatform.Core {
         }
 
         /// <summary>
+        /// Build 3D wall representation using CLT element information
+        /// </summary>
+        /// <param name="cltElement"></param>
+        /// <returns></returns>
+        public Wall BuildWall(CLTElement cltElement) {
+            GameObject newWallGameObject = new GameObject("Wall");
+            Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
+
+            newWall.InitializeWall(cltElement);
+
+            walls.Add(newWall);
+
+            return newWall;
+        }
+
+        /// <summary>
         /// Removes a wall from the managed building list
         /// </summary>
         /// <param name="wall"></param>
         public void RemoveWall(Wall wall) {
             if (walls.Contains(wall)) walls.Remove(wall);
+        }
+
+
+        /// <summary>
+        /// Removes a roof element from the managed building list
+        /// </summary>
+        /// <param name="roofElement">Roof element to remove</param>
+        public void RemoveRoof(Roof roofElement) {
+            if (roofs.Contains(roofElement)) roofs.Remove(roofElement);
         }
 
         /// <summary>
@@ -121,7 +185,18 @@ namespace DesignPlatform.Core {
             }
         }
 
-
+        /// <summary>
+        /// Removes ALL roof elements
+        /// </summary>
+        public void DeleteAllRoofElements() {
+            int amount = roofs.Count;
+            if (amount > 0) {
+                for (int i = 0; i < amount; i++) {
+                    roofs[0].DeleteRoof();
+                }
+                Debug.Log("Roofs deleted - Current count: "+roofs.Count);
+            }
+        }
 
         /// <summary>
         /// All slabs of this building
@@ -165,7 +240,6 @@ namespace DesignPlatform.Core {
                 }
             }
         }
-
 
         /// <summary>
         /// All the interfaces of this building
@@ -307,9 +381,12 @@ namespace DesignPlatform.Core {
             DeleteAllWalls();
             DeleteAllSlabs();
             DeleteAllInterfaces();
+            DeleteAllRoofElements();
+
             // Build new
             BuildAllInterfaces();
-            BuildAllWalls();
+            BuildAllWallsAsCLTElements();
+            BuildAllRoofElements();
             BuildAllSlabs();
         }
 

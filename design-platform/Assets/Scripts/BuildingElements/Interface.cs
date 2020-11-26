@@ -35,6 +35,7 @@ namespace DesignPlatform.Core {
             get { return Faces[0].Orientation; }
         }
 
+        public float Length { get {return (StartPoint - EndPoint).magnitude;  } }
 
 
         public Interface(Face face, float startParameter = 0.0f, float endParameter = 1.0f) {
