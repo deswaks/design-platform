@@ -66,6 +66,15 @@ namespace DesignPlatform.Core {
             private set {; }
         }
 
+        /// <summary>
+        /// The placement point of the opening on the wall (bottom) placement line.
+        /// </summary>
+        public Vector3 PlacementPoint {
+            get { return gameObject.transform.position; }
+            private set {; }
+        }
+
+
         public void InitializeOpening(OpeningShape shape = OpeningShape.WINDOW,
                                       OpeningState state = OpeningState.PREVIEW) {
             Shape = shape;
