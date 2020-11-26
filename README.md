@@ -18,5 +18,5 @@ Example will be given here when available.
 # Contents of folders
 Contents will be given here when available.
 
-# Acknowledgements
+# Acknowledgments
 This project was realized by Anders Bomann Christensen, Niklas Rosenkilde and Sebastian Dahl Meier with the support of The Technical University of Denmark under supervision of Tim Pat McGinley.
