@@ -1,11 +1,16 @@
-﻿using DesignPlatform.Core;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using System.Linq;
+using Xbim.Common;
+using Xbim.Common.Step21;
 using Xbim.Ifc;
+using Xbim.IO;
 using Xbim.Ifc4.ActorResource;
 using Xbim.Ifc4.DateTimeResource;
 using Xbim.Ifc4.ExternalReferenceResource;
+using Xbim.Ifc4.PresentationOrganizationResource;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
 using Xbim.Ifc4.GeometryResource;
@@ -13,406 +18,374 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MaterialResource;
 using Xbim.Ifc4.MeasureResource;
-using Xbim.Ifc4.PresentationOrganizationResource;
 using Xbim.Ifc4.ProductExtension;
 using Xbim.Ifc4.ProfileResource;
 using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
+using DesignPlatform.Core;
 
 namespace DesignPlatform.Export {
     public static class IfcConverter {
 
-        public static void IfcSpaceFromRoom(Room room) {
+        public static IfcStore ifcModel;
+        public static IfcBuilding ifcBuilding;
+        public static List<IfcBuildingStorey> ifcBuildingStoreys = new List<IfcBuildingStorey>();
+        public static Dictionary<Room, IfcSpace> ifcSpaces = new Dictionary<Room, IfcSpace>();
+        public static Dictionary<Interface, IfcWall> ifcWalls = new Dictionary<Interface, IfcWall>();
+        public static Dictionary<Interface, IfcSlab> ifcSlabs = new Dictionary<Interface, IfcSlab>();
+        public static Dictionary<Opening, IfcOpeningElement> ifcOpenings = new Dictionary<Opening, IfcOpeningElement>();
+
+        public static void CreateIfcBuilding(string name) {
+
+            // Create building
+            var building = ifcModel.Instances.New<IfcBuilding>();
+            building.Name = name;
+            building.CompositionType = IfcElementCompositionEnum.ELEMENT;
+            var localPlacement = ifcModel.Instances.New<IfcLocalPlacement>();
+            building.ObjectPlacement = localPlacement;
+            var placement = ifcModel.Instances.New<IfcAxis2Placement3D>();
+            localPlacement.RelativePlacement = placement;
+            placement.Location = ifcModel.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(0, 0, 0));
+            var project = ifcModel.Instances.OfType<IfcProject>().FirstOrDefault();
+            project?.AddBuilding(building);
+
+            ifcBuilding = building;
 
             return;
         }
 
-        //public static IfcWall IfcWallFromWall(Wall wall) {
-        //    return
-        //}
+        public static void CreateIfcBuildingStorey(int index) {
+            var storey = ifcModel.Instances.New<IfcBuildingStorey>();
+            storey.Elevation = new IfcLengthMeasure(0.0f * index);
 
+            storey.Name = "Storey " + index.ToString();
+            storey.LongName = "Ground floor";
+
+            // Relation to building
+            var rel = ifcModel.Instances.New<IfcRelAggregates>();
+            rel.RelatingObject = ifcBuilding;
+            rel.RelatedObjects.Add(storey);
+
+            //ifcBuilding.AddElement(storey);
+            ifcBuildingStoreys.Add(storey);
+            return;
+        }
 
         /// <summary>
-        /// This creates a wall and it's geometry, many geometric representations are possible and extruded rectangular footprint is chosen as this is commonly used for standard case walls
+        /// Create an IfcSpace and insert it into the given model.
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="length">Length of the rectangular footprint</param>
-        /// <param name="width">Width of the rectangular footprint (width of the wall)</param>
-        /// <param name="height">Height to extrude the wall, extrusion is vertical</param>
+        /// <param name="model">Model to insert the space into.</param>
+        /// <param name="room">Room to create the space geometry from.</param>
         /// <returns></returns>
-        public static IfcWallStandardCase CreateWall(IfcStore model, Interface interFace) {
+        public static void CreateIfcSpace(Room room) {
+
+            // Get data from room
+            int height = Mathf.RoundToInt(room.height * 1000);
+            Vector3 roomOrigin = new Vector3(
+                Mathf.RoundToInt(room.transform.position.x * 1000),
+                Mathf.RoundToInt(room.transform.position.z * 1000),
+                Mathf.RoundToInt(room.transform.position.y * 1000));
+            Vector3 placementDirection = new Vector3(
+                Mathf.RoundToInt(room.transform.right.normalized.x),
+                Mathf.RoundToInt(room.transform.right.normalized.z),
+                Mathf.RoundToInt(room.transform.right.normalized.y));
+            List<Vector2> controlPoints = room.GetControlPoints(localCoordinates: true, closed: true)
+                .Select(p => new Vector2(Mathf.RoundToInt(p.x * 1000),
+                                          Mathf.RoundToInt(p.z * 1000))).ToList();
+            string description = room.TypeName;
+
+            // Create space
+            var space = ifcModel.Instances.New<IfcSpace>();
+
+            // Properties
+            int roomIndex = Building.Instance.Rooms.FindIndex(r => r == room);
+            space.Name = "Space " + ifcSpaces.Keys.Count();
+            space.CompositionType = IfcElementCompositionEnum.ELEMENT;
+            space.PredefinedType = IfcSpaceTypeEnum.INTERNAL;
+            space.Description = new IfcText(description);
+
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = IfcUtils.CreateProfile(controlPoints: controlPoints);
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: height,
+                                              presentationLayer: "Conceptual Elements");
+            productDefinition.Representations.Add(shape3D);
+            space.Representation = productDefinition;
+
+            // Model insertion
+            space.ObjectPlacement = IfcUtils.CreateLocalPlacement(
+                origin: roomOrigin, xDirection: placementDirection, zDirection: Vector3.forward);
+
+            // Relation to building storey
+            var rel = ifcModel.Instances.New<IfcRelAggregates>();
+            rel.RelatingObject = ifcBuildingStoreys[0];
+            rel.RelatedObjects.Add(space);
+
+            ifcSpaces.Add(room, space);
+            return;
+        }
+
+        /// <summary>
+        /// Create an IfcSlab and insert it into the given model.
+        /// </summary>
+        /// <param name="model">Model to insert the space into.</param>
+        /// <param name="room">Room to create the space geometry from.</param>
+        /// <returns></returns>
+        public static void CreateIfcSlab(Interface interFace) {
+
+            if (interFace.Orientation != Orientation.HORIZONTAL) return;
+
+            // Get data from slab
+            int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
+            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Rooms[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
+            int elevation = Mathf.RoundToInt(isCeiling * interFace.Rooms[0].height * 1000);
+            Vector3 extrusionOffset = new Vector3(0, 0, -thickness);
+            Vector3 roomOrigin = new Vector3(
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.x * 1000),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.z * 1000),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.y * 1000) + elevation);
+            Vector3 placementDirection = new Vector3(
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.x),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.z),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.y));
+            List<Vector2> controlPoints = interFace.Rooms[0]
+                .GetControlPoints(localCoordinates: true, closed: true)
+                .Select(p => new Vector2(Mathf.RoundToInt(p.x * 1000),
+                                          Mathf.RoundToInt(p.z * 1000))).ToList();
+
+            // Create slab
+            var slab = ifcModel.Instances.New<IfcSlab>();
+
+            // Properties
+            slab.Name = "Slab " + ifcSlabs.Keys.Count().ToString();
+            if (isCeiling == 1) slab.PredefinedType = IfcSlabTypeEnum.ROOF;
+            else slab.PredefinedType = IfcSlabTypeEnum.FLOOR;
+            slab.Description = new IfcText(slab.ToString());
+
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = IfcUtils.CreateProfile(controlPoints: controlPoints);
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: thickness,
+                                              extrusionOffset: extrusionOffset,
+                                              presentationLayer: "Building Elements");
+            productDefinition.Representations.Add(shape3D);
+            slab.Representation = productDefinition;
+
+            // Model insertion
+            slab.ObjectPlacement = IfcUtils.CreateLocalPlacement(
+                origin: roomOrigin, xDirection: placementDirection, zDirection: Vector3.forward);
+
+            // Relation to building storey
+            var rel = ifcModel.Instances.New<IfcRelContainedInSpatialStructure>();
+            rel.RelatingStructure = ifcBuildingStoreys[0];
+            rel.RelatedElements.Add(slab);
+
+            // Relation to rooms
+            foreach (Room room in interFace.Rooms) {
+                var boundaryRel = ifcModel.Instances.New<IfcRelSpaceBoundary>();
+                boundaryRel.RelatingSpace = ifcSpaces[room];
+                boundaryRel.RelatedBuildingElement = slab;
+            }
+
+            ifcSlabs.Add(interFace, slab);
+            return;
+        }
+
+        /// <summary>
+        /// Create an IfcWall and insert it into the given model.
+        /// </summary>
+        /// <param name="model">Model to insert the wall into.</param>
+        /// <param name="interFace">Vertical interface to create wall from.</param>
+        /// <returns></returns>
+        public static void CreateIfcWall(Interface interFace) {
+
+            if (interFace.Orientation != Orientation.VERTICAL) return;
 
             // Get data from wall
-            string wallName = interFace.ToString();
             Vector3 startPoint = interFace.StartPoint * 1000;
             Vector3 endPoint = interFace.EndPoint * 1000;
-            Vector3 midPoint = (endPoint - startPoint) / 2;
-            Vector3 wallVector = (endPoint - startPoint).normalized;
-            float length = (endPoint - startPoint).magnitude;
-            float height = interFace.Rooms[0].height * 1000;
-            float thickness = interFace.Thickness * 1000;
+            Vector3 wallDirection = (endPoint - startPoint).normalized;
 
-            //begin a transaction
-            var transaction = model.BeginTransaction("Create Wall");
-            var wall = model.Instances.New<IfcWallStandardCase>();
-            wall.Name = wallName;
+            Vector3 localX = new Vector3(wallDirection.x,
+                                         wallDirection.z,
+                                         wallDirection.y);
+            Vector3 localZ = new Vector3(0, 0, 1);
+            Vector3 centerPoint = new Vector3(
+                (int)(interFace.CenterPoint.x * 1000),
+                (int)(interFace.CenterPoint.z * 1000),
+                (int)(interFace.CenterPoint.y * 1000));
+            int length = (int)(endPoint - startPoint).magnitude;
+            int height = (int)(interFace.Rooms[0].height * 1000);
+            int thickness = (int)(interFace.Thickness * 1000);
+            string description = interFace.ToString();
 
-            //represent wall as a rectangular flat profile
-            var rectProf = model.Instances.New<IfcRectangleProfileDef>();
-            rectProf.ProfileType = IfcProfileTypeEnum.AREA;
-            rectProf.YDim = thickness;
-            rectProf.XDim = length;
+            // Create wall
+            var wall = ifcModel.Instances.New<IfcWall>();
 
-            var insertPoint = model.Instances.New<IfcCartesianPoint>();
-            insertPoint.SetXY(length / 2, 0);
-            rectProf.Position = model.Instances.New<IfcAxis2Placement2D>();
-            rectProf.Position.Location = insertPoint;
+            // Properties
+            wall.Name = "Wall " + ifcWalls.Keys.Count().ToString();
+            wall.PredefinedType = IfcWallTypeEnum.STANDARD;
+            wall.Description = new IfcText(description);
 
-            //model as a swept area solid
-            var body = model.Instances.New<IfcExtrudedAreaSolid>();
-            body.Depth = height;
-            body.SweptArea = rectProf;
-            body.ExtrudedDirection = model.Instances.New<IfcDirection>();
-            body.ExtrudedDirection.SetXYZ(0, 0, 1);
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = IfcUtils.CreateProfile(width: length, height: thickness);
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: height,
+                                              presentationLayer: "Building Elements");
+            var shape2D = IfcUtils.ShapeAsLinearCurve(length: length);
+            productDefinition.Representations.Add(shape3D);
+            productDefinition.Representations.Add(shape2D);
+            wall.Representation = productDefinition;
 
-            //parameters to insert the geometry in the model
-            var bodyOrigin = model.Instances.New<IfcCartesianPoint>();
-            bodyOrigin.SetXYZ(0, 0, 0);
-            body.Position = model.Instances.New<IfcAxis2Placement3D>();
-            body.Position.Location = bodyOrigin;
+            // Model insertion
+            wall.ObjectPlacement = IfcUtils.CreateLocalPlacement(
+                origin: centerPoint, xDirection: localX, zDirection: localZ);
 
-            //Create a Definition shape to hold the geometry
-            var shape = model.Instances.New<IfcShapeRepresentation>();
-            var modelContext = model.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            shape.ContextOfItems = modelContext;
-            shape.RepresentationType = "SweptSolid";
-            shape.RepresentationIdentifier = "Body";
-            shape.Items.Add(body);
+            // Relation to building storey
+            var rel = ifcModel.Instances.New<IfcRelContainedInSpatialStructure>();
+            rel.RelatingStructure = ifcBuildingStoreys[0];
+            rel.RelatedElements.Add(wall);
 
-            //Create a Product Definition and add the model geometry to the wall
-            var rep = model.Instances.New<IfcProductDefinitionShape>();
-            rep.Representations.Add(shape);
-            wall.Representation = rep;
+            // Relation to rooms
+            foreach (Room room in interFace.Rooms) {
+                var boundaryRel = ifcModel.Instances.New<IfcRelSpaceBoundary>();
+                boundaryRel.RelatingSpace = ifcSpaces[room];
+                boundaryRel.RelatedBuildingElement = wall;
+            }
 
-            //now place the wall into the model
-            var placementLocation = model.Instances.New<IfcCartesianPoint>();
-            placementLocation.SetXYZ(startPoint.x, startPoint.z, startPoint.y);
-
-            var placementAxis = model.Instances.New<IfcAxis2Placement3D>();
-            placementAxis.Location = placementLocation;
-
-            var localPlacement = model.Instances.New<IfcLocalPlacement>();
-            placementAxis.RefDirection = model.Instances.New<IfcDirection>();
-            placementAxis.RefDirection.SetXYZ(wallVector.x, wallVector.z, wallVector.y);
-            placementAxis.Axis = model.Instances.New<IfcDirection>();
-            placementAxis.Axis.SetXYZ(0, 0, 1);
-            localPlacement.RelativePlacement = placementAxis;
-
-            wall.ObjectPlacement = localPlacement;
-
-            // Where Clause: The IfcWallStandard relies on the provision of an IfcMaterialLayerSetUsage 
-            var ifcMaterialLayerSetUsage = model.Instances.New<IfcMaterialLayerSetUsage>();
-            var ifcMaterialLayerSet = model.Instances.New<IfcMaterialLayerSet>();
-            var ifcMaterialLayer = model.Instances.New<IfcMaterialLayer>();
-            ifcMaterialLayer.LayerThickness = 10;
-            ifcMaterialLayerSet.MaterialLayers.Add(ifcMaterialLayer);
-            ifcMaterialLayerSetUsage.ForLayerSet = ifcMaterialLayerSet;
-            ifcMaterialLayerSetUsage.LayerSetDirection = IfcLayerSetDirectionEnum.AXIS2;
-            ifcMaterialLayerSetUsage.DirectionSense = IfcDirectionSenseEnum.NEGATIVE;
-            ifcMaterialLayerSetUsage.OffsetFromReferenceLine = 150;
-
-            // Add material to wall
-            var material = model.Instances.New<IfcMaterial>();
-            material.Name = "some material";
-            var ifcRelAssociatesMaterial = model.Instances.New<IfcRelAssociatesMaterial>();
-            ifcRelAssociatesMaterial.RelatingMaterial = material;
-            ifcRelAssociatesMaterial.RelatedObjects.Add(wall);
-            ifcRelAssociatesMaterial.RelatingMaterial = ifcMaterialLayerSetUsage;
-
-            // IfcPresentationLayerAssignment is required for CAD presentation in IfcWall or IfcWallStandardCase
-            var ifcPresentationLayerAssignment = model.Instances.New<IfcPresentationLayerAssignment>();
-            ifcPresentationLayerAssignment.Name = "some ifcPresentationLayerAssignment";
-            ifcPresentationLayerAssignment.AssignedItems.Add(shape);
-
-            // linear segment as IfcPolyline with two points is required for IfcWall
-            var ifcPolyline = model.Instances.New<IfcPolyline>();
-            var ifcStartPoint = model.Instances.New<IfcCartesianPoint>();
-            ifcStartPoint.SetXY(startPoint.x, startPoint.z);
-            var ifcEndPoint = model.Instances.New<IfcCartesianPoint>();
-            ifcEndPoint.SetXY(endPoint.x, endPoint.z);
-            ifcPolyline.Points.Add(ifcStartPoint);
-            ifcPolyline.Points.Add(ifcEndPoint);
-
-            var shape2D = model.Instances.New<IfcShapeRepresentation>();
-            shape2D.ContextOfItems = modelContext;
-            shape2D.RepresentationIdentifier = "Axis";
-            shape2D.RepresentationType = "Curve2D";
-            shape2D.Items.Add(ifcPolyline);
-            rep.Representations.Add(shape2D);
-            transaction.Commit();
-            return wall;
+            ifcWalls.Add(interFace, wall);
+            return;
         }
 
         /// <summary>
-        /// Add some properties to the wall,
+        /// Create an IfcWall and inset it into the given model.
         /// </summary>
-        /// <param name="model">XbimModel</param>
-        /// <param name="wall"></param>
-        public static void AddPropertiesToWall(IfcStore model, IfcWallStandardCase wall) {
-            using (var txn = model.BeginTransaction("Create Wall")) {
-                CreateElementQuantity(model, wall);
-                CreateSimpleProperty(model, wall);
-                txn.Commit();
+        /// <param name="model">Model to insert the wall into.</param>
+        /// <param name="interFace">Vertical interface to create wall from.</param>
+        /// <returns></returns>
+        public static void CreateIfcOpening(Opening opening) {
+
+            // Get properties from opening
+            int height = Mathf.RoundToInt(opening.Height * 1000);
+            int width = Mathf.RoundToInt(opening.Width * 1000);
+            int depth = Mathf.RoundToInt(opening.Interface.Thickness * 1000);
+            Vector3 ExtrusionOffset = new Vector3(
+                0,
+                Mathf.RoundToInt((opening.SillHeight + opening.Height / 2) * 1000),
+                -depth / 2);
+            Vector3 placementOrigin = new Vector3(
+                Mathf.RoundToInt(opening.PlacementPoint.x * 1000),
+                Mathf.RoundToInt(opening.PlacementPoint.z * 1000),
+                Mathf.RoundToInt(opening.PlacementPoint.y * 1000));
+            Vector3 placementZVector = new Vector3(
+                opening.Faces[0].Normal.x,
+                opening.Faces[0].Normal.z,
+                opening.Faces[0].Normal.y).normalized;
+            Vector3 xVector = (opening.Interface.StartPoint - opening.Interface.EndPoint).normalized;
+            Vector3 placementXVector = new Vector3(
+                xVector.x,
+                xVector.z,
+                xVector.y).normalized;
+            string description = opening.ToString();
+
+            // Create opening
+            var openingElement = ifcModel.Instances.New<IfcOpeningElement>();
+
+            // Set properties
+            openingElement.Name = "Opening " + ifcOpenings.Keys.Count().ToString();
+            openingElement.PredefinedType = IfcOpeningElementTypeEnum.OPENING;
+            openingElement.Description = new IfcText(opening.ToString());
+
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = IfcUtils.CreateProfile(width: width, height: height);
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: depth,
+                                              extrusionOffset: ExtrusionOffset);
+            productDefinition.Representations.Add(shape3D);
+            openingElement.Representation = productDefinition;
+
+            // Model insertion
+            openingElement.ObjectPlacement = IfcUtils.CreateLocalPlacement(
+                origin: placementOrigin, xDirection: placementXVector, zDirection: placementZVector);
+
+            // Set relations
+            var ifcWall = ifcWalls[opening.Interface];
+            var voidRelation = ifcModel.Instances.New<IfcRelVoidsElement>();
+            voidRelation.RelatedOpeningElement = openingElement;
+            voidRelation.RelatingBuildingElement = ifcWall;
+
+            // Store opening
+            ifcOpenings.Add(opening, openingElement);
+            return;
+        }
+
+
+        /// <summary>
+        /// Create an IfcRoof? and insert it into the given model.
+        /// </summary>
+        /// <param name="model">Model to insert the space into.</param>
+        /// <param name="room">Room to create the space geometry from.</param>
+        /// <returns></returns>
+        public static void CreateIfcRoofslab(Interface interFace) {
+
+            if (interFace.Orientation != Orientation.HORIZONTAL) return;
+
+            // Get data from wall
+            int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
+            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Rooms[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
+            int elevation = Mathf.RoundToInt(isCeiling * interFace.Rooms[0].height * 1000);
+            Vector3 extrusionOffset = new Vector3(0, 0, -thickness);
+            Vector3 roomOrigin = new Vector3(
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.x * 1000),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.z * 1000),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.y * 1000) + elevation);
+            Vector3 placementDirection = new Vector3(
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.x),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.z),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.y));
+            List<Vector2> controlPoints = interFace.Rooms[0]
+                .GetControlPoints(localCoordinates: true, closed: true)
+                .Select(p => new Vector2(Mathf.RoundToInt(p.x * 1000),
+                                          Mathf.RoundToInt(p.z * 1000))).ToList();
+
+            // Create space
+            var slab = ifcModel.Instances.New<IfcSlab>();
+
+            // Properties
+            slab.Name = "Slab " + ifcSlabs.Keys.Count().ToString();
+            if (isCeiling == 1) slab.PredefinedType = IfcSlabTypeEnum.ROOF;
+            else slab.PredefinedType = IfcSlabTypeEnum.FLOOR;
+            slab.Description = new IfcText(slab.ToString());
+
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = IfcUtils.CreateProfile(controlPoints: controlPoints);
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: thickness,
+                                              extrusionOffset: extrusionOffset,
+                                              presentationLayer: "Building Elements");
+            productDefinition.Representations.Add(shape3D);
+            slab.Representation = productDefinition;
+
+            // Model insertion
+            slab.ObjectPlacement = IfcUtils.CreateLocalPlacement(
+                origin: roomOrigin, xDirection: placementDirection, zDirection: Vector3.forward);
+
+            // Relation to building storey
+            var rel = ifcModel.Instances.New<IfcRelContainedInSpatialStructure>();
+            rel.RelatingStructure = ifcBuildingStoreys[0];
+            rel.RelatedElements.Add(slab);
+
+            // Relation to rooms
+            foreach (Room room in interFace.Rooms) {
+                var boundaryRel = ifcModel.Instances.New<IfcRelSpaceBoundary>();
+                boundaryRel.RelatingSpace = ifcSpaces[room];
+                boundaryRel.RelatedBuildingElement = slab;
             }
-        }
 
-        public static void CreateSimpleProperty(IfcStore model, IfcWallStandardCase wall) {
-            var ifcPropertySingleValue = model.Instances.New<IfcPropertySingleValue>(psv => {
-                psv.Name = "IfcPropertySingleValue:Time";
-                psv.Description = "";
-                psv.NominalValue = new IfcTimeMeasure(150.0);
-                psv.Unit = model.Instances.New<IfcSIUnit>(siu => {
-                    siu.UnitType = IfcUnitEnum.TIMEUNIT;
-                    siu.Name = IfcSIUnitName.SECOND;
-                });
-            });
-            var ifcPropertyEnumeratedValue = model.Instances.New<IfcPropertyEnumeratedValue>(pev => {
-                pev.Name = "IfcPropertyEnumeratedValue:Music";
-                pev.EnumerationReference = model.Instances.New<IfcPropertyEnumeration>(pe => {
-                    pe.Name = "Notes";
-                    pe.EnumerationValues.Add(new IfcLabel("Do"));
-                    pe.EnumerationValues.Add(new IfcLabel("Re"));
-                    pe.EnumerationValues.Add(new IfcLabel("Mi"));
-                    pe.EnumerationValues.Add(new IfcLabel("Fa"));
-                    pe.EnumerationValues.Add(new IfcLabel("So"));
-                    pe.EnumerationValues.Add(new IfcLabel("La"));
-                    pe.EnumerationValues.Add(new IfcLabel("Ti"));
-                });
-                pev.EnumerationValues.Add(new IfcLabel("Do"));
-                pev.EnumerationValues.Add(new IfcLabel("Re"));
-                pev.EnumerationValues.Add(new IfcLabel("Mi"));
-
-            });
-            var ifcPropertyBoundedValue = model.Instances.New<IfcPropertyBoundedValue>(pbv => {
-                pbv.Name = "IfcPropertyBoundedValue:Mass";
-                pbv.Description = "";
-                pbv.UpperBoundValue = new IfcMassMeasure(5000.0);
-                pbv.LowerBoundValue = new IfcMassMeasure(1000.0);
-                pbv.Unit = model.Instances.New<IfcSIUnit>(siu => {
-                    siu.UnitType = IfcUnitEnum.MASSUNIT;
-                    siu.Name = IfcSIUnitName.GRAM;
-                    siu.Prefix = IfcSIPrefix.KILO;
-                });
-            });
-
-            var definingValues = new List<IfcReal> { new IfcReal(100.0), new IfcReal(200.0), new IfcReal(400.0), new IfcReal(800.0), new IfcReal(1600.0), new IfcReal(3200.0), };
-            var definedValues = new List<IfcReal> { new IfcReal(20.0), new IfcReal(42.0), new IfcReal(46.0), new IfcReal(56.0), new IfcReal(60.0), new IfcReal(65.0), };
-            var ifcPropertyTableValue = model.Instances.New<IfcPropertyTableValue>(ptv => {
-                ptv.Name = "IfcPropertyTableValue:Sound";
-                foreach (var item in definingValues) {
-                    ptv.DefiningValues.Add(item);
-                }
-                foreach (var item in definedValues) {
-                    ptv.DefinedValues.Add(item);
-                }
-                ptv.DefinedUnit = model.Instances.New<IfcContextDependentUnit>(cd => {
-                    cd.Dimensions = model.Instances.New<IfcDimensionalExponents>(de => {
-                        de.LengthExponent = 0;
-                        de.MassExponent = 0;
-                        de.TimeExponent = 0;
-                        de.ElectricCurrentExponent = 0;
-                        de.ThermodynamicTemperatureExponent = 0;
-                        de.AmountOfSubstanceExponent = 0;
-                        de.LuminousIntensityExponent = 0;
-                    });
-                    cd.UnitType = IfcUnitEnum.FREQUENCYUNIT;
-                    cd.Name = "dB";
-                });
-            });
-
-            var listValues = new List<IfcLabel> { new IfcLabel("Red"), new IfcLabel("Green"), new IfcLabel("Blue"), new IfcLabel("Pink"), new IfcLabel("White"), new IfcLabel("Black"), };
-            var ifcPropertyListValue = model.Instances.New<IfcPropertyListValue>(plv => {
-                plv.Name = "IfcPropertyListValue:Colours";
-                foreach (var item in listValues) {
-                    plv.ListValues.Add(item);
-                }
-            });
-
-            var ifcMaterial = model.Instances.New<IfcMaterial>(m => {
-                m.Name = "Brick";
-            });
-            var ifcPrValueMaterial = model.Instances.New<IfcPropertyReferenceValue>(prv => {
-                prv.Name = "IfcPropertyReferenceValue:Material";
-                prv.PropertyReference = ifcMaterial;
-            });
-
-            var ifcMaterialList = model.Instances.New<IfcMaterialList>(ml => {
-                ml.Materials.Add(ifcMaterial);
-                ml.Materials.Add(model.Instances.New<IfcMaterial>(m => { m.Name = "Cavity"; }));
-                ml.Materials.Add(model.Instances.New<IfcMaterial>(m => { m.Name = "Block"; }));
-            });
-
-            var ifcMaterialLayer = model.Instances.New<IfcMaterialLayer>(ml => {
-                ml.Material = ifcMaterial;
-                ml.LayerThickness = 100.0;
-            });
-            var ifcPrValueMatLayer = model.Instances.New<IfcPropertyReferenceValue>(prv => {
-                prv.Name = "IfcPropertyReferenceValue:MaterialLayer";
-                prv.PropertyReference = ifcMaterialLayer;
-            });
-
-            var ifcDocumentReference = model.Instances.New<IfcDocumentReference>(dr => {
-                dr.Name = "Document";
-                dr.Location = "c://Documents//TheDoc.Txt";
-            });
-            var ifcPrValueRef = model.Instances.New<IfcPropertyReferenceValue>(prv => {
-                prv.Name = "IfcPropertyReferenceValue:Document";
-                prv.PropertyReference = ifcDocumentReference;
-            });
-
-            var ifcTimeSeries = model.Instances.New<IfcRegularTimeSeries>(ts => {
-                ts.Name = "Regular Time Series";
-                ts.Description = "Time series of events";
-                ts.StartTime = new IfcDateTime("2015-02-14T12:01:01");
-                ts.EndTime = new IfcDateTime("2015-05-15T12:01:01");
-                ts.TimeSeriesDataType = IfcTimeSeriesDataTypeEnum.CONTINUOUS;
-                ts.DataOrigin = IfcDataOriginEnum.MEASURED;
-                ts.TimeStep = 604800; //7 days in secs
-            });
-
-            var ifcPrValueTimeSeries = model.Instances.New<IfcPropertyReferenceValue>(prv => {
-                prv.Name = "IfcPropertyReferenceValue:TimeSeries";
-                prv.PropertyReference = ifcTimeSeries;
-            });
-
-            var ifcAddress = model.Instances.New<IfcPostalAddress>(a => {
-                a.InternalLocation = "Room 101";
-                a.AddressLines.AddRange(new[] { new IfcLabel("12 New road"), new IfcLabel("DoxField") });
-                a.Town = "Sunderland";
-                a.PostalCode = "DL01 6SX";
-            });
-            var ifcPrValueAddress = model.Instances.New<IfcPropertyReferenceValue>(prv => {
-                prv.Name = "IfcPropertyReferenceValue:Address";
-                prv.PropertyReference = ifcAddress;
-            });
-            var ifcTelecomAddress = model.Instances.New<IfcTelecomAddress>(a => {
-                a.TelephoneNumbers.Add(new IfcLabel("01325 6589965"));
-                a.ElectronicMailAddresses.Add(new IfcLabel("bob@bobsworks.com"));
-            });
-            var ifcPrValueTelecom = model.Instances.New<IfcPropertyReferenceValue>(prv => {
-                prv.Name = "IfcPropertyReferenceValue:Telecom";
-                prv.PropertyReference = ifcTelecomAddress;
-            });
-
-            //lets create the IfcElementQuantity
-            var ifcPropertySet = model.Instances.New<IfcPropertySet>(ps => {
-                ps.Name = "Test:IfcPropertySet";
-                ps.Description = "Property Set";
-                ps.HasProperties.Add(ifcPropertySingleValue);
-                ps.HasProperties.Add(ifcPropertyEnumeratedValue);
-                ps.HasProperties.Add(ifcPropertyBoundedValue);
-                ps.HasProperties.Add(ifcPropertyTableValue);
-                ps.HasProperties.Add(ifcPropertyListValue);
-                ps.HasProperties.Add(ifcPrValueMaterial);
-                ps.HasProperties.Add(ifcPrValueMatLayer);
-                ps.HasProperties.Add(ifcPrValueRef);
-                ps.HasProperties.Add(ifcPrValueTimeSeries);
-                ps.HasProperties.Add(ifcPrValueAddress);
-                ps.HasProperties.Add(ifcPrValueTelecom);
-            });
-
-            //need to create the relationship
-            model.Instances.New<IfcRelDefinesByProperties>(rdbp => {
-                rdbp.Name = "Property Association";
-                rdbp.Description = "IfcPropertySet associated to wall";
-                rdbp.RelatedObjects.Add(wall);
-                rdbp.RelatingPropertyDefinition = ifcPropertySet;
-            });
-        }
-
-        public static void CreateElementQuantity(IfcStore model, IfcWallStandardCase wall) {
-            //Create a IfcElementQuantity
-            //first we need a IfcPhysicalSimpleQuantity,first will use IfcQuantityLength
-            var ifcQuantityArea = model.Instances.New<IfcQuantityLength>(qa => {
-                qa.Name = "IfcQuantityArea:Area";
-                qa.Description = "";
-                qa.Unit = model.Instances.New<IfcSIUnit>(siu => {
-                    siu.UnitType = IfcUnitEnum.LENGTHUNIT;
-                    siu.Prefix = IfcSIPrefix.MILLI;
-                    siu.Name = IfcSIUnitName.METRE;
-                });
-                qa.LengthValue = 100.0;
-
-            });
-            //next quantity IfcQuantityCount using IfcContextDependentUnit
-            var ifcContextDependentUnit = model.Instances.New<IfcContextDependentUnit>(cd => {
-                cd.Dimensions = model.Instances.New<IfcDimensionalExponents>(de => {
-                    de.LengthExponent = 1;
-                    de.MassExponent = 0;
-                    de.TimeExponent = 0;
-                    de.ElectricCurrentExponent = 0;
-                    de.ThermodynamicTemperatureExponent = 0;
-                    de.AmountOfSubstanceExponent = 0;
-                    de.LuminousIntensityExponent = 0;
-                });
-                cd.UnitType = IfcUnitEnum.LENGTHUNIT;
-                cd.Name = "Elephants";
-            });
-            var ifcQuantityCount = model.Instances.New<IfcQuantityCount>(qc => {
-                qc.Name = "IfcQuantityCount:Elephant";
-                qc.CountValue = 12;
-                qc.Unit = ifcContextDependentUnit;
-            });
-
-
-            //next quantity IfcQuantityLength using IfcConversionBasedUnit
-            var ifcConversionBasedUnit = model.Instances.New<IfcConversionBasedUnit>(cbu => {
-                cbu.ConversionFactor = model.Instances.New<IfcMeasureWithUnit>(mu => {
-                    mu.ValueComponent = new IfcRatioMeasure(25.4);
-                    mu.UnitComponent = model.Instances.New<IfcSIUnit>(siu => {
-                        siu.UnitType = IfcUnitEnum.LENGTHUNIT;
-                        siu.Prefix = IfcSIPrefix.MILLI;
-                        siu.Name = IfcSIUnitName.METRE;
-                    });
-
-                });
-                cbu.Dimensions = model.Instances.New<IfcDimensionalExponents>(de => {
-                    de.LengthExponent = 1;
-                    de.MassExponent = 0;
-                    de.TimeExponent = 0;
-                    de.ElectricCurrentExponent = 0;
-                    de.ThermodynamicTemperatureExponent = 0;
-                    de.AmountOfSubstanceExponent = 0;
-                    de.LuminousIntensityExponent = 0;
-                });
-                cbu.UnitType = IfcUnitEnum.LENGTHUNIT;
-                cbu.Name = "Inch";
-            });
-            var ifcQuantityLength = model.Instances.New<IfcQuantityLength>(qa => {
-                qa.Name = "IfcQuantityLength:Length";
-                qa.Description = "";
-                qa.Unit = ifcConversionBasedUnit;
-                qa.LengthValue = 24.0;
-            });
-
-            //lets create the IfcElementQuantity
-            var ifcElementQuantity = model.Instances.New<IfcElementQuantity>(eq => {
-                eq.Name = "Test:IfcElementQuantity";
-                eq.Description = "Measurement quantity";
-                eq.Quantities.Add(ifcQuantityArea);
-                eq.Quantities.Add(ifcQuantityCount);
-                eq.Quantities.Add(ifcQuantityLength);
-            });
-
-            //need to create the relationship
-            model.Instances.New<IfcRelDefinesByProperties>(rdbp => {
-                rdbp.Name = "Area Association";
-                rdbp.Description = "IfcElementQuantity associated to wall";
-                rdbp.RelatedObjects.Add(wall);
-                rdbp.RelatingPropertyDefinition = ifcElementQuantity;
-            });
+            ifcSlabs.Add(interFace, slab);
+            return;
         }
     }
 }

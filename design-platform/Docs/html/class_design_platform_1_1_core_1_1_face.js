@@ -1,0 +1,28 @@
+var class_design_platform_1_1_core_1_1_face =
+[
+    [ "Face", "class_design_platform_1_1_core_1_1_face.html#a61d4135bfdd4dfee77cfaa857e0ff0e4", null ],
+    [ "AddInterface", "class_design_platform_1_1_core_1_1_face.html#a1616ba9c712f9c00af3fa74fd050c6db", null ],
+    [ "AddOpening", "class_design_platform_1_1_core_1_1_face.html#ad372d007525ff24fc9170db8f0bad4b9", null ],
+    [ "Delete", "class_design_platform_1_1_core_1_1_face.html#abbc3fb5400eb724f32461a084df91c36", null ],
+    [ "GetControlPoints", "class_design_platform_1_1_core_1_1_face.html#ae780c43edb3cd3bf04c76604a73226b3", null ],
+    [ "GetInterfaceAtParameter", "class_design_platform_1_1_core_1_1_face.html#afc4047ad8e61c12ac81526520a068111", null ],
+    [ "RemoveInterface", "class_design_platform_1_1_core_1_1_face.html#ae46d66ec8551ee91972ebd9dcdaefab0", null ],
+    [ "RemoveOpening", "class_design_platform_1_1_core_1_1_face.html#a6e5a203f903f79767ba55d229928581f", null ],
+    [ "ToString", "class_design_platform_1_1_core_1_1_face.html#a5d1aec15601b71efbae392654bded078", null ],
+    [ "Thickness", "class_design_platform_1_1_core_1_1_face.html#a078618303171b0dc0cfc69aa24cd96aa", null ],
+    [ "Vector3", "class_design_platform_1_1_core_1_1_face.html#a6b89658030b2f7769a01e66cd4c15a28", null ],
+    [ "CenterPoint", "class_design_platform_1_1_core_1_1_face.html#a5056139c59d0a409562d6fab773a6ac0", null ],
+    [ "EndPoint", "class_design_platform_1_1_core_1_1_face.html#a391158dd6c2be4c1de65b4647a6e32c0", null ],
+    [ "FaceIndex", "class_design_platform_1_1_core_1_1_face.html#a449827bb1f3c0b545b72d70dbbdc3f3c", null ],
+    [ "Height", "class_design_platform_1_1_core_1_1_face.html#aaaddfaa4023b680de7d97193bd8b2c12", null ],
+    [ "InterfaceParameters", "class_design_platform_1_1_core_1_1_face.html#a2ee8df631aa46f555b264718ab579905", null ],
+    [ "Interfaces", "class_design_platform_1_1_core_1_1_face.html#a9b1830ac795ea016ac69c2f100555798", null ],
+    [ "Length", "class_design_platform_1_1_core_1_1_face.html#a44bcff54ff728777f031dac61beddcb9", null ],
+    [ "Line", "class_design_platform_1_1_core_1_1_face.html#a2288c6779e7e6b5d793874bc5b528a57", null ],
+    [ "Normal", "class_design_platform_1_1_core_1_1_face.html#a940e1aa021edfc0ef90b3baf8f85ff24", null ],
+    [ "OpeningParameters", "class_design_platform_1_1_core_1_1_face.html#a1bd12a8ef50872eeca080805393ce5d7", null ],
+    [ "Openings", "class_design_platform_1_1_core_1_1_face.html#a165f16bbb0e090b3be08997db19537a1", null ],
+    [ "Orientation", "class_design_platform_1_1_core_1_1_face.html#ab3a22124c7742706355208517fbf3a61", null ],
+    [ "Room", "class_design_platform_1_1_core_1_1_face.html#adf8af430d40081596aae9693b018868b", null ],
+    [ "StartPoint", "class_design_platform_1_1_core_1_1_face.html#adde992e64d00391f5d626bc48a993d92", null ]
+];

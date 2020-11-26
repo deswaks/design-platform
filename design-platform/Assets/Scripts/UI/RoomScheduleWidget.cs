@@ -2,6 +2,7 @@
 using DesignPlatform.Utils;
 using System.Collections.Generic;
 using UnityEngine;
+using DesignPlatform.Utils;
 
 namespace DesignPlatform {
     public class RoomScheduleWidget : Widget {
@@ -60,11 +61,11 @@ namespace DesignPlatform {
 
                 List<string> rowData = new List<string>
                 {
-                "Room " + roomIndex.ToString(),                                             // Room Name
-                StringUtils.StringUtils.ToTitleCase(room.Type.ToString()),              // Room Type
-                StringUtils.StringUtils.ToTitleCase(room.Shape.ToString()),        // Room Shape
-                room.gameObject.GetInstanceID().ToString(),                                 // Room rumber - SKAL OPDATERES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                room.GetFloorArea().ToString() + " m²"                                      // Floor area
+                "Room " + roomIndex.ToString(),                 // Room Name
+                StringUtils.ToTitleCase(room.Type.ToString()),  // Room Type
+                StringUtils.ToTitleCase(room.Shape.ToString()), // Room Shape
+                room.gameObject.GetInstanceID().ToString(),     // Room rumber - SKAL OPDATERES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                room.GetFloorArea().ToString() + " m²"          // Floor area
 
             };
 
