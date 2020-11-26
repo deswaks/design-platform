@@ -16,17 +16,11 @@ namespace DesignPlatform.Core {
             List<Slider> sliders = gameObject.GetComponentsInChildren<Slider>().ToList();
             buttons = gameObject.GetComponentsInChildren<RectTransform>().First(cm => cm.name == "RoofTypeButtons").GetComponentsInChildren<Button>().ToList();
 
-            List<RectTransform> trans = gameObject.GetComponentsInChildren<RectTransform>().ToList();
-
-            Debug.Log("Buttons: " + string.Join(", ", buttons.Select(bt => bt.gameObject.name)));
-
             pitchSlider = sliders.First(s => s.gameObject.name.ToLower().Contains("pitch"));
             overhangSlider = sliders.First(s => s.gameObject.name.ToLower().Contains("overhang"));
         }
 
         public void ChangeRoofType(int i) {
-            Debug.Log("Trykket: "+ EventSystem.current.currentSelectedGameObject.name);
-
             GameObject current = EventSystem.current.currentSelectedGameObject;
                 
             current.GetComponentsInChildren<Image>().First(im => im.gameObject.name == "Icon").gameObject.transform.localScale = new Vector3(0, 0, 0);

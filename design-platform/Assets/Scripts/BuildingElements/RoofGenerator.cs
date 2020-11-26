@@ -124,8 +124,6 @@ namespace DesignPlatform.Core {
                 // Find ordered polyline vertices from unordered segments 
                 List<Vector3> outline = RoofUtils.SegmentsToPolyline(segments);
 
-                RoofUtils.VisualizePointsAsSpheres(outline,"generator output");
-
                 finalPanelOutlines.Add(outline);
             }
 

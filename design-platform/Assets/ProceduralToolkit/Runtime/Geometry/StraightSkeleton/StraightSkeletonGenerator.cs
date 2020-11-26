@@ -65,7 +65,7 @@ namespace ProceduralToolkit.Skeleton
                 float offset = FindSmallestOffset(plan);
                 if (float.IsPositiveInfinity(offset) || offset <= 0)
                 {
-                    Debug.LogError("Unable to find offset");
+                    Debug.LogError("Unable to find offset: "+offset);
                     return false;
                 }
 

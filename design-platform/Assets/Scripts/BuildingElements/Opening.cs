@@ -160,10 +160,8 @@ namespace DesignPlatform.Core {
 
             // Style
             lr.startWidth = width; lr.endWidth = width;
-            foreach (Material material in lr.materials) {
-                if (Shape == OpeningShape.DOOR) material.color = Color.gray;
-                else material.color = Color.blue;
-            }
+            if (Shape == OpeningShape.DOOR) lr.startColor = lr.endColor = Color.gray; 
+            else lr.startColor = lr.endColor = new Color(60f/256f, 124f / 256f, 209f / 256f);
         }
 
         public List<Vector3> GetControlPoints2D() {
