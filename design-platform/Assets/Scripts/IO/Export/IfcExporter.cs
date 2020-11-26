@@ -84,6 +84,7 @@ namespace DesignPlatform.Export {
             };
             ifcModel = IfcStore.Create(credentials, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
             IfcConverter.ifcModel = ifcModel;
+            IfcUtils.ifcModel = ifcModel;
 
             using (var transaction = ifcModel.BeginTransaction("Initialise Model")) {
                 var project = ifcModel.Instances.New<IfcProject>(); //create a project
@@ -133,6 +134,15 @@ namespace DesignPlatform.Export {
             foreach (Interface interFace in Building.Instance.InterfacesHorizontal) {
                 using (var transaction = ifcModel.BeginTransaction("Create Slab")) {
                     IfcConverter.CreateIfcSlab(interFace);
+                    transaction.Commit();
+                }
+            }
+        }
+
+        private static void CreateRoof() {
+            foreach (Interface interFace in Building.Instance.InterfacesHorizontal) {
+                using (var transaction = ifcModel.BeginTransaction("Create Roof")) {
+                    IfcConverter.CreateIfcRoofslab(interFace);
                     transaction.Commit();
                 }
             }
