@@ -4,8 +4,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 using Michsky.UI.ModernUIPack;
+using DesignPlatform.UI;
+using DesignPlatform.Core;
+using DesignPlatform.Database;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.Modes {
     public class POVMode : Mode {
 
         private static POVMode instance;
@@ -48,15 +51,15 @@ namespace DesignPlatform.Core {
             }
 
         }
-        public override void OnModeResume() { 
+        public override void OnModeResume() {
             ui.SetActive(false);
             player = GameObject.Find("First person player");
             PlanCamera = GameObject.Find("Plan Camera").GetComponent<Camera>();
             POVCamera = player.GetComponentInChildren<Camera>(true);
 
-            GlobalSettings.ShowWallLines = false;
-            GlobalSettings.ShowOpeningLines = false;
-            
+            UI.Settings.ShowWallLines = false;
+            UI.Settings.ShowOpeningLines = false;
+
             foreach (Room room in Building.Instance.Rooms) {
                 room.UpdateRender2D();
             }
@@ -85,8 +88,8 @@ namespace DesignPlatform.Core {
             POVCamera.gameObject.SetActive(false);
             PlanCamera.gameObject.SetActive(true);
 
-            GlobalSettings.ShowWallLines = true;
-            GlobalSettings.ShowOpeningLines = true;
+            UI.Settings.ShowWallLines = true;
+            UI.Settings.ShowOpeningLines = true;
 
             foreach (Room room in Building.Instance.Rooms) {
                 room.UpdateRender2D();
@@ -124,7 +127,7 @@ namespace DesignPlatform.Core {
             switch (currentModeType) {
                 case ModeType.POV:
                     UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                    UnityEngine.Cursor.visible = false; 
+                    UnityEngine.Cursor.visible = false;
                     break;
 
                 case ModeType.MENU:

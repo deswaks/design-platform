@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public abstract class Widget {
         public (int width, int height) Size;
         public GameObject Panel;

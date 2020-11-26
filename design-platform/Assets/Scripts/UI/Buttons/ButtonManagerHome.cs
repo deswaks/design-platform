@@ -1,9 +1,8 @@
 ﻿using DesignPlatform.Database;
 using DesignPlatform.Export;
-using DesignPlatform.PdfExport;
 using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class ButtonManagerHome : MonoBehaviour {
         public void SaveLocal() {
             LocalDatabase.SaveAllUnityRoomsAndOpeningsToJson();

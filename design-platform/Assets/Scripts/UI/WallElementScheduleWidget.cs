@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class WallElementScheduleWidget : Widget {
         // Names of used GameObjects in prefab
         private static readonly string HeaderRowName = "Row_Headers";

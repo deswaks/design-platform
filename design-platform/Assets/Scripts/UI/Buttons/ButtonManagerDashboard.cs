@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class ButtonManagerDashboard : MonoBehaviour {
 
         public void PopulateDashboard() {
@@ -8,7 +8,7 @@ namespace DesignPlatform.Core {
         }
 
         public void RefreshDashboard() {
-            DesignPlatform.Core.Dashboard.Instance.UpdateCurrentWidgets();
+            Dashboard.Instance.UpdateCurrentWidgets();
         }
 
     }

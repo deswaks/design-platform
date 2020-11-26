@@ -4,6 +4,11 @@ using System.Linq;
 using UnityEngine;
 
 namespace DesignPlatform.Core {
+
+    /// <summary>
+    /// The building class is responsible for creation of new building elements
+    /// and functions as a general access point for all created elements.
+    /// </summary>
     public partial class Building {
 
 

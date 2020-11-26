@@ -1,4 +1,5 @@
-﻿using DesignPlatform.Utils;
+﻿using DesignPlatform.Database;
+using DesignPlatform.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -148,7 +149,7 @@ namespace DesignPlatform.Core {
 
             // Reset line renderer and leave empty if wall visibility is false
             lr.positionCount = 0;
-            if (!GlobalSettings.ShowOpeningLines) return;
+            if (!UI.Settings.ShowOpeningLines) return;
 
             // Set controlpoints
             lr.useWorldSpace = false;

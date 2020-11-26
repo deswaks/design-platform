@@ -1,8 +1,10 @@
-﻿using DesignPlatform.Utils;
+﻿using DesignPlatform.Core;
+using DesignPlatform.UI;
+using DesignPlatform.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.Modes {
     public class ExtrudeMode : Mode {
 
         private static ExtrudeMode instance;

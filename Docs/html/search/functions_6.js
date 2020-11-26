@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['getallroomidsingraph_570',['GetAllRoomIdsInGraph',['../class_design_platform_1_1_database_1_1_graph_database.html#afbddd5a038760d2df6c69ab1d7057970',1,'DesignPlatform::Database::GraphDatabase']]],
+  ['getallroomnodes_571',['GetAllRoomNodes',['../class_design_platform_1_1_database_1_1_graph_database.html#a3028fd7c7184f1350159ea3d6b78ff60',1,'DesignPlatform::Database::GraphDatabase']]],
+  ['getarea_572',['GetArea',['../class_design_platform_1_1_geometry_1_1_polygon2_d.html#a88116772a5b0789adc0624b5a2ffb4b0',1,'DesignPlatform::Geometry::Polygon2D']]],
+  ['getbounds_573',['GetBounds',['../class_design_platform_1_1_geometry_1_1_polygon2_d.html#a3e30bea8c40e760373d25981312731c7',1,'DesignPlatform::Geometry::Polygon2D']]],
+  ['getcoincidentinterface_574',['GetCoincidentInterface',['../class_design_platform_1_1_core_1_1_opening.html#a78d561c5bca13c8646ebd915a804573c',1,'DesignPlatform::Core::Opening']]],
+  ['getcontrolpoints_575',['GetControlPoints',['../class_design_platform_1_1_core_1_1_face.html#ae780c43edb3cd3bf04c76604a73226b3',1,'DesignPlatform.Core.Face.GetControlPoints()'],['../class_design_platform_1_1_core_1_1_opening.html#abdc68016ad000553f3b13233192c07d8',1,'DesignPlatform.Core.Opening.GetControlPoints()'],['../class_design_platform_1_1_core_1_1_room.html#ac25f6f4e79397ea9ca8b36fc05723139',1,'DesignPlatform.Core.Room.GetControlPoints()']]],
+  ['getcontrolpoints2d_576',['GetControlPoints2D',['../class_design_platform_1_1_core_1_1_opening.html#ae7095ac081e74b4c1868c5983dd69988',1,'DesignPlatform::Core::Opening']]],
+  ['getdirection_577',['GetDirection',['../class_design_platform_1_1_core_1_1_wall_element.html#ac0c5f7941a6cfdffa59bbe8bc3c6ac02',1,'DesignPlatform::Core::WallElement']]],
+  ['getedgemidpoints_578',['GetEdgeMidpoints',['../class_design_platform_1_1_geometry_1_1_polygon2_d.html#ab8cb42b4e4edf7a53a47876ae347ee5f',1,'DesignPlatform::Geometry::Polygon2D']]],
+  ['getedgenormals_579',['GetEdgeNormals',['../class_design_platform_1_1_geometry_1_1_polygon2_d.html#a9eada6d48b720d8fc7e1a231f3df8f25',1,'DesignPlatform::Geometry::Polygon2D']]],
+  ['getfloorarea_580',['GetFloorArea',['../class_design_platform_1_1_core_1_1_room.html#a32e511aba9269803d6aff0c8e52d738d',1,'DesignPlatform::Core::Room']]],
+  ['getholevertices_581',['GetHoleVertices',['../class_design_platform_1_1_core_1_1_wall.html#a4b655c0c9201d1bf23a87920bafab87a',1,'DesignPlatform::Core::Wall']]],
+  ['getinterfaceatparameter_582',['GetInterfaceAtParameter',['../class_design_platform_1_1_core_1_1_face.html#afc4047ad8e61c12ac81526520a068111',1,'DesignPlatform::Core::Face']]],
+  ['getparallelconnectedinterfaces_583',['GetParallelConnectedInterfaces',['../class_design_platform_1_1_core_1_1_building.html#ae8bb0d74e6e10f2fcde33b1271090dba',1,'DesignPlatform::Core::Building']]],
+  ['getroomnodebyid_584',['GetRoomNodeById',['../class_design_platform_1_1_database_1_1_graph_database.html#a4ea250bf8b79a7bfbd7e122c39429582',1,'DesignPlatform::Database::GraphDatabase']]],
+  ['getsurfacevertices_585',['GetSurfaceVertices',['../class_design_platform_1_1_core_1_1_room.html#a36fbc859e98caaa9ab99654ecc7d302b',1,'DesignPlatform::Core::Room']]],
+  ['gettaglocation_586',['GetTagLocation',['../class_design_platform_1_1_core_1_1_room.html#acdcf78aec93b4f877b9af9ad990ef718',1,'DesignPlatform::Core::Room']]],
+  ['getverticesasvector3_587',['GetVerticesAsVector3',['../class_design_platform_1_1_database_1_1_room_node.html#aa141742759bc7c76dec6f0d52d791763',1,'DesignPlatform::Database::RoomNode']]],
+  ['getvolume_588',['GetVolume',['../class_design_platform_1_1_core_1_1_room.html#a2f2e3cd58e4ea9897e605c3b39a6d2db',1,'DesignPlatform::Core::Room']]],
+  ['getwallmidpoints_589',['GetWallMidpoints',['../class_design_platform_1_1_core_1_1_room.html#a144b36c00852fde7b953db44e8ae5cee',1,'DesignPlatform::Core::Room']]],
+  ['getwallnormals_590',['GetWallNormals',['../class_design_platform_1_1_core_1_1_room.html#ac7169fe2333430215c9152594c50bda0',1,'DesignPlatform::Core::Room']]],
+  ['givecollider_591',['GiveCollider',['../class_design_platform_1_1_core_1_1_room_collider.html#ad9e8847a07c4e2300b3b2a9270381f50',1,'DesignPlatform::Core::RoomCollider']]],
+  ['graphdatabase_592',['GraphDatabase',['../class_design_platform_1_1_database_1_1_graph_database.html#a767d71899a09a3711a58bc41b55381ef',1,'DesignPlatform::Database::GraphDatabase']]]
+];

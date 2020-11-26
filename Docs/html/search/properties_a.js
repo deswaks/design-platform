@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['offset_806',['Offset',['../class_design_platform_1_1_modes_1_1_move_mode.html#ac4b33d1a0010fd2d59b8a6011ee35cc8',1,'DesignPlatform::Modes::MoveMode']]],
+  ['openingparameters_807',['OpeningParameters',['../class_design_platform_1_1_core_1_1_face.html#a1bd12a8ef50872eeca080805393ce5d7',1,'DesignPlatform::Core::Face']]],
+  ['openings_808',['Openings',['../class_design_platform_1_1_core_1_1_building.html#a2ca2afe48b4a6989a640472b98878300',1,'DesignPlatform.Core.Building.Openings()'],['../class_design_platform_1_1_core_1_1_face.html#a165f16bbb0e090b3be08997db19537a1',1,'DesignPlatform.Core.Face.Openings()'],['../class_design_platform_1_1_core_1_1_interface.html#a0ce3f4101cc80afbfc963e88f3329249',1,'DesignPlatform.Core.Interface.Openings()'],['../class_design_platform_1_1_core_1_1_room.html#a90ca705cd26f52064429016905faf8c0',1,'DesignPlatform.Core.Room.Openings()'],['../class_design_platform_1_1_core_1_1_slab.html#a217a6961d9f3833f13bf59a448a62626',1,'DesignPlatform.Core.Slab.Openings()'],['../class_design_platform_1_1_core_1_1_wall.html#a17c77b71bdd7bc3d7c82caa535eccf41',1,'DesignPlatform.Core.Wall.Openings()']]],
+  ['openingshape_809',['openingShape',['../class_design_platform_1_1_database_1_1_opening_node.html#afd8f996eb111f5994fa954cc663f1618',1,'DesignPlatform::Database::OpeningNode']]],
+  ['openingsvertical_810',['OpeningsVertical',['../class_design_platform_1_1_core_1_1_interface.html#add7179fb85d14553e8d54c8500571c77',1,'DesignPlatform::Core::Interface']]],
+  ['orientation_811',['Orientation',['../class_design_platform_1_1_core_1_1_face.html#ab3a22124c7742706355208517fbf3a61',1,'DesignPlatform.Core.Face.Orientation()'],['../class_design_platform_1_1_core_1_1_interface.html#aef4889802cb27d6cf00a1f2800a3e77c',1,'DesignPlatform.Core.Interface.Orientation()']]]
+];

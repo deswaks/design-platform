@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using DesignPlatform.Core;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.Modes {
     public class BuildMode : Mode {
 
         private static BuildMode instance;
@@ -43,7 +44,7 @@ namespace DesignPlatform.Core {
 
             if (Input.GetMouseButtonDown(1)) {
                 if ((int)SelectedShape == 4) {
-                    SelectedShape = (RoomShape)0;
+                    SelectedShape = 0;
                 }
                 else {
                     SelectedShape = (RoomShape)(int)SelectedShape + 1;

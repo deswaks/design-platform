@@ -2,9 +2,8 @@
 using DesignPlatform.Utils;
 using System.Collections.Generic;
 using UnityEngine;
-using DesignPlatform.Utils;
 
-namespace DesignPlatform {
+namespace DesignPlatform.UI {
     public class RoomScheduleWidget : Widget {
         // Names of used GameObjects in prefab
         private static readonly string HeaderRowName = "Row_Headers";

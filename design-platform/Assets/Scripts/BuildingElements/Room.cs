@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
+using DesignPlatform.Modes;
+using DesignPlatform.Database;
 
 namespace DesignPlatform.Core {
 
@@ -211,7 +213,7 @@ namespace DesignPlatform.Core {
 
             // Update lines
             lr.positionCount = 0;
-            if (GlobalSettings.ShowWallLines) {
+            if (UI.Settings.ShowWallLines) {
                 // Set controlpoints
                 lr.useWorldSpace = false;
                 List<Vector3> points = GetControlPoints(localCoordinates: true).Select(p => p + Vector3.up * (height + 0.001f)).ToList();
@@ -238,7 +240,7 @@ namespace DesignPlatform.Core {
                     Destroy(text.gameObject);
                 }
             }
-            if (GlobalSettings.ShowRoomTags && Type != RoomType.PREVIEW) {
+            if (UI.Settings.ShowRoomTags && Type != RoomType.PREVIEW) {
                 // Create tag object
                 GameObject tagObject = new GameObject("Tag");
                 TextMeshPro tag = tagObject.AddComponent<TextMeshPro>();
@@ -582,7 +584,7 @@ namespace DesignPlatform.Core {
                 RoomCollider[] colliders = gameObject.GetComponentsInChildren<RoomCollider>();
                 List<bool> collidersColliding = colliders.Select(rc => rc.isCurrentlyColliding).ToList();
 
-                bool isSelected = (SelectMode.Instance.selection == this);
+                bool isSelected = (Modes.SelectMode.Instance.selection == this);
                 bool isColliding = (collidersColliding.Contains(true));
                 //Debug.Log("Selected:" + isSelected.ToString() + "  Colliding:" + isColliding.ToString());
                 UpdateRender2D(highlighted: isSelected, colliding: isColliding);
