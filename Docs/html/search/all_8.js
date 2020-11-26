@@ -26,5 +26,6 @@ var searchData=
   ['invokeatstart_163',['invokeAtStart',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#ab9a261d8d3167f4fa28633b4acf850ad',1,'DesignPlatform::UI::UISwitch']]],
   ['iscurrentlycolliding_164',['isCurrentlyColliding',['../class_design_platform_1_1_core_1_1_room_collider.html#a1c5606c6d235d88e261b12ff97af52df',1,'DesignPlatform::Core::RoomCollider']]],
   ['ison_165',['isOn',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#af9fdc75bee535164b5be335ba96f33f7',1,'DesignPlatform::UI::UISwitch']]],
-  ['isonline_166',['IsOnLine',['../class_design_platform_1_1_geometry_1_1_line.html#a41e3a2f619dc490044c6bc461d2bea19',1,'DesignPlatform::Geometry::Line']]]
+  ['isonline_166',['IsOnLine',['../class_design_platform_1_1_geometry_1_1_line.html#a41e3a2f619dc490044c6bc461d2bea19',1,'DesignPlatform::Geometry::Line']]],
+  ['settings_2ecs_167',['Settings.cs',['../_i_o_2_graph_database_2_settings_8cs.html',1,'']]]
 ];
