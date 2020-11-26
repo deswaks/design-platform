@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['roomshape_1165',['RoomShape',['../namespace_design_platform_1_1_core.html#ad372d7be12083d5c079089bae8984363',1,'DesignPlatform::Core']]],
-  ['roomstate_1166',['RoomState',['../namespace_design_platform_1_1_core.html#ae204d84c71f5340b03efa867c1f7fc8c',1,'DesignPlatform::Core']]],
-  ['roomtype_1167',['RoomType',['../namespace_design_platform_1_1_core.html#a41e29a1a08105b77175de377ed7a3bc6',1,'DesignPlatform::Core']]]
+  ['spacefunction_1165',['SpaceFunction',['../namespace_design_platform_1_1_core.html#a0ca6a3e97121d23b6c9d6206130fce8b',1,'DesignPlatform::Core']]],
+  ['spaceshape_1166',['SpaceShape',['../namespace_design_platform_1_1_core.html#aedad2d38f2f602ea1565f001fa15f924',1,'DesignPlatform::Core']]],
+  ['spacestate_1167',['SpaceState',['../namespace_design_platform_1_1_core.html#a6516747b4117405b4fdbc3daedd33818',1,'DesignPlatform::Core']]]
 ];

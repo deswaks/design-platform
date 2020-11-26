@@ -68,11 +68,11 @@ $(function() {
 &#160;
 
 <h3><a id="index_s"></a>- s -</h3><ul>
-<li>SaveAllUnityRoomsAndOpeningsToJson()
-: <a class="el" href="class_design_platform_1_1_database_1_1_local_database.html#a3772075e79dd8b0edc80edbb4e14aab7">DesignPlatform.Database.LocalDatabase</a>
+<li>SaveAllUnitySpacesAndOpeningsToJson()
+: <a class="el" href="class_design_platform_1_1_database_1_1_local_database.html#a70d802bd71efbe8a223bb0694086a5df">DesignPlatform.Database.LocalDatabase</a>
 </li>
-<li>SaveAllUnityRoomsToJson()
-: <a class="el" href="class_design_platform_1_1_database_1_1_local_database.html#acf656467fdb5dbe455726fa26c3ca87b">DesignPlatform.Database.LocalDatabase</a>
+<li>SaveAllUnitySpacesToJson()
+: <a class="el" href="class_design_platform_1_1_database_1_1_local_database.html#a598de83d11514803bce5fdf4a837490b">DesignPlatform.Database.LocalDatabase</a>
 </li>
 <li>SaveAllWallElementsToJson()
 : <a class="el" href="class_design_platform_1_1_database_1_1_local_database.html#a9f20f3718039baf3548b1a48f6fc856f">DesignPlatform.Database.LocalDatabase</a>
@@ -93,7 +93,7 @@ $(function() {
 : <a class="el" href="class_design_platform_1_1_u_i_1_1_dashboard.html#a16db4a5500996f6d074269273a37c07b">DesignPlatform.UI.Dashboard</a>
 </li>
 <li>SetControlPoints()
-: <a class="el" href="class_design_platform_1_1_core_1_1_room.html#a9872f33c4c34860a61b31a824f01a2a5">DesignPlatform.Core.Room</a>
+: <a class="el" href="class_design_platform_1_1_core_1_1_space.html#ae236d6587b80a5fe2cf45ff3a4de59b2">DesignPlatform.Core.Space</a>
 </li>
 <li>SetEndPoint()
 : <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html#a0848e77ff9adde3058cbf7c1b1a25e62">DesignPlatform.Core.CLTElement</a>
@@ -104,8 +104,8 @@ $(function() {
 <li>SetInterfaces()
 : <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html#a8d53e68144281d3910e9305009d77b2e">DesignPlatform.Core.CLTElement</a>
 </li>
-<li>SetIsRoomCurrentlyColliding()
-: <a class="el" href="class_design_platform_1_1_core_1_1_room.html#aa7e666f2a3c7b2ee86b7a2bbbe331e93">DesignPlatform.Core.Room</a>
+<li>SetIsSpaceCurrentlyColliding()
+: <a class="el" href="class_design_platform_1_1_core_1_1_space.html#a908a839eb25d6e4d4dfcfdba5283b4fe">DesignPlatform.Core.Space</a>
 </li>
 <li>SetMidPointJointType()
 : <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html#ac52ff3736390459cd5e04050c8da7983">DesignPlatform.Core.CLTElement</a>
@@ -129,14 +129,14 @@ $(function() {
 <li>SetRoofPitch()
 : <a class="el" href="class_design_platform_1_1_core_1_1_button_manager_roof.html#a821bfd2e4e78c5bffd717da983cbb909">DesignPlatform.Core.ButtonManagerRoof</a>
 </li>
-<li>SetRoomNote()
-: <a class="el" href="class_design_platform_1_1_core_1_1_room.html#acd207c5e6f055ee718a91fc3549ae372">DesignPlatform.Core.Room</a>
-</li>
-<li>SetRoomType()
-: <a class="el" href="class_design_platform_1_1_core_1_1_room.html#a301f341e0deb356986bb1cc041bfc5fc">DesignPlatform.Core.Room</a>
-</li>
 <li>SetSelectedShape()
-: <a class="el" href="class_design_platform_1_1_modes_1_1_build_mode.html#a8e9fc73575a302fc378d256274c175d5">DesignPlatform.Modes.BuildMode</a>
+: <a class="el" href="class_design_platform_1_1_modes_1_1_build_mode.html#a2603eb1ef44dd8c01aaeb5fe7b50cb39">DesignPlatform.Modes.BuildMode</a>
+</li>
+<li>SetSpaceNote()
+: <a class="el" href="class_design_platform_1_1_core_1_1_space.html#aaf2a6273fda8de62613a58358559fbfa">DesignPlatform.Core.Space</a>
+</li>
+<li>SetSpaceType()
+: <a class="el" href="class_design_platform_1_1_core_1_1_space.html#ad69f22accc91a69043bfd889e2d2b5a2">DesignPlatform.Core.Space</a>
 </li>
 <li>SetStartPoint()
 : <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html#aa609ed2c0d17100abf1f682001d5ec47">DesignPlatform.Core.CLTElement</a>
@@ -150,17 +150,23 @@ $(function() {
 <li>ShapeAsSweptProfile()
 : <a class="el" href="class_design_platform_1_1_export_1_1_ifc_utils.html#aaaa0f400f0c966df6009511668df1f6a">DesignPlatform.Export.IfcUtils</a>
 </li>
+<li>SpaceNode()
+: <a class="el" href="class_design_platform_1_1_database_1_1_space_node.html#aa3dfc2e10c4a115029fc5788b21a9197">DesignPlatform.Database.SpaceNode</a>
+</li>
+<li>SpaceScheduleWidget()
+: <a class="el" href="class_design_platform_1_1_u_i_1_1_space_schedule_widget.html#a33b796ce4fc622e49ad8130a4508d773">DesignPlatform.UI.SpaceScheduleWidget</a>
+</li>
 <li>Spans()
-: <a class="el" href="class_structural_analysis_1_1_load_distribution.html#a197d74106e71320e01be5944cb59e93d">StructuralAnalysis.LoadDistribution</a>
+: <a class="el" href="class_structural_analysis_1_1_load_distribution.html#ad16506aed8ac5ce16549bc305a35e5df">StructuralAnalysis.LoadDistribution</a>
 </li>
 <li>SplitList&lt; T &gt;()
 : <a class="el" href="class_design_platform_1_1_utils_1_1_roof_utils.html#a396ffc3cd5c1f35695b220fcfcee803f">DesignPlatform.Utils.RoofUtils</a>
 </li>
 <li>Start()
 : <a class="el" href="class_design_platform_1_1_core_1_1_button_manager_roof.html#a3494102d7b181cf22c9397dcad9ebc65">DesignPlatform.Core.ButtonManagerRoof</a>
-, <a class="el" href="class_design_platform_1_1_core_1_1_player_movement.html#a214e997fa0df0f5e64a663ea06ccc0ed">DesignPlatform.Core.PlayerMovement</a>
 , <a class="el" href="class_design_platform_1_1_modes_1_1_main.html#a4ca43ff17c52311229d7c14ed62c04c6">DesignPlatform.Modes.Main</a>
 , <a class="el" href="class_design_platform_1_1_u_i_1_1_pan2_d.html#a2f8c8f78940a632208ee9aa9fc9bb70f">DesignPlatform.UI.Pan2D</a>
+, <a class="el" href="class_design_platform_1_1_u_i_1_1_player_movement.html#a293134d153d52c6fbe26a31b7ff6f179">DesignPlatform.UI.PlayerMovement</a>
 , <a class="el" href="class_design_platform_1_1_u_i_1_1_select_widgets_window.html#afbfe9578d3b66c57f6678fb19ee052d4">DesignPlatform.UI.SelectWidgetsWindow</a>
 , <a class="el" href="class_design_platform_1_1_u_i_1_1_u_i_switch.html#a2b169a94185f6549021e6f1e3de7064f">DesignPlatform.UI.UISwitch</a>
 </li>

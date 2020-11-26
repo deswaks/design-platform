@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['bathroom_16',['BATHROOM',['../namespace_design_platform_1_1_core.html#a41e29a1a08105b77175de377ed7a3bc6a2b69c4921916493a4a8bc0a6ca81d51d',1,'DesignPlatform::Core']]],
-  ['bounds_17',['Bounds',['../class_design_platform_1_1_core_1_1_building.html#a3133c5c71622e473f323824c53a3a1f9',1,'DesignPlatform.Core.Building.Bounds()'],['../class_design_platform_1_1_core_1_1_room.html#a5a80d6e9ec36cb54264576cb6761a8a9',1,'DesignPlatform.Core.Room.Bounds()']]],
+  ['bathroom_16',['BATHROOM',['../namespace_design_platform_1_1_core.html#a0ca6a3e97121d23b6c9d6206130fce8ba2b69c4921916493a4a8bc0a6ca81d51d',1,'DesignPlatform::Core']]],
+  ['bounds_17',['Bounds',['../class_design_platform_1_1_core_1_1_building.html#a3133c5c71622e473f323824c53a3a1f9',1,'DesignPlatform.Core.Building.Bounds()'],['../class_design_platform_1_1_core_1_1_space.html#ad251c446b9fa35cccd2e116041a9b473',1,'DesignPlatform.Core.Space.Bounds()']]],
   ['build_18',['Build',['../class_design_platform_1_1_modes_1_1_build_mode.html#a42ccdd7d94a50e80e85901f787367c0e',1,'DesignPlatform.Modes.BuildMode.Build()'],['../class_design_platform_1_1_modes_1_1_opening_mode.html#a07175a0892b8ce832b256a5a048e6ce0',1,'DesignPlatform.Modes.OpeningMode.Build()']]],
   ['buildallinterfaces_19',['BuildAllInterfaces',['../class_design_platform_1_1_core_1_1_building.html#a2a686b028c95b52425213ee758e886f4',1,'DesignPlatform::Core::Building']]],
   ['buildallroofelements_20',['BuildAllRoofElements',['../class_design_platform_1_1_core_1_1_building.html#aea932f49381c0d13dc5ee68c8a159444',1,'DesignPlatform::Core::Building']]],
@@ -14,10 +14,10 @@ var searchData=
   ['buildmode_27',['BuildMode',['../class_design_platform_1_1_modes_1_1_build_mode.html',1,'DesignPlatform.Modes.BuildMode'],['../class_design_platform_1_1_modes_1_1_build_mode.html#a9b8696d437cf4607a9b2ecb88e9e56a5',1,'DesignPlatform.Modes.BuildMode.BuildMode()']]],
   ['buildmode_2ecs_28',['BuildMode.cs',['../_build_mode_8cs.html',1,'']]],
   ['buildmodel_29',['BuildModel',['../class_design_platform_1_1_export_1_1_ifc_exporter.html#aa61f2c0ec94bd9b8fe715396255eaf29',1,'DesignPlatform::Export::IfcExporter']]],
-  ['buildopening_30',['BuildOpening',['../class_design_platform_1_1_core_1_1_building.html#a69d1e0ba51e68e1d36dbb604d7a98d54',1,'DesignPlatform.Core.Building.BuildOpening(OpeningShape shape=OpeningShape.WINDOW, bool preview=false, Opening templateOpening=null)'],['../class_design_platform_1_1_core_1_1_building.html#aad65460df9d2079fb01a2a7f01585cdf',1,'DesignPlatform.Core.Building.BuildOpening(OpeningShape shape, Vector3 position, Quaternion rotation)']]],
+  ['buildopening_30',['BuildOpening',['../class_design_platform_1_1_core_1_1_building.html#a9254ec6b3ba66516271433596e9be6a3',1,'DesignPlatform.Core.Building.BuildOpening(OpeningFunction shape=OpeningFunction.WINDOW, bool preview=false, Opening templateOpening=null)'],['../class_design_platform_1_1_core_1_1_building.html#ac1651ced50123554c3369461ac7c91db',1,'DesignPlatform.Core.Building.BuildOpening(OpeningFunction shape, Vector3 position, Quaternion rotation)']]],
   ['buildroofelement_31',['BuildRoofElement',['../class_design_platform_1_1_core_1_1_building.html#af76e4ae9ca69ffa2fe5a3f848571049f',1,'DesignPlatform::Core::Building']]],
-  ['buildroom_32',['BuildRoom',['../class_design_platform_1_1_core_1_1_building.html#a77b37232db8c13fcd24de3f913a5aa49',1,'DesignPlatform::Core::Building']]],
-  ['buildslab_33',['BuildSlab',['../class_design_platform_1_1_core_1_1_building.html#abe5444d0a67302555df73b1366379da8',1,'DesignPlatform::Core::Building']]],
+  ['buildslab_32',['BuildSlab',['../class_design_platform_1_1_core_1_1_building.html#abe5444d0a67302555df73b1366379da8',1,'DesignPlatform::Core::Building']]],
+  ['buildspace_33',['BuildSpace',['../class_design_platform_1_1_core_1_1_building.html#a19baccf9b87fee98ad8c5a9881b14c9d',1,'DesignPlatform::Core::Building']]],
   ['buildverticalfaceinterfaces_34',['BuildVerticalFaceInterfaces',['../class_design_platform_1_1_core_1_1_building.html#a870008bc4ea17da35351fa895c603d15',1,'DesignPlatform::Core::Building']]],
   ['buildwall_35',['BuildWall',['../class_design_platform_1_1_core_1_1_building.html#a23e7541b2ccd78482ea905c7c20b65b3',1,'DesignPlatform.Core.Building.BuildWall(Interface interFace)'],['../class_design_platform_1_1_core_1_1_building.html#ae94d22b2dfe7a965dd684f1952bee85c',1,'DesignPlatform.Core.Building.BuildWall(CLTElement cltElement)']]],
   ['buttonmanagerdashboard_36',['ButtonManagerDashboard',['../class_design_platform_1_1_u_i_1_1_button_manager_dashboard.html',1,'DesignPlatform::UI']]],

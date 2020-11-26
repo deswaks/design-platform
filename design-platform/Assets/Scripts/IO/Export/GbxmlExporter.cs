@@ -29,8 +29,8 @@ namespace DesignPlatform.Export {
 
             // Create spaces
             List<gbXMLSerializer.Space> spaces = new List<gbXMLSerializer.Space>();
-            foreach (Room room in Building.Instance.Rooms) {
-                gbXMLSerializer.Space space = GbxmlConverter.XmlSpaceFromRoom(room);
+            foreach (Core.Space room in Building.Instance.Spaces) {
+                gbXMLSerializer.Space space = GbxmlConverter.XmlSpaceFromSpace(room);
                 building.Area += (float)space.Area;
                 spaces.Add(space);
             }

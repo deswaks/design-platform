@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jumpheight_1081',['jumpHeight',['../class_design_platform_1_1_core_1_1_player_movement.html#a1b77ad6bbd7645d25a686371e70c5915',1,'DesignPlatform::Core::PlayerMovement']]]
+  ['jumpheight_1081',['jumpHeight',['../class_design_platform_1_1_u_i_1_1_player_movement.html#a5d959832a011c06f30eab547d5fdbb64',1,'DesignPlatform::UI::PlayerMovement']]]
 ];

@@ -79,11 +79,14 @@ $(function() {
 <div class="title">DesignPlatform.Core.Face Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents a two dimensional face on a three dimensional solid building space polygon.  
+ <a href="class_design_platform_1_1_core_1_1_face.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a61d4135bfdd4dfee77cfaa857e0ff0e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a61d4135bfdd4dfee77cfaa857e0ff0e4">Face</a> (<a class="el" href="class_design_platform_1_1_core_1_1_room.html">Room</a> parent, int index)</td></tr>
-<tr class="separator:a61d4135bfdd4dfee77cfaa857e0ff0e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a202436a036c3c07f91b53ca7f8f4cc04"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a202436a036c3c07f91b53ca7f8f4cc04">Face</a> (<a class="el" href="class_design_platform_1_1_core_1_1_space.html">Space</a> parentSpace, int index)</td></tr>
+<tr class="separator:a202436a036c3c07f91b53ca7f8f4cc04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d1aec15601b71efbae392654bded078"><td class="memItemLeft" align="right" valign="top">override string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a5d1aec15601b71efbae392654bded078">ToString</a> ()</td></tr>
 <tr class="separator:a5d1aec15601b71efbae392654bded078"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae780c43edb3cd3bf04c76604a73226b3"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_face.html#a6b89658030b2f7769a01e66cd4c15a28">Vector3</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#ae780c43edb3cd3bf04c76604a73226b3">GetControlPoints</a> (bool localCoordinates=false)</td></tr>
@@ -115,8 +118,8 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:adf8af430d40081596aae9693b018868b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_room.html">Room</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#adf8af430d40081596aae9693b018868b">Room</a><code> [get, private set]</code></td></tr>
-<tr class="separator:adf8af430d40081596aae9693b018868b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d1be0fecff24971b52513b1382bb71e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_space.html">Space</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a7d1be0fecff24971b52513b1382bb71e">Space</a><code> [get, private set]</code></td></tr>
+<tr class="separator:a7d1be0fecff24971b52513b1382bb71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a449827bb1f3c0b545b72d70dbbdc3f3c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a449827bb1f3c0b545b72d70dbbdc3f3c">FaceIndex</a><code> [get, private set]</code></td></tr>
 <tr class="separator:a449827bb1f3c0b545b72d70dbbdc3f3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ee8df631aa46f555b264718ab579905"><td class="memItemLeft" align="right" valign="top">Dictionary&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a>, float[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a2ee8df631aa46f555b264718ab579905">InterfaceParameters</a><code> [get, private set]</code></td></tr>
@@ -152,9 +155,11 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a73c2526a306868601398cc7f0cb594bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a6b89658030b2f7769a01e66cd4c15a28">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a73c2526a306868601398cc7f0cb594bd">Get2DEndPoints</a> (bool localCoordinates=false)</td></tr>
 <tr class="separator:a73c2526a306868601398cc7f0cb594bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a61d4135bfdd4dfee77cfaa857e0ff0e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61d4135bfdd4dfee77cfaa857e0ff0e4">&#9670;&nbsp;</a></span>Face()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a two dimensional face on a three dimensional solid building space polygon. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a202436a036c3c07f91b53ca7f8f4cc04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a202436a036c3c07f91b53ca7f8f4cc04">&#9670;&nbsp;</a></span>Face()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,8 +167,8 @@ Private Member Functions</h2></td></tr>
         <tr>
           <td class="memname">DesignPlatform.Core.Face.Face </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_design_platform_1_1_core_1_1_room.html">Room</a>&#160;</td>
-          <td class="paramname"><em>parent</em>, </td>
+          <td class="paramtype"><a class="el" href="class_design_platform_1_1_core_1_1_space.html">Space</a>&#160;</td>
+          <td class="paramname"><em>parentSpace</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -731,8 +736,8 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adf8af430d40081596aae9693b018868b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf8af430d40081596aae9693b018868b">&#9670;&nbsp;</a></span>Room</h2>
+<a id="a7d1be0fecff24971b52513b1382bb71e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d1be0fecff24971b52513b1382bb71e">&#9670;&nbsp;</a></span>Space</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -741,7 +746,7 @@ Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_design_platform_1_1_core_1_1_room.html">Room</a> DesignPlatform.Core.Face.Room</td>
+          <td class="memname"><a class="el" href="class_design_platform_1_1_core_1_1_space.html">Space</a> DesignPlatform.Core.Face.Space</td>
         </tr>
       </table>
   </td>

@@ -8,11 +8,11 @@ using UnityEngine.EventSystems;
 namespace DesignPlatform.Modes {
     public class OpeningMode : Mode {
         private static OpeningMode instance;
-        private Collider[] collidingRooms;
+        private Collider[] collidingSpaces;
         private float radius = 4f;
-        private OpeningShape selectedShape = OpeningShape.DOOR;
+        private OpeningFunction selectedShape = OpeningFunction.DOOR;
 
-        public OpeningShape SelectedShape {
+        public OpeningFunction SelectedShape {
             get {
                 return selectedShape;
             }
@@ -33,14 +33,14 @@ namespace DesignPlatform.Modes {
         }
 
         public OpeningMode() {
-            SelectedShape = OpeningShape.WINDOW;
+            SelectedShape = OpeningFunction.WINDOW;
         }
 
         public override void Tick() {
             //Debug.Log("Opening Mode");
             if (Input.GetMouseButtonDown(0)) {
                 if (EventSystem.current.IsPointerOverGameObject() == false) {
-                    if (MousePositionCollidingRooms(hitPoint) != null) {
+                    if (MousePositionCollidingSpaces(hitPoint) != null) {
                         Build();
                     }
                 }
@@ -50,16 +50,16 @@ namespace DesignPlatform.Modes {
                     SelectedShape = 0;
                 }
                 else {
-                    SelectedShape = (OpeningShape)(int)SelectedShape + 1;
+                    SelectedShape = (OpeningFunction)(int)SelectedShape + 1;
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.D)) {
-                SelectedShape = OpeningShape.DOOR;
+                SelectedShape = OpeningFunction.DOOR;
             }
 
             if (Input.GetKeyDown(KeyCode.W)) {
-                SelectedShape = OpeningShape.WINDOW;
+                SelectedShape = OpeningFunction.WINDOW;
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -99,7 +99,7 @@ namespace DesignPlatform.Modes {
         /// <summary>
         /// 
         /// </summary>
-        public void RebuildPreview(OpeningShape buildShape) {
+        public void RebuildPreview(OpeningFunction buildShape) {
             if (previewOpening != null) previewOpening.Delete();
             previewOpening = Building.Instance.BuildOpening(shape: buildShape,
                                                             preview: true);
@@ -120,19 +120,19 @@ namespace DesignPlatform.Modes {
         }
 
         /// <summary>
-        /// Returns a collider array of colliding rooms for mouse position
+        /// Returns a collider array of colliding spaces for mouse position
         /// </summary> 
-        public Collider[] MousePositionCollidingRooms(Vector3 hitPoint) {
-            collidingRooms = Physics.OverlapSphere(hitPoint, radius);
-            collidingRooms = collidingRooms.ToList().Where(c => c.gameObject.layer == 8).ToArray();
-            if (collidingRooms.Count() == 0) { return collidingRooms = null; }
-            return collidingRooms;
+        public Collider[] MousePositionCollidingSpaces(Vector3 hitPoint) {
+            collidingSpaces = Physics.OverlapSphere(hitPoint, radius);
+            collidingSpaces = collidingSpaces.ToList().Where(c => c.gameObject.layer == 8).ToArray();
+            if (collidingSpaces.Count() == 0) { return collidingSpaces = null; }
+            return collidingSpaces;
         }
 
         // Moves Preview opening with the mouse
         public void UpdatePreviewLocation() {
             hitPoint = hitPointOnPlane();
-            if (MousePositionCollidingRooms(hitPoint) == null) {
+            if (MousePositionCollidingSpaces(hitPoint) == null) {
                 previewOpening.Move(hitPoint);
             }
             else {
@@ -151,10 +151,10 @@ namespace DesignPlatform.Modes {
         /// <returns></returns>
         public Face ClosestFace(Vector3 mousePos) {
 
-            // Create list of rooms that might have the closest face
-            List<Room> relevantRooms = new List<Room>();
-            foreach (Collider c in MousePositionCollidingRooms(mousePos)) {
-                Room r = c.GetComponentInParent<Room>();
+            // Create list of spaces that might have the closest face
+            List<Core.Space> relevantRooms = new List<Core.Space>();
+            foreach (Collider c in MousePositionCollidingSpaces(mousePos)) {
+                Core.Space r = c.GetComponentInParent<Core.Space>();
                 if (!relevantRooms.Contains(r)) {
                     relevantRooms.Add(r);
                 }
@@ -165,9 +165,9 @@ namespace DesignPlatform.Modes {
             float closestDistance = float.PositiveInfinity;
 
             for (int i = 0; i < relevantRooms.Count; i++) {
-                List<Face> roomFaces = relevantRooms[i].Faces.Where(f => f.Orientation == Orientation.VERTICAL).ToList();
+                List<Face> spaceFaces = relevantRooms[i].Faces.Where(f => f.Orientation == Orientation.VERTICAL).ToList();
 
-                foreach (Face face in roomFaces) {
+                foreach (Face face in spaceFaces) {
 
                     (Vector3 vA, Vector3 vB) = face.Get2DEndPoints();
                     Vector3 closestPoint = VectorFunctions.LineClosestPoint(vA, vB, mousePos);

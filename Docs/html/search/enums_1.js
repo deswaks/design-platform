@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['openingshape_1162',['OpeningShape',['../namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449e',1,'DesignPlatform::Core']]],
+  ['openingfunction_1162',['OpeningFunction',['../namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0',1,'DesignPlatform::Core']]],
   ['openingstate_1163',['OpeningState',['../namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3f',1,'DesignPlatform::Core']]],
   ['orientation_1164',['Orientation',['../namespace_design_platform_1_1_core.html#a5888cab138bec0892d17b579e8ba3daf',1,'DesignPlatform::Core']]]
 ];

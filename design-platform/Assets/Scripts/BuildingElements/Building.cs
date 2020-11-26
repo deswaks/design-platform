@@ -17,50 +17,50 @@ namespace DesignPlatform.Core {
             get { return instance ?? (instance = new Building()); }
         }
         public Building() {
-            Rooms = new List<Room>();
+            Spaces = new List<Space>();
             walls = new List<Wall>();
             slabs = new List<Slab>();
             roofs = new List<Roof>();
         }
 
         /// <summary>
-        /// All Rooms of this building
+        /// All spaces of this building
         /// </summary>
-        public List<Room> Rooms { get; private set; }
+        public List<Space> Spaces { get; private set; }
 
         /// <summary>
-        /// Builds a new room and adds it to the managed building list
+        /// Builds a new space and adds it to the managed building list
         /// </summary>
         /// <param name="buildShape"></param>
         /// <param name="preview"></param>
-        /// <param name="templateRoom"></param>
+        /// <param name="templateSpace"></param>
         /// <returns></returns>
-        public Room BuildRoom(RoomShape buildShape = RoomShape.RECTANGLE, bool preview = false, Room templateRoom = null) {
-            GameObject newRoomGameObject = new GameObject("Room");
-            Room newRoom = (Room)newRoomGameObject.AddComponent(typeof(Room));
+        public Space BuildSpace(SpaceShape buildShape = SpaceShape.RECTANGLE, bool preview = false, Space templateSpace = null) {
+            GameObject newSpaceGameObject = new GameObject("Space");
+            Space newSpace = (Space)newSpaceGameObject.AddComponent(typeof(Space));
 
             if (preview) {
-                newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.PREVIEW);
+                newSpace.InitSpace(buildShape: buildShape, building: this, type: SpaceFunction.PREVIEW);
             }
             else {
-                newRoom.InitRoom(buildShape: buildShape, building: this, type: RoomType.DEFAULT);
-                if (templateRoom != null) {
-                    newRoomGameObject.transform.position = templateRoom.transform.position;
-                    newRoomGameObject.transform.rotation = templateRoom.transform.rotation;
+                newSpace.InitSpace(buildShape: buildShape, building: this, type: SpaceFunction.DEFAULT);
+                if (templateSpace != null) {
+                    newSpaceGameObject.transform.position = templateSpace.transform.position;
+                    newSpaceGameObject.transform.rotation = templateSpace.transform.rotation;
                 }
             }
 
-            if (preview == false) { Rooms.Add(newRoom); }
+            if (preview == false) { Spaces.Add(newSpace); }
 
-            return newRoom;
+            return newSpace;
         }
 
         /// <summary>
-        /// Removes a room from the managed building list
+        /// Removes a space from the managed building list
         /// </summary>
-        /// <param name="room"></param>
-        public void RemoveRoom(Room room) {
-            if (Rooms.Contains(room)) { Rooms.Remove(room); }
+        /// <param name="space"></param>
+        public void RemoveSpace(Space space) {
+            if (Spaces.Contains(space)) { Spaces.Remove(space); }
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace DesignPlatform.Core {
         /// All the interfaces of this building
         /// </summary>
         public List<Interface> Interfaces {
-            get { return Rooms.SelectMany(r => r.Interfaces).Distinct().ToList(); }
+            get { return Spaces.SelectMany(r => r.Interfaces).Distinct().ToList(); }
         }
         public List<Interface> InterfacesVertical {
             get { return Interfaces.Where(i => i.Orientation == Orientation.VERTICAL).ToList(); }
@@ -259,13 +259,15 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <returns></returns>
         public void BuildAllInterfaces() {
-            for (int r = 0; r < Rooms.Count; r++) {
-                for (int f = 0; f < Rooms[r].Faces.Count; f++) {
-                    Face face = Rooms[r].Faces[f];
+            for (int r = 0; r < Spaces.Count; r++) {
+                for (int f = 0; f < Spaces[r].Faces.Count; f++) {
+                    Face face = Spaces[r].Faces[f];
                     BuildInterfaces(face);
                 }
             }
         }
+
+
         public void BuildInterfaces(Face face) {
             // Slab interface
             if (face.Orientation == Orientation.HORIZONTAL) {
@@ -276,13 +278,15 @@ namespace DesignPlatform.Core {
                 BuildVerticalFaceInterfaces(face);
             }
         }
+
+
         private void BuildVerticalFaceInterfaces(Face face) {
 
-            // Find points on face line from the controlpoints of all other rooms
+            // Find points on face line from the controlpoints of all other spaces
             List<Vector3> splitPoints = new List<Vector3> { face.StartPoint, face.EndPoint };
-            for (int r2 = 0; r2 < Rooms.Count; r2++) {
-                if (face.Room == Rooms[r2]) continue;
-                foreach (Vector3 point in Rooms[r2].GetControlPoints()) {
+            for (int r2 = 0; r2 < Spaces.Count; r2++) {
+                if (face.Space == Spaces[r2]) continue;
+                foreach (Vector3 point in Spaces[r2].GetControlPoints()) {
                     if (face.Line.IsOnLine(point)) {
                         splitPoints.Add(point);
                     }
@@ -330,7 +334,7 @@ namespace DesignPlatform.Core {
         /// All the openings of this building
         /// </summary>
         public List<Opening> Openings {
-            get { return Rooms.SelectMany(r => r.Openings).Distinct().ToList(); }
+            get { return Spaces.SelectMany(r => r.Openings).Distinct().ToList(); }
         }
         /// <summary>
         /// Builds a new opening and adds it to the managed building list
@@ -340,7 +344,7 @@ namespace DesignPlatform.Core {
         /// <param name="templateOpening"></param>
         /// <param name="closestFaces"></param>
         /// <returns></returns>
-        public Opening BuildOpening(OpeningShape shape = OpeningShape.WINDOW,
+        public Opening BuildOpening(OpeningFunction shape = OpeningFunction.WINDOW,
                                     bool preview = false,
                                     Opening templateOpening = null) {
             // Create game object
@@ -358,7 +362,7 @@ namespace DesignPlatform.Core {
             return newOpening;
         }        
         
-        public Opening BuildOpening(OpeningShape shape, Vector3 position, Quaternion rotation) {
+        public Opening BuildOpening(OpeningFunction shape, Vector3 position, Quaternion rotation) {
             // Create game object
             GameObject newOpeningGameObject = new GameObject("Opening");
             newOpeningGameObject.transform.position = position;
@@ -396,8 +400,8 @@ namespace DesignPlatform.Core {
         public List<float> Bounds() {
             float minX = 0; float maxX = 0;
             float minY = 0; float maxY = 0;
-            foreach (Room room in Rooms) {
-                foreach (Vector3 controlPoint in room.GetControlPoints()) {
+            foreach (Space space in Spaces) {
+                foreach (Vector3 controlPoint in space.GetControlPoints()) {
                     if (controlPoint[0] < minX) { minX = controlPoint[0]; }
                     if (controlPoint[0] > maxX) { minX = controlPoint[0]; }
                     if (controlPoint[2] < minY) { minX = controlPoint[2]; }

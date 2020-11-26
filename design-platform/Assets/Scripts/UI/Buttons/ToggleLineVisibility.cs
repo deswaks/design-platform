@@ -12,7 +12,7 @@ namespace DesignPlatform.UI {
 
             Settings.ShowWallLines = showLines;
             Settings.ShowOpeningLines = showLines;
-            foreach (Room room in Building.Instance.Rooms) {
+            foreach (Core.Space room in Building.Instance.Spaces) {
                 room.UpdateRender2D();
             }
             foreach (Opening opening in Building.Instance.Openings) {

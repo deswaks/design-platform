@@ -6,10 +6,14 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
+
+    /// <summary>
+    /// Represents horizontal space-dividing building elements such as floors and ceilings.
+    /// </summary>
     public class Slab : MonoBehaviour {
 
-        public List<Room> Rooms {
-            get { return Faces.Select(f => f.Room).ToList(); }
+        public List<Space> Spaces {
+            get { return Faces.Select(f => f.Space).ToList(); }
         }
         public List<Face> Faces {
             get { return Interface.Faces; }
@@ -33,16 +37,16 @@ namespace DesignPlatform.Core {
             Material slabMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
             gameObject.name = "CLT Slab";
 
-            List<Vector3> slabControlPoints = Rooms[0].GetControlPoints(localCoordinates: true);
+            List<Vector3> slabControlPoints = Spaces[0].GetControlPoints(localCoordinates: true);
 
             gameObject.AddComponent<MeshCollider>();
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
             mesh.CreateShapeFromPolygon(slabControlPoints, -Thickness, false);
 
-            gameObject.transform.position = Rooms[0].transform.position
+            gameObject.transform.position = Spaces[0].transform.position
                + Vector3.up * Faces[0].GetControlPoints()[0].y;
-            gameObject.transform.rotation = Rooms[0].transform.rotation;
+            gameObject.transform.rotation = Spaces[0].transform.rotation;
 
             mesh.GetComponent<MeshRenderer>().material = slabMaterial;
 

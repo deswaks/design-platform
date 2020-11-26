@@ -4,14 +4,19 @@ using System.Linq;
 using UnityEngine;
 
 namespace DesignPlatform.Core {
+
+    /// <summary>
+    /// Represents the shared face between two adjacent building spaces or the shared face
+    /// between a face and the greater external space if no adjacent building spaces exist
+    /// </summary>
     public class Interface {
 
-        public List<Room> Rooms {
+        public List<Space> Spaces {
             get {
                 if (Faces != null && Faces.Count() > 0) {
-                    return Faces.Select(f => f.Room).ToList();
+                    return Faces.Select(f => f.Space).ToList();
                 }
-                else return new List<Room>();
+                else return new List<Space>();
             }
         }
         public List<Face> Faces { get; private set; }
@@ -62,7 +67,7 @@ namespace DesignPlatform.Core {
                     return faceStartPoint + (faceEndPoint - faceStartPoint) * Parameters[0][0];
                 }
                 else {
-                    return Rooms[0].GetControlPoints()[0];
+                    return Spaces[0].GetControlPoints()[0];
                 }
             }
         }
@@ -75,7 +80,7 @@ namespace DesignPlatform.Core {
                     return faceStartPoint + (faceEndPoint - faceStartPoint) * Parameters[0][1];
                 }
                 else {
-                    return Rooms[0].GetControlPoints()[0];
+                    return Spaces[0].GetControlPoints()[0];
                 }
             }
         }
@@ -88,7 +93,7 @@ namespace DesignPlatform.Core {
                     return faceStartPoint + (faceEndPoint - faceStartPoint) * (Parameters[0][0]+ Parameters[0][1])/2;
                 }
                 else {
-                    return Rooms[0].GetControlPoints()[0];
+                    return Spaces[0].GetControlPoints()[0];
                 }
             }
         }
