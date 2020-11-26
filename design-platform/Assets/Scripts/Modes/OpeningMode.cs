@@ -1,10 +1,11 @@
-﻿using DesignPlatform.Utils;
+﻿using DesignPlatform.Core;
+using DesignPlatform.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.Modes {
     public class OpeningMode : Mode {
         private static OpeningMode instance;
         private Collider[] collidingRooms;
@@ -46,7 +47,7 @@ namespace DesignPlatform.Core {
             }
             if (Input.GetMouseButtonDown(1)) {
                 if ((int)SelectedShape == 1) {
-                    SelectedShape = (OpeningShape)0;
+                    SelectedShape = 0;
                 }
                 else {
                     SelectedShape = (OpeningShape)(int)SelectedShape + 1;

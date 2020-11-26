@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class Pan2D : MonoBehaviour {
         public float moveSpeed;
 

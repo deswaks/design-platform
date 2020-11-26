@@ -1,7 +1,9 @@
-﻿using TMPro;
+﻿using DesignPlatform.Core;
+using DesignPlatform.Modes;
+using TMPro;
 using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class ButtonManagerModify : MonoBehaviour {
         public void Move() {
             SelectMode.Instance.SetMode(MoveMode.Instance);

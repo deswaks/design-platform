@@ -1,82 +1,69 @@
-﻿using DesignPlatform.Core;
-using System;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using System.Diagnostics;
 using System.Linq;
 using Xbim.Common;
 using Xbim.Common.Step21;
-using Xbim.Ifc;
-using Xbim.Ifc4.GeometricConstraintResource;
-using Xbim.Ifc4.GeometryResource;
-using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.Kernel;
-using Xbim.Ifc4.ProductExtension;
-using Xbim.Ifc4.SharedBldgElements;
 using Xbim.IO;
+using Xbim.Ifc;
+using Xbim.Ifc4.Kernel;
+using Xbim.Ifc4.MaterialResource;
+using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc4.ProductExtension;
+using Xbim.Ifc4.ProfileResource;
+using Xbim.Ifc4.PropertyResource;
+using Xbim.Ifc4.QuantityResource;
+using Xbim.Ifc4.RepresentationResource;
+using Xbim.Ifc4.SharedBldgElements;
+using DesignPlatform.Core;
 
 namespace DesignPlatform.Export {
     public static class IfcExporter {
-        private static IfcStore model;
-        private static IfcBuilding building;
 
+        public static IfcStore ifcModel;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static void Export() {
 
-            // Save file
+            BuildModel();
+            //try {
+            //    BuildModel();
+            //}
+            //catch (Exception e) {
+            //    UnityEngine.Debug.Log("Failed to create ifc model, "+ e.Message);
+            //}
+
             try {
-                // Create model
-                model = CreateandInitModel("CLT House");
-                if (model == null) return;
-
-                // Create building
-                building = CreateBuilding(model, "Default Building");
-
-                // Create all elements
-                CreateWalls();
-
-                model.SaveAs("Exports/Building.ifc", StorageType.Ifc);
-                UnityEngine.Debug.Log("Successfully exported ifc to: ~Exports/Building.ifc");
+                ifcModel.SaveAs("Exports/Design_platform_export.ifc", StorageType.Ifc);
+                UnityEngine.Debug.Log("Successfully exported ifc to: ~Exports/Design_platform_export.ifc");
             }
             catch (Exception e) {
-                UnityEngine.Debug.Log("Failed to export ifc");
+                UnityEngine.Debug.Log("Failed to export ifc model");
                 UnityEngine.Debug.Log(e.Message);
             }
 
             // Open file
-            Process.Start("Exports\\Building.ifc");
+            Process.Start("Exports\\Design_platform_export.ifc");
         }
 
-        private static void CreateWalls() {
-            if (Building.Instance.InterfacesVertical == null || Building.Instance.InterfacesVertical.Count == 0) {
-                Building.Instance.BuildAllInterfaces();
-            }
-            foreach (Interface interFace in Building.Instance.InterfacesVertical) {
-                IfcWallStandardCase wall = IfcConverter.CreateWall(model, interFace);
-                if (wall != null) IfcConverter.AddPropertiesToWall(model, wall);
+        /// <summary>
+        /// 
+        /// </summary>
+        private static void BuildModel() {
+            // Create model an building
+            CreateandInitModel("Model");
 
-                // Add to model
-                using (var transaction = model.BeginTransaction("Add Wall")) {
-                    building.AddElement(wall);
-                    transaction.Commit();
-                }
-            }
-        }
-
-        private static IfcBuilding CreateBuilding(IfcStore model, string name) {
-            using (var txn = model.BeginTransaction("Create Building")) {
-                var building = model.Instances.New<IfcBuilding>();
-                building.Name = name;
-
-                building.CompositionType = IfcElementCompositionEnum.ELEMENT;
-                var localPlacement = model.Instances.New<IfcLocalPlacement>();
-                building.ObjectPlacement = localPlacement;
-                var placement = model.Instances.New<IfcAxis2Placement3D>();
-                localPlacement.RelativePlacement = placement;
-                placement.Location = model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(0, 0, 0));
-                //get the project there should only be one and it should exist
-                var project = model.Instances.OfType<IfcProject>().FirstOrDefault();
-                project?.AddBuilding(building);
-                txn.Commit();
-                return building;
-            }
+            // Create all elements
+            CreateBuilding("Building");
+            CreateSpaces();
+            Building.Instance.RebuildPOVElements();
+            CreateWalls();
+            CreateSlabs();
+            CreateOpenings();
         }
 
         /// <summary>
@@ -84,36 +71,83 @@ namespace DesignPlatform.Export {
         /// </summary>
         /// <param name="projectName">Name of the project</param>
         /// <returns></returns>
-        private static IfcStore CreateandInitModel(string projectName) {
-            //first we need to set up some credentials for ownership of data in the new model
+        private static void CreateandInitModel(string projectName) {
+
             var credentials = new XbimEditorCredentials {
-                ApplicationDevelopersName = "xbim developer",
-                ApplicationFullName = "Hello Wall Application",
-                ApplicationIdentifier = "HelloWall.exe",
-                ApplicationVersion = "1.0",
+                ApplicationDevelopersName = "Deswaks",
+                ApplicationFullName = "Design Platform",
+                ApplicationIdentifier = "design-platform.exe",
+                ApplicationVersion = "0.1",
                 EditorsFamilyName = "Team",
-                EditorsGivenName = "xbim",
-                EditorsOrganisationName = "xbim developer"
+                EditorsGivenName = "Deswaks",
+                EditorsOrganisationName = "Deswaks"
             };
-            //now we can create an IfcStore, it is in Ifc4 format and will be held in memory rather than in a database
-            //database is normally better in performance terms if the model is large >50MB of Ifc or if robust transactions are required
+            ifcModel = IfcStore.Create(credentials, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
+            IfcConverter.ifcModel = ifcModel;
+            IfcUtils.ifcModel = ifcModel;
 
-            var model = IfcStore.Create(credentials, XbimSchemaVersion.Ifc4, XbimStoreType.InMemoryModel);
-
-            //Begin a transaction as all changes to a model are ACID
-            using (var txn = model.BeginTransaction("Initialise Model")) {
-
-                //create a project
-                var project = model.Instances.New<IfcProject>();
-                //set the units to SI (mm and metres)
-                project.Initialize(ProjectUnits.SIUnitsUK);
+            using (var transaction = ifcModel.BeginTransaction("Initialise Model")) {
+                var project = ifcModel.Instances.New<IfcProject>(); //create a project
+                project.Initialize(ProjectUnits.SIUnitsUK); //set the units to SI (mm and metres)
                 project.Name = projectName;
-                //now commit the changes, else they will be rolled back at the end of the scope of the using statement
-                txn.Commit();
+                transaction.Commit();
             }
-            return model;
-
         }
+
+        private static void CreateBuilding(string buildingName) {
+            using (var transaction = ifcModel.BeginTransaction("Create Building")) {
+                IfcConverter.CreateIfcBuilding(buildingName);
+                IfcConverter.CreateIfcBuildingStorey(index: 0);
+                transaction.Commit();
+            }
+        }
+
+        private static void CreateSpaces() {
+            Building.Instance.RebuildPOVElements();
+            foreach (Room room in Building.Instance.Rooms) {
+                using (var transaction = ifcModel.BeginTransaction("Create Space")) {
+                    IfcConverter.CreateIfcSpace(room);
+                    transaction.Commit();
+                }
+            }
+        }
+
+        private static void CreateWalls() {
+            foreach (Interface interFace in Building.Instance.InterfacesVertical) {
+                using (var transaction = ifcModel.BeginTransaction("Create Wall")) {
+                    IfcConverter.CreateIfcWall(interFace);
+                    transaction.Commit();
+                }
+            }
+        }
+
+        private static void CreateOpenings() {
+            foreach (Opening opening in Building.Instance.Openings) {
+                using (var transaction = ifcModel.BeginTransaction("Create Opening")) {
+                    IfcConverter.CreateIfcOpening(opening);
+                    transaction.Commit();
+                }
+            }
+        }
+
+        private static void CreateSlabs() {
+            foreach (Interface interFace in Building.Instance.InterfacesHorizontal) {
+                using (var transaction = ifcModel.BeginTransaction("Create Slab")) {
+                    IfcConverter.CreateIfcSlab(interFace);
+                    transaction.Commit();
+                }
+            }
+        }
+
+        private static void CreateRoof() {
+            foreach (Interface interFace in Building.Instance.InterfacesHorizontal) {
+                using (var transaction = ifcModel.BeginTransaction("Create Roof")) {
+                    IfcConverter.CreateIfcRoofslab(interFace);
+                    transaction.Commit();
+                }
+            }
+        }
+
 
 
     }

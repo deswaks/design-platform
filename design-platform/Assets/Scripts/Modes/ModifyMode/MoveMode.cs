@@ -1,7 +1,8 @@
-﻿using DesignPlatform.Utils;
+﻿using DesignPlatform.Core;
+using DesignPlatform.Utils;
 using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.Modes {
     public class MoveMode : Mode {
 
         public Vector3 Offset { get; set; }

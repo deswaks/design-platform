@@ -1,7 +1,9 @@
-﻿using StructuralAnalysis;
+﻿using DesignPlatform.Core;
+using DesignPlatform.UI;
+using StructuralAnalysis;
 using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.Modes {
     public class Main : MonoBehaviour {
 
         private static Main instance;
@@ -15,14 +17,14 @@ namespace DesignPlatform.Core {
 
         void Start() {
             instance = this;
-            Grid.size = 1.0f;
+            Core.Grid.size = 1.0f;
             SetMode(SelectMode.Instance);
 
             // Pre load assets
             Utils.AssetUtil.LoadBundle("materials");
             Utils.AssetUtil.LoadBundle("prefabs");
 
-            ///////////////////////////////////////////////////////////////// WIDGET TEST ///////////////////////////
+            // WIDGET TEST
             RoomScheduleWidget widgey = new RoomScheduleWidget();
             widgey.RequestDraw();
             WallElementScheduleWidget wallElementwidget = new WallElementScheduleWidget();
@@ -31,18 +33,12 @@ namespace DesignPlatform.Core {
             strucWidget.RequestDraw();
             Widget_CircleDiagram circle = new Widget_CircleDiagram();
             circle.RequestDraw();
-
-            ///////////////////////////////////////////////////////////////// WIDGET TEST - SLUT ///////////////////////////
-
-
+            // WIDGET TEST - SLUT
 
             ModuleLoader.LoadModules();
-
-
         }
 
         void Update() {
-            //Debug.Log(currentMode.ToString());
             currentMode.Tick();
         }
 

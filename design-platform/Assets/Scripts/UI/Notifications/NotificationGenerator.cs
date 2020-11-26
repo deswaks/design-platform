@@ -2,7 +2,7 @@
 using Michsky.UI.ModernUIPack;
 using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public static class NotificationHandler {
         public static GameObject GenerateNotification(string text, string title, Vector3 location, GameObject parent, float timer = 0) {
             Object notificationPrefab = AssetUtil.LoadAsset<GameObject>("prefabs", "notification");

@@ -1,4 +1,4 @@
-﻿namespace DesignPlatform.Core {
+﻿namespace DesignPlatform.Modes {
     public abstract class Mode {
         public abstract void Tick();
 

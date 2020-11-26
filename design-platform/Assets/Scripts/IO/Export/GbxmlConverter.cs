@@ -2,15 +2,14 @@
 using gbXMLSerializer;
 using System.Collections.Generic;
 using UnityEngine;
-using gbs = gbXMLSerializer;
 
 namespace DesignPlatform.Export {
     public static class GbxmlConverter {
 
-        public static gbs.Space XmlSpaceFromRoom(Room room) {
+        public static gbXMLSerializer.Space XmlSpaceFromRoom(Room room) {
 
             // Create space
-            gbs.Space space = new gbs.Space();
+            gbXMLSerializer.Space space = new gbXMLSerializer.Space();
             space.id = "Space_";// + room.name;
             space.Name = "Space_";// + room.name;
 
