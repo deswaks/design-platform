@@ -3,13 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Xbim.Common;
-using Xbim.Common.Step21;
 using Xbim.Ifc;
-using Xbim.IO;
-using Xbim.Ifc4.ActorResource;
-using Xbim.Ifc4.DateTimeResource;
-using Xbim.Ifc4.ExternalReferenceResource;
 using Xbim.Ifc4.PresentationOrganizationResource;
 using Xbim.Ifc4.GeometricConstraintResource;
 using Xbim.Ifc4.GeometricModelResource;
@@ -24,7 +18,6 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
-using DesignPlatform.Core;
 
 namespace DesignPlatform.Export {
     public static class IfcUtils {
