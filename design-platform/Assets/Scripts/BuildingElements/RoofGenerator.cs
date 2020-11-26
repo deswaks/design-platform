@@ -129,9 +129,6 @@ namespace DesignPlatform.Core {
                 finalPanelOutlines.Add(outline);
             }
 
-            Debug.Log("Panels created: " + finalPanelOutlines.Count);
-
-
             return finalPanelOutlines;
         }
     }
