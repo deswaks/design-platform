@@ -21,7 +21,7 @@ namespace DesignPlatform.Core {
         public List<Opening> Openings {
             get {
                 return Faces.SelectMany(f => f.Openings
-                    .Where(o => f.GetInterfaceAtParameter(f.Line.Parameter(o.CenterPoint)) == this))
+                    .Where(o => f.GetInterfaceAtParameter(f.Line.Parameter(o.PlacementPoint)) == this))
                     .Distinct().ToList();
             }
         }

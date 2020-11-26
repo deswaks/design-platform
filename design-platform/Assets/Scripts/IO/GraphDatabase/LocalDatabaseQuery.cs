@@ -269,7 +269,7 @@ namespace DesignPlatform.Database {
                     openingShape = opening.Shape,
                     height = opening.Height,
                     width = opening.Width,
-                    position = GraphUtils.Vector3ToString(opening.CenterPoint),
+                    position = GraphUtils.Vector3ToString(opening.PlacementPoint),
                     rotation = GraphUtils.Vector3ToString(opening.transform.rotation.eulerAngles),
                 };
                 openingNodes.Add(roomNode);

@@ -149,7 +149,7 @@ namespace DesignPlatform.Core {
         /// <param name="opening"></param>
         public void AddOpening(Opening opening) {
             if (Openings.Contains(opening)) return;
-            float parameter = Line.Parameter(opening.CenterPoint);
+            float parameter = Line.Parameter(opening.PlacementPoint);
             OpeningParameters.Add(opening, parameter);
         }
 

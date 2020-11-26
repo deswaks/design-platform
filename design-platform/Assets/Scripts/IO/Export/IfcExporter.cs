@@ -6,19 +6,8 @@ using System.Diagnostics;
 using System.Linq;
 using Xbim.Common;
 using Xbim.Common.Step21;
-using Xbim.Ifc;
-<<<<<<< Updated upstream:design-platform/Assets/Scripts/Modules/Export Ifc/Exporter.cs
 using Xbim.IO;
-using Xbim.Ifc4.ActorResource;
-using Xbim.Ifc4.DateTimeResource;
-using Xbim.Ifc4.ExternalReferenceResource;
-using Xbim.Ifc4.PresentationOrganizationResource;
-using Xbim.Ifc4.GeometricConstraintResource;
-using Xbim.Ifc4.GeometricModelResource;
-using Xbim.Ifc4.GeometryResource;
-using Xbim.Ifc4.Interfaces;
-=======
->>>>>>> Stashed changes:design-platform/Assets/Scripts/IO/Export/IfcExporter.cs
+using Xbim.Ifc;
 using Xbim.Ifc4.Kernel;
 using Xbim.Ifc4.MaterialResource;
 using Xbim.Ifc4.MeasureResource;
@@ -28,33 +17,8 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
+using DesignPlatform.Core;
 
-<<<<<<< Updated upstream:design-platform/Assets/Scripts/Modules/Export Ifc/Exporter.cs
-namespace Ifc {
-    public static class Exporter {
-        private static IfcStore model;
-        private static IfcBuilding building;
-
-        public static void Export() {
-
-            // Create model
-            model = CreateandInitModel("CLT House");
-            if (model == null) return;
-
-            // Create building
-            building = CreateBuilding(model, "Default Building");
-
-            // Create all elements
-            CreateWalls();
-
-            // Save file
-            try {
-                model.SaveAs("Exports/Building.ifc", StorageType.Ifc);
-                UnityEngine.Debug.Log("Building.ifc has been successfully written");
-            }
-            catch (Exception e) {
-                UnityEngine.Debug.Log("Failed to save HelloWall.ifc");
-=======
 namespace DesignPlatform.Export {
     public static class IfcExporter {
 
@@ -79,7 +43,6 @@ namespace DesignPlatform.Export {
             }
             catch (Exception e) {
                 UnityEngine.Debug.Log("Failed to export ifc model");
->>>>>>> Stashed changes:design-platform/Assets/Scripts/IO/Export/IfcExporter.cs
                 UnityEngine.Debug.Log(e.Message);
             }
 
@@ -87,42 +50,6 @@ namespace DesignPlatform.Export {
             Process.Start("Exports\\Design_platform_export.ifc");
         }
 
-<<<<<<< Updated upstream:design-platform/Assets/Scripts/Modules/Export Ifc/Exporter.cs
-        private static void CreateWalls() {
-
-            // Create the interfaces that are the basis for walls
-            Building.Instance.CreateInterfaces();
-
-            foreach (Interface interFace in Building.Instance.interfaces) {
-                IfcWallStandardCase wall = Converter.CreateWall(model, interFace);
-                if (wall != null) Converter.AddPropertiesToWall(model, wall);
-
-                // Add to model
-                using (var transaction = model.BeginTransaction("Add Wall")) {
-                    building.AddElement(wall);
-                    transaction.Commit();
-                }
-            }
-        }
-
-        private static IfcBuilding CreateBuilding(IfcStore model, string name) {
-            using (var txn = model.BeginTransaction("Create Building")) {
-                var building = model.Instances.New<IfcBuilding>();
-                building.Name = name;
-
-                building.CompositionType = IfcElementCompositionEnum.ELEMENT;
-                var localPlacement = model.Instances.New<IfcLocalPlacement>();
-                building.ObjectPlacement = localPlacement;
-                var placement = model.Instances.New<IfcAxis2Placement3D>();
-                localPlacement.RelativePlacement = placement;
-                placement.Location = model.Instances.New<IfcCartesianPoint>(p => p.SetXYZ(0, 0, 0));
-                //get the project there should only be one and it should exist
-                var project = model.Instances.OfType<IfcProject>().FirstOrDefault();
-                project?.AddBuilding(building);
-                txn.Commit();
-                return building;
-            }
-=======
         /// <summary>
         /// 
         /// </summary>
@@ -137,7 +64,6 @@ namespace DesignPlatform.Export {
             CreateWalls();
             CreateSlabs();
             CreateOpenings();
->>>>>>> Stashed changes:design-platform/Assets/Scripts/IO/Export/IfcExporter.cs
         }
 
         /// <summary>

@@ -43,9 +43,9 @@ namespace DesignPlatform.Core {
         private float WindowWidth = 1.6f;
         private float WindowHeight = 1.05f;
 
-        private float DoorWidth = 0.9f;
-        private float DoorHeight = 2.1f;
-        private float Doorstep = 0.05f;
+        private float DoorWidth = 0.900f;
+        private float DoorHeight = 2.100f;
+        private float Doorstep = 0.050f;
 
         public float OpeningDepth = 0.051f;
         public float SillHeight;
@@ -61,7 +61,10 @@ namespace DesignPlatform.Core {
         public OpeningState State { get; private set; }
         public List<Vector3> ControlPoints { get; private set; }
 
-        public Vector3 CenterPoint {
+        /// <summary>
+        /// The placement point of the opening on the wall (bottom) placement line.
+        /// </summary>
+        public Vector3 PlacementPoint {
             get { return gameObject.transform.position; }
             private set {; }
         }
@@ -197,7 +200,7 @@ namespace DesignPlatform.Core {
         }
 
         public Interface GetCoincidentInterface() {
-            float parameterOnFace = Faces[0].Line.Parameter(CenterPoint);
+            float parameterOnFace = Faces[0].Line.Parameter(PlacementPoint);
             return Faces[0].GetInterfaceAtParameter(parameterOnFace);
         }
         /// <summary>
@@ -228,7 +231,7 @@ namespace DesignPlatform.Core {
             List<Face> closestFaces = new List<Face>();
             foreach (Room room in Building.Instance.Rooms) {
                 foreach (Face face in room.Faces.Where(f => f.Orientation == Orientation.VERTICAL)) {
-                    if (face.Line.IsOnLine(CenterPoint)) {
+                    if (face.Line.IsOnLine(PlacementPoint)) {
                         closestFaces.Add(face);
                     }
                 }

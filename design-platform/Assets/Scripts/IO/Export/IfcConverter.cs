@@ -24,9 +24,10 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
+using DesignPlatform.Core;
 
-namespace Ifc {
-    public static class Converter {
+namespace DesignPlatform.Export {
+    public static class IfcConverter {
 
         public static IfcStore ifcModel;
         public static IfcBuilding ifcBuilding;
@@ -80,69 +81,47 @@ namespace Ifc {
         /// <returns></returns>
         public static void CreateIfcSpace(Room room) {
 
+            // Get data from room
+            int height = Mathf.RoundToInt(room.height * 1000);
+            Vector3 roomOrigin = new Vector3(
+                Mathf.RoundToInt(room.transform.position.x * 1000),
+                Mathf.RoundToInt(room.transform.position.z * 1000),
+                Mathf.RoundToInt(room.transform.position.y * 1000));
+            Vector3 placementDirection = new Vector3(
+                Mathf.RoundToInt(room.transform.right.normalized.x),
+                Mathf.RoundToInt(room.transform.right.normalized.z),
+                Mathf.RoundToInt(room.transform.right.normalized.y));
+            List<Vector2> controlPoints = room.GetControlPoints(localCoordinates: true, closed: true)
+                .Select(p => new Vector2(Mathf.RoundToInt(p.x * 1000),
+                                          Mathf.RoundToInt(p.z * 1000))).ToList();
+            string description = room.TypeName;
+
             // Create space
             var space = ifcModel.Instances.New<IfcSpace>();
 
             // Properties
             int roomIndex = Building.Instance.Rooms.FindIndex(r => r == room);
             space.Name = "Space " + ifcSpaces.Keys.Count();
-            space.LongName = room.TypeName;
             space.CompositionType = IfcElementCompositionEnum.ELEMENT;
+            space.PredefinedType = IfcSpaceTypeEnum.INTERNAL;
+            space.Description = new IfcText(description);
+
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = CreateProfile(controlPoints: controlPoints);
+            var shape3D = ShapeAsSweptProfile(profile: profile, depth: height,
+                                              presentationLayer: "Conceptual Elements");
+            productDefinition.Representations.Add(shape3D);
+            space.Representation = productDefinition;
+
+            // Model insertion
+            space.ObjectPlacement = CreateLocalPlacement(
+                origin: roomOrigin, xDirection: placementDirection, zDirection: Vector3.forward);
 
             // Relation to building storey
             var rel = ifcModel.Instances.New<IfcRelAggregates>();
             rel.RelatingObject = ifcBuildingStoreys[0];
             rel.RelatedObjects.Add(space);
-
-            // Geometry representation 1 (AND 2D CURVE): profile as a closed polyline
-            var profileCurve = ifcModel.Instances.New<IfcPolyline>();
-            foreach (Vector3 point in room.GetControlPoints(localCoordinates: true, closed: true)) {
-                var ifcPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-                ifcPoint.SetXY(point.x * 1000, point.z * 1000);
-                profileCurve.Points.Add(ifcPoint);
-            }
-            var profile = ifcModel.Instances.New<IfcArbitraryClosedProfileDef>();
-            profile.OuterCurve = profileCurve;
-            profile.ProfileType = IfcProfileTypeEnum.AREA;
-
-            // Geometry representation 2: Sweep profile
-            var body = ifcModel.Instances.New<IfcExtrudedAreaSolid>();
-            body.Depth = room.height * 1000;
-            body.SweptArea = profile;
-            body.ExtrudedDirection = ifcModel.Instances.New<IfcDirection>();
-            body.ExtrudedDirection.SetXYZ(0, 0, 1);
-
-            // Geometry representation 3: Insert the geometry in the model (at correct place)
-            var bodyOrigin = ifcModel.Instances.New<IfcCartesianPoint>();
-            Vector3 roomOrigin = room.gameObject.transform.position;
-            bodyOrigin.SetXYZ(roomOrigin.x * 1000, roomOrigin.z * 1000, roomOrigin.y * 1000);
-            body.Position = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            body.Position.Location = bodyOrigin;
-
-            // Create a Definition shape to hold the geometry
-            var modelContext = ifcModel.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-
-            var shape3D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            shape3D.ContextOfItems = modelContext;
-            shape3D.RepresentationType = "SweptSolid";
-            shape3D.RepresentationIdentifier = "Body";
-            shape3D.Items.Add(body);
-
-            var shape2D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            shape2D.ContextOfItems = modelContext;
-            shape2D.RepresentationIdentifier = "Axis";
-            shape2D.RepresentationType = "Curve2D";
-            shape2D.Items.Add(profileCurve);
-
-            var rep = ifcModel.Instances.New<IfcProductDefinitionShape>();
-            rep.Representations.Add(shape3D);
-            rep.Representations.Add(shape2D);
-            space.Representation = rep;
-
-            // Presentation Layer Assignment is required for CAD presentation in IfcWall or IfcWallStandardCase
-            var ifcPresentationLayerAssignment = ifcModel.Instances.New<IfcPresentationLayerAssignment>();
-            ifcPresentationLayerAssignment.Name = "Conceptual elements";
-            ifcPresentationLayerAssignment.AssignedItems.Add(shape3D);
 
             ifcSpaces.Add(room, space);
             return;
@@ -159,77 +138,44 @@ namespace Ifc {
             if (interFace.Orientation != Orientation.HORIZONTAL) return;
 
             // Get data from wall
-            int thickness = (int)(interFace.Thickness * 1000);
-            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.GetControlPoints().Count); //0 for floor, 1 for ceiling
-            int elevation = (int)(isCeiling * interFace.Rooms[0].height * 1000);
-            Vector3 roomOrigin = interFace.Rooms[0].transform.position * 1000;
-            Vector3 placementDirection = interFace.Rooms[0].transform.right.normalized;
+            int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
+            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Rooms[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
+            int elevation = Mathf.RoundToInt(isCeiling * interFace.Rooms[0].height * 1000);
+            Vector3 extrusionOffset = new Vector3(0,0,-thickness);
+            Vector3 roomOrigin = new Vector3(
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.x * 1000),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.z * 1000),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.position.y * 1000) + elevation);
+            Vector3 placementDirection = new Vector3(
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.x),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.z),
+                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.y));
+            List<Vector2> controlPoints = interFace.Rooms[0]
+                .GetControlPoints(localCoordinates: true, closed: true)
+                .Select(p => new Vector2( Mathf.RoundToInt(p.x * 1000),
+                                          Mathf.RoundToInt(p.z * 1000))).ToList();
 
             // Create space
             var slab = ifcModel.Instances.New<IfcSlab>();
 
             // Properties
             slab.Name = "Slab " + ifcSlabs.Keys.Count().ToString();
+            if (isCeiling == 1) slab.PredefinedType = IfcSlabTypeEnum.ROOF;
+            else slab.PredefinedType = IfcSlabTypeEnum.FLOOR;
+            slab.Description = new IfcText(slab.ToString());
 
-            // Geometry representation 1 (AND 2D CURVE): profile as a closed polyline
-            var profileCurve = ifcModel.Instances.New<IfcPolyline>();
-            foreach (Vector3 point in interFace.Rooms[0].GetControlPoints(localCoordinates: true, closed: true)) {
-                var ifcPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-                ifcPoint.SetXY(point.x * 1000, point.z * 1000);
-                profileCurve.Points.Add(ifcPoint);
-            }
-            var profile = ifcModel.Instances.New<IfcArbitraryClosedProfileDef>();
-            profile.OuterCurve = profileCurve;
-            profile.ProfileType = IfcProfileTypeEnum.AREA;
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = CreateProfile(controlPoints: controlPoints);
+            var shape3D = ShapeAsSweptProfile(profile: profile, depth: thickness,
+                                              extrusionOffset: extrusionOffset,
+                                              presentationLayer: "Building Elements");
+            productDefinition.Representations.Add(shape3D);
+            slab.Representation = productDefinition;
 
-            // Geometry representation 2: Sweep profile
-            var body = ifcModel.Instances.New<IfcExtrudedAreaSolid>();
-            body.Depth = thickness;
-            body.SweptArea = profile;
-            body.ExtrudedDirection = ifcModel.Instances.New<IfcDirection>();
-            body.ExtrudedDirection.SetXYZ(0, 0, -1);
-
-            // Geometry representation 3: Insert the geometry in the model (at correct place)
-            var bodyOrigin = ifcModel.Instances.New<IfcCartesianPoint>();
-            bodyOrigin.SetXYZ(0, 0, 0);
-            body.Position = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            body.Position.Location = bodyOrigin;
-            var placementLocation = ifcModel.Instances.New<IfcCartesianPoint>();
-            placementLocation.SetXYZ(roomOrigin.x, roomOrigin.y, roomOrigin.z + elevation);
-            var placementAxis = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            placementAxis.Location = placementLocation;
-            var localPlacement = ifcModel.Instances.New<IfcLocalPlacement>();
-            placementAxis.RefDirection = ifcModel.Instances.New<IfcDirection>();
-            placementAxis.RefDirection.SetXYZ(placementDirection.x, placementDirection.z, placementDirection.y);
-            placementAxis.Axis = ifcModel.Instances.New<IfcDirection>();
-            placementAxis.Axis.SetXYZ(0, 0, 1);
-            localPlacement.RelativePlacement = placementAxis;
-            slab.ObjectPlacement = localPlacement;
-
-            // Create a Definition shape to hold the geometry
-            var modelContext = ifcModel.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-
-            var shape3D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            shape3D.ContextOfItems = modelContext;
-            shape3D.RepresentationType = "SweptSolid";
-            shape3D.RepresentationIdentifier = "Body";
-            shape3D.Items.Add(body);
-
-            var shape2D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            shape2D.ContextOfItems = modelContext;
-            shape2D.RepresentationIdentifier = "Axis";
-            shape2D.RepresentationType = "Curve2D";
-            shape2D.Items.Add(profileCurve);
-
-            var rep = ifcModel.Instances.New<IfcProductDefinitionShape>();
-            rep.Representations.Add(shape3D);
-            rep.Representations.Add(shape2D);
-            slab.Representation = rep;
-
-            // Presentation Layer Assignment is required for CAD presentation in IfcWall or IfcWallStandardCase
-            var presentationLayer = ifcModel.Instances.New<IfcPresentationLayerAssignment>();
-            presentationLayer.Name = "Building elements";
-            presentationLayer.AssignedItems.Add(shape3D);
+            // Model insertion
+            slab.ObjectPlacement = CreateLocalPlacement(
+                origin: roomOrigin, xDirection: placementDirection, zDirection: Vector3.forward);
 
             // Relation to building storey
             var rel = ifcModel.Instances.New<IfcRelContainedInSpatialStructure>();
@@ -258,104 +204,44 @@ namespace Ifc {
             if (interFace.Orientation != Orientation.VERTICAL) return;
 
             // Get data from wall
-<<<<<<< Updated upstream:design-platform/Assets/Scripts/Modules/Export Ifc/Converter.cs
-            string wallName = interFace.ToString() ;
-            Vector3 startPoint = interFace.GetStartPoint() * 1000;
-            Vector3 endPoint = interFace.GetEndPoint() * 1000;
-            Vector3 midPoint = (endPoint - startPoint)/2;
-            Vector3 wallVector = (endPoint - startPoint).normalized;
-            float length = (endPoint - startPoint).magnitude;
-            float height = interFace.attachedFaces[0].parentRoom.height * 1000;
-            float thickness = interFace.GetWallThickness() * 1000;
-=======
             Vector3 startPoint = interFace.StartPoint * 1000;
             Vector3 endPoint = interFace.EndPoint * 1000;
-            Vector3 wallVector = (endPoint - startPoint).normalized;
-            float length = (endPoint - startPoint).magnitude;
-            float height = interFace.Rooms[0].height * 1000;
-            float thickness = interFace.Thickness * 1000;
+            Vector3 wallDirection = (endPoint - startPoint).normalized;
+
+            Vector3 localX = new Vector3(wallDirection.x,
+                                         wallDirection.z,
+                                         wallDirection.y);
+            Vector3 localZ = new Vector3(0,0,1);
+            Vector3 centerPoint = new Vector3(
+                (int)(interFace.CenterPoint.x * 1000),
+                (int)(interFace.CenterPoint.z * 1000),
+                (int)(interFace.CenterPoint.y * 1000));
+            int length = (int)(endPoint - startPoint).magnitude;
+            int height = (int)(interFace.Rooms[0].height * 1000);
+            int thickness = (int)(interFace.Thickness * 1000);
             string description = interFace.ToString();
 
             // Create wall
             var wall = ifcModel.Instances.New<IfcWall>();
->>>>>>> Stashed changes:design-platform/Assets/Scripts/IO/Export/IfcConverter.cs
 
             // Properties
             wall.Name = "Wall " + ifcWalls.Keys.Count().ToString();
             wall.PredefinedType = IfcWallTypeEnum.STANDARD;
             wall.Description = new IfcText(description);
 
-            // Geometry 3D Profile
-            var rectProf = ifcModel.Instances.New<IfcRectangleProfileDef>();
-            rectProf.ProfileType = IfcProfileTypeEnum.AREA;
-            rectProf.YDim = thickness;
-            rectProf.XDim = length;
-            var insertPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-            insertPoint.SetXY(length / 2, 0);
-            rectProf.Position = ifcModel.Instances.New<IfcAxis2Placement2D>();
-            rectProf.Position.Location = insertPoint;
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = CreateProfile(width: length, height: thickness);
+            var shape3D = ShapeAsSweptProfile(profile: profile, depth: height,
+                                              presentationLayer: "Building Elements");
+            var shape2D = ShapeAsLinearCurve(length: length);
+            productDefinition.Representations.Add(shape3D);
+            productDefinition.Representations.Add(shape2D);
+            wall.Representation = productDefinition;
 
-            // Geometry 3D Extrusion
-            var body = ifcModel.Instances.New<IfcExtrudedAreaSolid>();
-            body.Depth = height;
-            body.SweptArea = rectProf;
-            body.ExtrudedDirection = ifcModel.Instances.New<IfcDirection>();
-            body.ExtrudedDirection.SetXYZ(0, 0, 1);
-
-            // Geometry 3D Insertion
-            var bodyOrigin = ifcModel.Instances.New<IfcCartesianPoint>();
-            bodyOrigin.SetXYZ(0, 0, 0);
-            body.Position = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            body.Position.Location = bodyOrigin;
-            var placementLocation = ifcModel.Instances.New<IfcCartesianPoint>();
-            placementLocation.SetXYZ(startPoint.x, startPoint.z, startPoint.y);
-            var placementAxis = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            placementAxis.Location = placementLocation;
-            var localPlacement = ifcModel.Instances.New<IfcLocalPlacement>();
-            placementAxis.RefDirection = ifcModel.Instances.New<IfcDirection>();
-            placementAxis.RefDirection.SetXYZ(wallVector.x, wallVector.z, wallVector.y);
-            placementAxis.Axis = ifcModel.Instances.New<IfcDirection>();
-            placementAxis.Axis.SetXYZ(0, 0, 1);
-            localPlacement.RelativePlacement = placementAxis;
-<<<<<<< Updated upstream:design-platform/Assets/Scripts/Modules/Export Ifc/Converter.cs
-            
-=======
->>>>>>> Stashed changes:design-platform/Assets/Scripts/IO/Export/IfcConverter.cs
-            wall.ObjectPlacement = localPlacement;
-
-            // Geometry 2D as linear segment (required for IfcWall)
-            var ifcPolyline = ifcModel.Instances.New<IfcPolyline>();
-            var ifcStartPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-            ifcStartPoint.SetXY(startPoint.x, startPoint.z);
-            var ifcEndPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-            ifcEndPoint.SetXY(endPoint.x, endPoint.z);
-            ifcPolyline.Points.Add(ifcStartPoint);
-            ifcPolyline.Points.Add(ifcEndPoint);
-
-            // Create a Product Definition and add the model geometry to the wall
-            var rep = ifcModel.Instances.New<IfcProductDefinitionShape>();
-
-            var shape3D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            var modelContext = ifcModel.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            shape3D.ContextOfItems = modelContext;
-            shape3D.RepresentationType = "SweptSolid";
-            shape3D.RepresentationIdentifier = "Body";
-            shape3D.Items.Add(body);
-
-            var shape2D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            shape2D.ContextOfItems = modelContext;
-            shape2D.RepresentationIdentifier = "Axis";
-            shape2D.RepresentationType = "Curve2D";
-            shape2D.Items.Add(ifcPolyline);
-
-            rep.Representations.Add(shape3D);
-            rep.Representations.Add(shape2D);
-            wall.Representation = rep;
-
-            // Presentation Layer Assignment is required for CAD presentation in IfcWall or IfcWallStandardCase
-            var ifcPresentationLayerAssignment = ifcModel.Instances.New<IfcPresentationLayerAssignment>();
-            ifcPresentationLayerAssignment.Name = "Building Elements";
-            ifcPresentationLayerAssignment.AssignedItems.Add(shape3D);
+            // Model insertion
+            wall.ObjectPlacement = CreateLocalPlacement(
+                origin: centerPoint, xDirection: localX, zDirection: localZ);
 
             // Relation to building storey
             var rel = ifcModel.Instances.New<IfcRelContainedInSpatialStructure>();
@@ -381,220 +267,191 @@ namespace Ifc {
         /// <returns></returns>
         public static void CreateIfcOpening(Opening opening) {
 
-            int height = (int)(opening.Height * 1000);
-            int width = (int)(opening.Width * 1000);
-            int depth = (int)(opening.OpeningDepth * 1000);
-            int sillHeight = (int)(opening.SillHeight * 1000);
-            Vector3 localPlacementOrigin = new Vector3(
-                (int)(opening.CenterPoint.x * 1000),
-                (int)(opening.CenterPoint.z * 1000),
-                (int)(opening.CenterPoint.y * 1000));
-            Vector3 localPlacementAxis = new Vector3(
-                (int)(opening.Faces[0].Normal.x * 1000),
-                (int)(opening.Faces[0].Normal.z * 1000),
-                (int)(opening.Faces[0].Normal.y * 1000));
-            Vector3 xVector = (opening.Interface.EndPoint - opening.Interface.StartPoint).normalized;
-            Vector3 localPlacementX = new Vector3(
-                (int)(xVector.x * 1000),
-                (int)(xVector.z * 1000),
-                (int)(xVector.y * 1000));
+            // Get properties from opening
+            int height = Mathf.RoundToInt(opening.Height * 1000);
+            int width = Mathf.RoundToInt(opening.Width * 1000);
+            int depth = Mathf.RoundToInt(opening.Interface.Thickness * 1000);
+            Vector3 ExtrusionOffset = new Vector3(
+                0,
+                Mathf.RoundToInt((opening.SillHeight + opening.Height/2) * 1000),
+                -depth/2);
+            Vector3 placementOrigin = new Vector3(
+                Mathf.RoundToInt(opening.PlacementPoint.x * 1000),
+                Mathf.RoundToInt(opening.PlacementPoint.z * 1000),
+                Mathf.RoundToInt(opening.PlacementPoint.y * 1000));
+            Vector3 placementZVector = new Vector3(
+                opening.Faces[0].Normal.x,
+                opening.Faces[0].Normal.z,
+                opening.Faces[0].Normal.y).normalized;
+            Vector3 xVector = (opening.Interface.StartPoint - opening.Interface.EndPoint).normalized;
+            Vector3 placementXVector = new Vector3(
+                xVector.x,
+                xVector.z,
+                xVector.y).normalized;
             string description = opening.ToString();
 
-            // Create wall
+            // Create opening
             var openingElement = ifcModel.Instances.New<IfcOpeningElement>();
 
-            // Properties
+            // Set properties
             openingElement.Name = "Opening " + ifcOpenings.Keys.Count().ToString();
             openingElement.PredefinedType = IfcOpeningElementTypeEnum.OPENING;
-            openingElement.Description = new IfcText(description);
+            openingElement.Description = new IfcText(opening.ToString());
 
-            // Geometry representation 1 (AND 2D CURVE): profile as a closed polyline
+            // Create representation
+            var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            var profile = CreateProfile(width: width, height: height);
+            var shape3D = ShapeAsSweptProfile(profile: profile, depth: depth,
+                                              extrusionOffset: ExtrusionOffset);
+            productDefinition.Representations.Add(shape3D);
+            openingElement.Representation = productDefinition;
+
+            // Model insertion
+            openingElement.ObjectPlacement = CreateLocalPlacement(
+                origin: placementOrigin, xDirection: placementXVector, zDirection: placementZVector);
+
+            // Set relations
+            var ifcWall = ifcWalls[opening.Interface];
+            var voidRelation = ifcModel.Instances.New<IfcRelVoidsElement>();
+            voidRelation.RelatedOpeningElement = openingElement;
+            voidRelation.RelatingBuildingElement = ifcWall;
+
+            // Store opening
+            ifcOpenings.Add(opening, openingElement);
+            return;
+        }
+
+        /// <summary>
+        /// Sets up a local placement element
+        /// </summary>
+        /// <param name="origin">Origin of the local placement coordinate system</param>
+        /// <param name="xDirection">X direction of the local placement coordinate system</param>
+        /// <param name="zDirection">Z direction of the local placement coordinate system</param>
+        /// <returns></returns>
+        private static IfcLocalPlacement CreateLocalPlacement( Vector3 origin,
+                                                               Vector3 xDirection,
+                                                               Vector3 zDirection) {
+            var placementAxis = ifcModel.Instances.New<IfcAxis2Placement3D>();
+            placementAxis.Location = ifcModel.Instances.New<IfcCartesianPoint>();
+            placementAxis.Location.SetXYZ(origin.x, origin.y, origin.z);
+            placementAxis.RefDirection = ifcModel.Instances.New<IfcDirection>();
+            placementAxis.RefDirection.SetXYZ(xDirection.x, xDirection.y, xDirection.z);
+            placementAxis.Axis = ifcModel.Instances.New<IfcDirection>();
+            placementAxis.Axis.SetXYZ(zDirection.x, zDirection.y, zDirection.z);
+
+            var localPlacement = ifcModel.Instances.New<IfcLocalPlacement>();
+            localPlacement.RelativePlacement = placementAxis;
+            return localPlacement;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="controlPoints"></param>
+        /// <returns></returns>
+        private static IfcProfileDef CreateProfile(List<Vector2> controlPoints) {
+            var profileCurve = ifcModel.Instances.New<IfcPolyline>();
+            foreach (Vector3 point in controlPoints) {
+                var ifcPoint = ifcModel.Instances.New<IfcCartesianPoint>();
+                ifcPoint.SetXY(point.x, point.y);
+                profileCurve.Points.Add(ifcPoint);
+            }
+            var profile = ifcModel.Instances.New<IfcArbitraryClosedProfileDef>();
+            profile.OuterCurve = profileCurve;
+            profile.ProfileType = IfcProfileTypeEnum.AREA;
+            return profile;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        private static IfcProfileDef CreateProfile(int width, int height) {
             var profile = ifcModel.Instances.New<IfcRectangleProfileDef>();
             profile.ProfileType = IfcProfileTypeEnum.AREA;
             profile.YDim = height;
             profile.XDim = width;
-            var insertPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-            insertPoint.SetXY(0, -height / 2);
             profile.Position = ifcModel.Instances.New<IfcAxis2Placement2D>();
-            profile.Position.Location = insertPoint;
+            profile.Position.Location = ifcModel.Instances.New<IfcCartesianPoint>();
+            profile.Position.Location.SetXY(0, 0);
+            return profile;
+        }
 
-            // Geometry representation 2: Sweep profile
+        /// <summary>
+        /// Sets up a full product definition with 3D and 2D body.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="depth"></param>
+        /// <param name="extrusionOffset"></param>
+        /// <param name="presentationLayer"></param>
+        /// <param name="add2D"></param>
+        /// <returns></returns>
+        private static IfcShapeRepresentation ShapeAsSweptProfile(
+                                    IfcProfileDef profile,
+                                    int depth,
+                                    Vector3 extrusionOffset = new Vector3(),
+                                    string presentationLayer = null,
+                                    bool add2D = false) {
+
+            // Solid body as extrusion
             var body = ifcModel.Instances.New<IfcExtrudedAreaSolid>();
             body.Depth = depth;
             body.SweptArea = profile;
             body.ExtrudedDirection = ifcModel.Instances.New<IfcDirection>();
             body.ExtrudedDirection.SetXYZ(0, 0, 1);
-
-            // Geometry 3D Insertion
-            var bodyOrigin = ifcModel.Instances.New<IfcCartesianPoint>();
-            bodyOrigin.SetXYZ(0, sillHeight, depth / 2);
             body.Position = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            body.Position.Location = bodyOrigin;
-            var placementLocation = ifcModel.Instances.New<IfcCartesianPoint>();
-            placementLocation.SetXYZ(localPlacementOrigin.x, localPlacementOrigin.y, localPlacementOrigin.z);
-            var placementAxis = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            placementAxis.Location = placementLocation;
-            var localPlacement = ifcModel.Instances.New<IfcLocalPlacement>();
-            placementAxis.RefDirection = ifcModel.Instances.New<IfcDirection>();
-            placementAxis.RefDirection.SetXYZ(localPlacementX.x, localPlacementX.y, localPlacementX.z);
-            placementAxis.Axis = ifcModel.Instances.New<IfcDirection>();
-            placementAxis.Axis.SetXYZ(localPlacementAxis.x, localPlacementAxis.y, localPlacementAxis.z);
-            localPlacement.RelativePlacement = placementAxis;
-            openingElement.ObjectPlacement = localPlacement;
+            body.Position.Location = ifcModel.Instances.New<IfcCartesianPoint>();
+            body.Position.Location.SetXYZ(extrusionOffset.x, extrusionOffset.y, extrusionOffset.z);
 
-            // Geometry 2D as linear segment (required for IfcWall)
-            //var ifcPolyline = ifcModel.Instances.New<IfcPolyline>();
-            //var ifcStartPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-            //ifcStartPoint.SetXY(startPoint2D.x, startPoint2D.y);
-            //var ifcEndPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-            //ifcEndPoint.SetXY(endPoint2D.x, endPoint2D.y);
-            //ifcPolyline.Points.Add(ifcStartPoint);
-            //ifcPolyline.Points.Add(ifcEndPoint);
+            // Shape representation (3D)
+            var shapeRep = ifcModel.Instances.New<IfcShapeRepresentation>();
+            shapeRep.ContextOfItems = ifcModel.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
+            shapeRep.RepresentationType = "SweptSolid";
+            shapeRep.RepresentationIdentifier = "body";
+            shapeRep.Items.Add(body);
 
-            // Create a Product Definition and add the model geometry to the wall
-            var rep = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            // Presentation Layer Assignment
+            if (presentationLayer != null) {
+                var ifcPresentationLayerAssignment = ifcModel.Instances.New<IfcPresentationLayerAssignment>();
+                ifcPresentationLayerAssignment.Name = presentationLayer;
+                ifcPresentationLayerAssignment.AssignedItems.Add(shapeRep);
+            }
 
-            var shape3D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            var modelContext = ifcModel.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            shape3D.ContextOfItems = modelContext;
-            shape3D.RepresentationType = "SweptSolid";
-            shape3D.RepresentationIdentifier = "Reference";
-            shape3D.Items.Add(body);
-
-            rep.Representations.Add(shape3D);
-            openingElement.Representation = rep;
-
-            // Presentation Layer Assignment is required for CAD presentation in IfcWall or IfcWallStandardCase
-            var ifcPresentationLayerAssignment = ifcModel.Instances.New<IfcPresentationLayerAssignment>();
-            ifcPresentationLayerAssignment.Name = "Void Elements";
-            ifcPresentationLayerAssignment.AssignedItems.Add(shape3D);
-
-            // Relation to wall
-            // They are attached to the wall using the inverse relationship HasOpenings pointing to IfcRelVoidsElement.
-            var voidRelation = ifcModel.Instances.New<IfcRelVoidsElement>();
-            voidRelation.RelatedOpeningElement = openingElement;
-            voidRelation.RelatingBuildingElement = ifcWalls[opening.Interface];
-
-            ifcOpenings.Add(opening, openingElement);
-            return;
+            return shapeRep;
         }
 
-        public static void CreateIfcWallFAILED(Interface interFace) {
-
-            if (interFace.Orientation != Orientation.VERTICAL) return;
-
-            // Get information about wall
-            Vector3 origin = interFace.Origin;
-            Vector3 wallAxis = (interFace.EndPoint - interFace.StartPoint).normalized;
-            Vector3 wallNormal = interFace.Faces[0].Normal.normalized;
-            int thickness = (int)(interFace.Thickness * 1000);
-            List<Vector2> wallOuterProfile = interFace.GetLocalNormalOuterVertices(closed: true);
-            List<List<Vector2>> holesOuterProfiles = interFace.GetLocalNormalHoleVertices(closed: true);
-            Vector2 startPoint2D = wallOuterProfile[0];
-            Vector2 endPoint2D = wallOuterProfile[3];
-
-
-            // Create wall
-            var wall = ifcModel.Instances.New<IfcWall>();
-
-            // Properties
-            wall.Name = "Wall " + ifcWalls.Keys.Count().ToString();
-
-            // Geometry representation 1 (AND 2D CURVE): profile as a closed polyline
-            var profile = ifcModel.Instances.New<IfcArbitraryProfileDefWithVoids>();
-            profile.ProfileType = IfcProfileTypeEnum.AREA;
-
-            var wallProfile = ifcModel.Instances.New<IfcPolyline>();
-            foreach (Vector2 point in wallOuterProfile) {
-                var ifcPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-                ifcPoint.SetXY((int)(point.x * 1000), (int)(point.y * 1000));
-                wallProfile.Points.Add(ifcPoint);
-            }
-            profile.OuterCurve = wallProfile;
-
-            foreach (List<Vector2> openingSet in holesOuterProfiles) {
-                var holeProfile = ifcModel.Instances.New<IfcPolyline>();
-                foreach (Vector2 point in openingSet) {
-                    var ifcPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-                    ifcPoint.SetXY((int)(point.x * 1000), (int)(point.y * 1000));
-                    holeProfile.Points.Add(ifcPoint);
-                }
-                profile.InnerCurves.Add(holeProfile);
-            }
-
-            // Geometry representation 2: Sweep profile
-            var body = ifcModel.Instances.New<IfcExtrudedAreaSolid>();
-            body.Depth = thickness;
-            body.SweptArea = profile;
-            body.ExtrudedDirection = ifcModel.Instances.New<IfcDirection>();
-            body.ExtrudedDirection.SetXYZ(0, 0, 1);
-
-            // Geometry 3D Insertion
-            var bodyOrigin = ifcModel.Instances.New<IfcCartesianPoint>();
-            bodyOrigin.SetXYZ(0, 0, 0);
-            body.Position = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            body.Position.Location = bodyOrigin;
-            var placementLocation = ifcModel.Instances.New<IfcCartesianPoint>();
-            placementLocation.SetXYZ((int)(origin.x * 1000), (int)(origin.z * 1000), (int)(origin.y * 1000));
-            var placementAxis = ifcModel.Instances.New<IfcAxis2Placement3D>();
-            placementAxis.Location = placementLocation;
-            var localPlacement = ifcModel.Instances.New<IfcLocalPlacement>();
-            placementAxis.RefDirection = ifcModel.Instances.New<IfcDirection>();
-            placementAxis.RefDirection.SetXYZ(wallAxis.x, wallAxis.z, wallAxis.y);
-            placementAxis.Axis = ifcModel.Instances.New<IfcDirection>();
-            placementAxis.Axis.SetXYZ(wallNormal.x, wallNormal.z, wallNormal.y);
-            localPlacement.RelativePlacement = placementAxis;
-            wall.ObjectPlacement = localPlacement;
-
-            // Geometry 2D as linear segment (required for IfcWall)
-            var ifcPolyline = ifcModel.Instances.New<IfcPolyline>();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private static IfcShapeRepresentation ShapeAsLinearCurve(int length) {
+            // Linear Axis as Poly line
+            var curve2D = ifcModel.Instances.New<IfcPolyline>();
             var ifcStartPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-            ifcStartPoint.SetXY(startPoint2D.x, startPoint2D.y);
+            ifcStartPoint.SetXY(-length / 2, 0);
             var ifcEndPoint = ifcModel.Instances.New<IfcCartesianPoint>();
-            ifcEndPoint.SetXY(endPoint2D.x, endPoint2D.y);
-            ifcPolyline.Points.Add(ifcStartPoint);
-            ifcPolyline.Points.Add(ifcEndPoint);
+            ifcEndPoint.SetXY(length / 2, 0);
+            curve2D.Points.Add(ifcStartPoint);
+            curve2D.Points.Add(ifcEndPoint);
 
-            // Create a Product Definition and add the model geometry to the wall
-            var rep = ifcModel.Instances.New<IfcProductDefinitionShape>();
+            // Shape representation
+            var shapeRep = ifcModel.Instances.New<IfcShapeRepresentation>();
+            shapeRep.ContextOfItems = ifcModel.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
+            shapeRep.RepresentationType = "Curve2D";
+            shapeRep.RepresentationIdentifier = "Axis";
+            shapeRep.Items.Add(curve2D);
 
-            var shape3D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            var modelContext = ifcModel.Instances.OfType<IfcGeometricRepresentationContext>().FirstOrDefault();
-            shape3D.ContextOfItems = modelContext;
-            shape3D.RepresentationType = "SweptSolid";
-            shape3D.RepresentationIdentifier = "Body";
-            shape3D.Items.Add(body);
-
-            var shape2D = ifcModel.Instances.New<IfcShapeRepresentation>();
-            shape2D.ContextOfItems = modelContext;
-            shape2D.RepresentationIdentifier = "Axis";
-            shape2D.RepresentationType = "Curve2D";
-            shape2D.Items.Add(ifcPolyline);
-
-            rep.Representations.Add(shape3D);
-            rep.Representations.Add(shape2D);
-            wall.Representation = rep;
-
-            // Presentation Layer Assignment is required for CAD presentation in IfcWall or IfcWallStandardCase
-            var ifcPresentationLayerAssignment = ifcModel.Instances.New<IfcPresentationLayerAssignment>();
-            ifcPresentationLayerAssignment.Name = "Building Elements";
-            ifcPresentationLayerAssignment.AssignedItems.Add(shape3D);
-
-            // Relation to building storey
-            var rel = ifcModel.Instances.New<IfcRelContainedInSpatialStructure>();
-            rel.RelatingStructure = ifcBuildingStoreys[0];
-            rel.RelatedElements.Add(wall);
-
-            // Relation to rooms
-            foreach (Room room in interFace.Rooms) {
-                var boundaryRel = ifcModel.Instances.New<IfcRelSpaceBoundary>();
-                boundaryRel.RelatingSpace = ifcSpaces[room];
-                boundaryRel.RelatedBuildingElement = wall;
-            }
-
-            ifcWalls.Add(interFace, wall);
-            return;
+            return shapeRep;
         }
+
+
+
+        
+
     }
 }
 
