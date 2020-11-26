@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['core_55',['Core',['../namespace_design_platform_1_1_core.html',1,'DesignPlatform']]],
+  ['dashboard_56',['Dashboard',['../class_design_platform_1_1_u_i_1_1_dashboard.html',1,'DesignPlatform.UI.Dashboard'],['../class_design_platform_1_1_u_i_1_1_dashboard.html#accb92b6297ca04d75412f08380f8a07a',1,'DesignPlatform.UI.Dashboard.Dashboard()']]],
+  ['dashboard_2ecs_57',['Dashboard.cs',['../_dashboard_8cs.html',1,'']]],
+  ['database_58',['Database',['../namespace_design_platform_1_1_database.html',1,'DesignPlatform']]],
+  ['datamodelconfig_2ecs_59',['DataModelConfig.cs',['../_data_model_config_8cs.html',1,'']]],
+  ['datecreated_60',['dateCreated',['../class_design_platform_1_1_database_1_1_room_node.html#aef4b67df5f86da9c50e2219462e8a989',1,'DesignPlatform::Database::RoomNode']]],
+  ['default_61',['DEFAULT',['../namespace_design_platform_1_1_core.html#a41e29a1a08105b77175de377ed7a3bc6a5b39c8b553c821e7cddc6da64b5bd2ee',1,'DesignPlatform::Core']]],
+  ['delete_62',['Delete',['../class_design_platform_1_1_core_1_1_face.html#abbc3fb5400eb724f32461a084df91c36',1,'DesignPlatform.Core.Face.Delete()'],['../class_design_platform_1_1_core_1_1_interface.html#aba1d7f1b9026fd6073b34314b89409e4',1,'DesignPlatform.Core.Interface.Delete()'],['../class_design_platform_1_1_core_1_1_opening.html#aa208a3cdbbc5844b2087afb6ebf93e18',1,'DesignPlatform.Core.Opening.Delete()'],['../class_design_platform_1_1_core_1_1_room.html#afab8bbeded690dae5bc3d4f1dd1a0649',1,'DesignPlatform.Core.Room.Delete()'],['../class_design_platform_1_1_u_i_1_1_button_manager_modify.html#ae3056689c6a0ed372968ab6d98cabfac',1,'DesignPlatform.UI.ButtonManagerModify.Delete()'],['../class_design_platform_1_1_u_i_1_1_widget.html#afb94876bc24233854351345746c34285',1,'DesignPlatform.UI.Widget.Delete()']]],
+  ['deleteallinterfaces_63',['DeleteAllInterfaces',['../class_design_platform_1_1_core_1_1_building.html#a6049b8ee353769672104e31b23931bd2',1,'DesignPlatform::Core::Building']]],
+  ['deleteallnodeswithlabel_64',['DeleteAllNodesWithLabel',['../class_design_platform_1_1_database_1_1_graph_database.html#a0878a1ccc54138f67fc9ce0378502494',1,'DesignPlatform::Database::GraphDatabase']]],
+  ['deleteallslabs_65',['DeleteAllSlabs',['../class_design_platform_1_1_core_1_1_building.html#aea1e8a0819fbbbbe9ef1bb1664001cd2',1,'DesignPlatform::Core::Building']]],
+  ['deleteallwalls_66',['DeleteAllWalls',['../class_design_platform_1_1_core_1_1_building.html#a05554cc2a0e4cff4e274103ebf0ae788',1,'DesignPlatform::Core::Building']]],
+  ['deleted_67',['DELETED',['../namespace_design_platform_1_1_core.html#a41e29a1a08105b77175de377ed7a3bc6a63c2867fdcae0e8e8413d7ac21b69b59',1,'DesignPlatform::Core']]],
+  ['deleteslab_68',['DeleteSlab',['../class_design_platform_1_1_core_1_1_slab.html#a65407a378a6c85aa3d98f71d61ac10d2',1,'DesignPlatform::Core::Slab']]],
+  ['deletewall_69',['DeleteWall',['../class_design_platform_1_1_core_1_1_wall.html#a53a8e638f5a4f55dc686e08efa5ed18f',1,'DesignPlatform::Core::Wall']]],
+  ['designplatform_70',['DesignPlatform',['../namespace_design_platform.html',1,'']]],
+  ['door_71',['DOOR',['../namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449ea37ce845535b7c13f529505fdfdb04942',1,'DesignPlatform::Core']]],
+  ['doubleroom_72',['DOUBLEROOM',['../namespace_design_platform_1_1_core.html#a41e29a1a08105b77175de377ed7a3bc6a6178305fa184070fc8a0f2659a142c29',1,'DesignPlatform::Core']]],
+  ['draw_73',['Draw',['../class_design_platform_1_1_u_i_1_1_widget.html#a1e5850c9a8603f34bba94896cdce731a',1,'DesignPlatform::UI::Widget']]],
+  ['drawpanel_74',['DrawPanel',['../class_design_platform_1_1_u_i_1_1_room_schedule_widget.html#aa3b667e5713e04eeba51c3d10b44a4eb',1,'DesignPlatform.UI.RoomScheduleWidget.DrawPanel()'],['../class_design_platform_1_1_u_i_1_1_wall_element_schedule_widget.html#af245cdc908a75ec4950bf480b49d6705',1,'DesignPlatform.UI.WallElementScheduleWidget.DrawPanel()'],['../class_design_platform_1_1_u_i_1_1_widget___circle_diagram.html#a1e74d341d49e7f93992dda6f983e2333',1,'DesignPlatform.UI.Widget_CircleDiagram.DrawPanel()']]],
+  ['export_75',['Export',['../namespace_design_platform_1_1_export.html',1,'DesignPlatform']]],
+  ['geometry_76',['Geometry',['../namespace_design_platform_1_1_geometry.html',1,'DesignPlatform']]],
+  ['modes_77',['Modes',['../namespace_design_platform_1_1_modes.html',1,'DesignPlatform']]],
+  ['ui_78',['UI',['../namespace_design_platform_1_1_u_i.html',1,'DesignPlatform']]],
+  ['utils_79',['Utils',['../namespace_design_platform_1_1_utils.html',1,'DesignPlatform']]]
+];

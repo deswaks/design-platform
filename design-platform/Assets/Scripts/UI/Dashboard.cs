@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
 
     public class Dashboard {
         private static Dashboard instance;
@@ -36,7 +36,7 @@ namespace DesignPlatform.Core {
 
                 // If widget is full width, a new row is created and the widget is inserted into it
                 if (widget.Size.width == 2) {
-                    GameObject hostRow = GameObject.Instantiate(TemplateRow, WidgetArea.transform);
+                    GameObject hostRow = Object.Instantiate(TemplateRow, WidgetArea.transform);
                     widgetRows.Add(hostRow);
                     widget.Draw(hostRow);
                     // Forces rebuild of layout to update position in layout groups
@@ -46,7 +46,7 @@ namespace DesignPlatform.Core {
                 else if (widget.Size.width == 1) {
                     // If no dualRow is available
                     if (dualRow == null) {
-                        dualRow = GameObject.Instantiate(TemplateRow, WidgetArea.transform);
+                        dualRow = Object.Instantiate(TemplateRow, WidgetArea.transform);
                         widgetRows.Add(dualRow);
                         widget.Draw(dualRow);
                         LayoutRebuilder.ForceRebuildLayoutImmediate(dualRow.transform as RectTransform);
@@ -81,7 +81,7 @@ namespace DesignPlatform.Core {
 
         private void ClearAllWidgets() {
             foreach (GameObject row in widgetRows) {
-                GameObject.Destroy(row);
+                Object.Destroy(row);
             }
             widgetRows = new List<GameObject>();
         }

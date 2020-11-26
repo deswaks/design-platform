@@ -1,4 +1,5 @@
-﻿using DesignPlatform.Utils;
+﻿using DesignPlatform.Database;
+using DesignPlatform.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -65,6 +66,15 @@ namespace DesignPlatform.Core {
             get { return gameObject.transform.position; }
             private set {; }
         }
+
+        /// <summary>
+        /// The placement point of the opening on the wall (bottom) placement line.
+        /// </summary>
+        public Vector3 PlacementPoint {
+            get { return gameObject.transform.position; }
+            private set {; }
+        }
+
 
         public void InitializeOpening(OpeningShape shape = OpeningShape.WINDOW,
                                       OpeningState state = OpeningState.PREVIEW) {
@@ -139,7 +149,7 @@ namespace DesignPlatform.Core {
 
             // Reset line renderer and leave empty if wall visibility is false
             lr.positionCount = 0;
-            if (!GlobalSettings.ShowOpeningLines) return;
+            if (!UI.Settings.ShowOpeningLines) return;
 
             // Set controlpoints
             lr.useWorldSpace = false;

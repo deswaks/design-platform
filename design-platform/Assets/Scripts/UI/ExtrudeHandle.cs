@@ -1,7 +1,8 @@
-﻿using DesignPlatform.Utils;
+﻿using DesignPlatform.Core;
+using DesignPlatform.Utils;
 using UnityEngine;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class ExtrudeHandle : MonoBehaviour {
         public Room parentRoom;
         public int wallIndex;
@@ -26,7 +27,7 @@ namespace DesignPlatform.Core {
             Vector3 handleStartPosition = transform.position;
             Vector3 mouseGridPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            Vector3 diffPosition = Grid.GetNearestGridpoint(mouseGridPosition - handleStartPosition);
+            Vector3 diffPosition = Core.Grid.GetNearestGridpoint(mouseGridPosition - handleStartPosition);
 
             Vector3 extrusionVector = Vector3.Scale(Vector3.Project(diffPosition, wallNormal), wallNormal);
             float extrusion = extrusionVector[VectorFunctions.IndexAbsLargestComponent(extrusionVector)];

@@ -11,7 +11,7 @@ using System.Linq;
 using DesignPlatform.Core;
 using StructuralAnalysis;
 
-namespace DesignPlatform.PdfExport {
+namespace DesignPlatform.Export {
     public static class PdfExporter {
 
         public static Dictionary<string, float> Scales = new Dictionary<string, float>() {

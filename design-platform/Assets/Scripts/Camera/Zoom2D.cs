@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace DesignPlatform.Core {
+namespace DesignPlatform.UI {
     public class Zoom2D : MonoBehaviour {
         float scroll;
         float size;
