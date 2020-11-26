@@ -1,27 +1,4 @@
 var searchData=
 [
-  ['saveallunityroomsandopeningstojson_652',['SaveAllUnityRoomsAndOpeningsToJson',['../class_design_platform_1_1_database_1_1_local_database.html#a3772075e79dd8b0edc80edbb4e14aab7',1,'DesignPlatform::Database::LocalDatabase']]],
-  ['saveallunityroomstojson_653',['SaveAllUnityRoomsToJson',['../class_design_platform_1_1_database_1_1_local_database.html#acf656467fdb5dbe455726fa26c3ca87b',1,'DesignPlatform::Database::LocalDatabase']]],
-  ['saveallwallelementstojson_654',['SaveAllWallElementsToJson',['../class_design_platform_1_1_database_1_1_local_database.html#a9f20f3718039baf3548b1a48f6fc856f',1,'DesignPlatform::Database::LocalDatabase']]],
-  ['savelocal_655',['SaveLocal',['../class_design_platform_1_1_u_i_1_1_button_manager_home.html#ae65f6fd64e70af133e521f3de8ec818d',1,'DesignPlatform::UI::ButtonManagerHome']]],
-  ['savetograph_656',['SaveToGraph',['../class_design_platform_1_1_u_i_1_1_button_manager_home.html#a259d2a87a2babf5f7050c6d0a8f840c1',1,'DesignPlatform::UI::ButtonManagerHome']]],
-  ['setcontrolpoints_657',['SetControlPoints',['../class_design_platform_1_1_core_1_1_room.html#a9872f33c4c34860a61b31a824f01a2a5',1,'DesignPlatform::Core::Room']]],
-  ['setendpoint_658',['SetEndPoint',['../class_design_platform_1_1_core_1_1_wall_element.html#a5f6d311ef77416f3f8338f7c83cc3571',1,'DesignPlatform::Core::WallElement']]],
-  ['setendpointjointtype_659',['SetEndPointJointType',['../class_design_platform_1_1_core_1_1_wall_element.html#a2f784947dd43609a0ba118a3153bf9eb',1,'DesignPlatform::Core::WallElement']]],
-  ['setisroomcurrentlycolliding_660',['SetIsRoomCurrentlyColliding',['../class_design_platform_1_1_core_1_1_room.html#aa7e666f2a3c7b2ee86b7a2bbbe331e93',1,'DesignPlatform::Core::Room']]],
-  ['setmidpointjointtype_661',['SetMidPointJointType',['../class_design_platform_1_1_core_1_1_wall_element.html#a26a3479f8553e888ce00d3cc2b7ac8aa',1,'DesignPlatform::Core::WallElement']]],
-  ['setmidpoints_662',['SetMidPoints',['../class_design_platform_1_1_core_1_1_wall_element.html#a5fa86b3ad53142e9ae2729d435b898d8',1,'DesignPlatform.Core.WallElement.SetMidPoints(List&lt; Vector3 &gt; points, List&lt; WallJointType &gt; jointTypes)'],['../class_design_platform_1_1_core_1_1_wall_element.html#abbbda0a716810d470c835e9161aafa32',1,'DesignPlatform.Core.WallElement.SetMidPoints(List&lt;(Vector3 point, WallJointType jointType)&gt; midpoints)'],['../class_design_platform_1_1_core_1_1_wall_element.html#af445135e4ee28458feaf4d8bd40d0cf8',1,'DesignPlatform.Core.WallElement.SetMidPoints(List&lt; Vector3 &gt; points)']]],
-  ['setmode_663',['SetMode',['../class_design_platform_1_1_modes_1_1_main.html#aed7b25026d6ba79d84b8f44570306aa6',1,'DesignPlatform.Modes.Main.SetMode()'],['../class_design_platform_1_1_modes_1_1_select_mode.html#ad3098ebe39d51b90b0e120328721624f',1,'DesignPlatform.Modes.SelectMode.SetMode()']]],
-  ['setmodetype_664',['SetModeType',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a4d05753e95c375daa43eb369558c93d3',1,'DesignPlatform::Modes::POVMode']]],
-  ['setroomnote_665',['SetRoomNote',['../class_design_platform_1_1_core_1_1_room.html#acd207c5e6f055ee718a91fc3549ae372',1,'DesignPlatform::Core::Room']]],
-  ['setroomtype_666',['SetRoomType',['../class_design_platform_1_1_core_1_1_room.html#a301f341e0deb356986bb1cc041bfc5fc',1,'DesignPlatform::Core::Room']]],
-  ['setselectedshape_667',['SetSelectedShape',['../class_design_platform_1_1_modes_1_1_build_mode.html#a8e9fc73575a302fc378d256274c175d5',1,'DesignPlatform::Modes::BuildMode']]],
-  ['setstartpoint_668',['SetStartPoint',['../class_design_platform_1_1_core_1_1_wall_element.html#a393b049ab20cb6098fb43062c47feac3',1,'DesignPlatform::Core::WallElement']]],
-  ['setstartpointjointtype_669',['SetStartPointJointType',['../class_design_platform_1_1_core_1_1_wall_element.html#ae0160a388fac7b374497b91f4c12d0af',1,'DesignPlatform::Core::WallElement']]],
-  ['startbuildmode_670',['StartBuildMode',['../class_design_platform_1_1_u_i_1_1_button_manager_mode.html#aeae00bd7d57b1dbd5e053cdb7488d363',1,'DesignPlatform::UI::ButtonManagerMode']]],
-  ['startopeningmode_671',['StartOpeningMode',['../class_design_platform_1_1_u_i_1_1_button_manager_mode.html#ab931b981e2007005fd7a1c306c1f7215',1,'DesignPlatform::UI::ButtonManagerMode']]],
-  ['startpovmode_672',['StartPOVMode',['../class_design_platform_1_1_u_i_1_1_button_manager_mode.html#aa3b01ec2f4f1e60340f41405302ff44a',1,'DesignPlatform::UI::ButtonManagerMode']]],
-  ['startselectmode_673',['StartSelectMode',['../class_design_platform_1_1_u_i_1_1_button_manager_mode.html#a56b4697f14435894c63a85b13496415d',1,'DesignPlatform::UI::ButtonManagerMode']]],
-  ['structuralwidget_674',['StructuralWidget',['../class_structural_analysis_1_1_structural_widget.html#a5aa968e3bf80f10c783923086ae89310',1,'StructuralAnalysis::StructuralWidget']]],
-  ['submove_675',['SubMove',['../class_design_platform_1_1_core_1_1_opening.html#a93496f3f9900598e5fdf3348feedc4f6',1,'DesignPlatform::Core::Opening']]]
+  ['quitapplication_944',['QuitApplication',['../class_design_platform_1_1_u_i_1_1_button_manager_main.html#ac9940dc12772fc74a78764ff8bfcaccb',1,'DesignPlatform::UI::ButtonManagerMain']]]
 ];

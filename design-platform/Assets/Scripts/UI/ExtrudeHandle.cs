@@ -1,18 +1,21 @@
-﻿using DesignPlatform.Core;
-using DesignPlatform.Utils;
+﻿using DesignPlatform.Utils;
 using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// Handle for dragging the faces of spaces to manipulate their geometry.
+    /// </summary>
     public class ExtrudeHandle : MonoBehaviour {
-        public Room parentRoom;
+        public Core.Space parentSpace;
         public int wallIndex;
 
         public Vector3 wallNormal;
 
         public void InitHandle(int wall) {
-            parentRoom = gameObject.transform.parent.gameObject.GetComponent<Room>();
+            parentSpace = gameObject.transform.parent.gameObject.GetComponent<Core.Space>();
             wallIndex = wall;
-            wallNormal = parentRoom.GetWallNormals()[wallIndex];
+            wallNormal = parentSpace.GetWallNormals()[wallIndex];
             gameObject.name = "Extrude handle";
             UpdateTransform(updateRotation: true);
             gameObject.AddComponent<BoxCollider>();
@@ -33,22 +36,22 @@ namespace DesignPlatform.UI {
             float extrusion = extrusionVector[VectorFunctions.IndexAbsLargestComponent(extrusionVector)];
 
             //transform.position = handleStartPosition + Distance;
-            parentRoom.ExtrudeWall(wallIndex, extrusion);
+            parentSpace.ExtrudeWall(wallIndex, extrusion);
 
-            foreach (ExtrudeHandle handle in parentRoom.GetComponentsInChildren<ExtrudeHandle>()) {
+            foreach (ExtrudeHandle handle in parentSpace.GetComponentsInChildren<ExtrudeHandle>()) {
                 handle.UpdateTransform();
             }
         }
 
         public void UpdateTransform(bool updatePosition = true, bool updateRotation = false) {
             if (updatePosition) {
-                transform.position = parentRoom.GetWallMidpoints()[wallIndex] + Vector3.up * (parentRoom.height + 0.05f);
+                transform.position = parentSpace.GetWallMidpoints()[wallIndex] + Vector3.up * (parentSpace.height + 0.05f);
             }
             if (updateRotation) {
                 transform.RotateAround(
-                point: parentRoom.GetWallMidpoints()[wallIndex],
+                point: parentSpace.GetWallMidpoints()[wallIndex],
                 axis: new Vector3(0, 1, 0),
-                angle: Vector3.SignedAngle(new Vector3(1, 0, 0), parentRoom.GetWallNormals()[wallIndex], new Vector3(0, 1, 0))
+                angle: Vector3.SignedAngle(new Vector3(1, 0, 0), parentSpace.GetWallNormals()[wallIndex], new Vector3(0, 1, 0))
             );
             }
         }

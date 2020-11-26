@@ -1790,9 +1790,9 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 2048
-  roomMask:
+  spaceMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
   wallMask:
     serializedVersion: 2
     m_Bits: 8192

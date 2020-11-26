@@ -4,17 +4,21 @@ using UnityEngine;
 using System.Linq;
 
 namespace DesignPlatform.Core {
+
+    /// <summary>
+    /// Represents a two dimensional face on a three dimensional solid building space polygon.
+    /// </summary>
     public class Face {
 
-        public Face(Room parent, int index) {
+        public Face(Space parentSpace, int index) {
             OpeningParameters = new Dictionary<Opening, float>();
             InterfaceParameters = new Dictionary<Interface, float[]>();
-            Room = parent;
+            Space = parentSpace;
             FaceIndex = index;
             SetOrientation();
         }
 
-        public Room Room { get; private set; }
+        public Space Space { get; private set; }
         public int FaceIndex { get; private set; }
 
         public Dictionary<Interface, float[]> InterfaceParameters { get; private set; }
@@ -35,28 +39,28 @@ namespace DesignPlatform.Core {
         public float Thickness = 0.2f;
 
         public Vector3 Normal {
-            get { return Room.GetWallNormals()[FaceIndex]; }
+            get { return Space.GetWallNormals()[FaceIndex]; }
             private set {; }
         }
         public float Length {
             get {
-                return (Room.GetControlPoints()[FaceIndex]
-                  - Room.GetControlPoints(closed: true)[FaceIndex + 1]).magnitude;
+                return (Space.GetControlPoints()[FaceIndex]
+                  - Space.GetControlPoints(closed: true)[FaceIndex + 1]).magnitude;
             }
             private set {; }
         }
         public float Height {
-            get { return Room.height; }
+            get { return Space.height; }
             private set {; }
         }
 
         public Vector3 StartPoint {
-            get { return Room.GetControlPoints()[FaceIndex]; }
+            get { return Space.GetControlPoints()[FaceIndex]; }
             private set {; }
         }
 
         public Vector3 EndPoint {
-            get { return Room.GetControlPoints(closed: true)[FaceIndex + 1]; }
+            get { return Space.GetControlPoints(closed: true)[FaceIndex + 1]; }
             private set {; }
         }
 
@@ -66,19 +70,19 @@ namespace DesignPlatform.Core {
         }
 
         public Vector3 CenterPoint {
-            get { return Room.GetWallMidpoints()[FaceIndex]; }
+            get { return Space.GetWallMidpoints()[FaceIndex]; }
             private set {; }
         }
 
         public override string ToString() {
-            return Room.ToString() + " Face#" + FaceIndex.ToString();
+            return Space.ToString() + " Face#" + FaceIndex.ToString();
         }
 
         /// <summary>
         /// Determs the orientation of the face (horizontal or vertical)
         /// </summary>
         private void SetOrientation() {
-            if (FaceIndex < Room.GetControlPoints().Count) {
+            if (FaceIndex < Space.GetControlPoints().Count) {
                 Orientation = Orientation.VERTICAL;
             }
             else Orientation = Orientation.HORIZONTAL;
@@ -88,22 +92,22 @@ namespace DesignPlatform.Core {
         /// Gets the original controlpoints of the face (horizontal and vertical faces)
         /// </summary>
         public List<Vector3> GetControlPoints(bool localCoordinates = false) {
-            List<Vector3> roomControlPoints = Room.GetControlPoints(localCoordinates: localCoordinates, closed: true);
+            List<Vector3> spaceControlPoints = Space.GetControlPoints(localCoordinates: localCoordinates, closed: true);
             List<Vector3> controlPoints = new List<Vector3>();
 
             switch (Orientation) {
                 // Vertical face
                 case Orientation.VERTICAL:
-                    controlPoints.Add(roomControlPoints[FaceIndex]);
-                    controlPoints.Add(roomControlPoints[FaceIndex + 1]);
+                    controlPoints.Add(spaceControlPoints[FaceIndex]);
+                    controlPoints.Add(spaceControlPoints[FaceIndex + 1]);
                     break;
 
                 // Horizontal face
                 case Orientation.HORIZONTAL:
-                    controlPoints = roomControlPoints.GetRange(0, roomControlPoints.Count - 1);
+                    controlPoints = spaceControlPoints.GetRange(0, spaceControlPoints.Count - 1);
 
                     // Top face
-                    if (FaceIndex == roomControlPoints.Count) {
+                    if (FaceIndex == spaceControlPoints.Count) {
                         controlPoints = controlPoints.Select(p => p + Vector3.up * Height).ToList();
                     }
                     break;
@@ -115,7 +119,7 @@ namespace DesignPlatform.Core {
         public (Vector3, Vector3) Get2DEndPoints(bool localCoordinates = false) {
             (Vector3, Vector3) endpoints = (new Vector3(), new Vector3());
             if (Orientation == Orientation.VERTICAL) {
-                List<Vector3> cp = Room.GetControlPoints(localCoordinates: localCoordinates, closed: true);
+                List<Vector3> cp = Space.GetControlPoints(localCoordinates: localCoordinates, closed: true);
                 endpoints.Item1 = cp[FaceIndex];
                 endpoints.Item2 = cp[FaceIndex + 1];
             }

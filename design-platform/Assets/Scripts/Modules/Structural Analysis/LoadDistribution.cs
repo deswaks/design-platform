@@ -13,7 +13,7 @@ namespace StructuralAnalysis {
         /// </summary>
         /// <param name="room">The room to analyze</param>
         /// <returns>The cumulative spans in each direction</returns>
-        public static List<float> Spans(Room room) {
+        public static List<float> Spans(DesignPlatform.Core.Space room) {
             List<Vector3> controlPoints = room.GetControlPoints(localCoordinates: true, closed: true);
             List<float> spans = new List<float>() { 0.0f, 0.0f, 0.0f };
             for (int i = 0; i < controlPoints.Count - 1; i++) {
@@ -26,7 +26,7 @@ namespace StructuralAnalysis {
         }
 
 
-        public static Dictionary<int, List<Load>> AreaLoad(Room room) {
+        public static Dictionary<int, List<Load>> AreaLoad(DesignPlatform.Core.Space room) {
             Dictionary<int, List<Load>> loadTables = WallLoadTables(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
             List<Vector3> normals = room.GetWallNormals(localCoordinates: true);
@@ -68,7 +68,7 @@ namespace StructuralAnalysis {
         /// </summary>
         /// <param name="room">Room to analyze</param>
         /// <returns></returns>
-        public static Dictionary<int, List<Load>> WallLoadTables(Room room) {
+        public static Dictionary<int, List<Load>> WallLoadTables(DesignPlatform.Core.Space room) {
             Dictionary<int, List<Load>> WallLoads = new Dictionary<int, List<Load>>();
             List<int> loadCarryingWalls = LoadCarryingWalls(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
@@ -106,7 +106,7 @@ namespace StructuralAnalysis {
         /// </summary>
         /// <param name="room">Room to analyze</param>
         /// <returns>List of indices of the load carrying walls of the room</returns>
-        public static List<int> LoadCarryingWalls(Room room) {
+        public static List<int> LoadCarryingWalls(DesignPlatform.Core.Space room) {
             List<int> loadCarryingWalls = new List<int>();
             List<float> spans = Spans(room);
 

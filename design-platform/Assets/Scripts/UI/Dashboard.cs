@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 namespace DesignPlatform.UI {
 
+    /// <summary>
+    /// The main dashboard for the display of information. The information
+    /// is displayid in the form of widgets.
+    /// </summary>
     public class Dashboard {
         private static Dashboard instance;
         public Dictionary<Widget, bool> widgets { get; private set; } = new Dictionary<Widget, bool>();

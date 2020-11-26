@@ -2,6 +2,10 @@
 using System.Linq;
 
 namespace DesignPlatform.Utils {
+
+    /// <summary>
+    /// Helper functions for number ranges.
+    /// </summary>
     public static class RangeUtils {
 
         /// <summary>

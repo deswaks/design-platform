@@ -5,7 +5,9 @@ using UnityEngine;
 
 namespace DesignPlatform.Utils {
 
-
+    /// <summary>
+    /// Helper functions for loading unity assets.
+    /// </summary>
     public static class AssetUtil {
 
         private static Dictionary<string, AssetBundle> LoadedBundles = new Dictionary<string, AssetBundle>();

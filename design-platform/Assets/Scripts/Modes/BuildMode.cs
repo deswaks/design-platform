@@ -7,8 +7,8 @@ namespace DesignPlatform.Modes {
 
         private static BuildMode instance;
 
-        private RoomShape selectedShape = RoomShape.RECTANGLE;
-        public RoomShape SelectedShape {
+        private SpaceShape selectedShape = SpaceShape.RECTANGLE;
+        public SpaceShape SelectedShape {
             get {
                 return selectedShape;
             }
@@ -19,7 +19,7 @@ namespace DesignPlatform.Modes {
         }
 
         // Set at runtime
-        public Room previewRoom;
+        public Core.Space previewSpace;
 
 
         public static BuildMode Instance {
@@ -29,7 +29,7 @@ namespace DesignPlatform.Modes {
         }
 
         public BuildMode() {
-            SelectedShape = RoomShape.RECTANGLE;
+            SelectedShape = SpaceShape.RECTANGLE;
         }
 
         public override void Tick() {
@@ -47,37 +47,37 @@ namespace DesignPlatform.Modes {
                     SelectedShape = 0;
                 }
                 else {
-                    SelectedShape = (RoomShape)(int)SelectedShape + 1;
+                    SelectedShape = (SpaceShape)(int)SelectedShape + 1;
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.R)) {
-                previewRoom.Rotate(); //remember to tell this to the user when implementing tooltips
+                previewSpace.Rotate(); //remember to tell this to the user when implementing tooltips
             }
 
             if (Input.GetKeyDown(KeyCode.L)) {
-                SelectedShape = RoomShape.LSHAPE;
+                SelectedShape = SpaceShape.LSHAPE;
             }
 
             if (Input.GetKeyDown(KeyCode.U)) {
-                SelectedShape = RoomShape.USHAPE;
+                SelectedShape = SpaceShape.USHAPE;
             }
 
             if (Input.GetKeyDown(KeyCode.S)) {
-                SelectedShape = RoomShape.SSHAPE;
+                SelectedShape = SpaceShape.SSHAPE;
             }
 
             if (Input.GetKeyDown(KeyCode.T)) {
-                SelectedShape = RoomShape.TSHAPE;
+                SelectedShape = SpaceShape.TSHAPE;
             }
 
             if (Input.GetKeyDown(KeyCode.D)) {
-                OpeningMode.Instance.SelectedShape = OpeningShape.DOOR;
+                OpeningMode.Instance.SelectedShape = OpeningFunction.DOOR;
                 Main.Instance.SetMode(OpeningMode.Instance);
             }
 
             if (Input.GetKeyDown(KeyCode.W)) {
-                OpeningMode.Instance.SelectedShape = OpeningShape.WINDOW;
+                OpeningMode.Instance.SelectedShape = OpeningFunction.WINDOW;
                 Main.Instance.SetMode(OpeningMode.Instance);
             }
 
@@ -85,29 +85,29 @@ namespace DesignPlatform.Modes {
                 Main.Instance.SetMode(SelectMode.Instance);
             }
 
-            if (previewRoom) { UpdatePreviewLocation(); }
+            if (previewSpace) { UpdatePreviewLocation(); }
         }
 
         public override void OnModeResume() {
-            if (previewRoom == null) {
-                previewRoom = Building.Instance.BuildRoom(buildShape: SelectedShape, preview: true);
+            if (previewSpace == null) {
+                previewSpace = Building.Instance.BuildSpace(buildShape: SelectedShape, preview: true);
             }
         }
 
         public override void OnModePause() {
-            if (previewRoom != null) previewRoom.Delete();
-            previewRoom = null;
+            if (previewSpace != null) previewSpace.Delete();
+            previewSpace = null;
         }
 
-        public void RebuildPreview(RoomShape SelectedShape = RoomShape.RECTANGLE) {
-            if (previewRoom != null) previewRoom.Delete();
-            previewRoom = Building.Instance.BuildRoom(buildShape: SelectedShape, preview: true);
+        public void RebuildPreview(SpaceShape SelectedShape = SpaceShape.RECTANGLE) {
+            if (previewSpace != null) previewSpace.Delete();
+            previewSpace = Building.Instance.BuildSpace(buildShape: SelectedShape, preview: true);
         }
 
         // Actually build the thing
         public void Build() {
-            Room builtRoom = Building.Instance.BuildRoom(buildShape: SelectedShape, templateRoom: previewRoom);
-            builtRoom.State = RoomState.STATIONARY;
+            Core.Space builtRoom = Building.Instance.BuildSpace(buildShape: SelectedShape, templateSpace: previewSpace);
+            builtRoom.State = SpaceState.STATIONARY;
 
         }
 
@@ -119,12 +119,12 @@ namespace DesignPlatform.Modes {
             float distance;
             if (basePlane.Raycast(ray, out distance)) {
                 Vector3 hitPoint = ray.GetPoint(distance);
-                previewRoom.Move(hitPoint);
+                previewSpace.Move(hitPoint);
             }
             //Nyttig funktion: ElementSelection.GetPerimeterEdges()
         }
 
-        public void SetSelectedShape(RoomShape shape = RoomShape.RECTANGLE) {
+        public void SetSelectedShape(SpaceShape shape = SpaceShape.RECTANGLE) {
             SelectedShape = shape;
         }
     }

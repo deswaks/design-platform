@@ -60,7 +60,7 @@ namespace DesignPlatform.Modes {
             UI.Settings.ShowWallLines = false;
             UI.Settings.ShowOpeningLines = false;
 
-            foreach (Room room in Building.Instance.Rooms) {
+            foreach (Core.Space room in Building.Instance.Spaces) {
                 room.UpdateRender2D();
             }
             foreach (Opening opening in Building.Instance.Openings) {
@@ -91,7 +91,7 @@ namespace DesignPlatform.Modes {
             UI.Settings.ShowWallLines = true;
             UI.Settings.ShowOpeningLines = true;
 
-            foreach (Room room in Building.Instance.Rooms) {
+            foreach (Core.Space room in Building.Instance.Spaces) {
                 room.UpdateRender2D();
             }
             foreach (Opening opening in Building.Instance.Openings) {

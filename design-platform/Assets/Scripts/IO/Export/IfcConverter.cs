@@ -32,7 +32,7 @@ namespace DesignPlatform.Export {
         public static IfcStore ifcModel;
         public static IfcBuilding ifcBuilding;
         public static List<IfcBuildingStorey> ifcBuildingStoreys = new List<IfcBuildingStorey>();
-        public static Dictionary<Room, IfcSpace> ifcSpaces = new Dictionary<Room, IfcSpace>();
+        public static Dictionary<Core.Space, IfcSpace> ifcSpaces = new Dictionary<Core.Space, IfcSpace>();
         public static Dictionary<Interface, IfcWall> ifcWalls = new Dictionary<Interface, IfcWall>();
         public static Dictionary<Interface, IfcSlab> ifcSlabs = new Dictionary<Interface, IfcSlab>();
         public static Dictionary<Opening, IfcOpeningElement> ifcOpenings = new Dictionary<Opening, IfcOpeningElement>();
@@ -79,7 +79,7 @@ namespace DesignPlatform.Export {
         /// <param name="model">Model to insert the space into.</param>
         /// <param name="room">Room to create the space geometry from.</param>
         /// <returns></returns>
-        public static void CreateIfcSpace(Room room) {
+        public static void CreateIfcSpace(Core.Space room) {
 
             // Get data from room
             int height = Mathf.RoundToInt(room.height * 1000);
@@ -100,7 +100,7 @@ namespace DesignPlatform.Export {
             var space = ifcModel.Instances.New<IfcSpace>();
 
             // Properties
-            int roomIndex = Building.Instance.Rooms.FindIndex(r => r == room);
+            int roomIndex = Building.Instance.Spaces.FindIndex(r => r == room);
             space.Name = "Space " + ifcSpaces.Keys.Count();
             space.CompositionType = IfcElementCompositionEnum.ELEMENT;
             space.PredefinedType = IfcSpaceTypeEnum.INTERNAL;
@@ -139,18 +139,18 @@ namespace DesignPlatform.Export {
 
             // Get data from slab
             int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
-            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Rooms[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
-            int elevation = Mathf.RoundToInt(isCeiling * interFace.Rooms[0].height * 1000);
+            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Spaces[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
+            int elevation = Mathf.RoundToInt(isCeiling * interFace.Spaces[0].height * 1000);
             Vector3 extrusionOffset = new Vector3(0, 0, -thickness);
             Vector3 roomOrigin = new Vector3(
-                Mathf.RoundToInt(interFace.Rooms[0].transform.position.x * 1000),
-                Mathf.RoundToInt(interFace.Rooms[0].transform.position.z * 1000),
-                Mathf.RoundToInt(interFace.Rooms[0].transform.position.y * 1000) + elevation);
+                Mathf.RoundToInt(interFace.Spaces[0].transform.position.x * 1000),
+                Mathf.RoundToInt(interFace.Spaces[0].transform.position.z * 1000),
+                Mathf.RoundToInt(interFace.Spaces[0].transform.position.y * 1000) + elevation);
             Vector3 placementDirection = new Vector3(
-                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.x),
-                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.z),
-                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.y));
-            List<Vector2> controlPoints = interFace.Rooms[0]
+                Mathf.RoundToInt(interFace.Spaces[0].transform.right.normalized.x),
+                Mathf.RoundToInt(interFace.Spaces[0].transform.right.normalized.z),
+                Mathf.RoundToInt(interFace.Spaces[0].transform.right.normalized.y));
+            List<Vector2> controlPoints = interFace.Spaces[0]
                 .GetControlPoints(localCoordinates: true, closed: true)
                 .Select(p => new Vector2(Mathf.RoundToInt(p.x * 1000),
                                           Mathf.RoundToInt(p.z * 1000))).ToList();
@@ -183,7 +183,7 @@ namespace DesignPlatform.Export {
             rel.RelatedElements.Add(slab);
 
             // Relation to rooms
-            foreach (Room room in interFace.Rooms) {
+            foreach (Core.Space room in interFace.Spaces) {
                 var boundaryRel = ifcModel.Instances.New<IfcRelSpaceBoundary>();
                 boundaryRel.RelatingSpace = ifcSpaces[room];
                 boundaryRel.RelatedBuildingElement = slab;
@@ -217,7 +217,7 @@ namespace DesignPlatform.Export {
                 (int)(interFace.CenterPoint.z * 1000),
                 (int)(interFace.CenterPoint.y * 1000));
             int length = (int)(endPoint - startPoint).magnitude;
-            int height = (int)(interFace.Rooms[0].height * 1000);
+            int height = (int)(interFace.Spaces[0].height * 1000);
             int thickness = (int)(interFace.Thickness * 1000);
             string description = interFace.ToString();
 
@@ -249,7 +249,7 @@ namespace DesignPlatform.Export {
             rel.RelatedElements.Add(wall);
 
             // Relation to rooms
-            foreach (Room room in interFace.Rooms) {
+            foreach (Core.Space room in interFace.Spaces) {
                 var boundaryRel = ifcModel.Instances.New<IfcRelSpaceBoundary>();
                 boundaryRel.RelatingSpace = ifcSpaces[room];
                 boundaryRel.RelatedBuildingElement = wall;
@@ -334,18 +334,18 @@ namespace DesignPlatform.Export {
 
             // Get data from wall
             int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
-            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Rooms[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
-            int elevation = Mathf.RoundToInt(isCeiling * interFace.Rooms[0].height * 1000);
+            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Spaces[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
+            int elevation = Mathf.RoundToInt(isCeiling * interFace.Spaces[0].height * 1000);
             Vector3 extrusionOffset = new Vector3(0, 0, -thickness);
             Vector3 roomOrigin = new Vector3(
-                Mathf.RoundToInt(interFace.Rooms[0].transform.position.x * 1000),
-                Mathf.RoundToInt(interFace.Rooms[0].transform.position.z * 1000),
-                Mathf.RoundToInt(interFace.Rooms[0].transform.position.y * 1000) + elevation);
+                Mathf.RoundToInt(interFace.Spaces[0].transform.position.x * 1000),
+                Mathf.RoundToInt(interFace.Spaces[0].transform.position.z * 1000),
+                Mathf.RoundToInt(interFace.Spaces[0].transform.position.y * 1000) + elevation);
             Vector3 placementDirection = new Vector3(
-                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.x),
-                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.z),
-                Mathf.RoundToInt(interFace.Rooms[0].transform.right.normalized.y));
-            List<Vector2> controlPoints = interFace.Rooms[0]
+                Mathf.RoundToInt(interFace.Spaces[0].transform.right.normalized.x),
+                Mathf.RoundToInt(interFace.Spaces[0].transform.right.normalized.z),
+                Mathf.RoundToInt(interFace.Spaces[0].transform.right.normalized.y));
+            List<Vector2> controlPoints = interFace.Spaces[0]
                 .GetControlPoints(localCoordinates: true, closed: true)
                 .Select(p => new Vector2(Mathf.RoundToInt(p.x * 1000),
                                           Mathf.RoundToInt(p.z * 1000))).ToList();
@@ -378,7 +378,7 @@ namespace DesignPlatform.Export {
             rel.RelatedElements.Add(slab);
 
             // Relation to rooms
-            foreach (Room room in interFace.Rooms) {
+            foreach (Core.Space room in interFace.Spaces) {
                 var boundaryRel = ifcModel.Instances.New<IfcRelSpaceBoundary>();
                 boundaryRel.RelatingSpace = ifcSpaces[room];
                 boundaryRel.RelatedBuildingElement = slab;

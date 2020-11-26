@@ -7,6 +7,10 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
+
+    /// <summary>
+    /// The CLT element represents a structural panel made of CLT (cross laminated timber)
+    /// </summary>
     public class CLTElement {
         public (Vector3 point, WallJointType jointType) startPoint { get; private set; } = (new Vector3(), WallJointType.None);
         public (Vector3 point, WallJointType jointType) endPoint { get; private set; } = (new Vector3(), WallJointType.None);

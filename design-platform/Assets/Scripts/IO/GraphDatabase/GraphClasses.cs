@@ -13,16 +13,16 @@ namespace DesignPlatform.Database {
     /// <summary>
     /// 
     /// </summary>
-    public class RoomNode {
+    public class SpaceNode {
         public int id { get; set; }
         public string name { get; set; }
-        public RoomShape shape { get; set; }
-        public RoomType type { get; set; }
+        public SpaceShape shape { get; set; }
+        public SpaceFunction type { get; set; }
         public float area { get; set; }
         public DateTimeOffset dateCreated { get; set; }
         public string[] vertices { get; set; }
 
-        public RoomNode() { }
+        public SpaceNode() { }
 
         public override string ToString() {
             return string.Format("Id: {0}, Name: {1}, Type: {2}, Shape: {3}", id, name, type.ToString("g"), shape.ToString());
@@ -37,7 +37,7 @@ namespace DesignPlatform.Database {
     /// 
     /// </summary>
     public class OpeningNode {
-        public OpeningShape openingShape { get; set; } // Door or window
+        public OpeningFunction openingShape { get; set; } // Door or window
         public string position { get; set; }
         public string rotation { get; set; }
         public float width { get; set; }
@@ -59,9 +59,9 @@ namespace DesignPlatform.Database {
     /// 
     /// </summary>
     [CypherLabel(Name = LabelName)]
-    public class AdjacentRoomRelationship : BaseRelationship {
+    public class AdjacentSpaceRelationship : BaseRelationship {
         public const string LabelName = "ADJACENT_TO";
-        public AdjacentRoomRelationship(string from = null, string to = null)
+        public AdjacentSpaceRelationship(string from = null, string to = null)
             : base(from, to) {
         }
     }
@@ -70,9 +70,9 @@ namespace DesignPlatform.Database {
     /// 
     /// </summary>
     [CypherLabel(Name = LabelName)]
-    public class InterfaceRoomRelationship : BaseRelationship {
+    public class InterfaceSpaceRelationship : BaseRelationship {
         public const string LabelName = "INTERFACE_OF";
-        public InterfaceRoomRelationship(string from = null, string to = null)
+        public InterfaceSpaceRelationship(string from = null, string to = null)
             : base(from, to) {
         }
     }

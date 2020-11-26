@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['area_784',['Area',['../class_design_platform_1_1_core_1_1_wall_element.html#a3d0200ff6074d9c63baa890aaebcfc40',1,'DesignPlatform.Core.WallElement.Area()'],['../class_design_platform_1_1_database_1_1_room_node.html#a8ccaa0b7d1bc8d577b5846bbbeaccdec',1,'DesignPlatform.Database.RoomNode.area()']]]
+  ['area_1200',['area',['../class_design_platform_1_1_database_1_1_space_node.html#af7da7d2c27999c5fabb0d4e48f44f42e',1,'DesignPlatform.Database.SpaceNode.area()'],['../class_design_platform_1_1_core_1_1_c_l_t_element.html#aa35f91dae9e59422a282ab530929e980',1,'DesignPlatform.Core.CLTElement.Area()']]]
 ];

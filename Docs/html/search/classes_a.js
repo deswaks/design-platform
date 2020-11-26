@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['opening_427',['Opening',['../class_design_platform_1_1_core_1_1_opening.html',1,'DesignPlatform::Core']]],
-  ['openingmode_428',['OpeningMode',['../class_design_platform_1_1_modes_1_1_opening_mode.html',1,'DesignPlatform::Modes']]],
-  ['openingnode_429',['OpeningNode',['../class_design_platform_1_1_database_1_1_opening_node.html',1,'DesignPlatform::Database']]]
+  ['neoconfig_646',['NeoConfig',['../class_design_platform_1_1_database_1_1_neo_config.html',1,'DesignPlatform::Database']]],
+  ['notificationhandler_647',['NotificationHandler',['../class_design_platform_1_1_u_i_1_1_notification_handler.html',1,'DesignPlatform::UI']]]
 ];

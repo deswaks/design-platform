@@ -6,34 +6,34 @@ using UnityEngine;
 namespace DesignPlatform.Export {
     public static class GbxmlConverter {
 
-        public static gbXMLSerializer.Space XmlSpaceFromRoom(Room room) {
+        public static gbXMLSerializer.Space XmlSpaceFromSpace(Core.Space space) {
 
             // Create space
-            gbXMLSerializer.Space space = new gbXMLSerializer.Space();
-            space.id = "Space_";// + room.name;
-            space.Name = "Space_";// + room.name;
+            gbXMLSerializer.Space xmlSpace = new gbXMLSerializer.Space();
+            xmlSpace.id = "Space_";// + room.name;
+            xmlSpace.Name = "Space_";// + room.name;
 
             // Space area
             Area area = new Area();
-            area.val = string.Format("{0:N2}", room.GetFloorArea());
-            space.spacearea = area;
+            area.val = string.Format("{0:N2}", space.GetFloorArea());
+            xmlSpace.spacearea = area;
 
             // Space volume
             Volume vol = new Volume();
-            vol.val = string.Format("{0:N2}", room.GetVolume());
-            space.spacevol = vol;
+            vol.val = string.Format("{0:N2}", space.GetVolume());
+            xmlSpace.spacevol = vol;
 
             // Shell geometry
             ShellGeometry shellGeometry = new ShellGeometry();
             shellGeometry.unit = lengthUnitEnum.Meters;
-            shellGeometry.id = "sg" + space.Name;
-            space.ShellGeo = shellGeometry;
+            shellGeometry.id = "sg" + xmlSpace.Name;
+            xmlSpace.ShellGeo = shellGeometry;
 
             // Closed shell
             ClosedShell closedShell = new ClosedShell();
             shellGeometry.ClosedShell = closedShell;
 
-            List<List<Vector3>> surfacesVertices = room.GetSurfaceVertices();
+            List<List<Vector3>> surfacesVertices = space.GetSurfaceVertices();
 
             // Make polyloop arrays
             closedShell.PolyLoops = prod.makePolyLoopArray(surfacesVertices.Count);
@@ -54,7 +54,7 @@ namespace DesignPlatform.Export {
                 }
             }
 
-            return space;
+            return xmlSpace;
         }
     }
 }

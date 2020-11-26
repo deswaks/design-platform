@@ -24,13 +24,13 @@ namespace DesignPlatform.UI {
                 SelectMode.Instance.selection.Delete();
             }
         }
-        public void PublishRoomType(int buildType) {
-            SelectMode.Instance.selection.SetRoomType((RoomType)buildType);
+        public void PublishSpaceType(int buildType) {
+            SelectMode.Instance.selection.SetSpaceType((SpaceFunction)buildType);
         }
-        public void PublishRoomNote() {
+        public void PublishSpaceNote() {
             //GameObject myInputGO = GameObject.Find("InputField Room Note");
             TMP_InputField myInputIF = GameObject.Find("InputProperty").GetComponent<TMP_InputField>();
-            SelectMode.Instance.selection.SetRoomNote(myInputIF.text);
+            SelectMode.Instance.selection.SetSpaceNote(myInputIF.text);
             myInputIF.text = "";
             Debug.Log(SelectMode.Instance.selection.customProperty);
         }

@@ -1,13 +1,10 @@
 var searchData=
 [
-  ['panel_720',['Panel',['../class_design_platform_1_1_u_i_1_1_widget.html#a71132fac3a8875a550522f2dee9d1de6',1,'DesignPlatform::UI::Widget']]],
-  ['parentroom_721',['parentRoom',['../class_design_platform_1_1_u_i_1_1_extrude_handle.html#a45d1e1305d91154081d0540ed29e1720',1,'DesignPlatform::UI::ExtrudeHandle']]],
-  ['pend_722',['pEnd',['../struct_structural_analysis_1_1_load.html#a66f18ef1a621d1d2080a1ac9b36fbc36',1,'StructuralAnalysis::Load']]],
-  ['plancamera_723',['PlanCamera',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#ae1d1ea18793884b15b79c9a0e217177f',1,'DesignPlatform::Modes::POVMode']]],
-  ['player_724',['player',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#abb25b5732dd293a60ef9a6e7c3377195',1,'DesignPlatform::Modes::POVMode']]],
-  ['point_725',['point',['../class_design_platform_1_1_core_1_1_wall_element.html#a0f8200fbb0dcdff3a81ee1a190225df6',1,'DesignPlatform::Core::WallElement']]],
-  ['povcamera_726',['POVCamera',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a4840b43d988199f523116130d515e672',1,'DesignPlatform::Modes::POVMode']]],
-  ['previewopening_727',['previewOpening',['../class_design_platform_1_1_modes_1_1_opening_mode.html#a5c9a545585de1502dfcf555d1921cc5a',1,'DesignPlatform::Modes::OpeningMode']]],
-  ['previewroom_728',['previewRoom',['../class_design_platform_1_1_modes_1_1_build_mode.html#a4640454a5133b5dc53534f896b2462fa',1,'DesignPlatform::Modes::BuildMode']]],
-  ['pstart_729',['pStart',['../struct_structural_analysis_1_1_load.html#a39ab8197a2a25579c7e0df7cd5a12cf1',1,'StructuralAnalysis::Load']]]
+  ['magnitude_1085',['magnitude',['../struct_structural_analysis_1_1_load.html#ae952ee73fa3a981f5580ec67ee81a592',1,'StructuralAnalysis::Load']]],
+  ['maxsize_1086',['maxSize',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#ae8beb3614baa18f203dd80c0c7b6d9e9',1,'DesignPlatform::UI::Zoom2D']]],
+  ['minsize_1087',['minSize',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#a82a70e1810a73cea90aa76322fbf6ce3',1,'DesignPlatform::UI::Zoom2D']]],
+  ['modulefolderpath_1088',['ModuleFolderPath',['../class_design_platform_1_1_utils_1_1_module_loader.html#af03f6c54e64b8932625a15ed3d317bc9',1,'DesignPlatform::Utils::ModuleLoader']]],
+  ['mousesensitivity_1089',['mouseSensitivity',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a28cb46d82d758346af5bc42a8b33cd73',1,'DesignPlatform::Modes::POVMode']]],
+  ['movemodeoffset_1090',['moveModeOffset',['../class_design_platform_1_1_core_1_1_space.html#a796b4c008f519b83a6ce6963af6f0f37',1,'DesignPlatform::Core::Space']]],
+  ['movespeed_1091',['moveSpeed',['../class_design_platform_1_1_u_i_1_1_pan2_d.html#a0679c594221fb4404f13ffbe8a6c8f1e',1,'DesignPlatform::UI::Pan2D']]]
 ];

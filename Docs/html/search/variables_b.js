@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['selection_731',['selection',['../class_design_platform_1_1_modes_1_1_select_mode.html#a522ebbff1e272d1e8e06ba46f0f5cbea',1,'DesignPlatform::Modes::SelectMode']]],
-  ['sillheight_732',['SillHeight',['../class_design_platform_1_1_core_1_1_opening.html#aa88798acb718b253769f40c901857088',1,'DesignPlatform::Core::Opening']]],
-  ['speed_733',['speed',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#acd369ac6589dd79a2489a2bf5aecbf28',1,'DesignPlatform.UI.Zoom2D.speed()'],['../class_design_platform_1_1_core_1_1_player_movement.html#a76afe22dbb85f0553c41360ed3719cee',1,'DesignPlatform.Core.PlayerMovement.speed()']]]
+  ['offevents_1094',['OffEvents',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#a3f8ff69f5eb15f35992865e86671dca3',1,'DesignPlatform::UI::UISwitch']]],
+  ['onevents_1095',['OnEvents',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#adc6292c73b4892ca353e536d94b78b2c',1,'DesignPlatform::UI::UISwitch']]],
+  ['overhang_1096',['overhang',['../class_design_platform_1_1_core_1_1_roof_generator.html#a1633dc3326821d44e219f56592c3cde0',1,'DesignPlatform::Core::RoofGenerator']]],
+  ['overhangslider_1097',['overhangSlider',['../class_design_platform_1_1_u_i_1_1_button_manager_roof.html#a2297b0578540e6831b84d7858ba1d7ec',1,'DesignPlatform::UI::ButtonManagerRoof']]]
 ];

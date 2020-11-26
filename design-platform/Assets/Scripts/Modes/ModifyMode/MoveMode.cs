@@ -23,16 +23,16 @@ namespace DesignPlatform.Modes {
         public override void Tick() {
         }
         public override void OnModeResume() {
-            Room selectedRoom = SelectMode.Instance.selection;
+            Core.Space selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
                 CreateHandle(selectedRoom);
-                selectedRoom.State = RoomState.MOVING;
+                selectedRoom.State = SpaceState.MOVING;
             }
         }
         public override void OnModePause() {
-            Room selectedRoom = SelectMode.Instance.selection;
+            Core.Space selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
-                selectedRoom.State = RoomState.STATIONARY;
+                selectedRoom.State = SpaceState.STATIONARY;
             }
             RemoveHandle();
         }
@@ -41,7 +41,7 @@ namespace DesignPlatform.Modes {
         /// <summary>
         /// 
         /// </summary>
-        public void CreateHandle(Room room) {
+        public void CreateHandle(Core.Space room) {
             // Remove prior handle
             RemoveHandle();
 

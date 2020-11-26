@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['vertices_833',['vertices',['../class_design_platform_1_1_database_1_1_room_node.html#a672ac8776dfb0cc70d0b3c9e18883895',1,'DesignPlatform.Database.RoomNode.vertices()'],['../class_design_platform_1_1_database_1_1_wall_element_node.html#a1e4a14b07abe5f6ec3b18fa11ff32100',1,'DesignPlatform.Database.WallElementNode.vertices()']]]
+  ['thickness_1254',['Thickness',['../class_design_platform_1_1_core_1_1_c_l_t_element.html#ab6382e53e2c89b2dcf1d69e2dcf600ff',1,'DesignPlatform.Core.CLTElement.Thickness()'],['../class_design_platform_1_1_core_1_1_interface.html#adc15817f87e79233e7c813524447a58e',1,'DesignPlatform.Core.Interface.Thickness()']]],
+  ['type_1255',['type',['../class_design_platform_1_1_database_1_1_space_node.html#a74e519bdb0117e90f5d3b12ccd5beae5',1,'DesignPlatform.Database.SpaceNode.type()'],['../class_design_platform_1_1_core_1_1_space.html#a4e42031e98a9026a42016da19552b8f9',1,'DesignPlatform.Core.Space.Type()']]],
+  ['typename_1256',['TypeName',['../class_design_platform_1_1_core_1_1_space.html#a45c818a414a16b4f5fbe5f267767491f',1,'DesignPlatform::Core::Space']]]
 ];

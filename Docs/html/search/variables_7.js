@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['name_716',['Name',['../class_design_platform_1_1_u_i_1_1_widget.html#ac159df175117b1868a69dd9a74d630a9',1,'DesignPlatform::UI::Widget']]]
+  ['jumpheight_1079',['jumpHeight',['../class_design_platform_1_1_u_i_1_1_player_movement.html#a5d959832a011c06f30eab547d5fdbb64',1,'DesignPlatform::UI::PlayerMovement']]]
 ];

@@ -21,7 +21,7 @@ namespace DesignPlatform.Export {
         public static float scale = Scales["1:100"];
 
         /// <summary>
-        /// Prints all the rooms of the building to a pdf file
+        /// Prints all the spaces of the building to a pdf file
         /// </summary>
         public static void ExportPlan() {
             // Create a new PDF document with an empty page
@@ -35,8 +35,8 @@ namespace DesignPlatform.Export {
             XFont font = new XFont("Verdana", 20, XFontStyle.BoldItalic);
 
             // Draw
-            DrawRooms(gfx);
-            TagRooms(gfx);
+            DrawSpaces(gfx);
+            TagSpaces(gfx);
 
             // Save the document
             document.Save("Exports/Plan.pdf");
@@ -45,24 +45,24 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// Draws each room of the building using the given XGraphics object
+        /// Draws each space of the building using the given XGraphics object
         /// </summary>
-        private static void DrawRooms(XGraphics gfx) {
+        private static void DrawSpaces(XGraphics gfx) {
             // Definition of Pens and brushes
-            XSolidBrush roomBrush = new XSolidBrush(XColors.BlanchedAlmond);
+            XSolidBrush spaceBrush = new XSolidBrush(XColors.BlanchedAlmond);
             XPen wallPen1 = new XPen(XColors.Black, 2);
             XPen wallPen2 = new XPen(XColors.Black, 6);
             wallPen2.LineCap = XLineCap.Square;
 
-            foreach (Room room in Building.Instance.Rooms) {
-                drawRoomPolygon(gfx, roomBrush, room);
+            foreach (Core.Space space in Building.Instance.Spaces) {
+                drawSpacePolygon(gfx, spaceBrush, space);
             }
-            foreach (Room room in Building.Instance.Rooms) {
-                drawWallLines(gfx, wallPen1, wallPen2, room);
+            foreach (Core.Space space in Building.Instance.Spaces) {
+                drawWallLines(gfx, wallPen1, wallPen2, space);
             }
         }
 
-        private static void TagRooms(XGraphics gfx) {
+        private static void TagSpaces(XGraphics gfx) {
             // Font definitions
             const string facename = "Times New Roman";
             XPdfFontOptions options = new XPdfFontOptions(PdfFontEncoding.Unicode);
@@ -72,18 +72,16 @@ namespace DesignPlatform.Export {
             XStringFormat tagFormat = new XStringFormat();
             tagFormat.Alignment = XStringAlignment.Center;
 
-            foreach (Room room in Building.Instance.Rooms) {
-                WriteRoomName(gfx, nameFont, room, tagFormat);
-                WriteRoomArea(gfx, areaFont, room, tagFormat);
+            foreach (Core.Space space in Building.Instance.Spaces) {
+                WriteSpaceName(gfx, nameFont, space, tagFormat);
+                WriteSpaceArea(gfx, areaFont, space, tagFormat);
             }
         }
 
-        private static void WriteRoomName(XGraphics gfx, XFont tagFont, Room room, XStringFormat tagFormat) {
-            XPoint tagLocation = WorldToPaper(gfx, room.GetTagLocation());
-            //string[] tagLines = room.TypeName.Split(new string[] { @"\n" }, StringSplitOptions.None);
-            //string[] tagLines = room.TypeName.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+        private static void WriteSpaceName(XGraphics gfx, XFont tagFont, Core.Space space, XStringFormat tagFormat) {
+            XPoint tagLocation = WorldToPaper(gfx, space.GetTagLocation());
             List<string> tagLines = new List<string>();
-            using (System.IO.StringReader reader = new System.IO.StringReader(room.TypeName)) {
+            using (System.IO.StringReader reader = new System.IO.StringReader(space.TypeName)) {
                 string line;
                 while ((line = reader.ReadLine()) != null) {
                     tagLines.Add(line);
@@ -95,25 +93,25 @@ namespace DesignPlatform.Export {
             }
         }
 
-        private static void WriteRoomArea(XGraphics gfx, XFont tagFont, Room room, XStringFormat tagFormat) {
-            XPoint tagLocation = WorldToPaper(gfx, room.GetTagLocation());
-            string tagText = room.GetFloorArea().ToString() + "m²";
+        private static void WriteSpaceArea(XGraphics gfx, XFont tagFont, Core.Space space, XStringFormat tagFormat) {
+            XPoint tagLocation = WorldToPaper(gfx, space.GetTagLocation());
+            string tagText = space.GetFloorArea().ToString() + "m²";
             gfx.DrawString(tagText, tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y + tagFont.Size / 2 + 2, tagFormat);
         }
 
-        private static void drawRoomPolygon(XGraphics gfx, XSolidBrush roomBrush, Room room) {
+        private static void drawSpacePolygon(XGraphics gfx, XSolidBrush spaceBrush, Core.Space space) {
             double centerX = gfx.PageSize.Width / 2;
             double centerY = gfx.PageSize.Height / 2;
-            List<XPoint> polylinePoints = room.GetControlPoints(closed: true).Select(p => new XPoint(p.x * scale + centerX, -p.z * scale + centerY)).ToList();
-            gfx.DrawPolygon(roomBrush, polylinePoints.ToArray(), XFillMode.Alternate);
+            List<XPoint> polylinePoints = space.GetControlPoints(closed: true).Select(p => new XPoint(p.x * scale + centerX, -p.z * scale + centerY)).ToList();
+            gfx.DrawPolygon(spaceBrush, polylinePoints.ToArray(), XFillMode.Alternate);
         }
 
-        private static void drawWallLines(XGraphics gfx, XPen penArchitectural, XPen penStructural, Room room) {
+        private static void drawWallLines(XGraphics gfx, XPen penArchitectural, XPen penStructural, Core.Space space) {
 
 
-            Dictionary<int, List<Load>> loadTable = LoadDistribution.AreaLoad(room);
+            Dictionary<int, List<Load>> loadTable = LoadDistribution.AreaLoad(space);
             List<int> structuralWalls = loadTable.Keys.ToList();
-            List<XPoint> drawPoints = room.GetControlPoints(closed: true).Select(p => WorldToPaper(gfx, p)).ToList();
+            List<XPoint> drawPoints = space.GetControlPoints(closed: true).Select(p => WorldToPaper(gfx, p)).ToList();
 
             // Draw each wall using architectural or structural brush according to whether the wall is in load list
             for (int iWall = 0; iWall < drawPoints.Count - 1; iWall++) {
