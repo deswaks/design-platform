@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['labelname_759',['LabelName',['../class_design_platform_1_1_database_1_1_adjacent_room_relationship.html#a3b460d621cf483f0df2e2f7d506cc3de',1,'DesignPlatform.Database.AdjacentRoomRelationship.LabelName()'],['../class_design_platform_1_1_database_1_1_interface_room_relationship.html#aa984fae19fcc61408bbc1c9f5e159aac',1,'DesignPlatform.Database.InterfaceRoomRelationship.LabelName()'],['../class_design_platform_1_1_database_1_1_home_address_relationship.html#a6bbf7a5711f828d3f38a3b0bc00fe0cc',1,'DesignPlatform.Database.HomeAddressRelationship.LabelName()'],['../class_design_platform_1_1_database_1_1_work_address_relationship.html#aaa3fb5171539133b0def8b6f35cb797f',1,'DesignPlatform.Database.WorkAddressRelationship.LabelName()']]]
+  ['magnitude_707',['magnitude',['../struct_structural_analysis_1_1_load.html#ae952ee73fa3a981f5580ec67ee81a592',1,'StructuralAnalysis::Load']]],
+  ['maxsize_708',['maxSize',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#ae8beb3614baa18f203dd80c0c7b6d9e9',1,'DesignPlatform::UI::Zoom2D']]],
+  ['minsize_709',['minSize',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#a82a70e1810a73cea90aa76322fbf6ce3',1,'DesignPlatform::UI::Zoom2D']]],
+  ['mousesensitivity_710',['mouseSensitivity',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a28cb46d82d758346af5bc42a8b33cd73',1,'DesignPlatform::Modes::POVMode']]],
+  ['movespeed_711',['moveSpeed',['../class_design_platform_1_1_u_i_1_1_pan2_d.html#a0679c594221fb4404f13ffbe8a6c8f1e',1,'DesignPlatform::UI::Pan2D']]]
 ];

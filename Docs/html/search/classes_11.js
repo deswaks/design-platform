@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['uiswitch_483',['UISwitch',['../class_design_platform_1_1_core_1_1_u_i_switch.html',1,'DesignPlatform::Core']]]
+  ['zoom2d_449',['Zoom2D',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html',1,'DesignPlatform::UI']]]
 ];

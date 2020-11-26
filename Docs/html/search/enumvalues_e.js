@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vertical_836',['VERTICAL',['../namespace_design_platform_1_1_core.html#a5888cab138bec0892d17b579e8ba3dafa3e1b74251c07310c5f1b968145bf00dc',1,'DesignPlatform::Core']]]
+  ['window_777',['WINDOW',['../namespace_design_platform_1_1_core.html#ab2e899307f8f1cb3377a6c9a7562449ea70e2a9fa5d5ec49dc67453eab551251d',1,'DesignPlatform::Core']]]
 ];

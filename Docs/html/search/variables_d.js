@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['thickness_783',['Thickness',['../class_design_platform_1_1_core_1_1_face.html#a078618303171b0dc0cfc69aa24cd96aa',1,'DesignPlatform.Core.Face.Thickness()'],['../class_design_platform_1_1_core_1_1_slab.html#ab51cf7ce8de42b5dd815ee0c3303bc5c',1,'DesignPlatform.Core.Slab.Thickness()']]]
+  ['vector3_731',['Vector3',['../class_design_platform_1_1_core_1_1_face.html#a6b89658030b2f7769a01e66cd4c15a28',1,'DesignPlatform::Core::Face']]]
 ];

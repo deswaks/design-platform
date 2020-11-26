@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['dashboard_448',['Dashboard',['../class_design_platform_1_1_core_1_1_dashboard.html',1,'DesignPlatform::Core']]]
+  ['extrudehandle_411',['ExtrudeHandle',['../class_design_platform_1_1_u_i_1_1_extrude_handle.html',1,'DesignPlatform::UI']]],
+  ['extrudemode_412',['ExtrudeMode',['../class_design_platform_1_1_modes_1_1_extrude_mode.html',1,'DesignPlatform::Modes']]]
 ];

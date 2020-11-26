@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quitapplication_291',['QuitApplication',['../class_design_platform_1_1_core_1_1_button_manager_main.html#a515de6bd7ec96cbce3ccf175227aefbf',1,'DesignPlatform::Core::ButtonManagerMain']]]
+  ['quitapplication_267',['QuitApplication',['../class_design_platform_1_1_u_i_1_1_button_manager_main.html#ac9940dc12772fc74a78764ff8bfcaccb',1,'DesignPlatform::UI::ButtonManagerMain']]]
 ];

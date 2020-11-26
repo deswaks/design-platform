@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['female_810',['Female',['../namespace_design_platform_1_1_database.html#a872ffc0022a9b9de3baf370ac1963812ab719ce180ec7bd9641fece2f920f4817',1,'DesignPlatform::Database']]]
+  ['hidden_753',['HIDDEN',['../namespace_design_platform_1_1_core.html#a41e29a1a08105b77175de377ed7a3bc6a347e628a8f72626a0611ef842fe9d304',1,'DesignPlatform::Core']]],
+  ['horizontal_754',['HORIZONTAL',['../namespace_design_platform_1_1_core.html#a5888cab138bec0892d17b579e8ba3dafa86e5d0d8407ce71f7e2004ef3949894e',1,'DesignPlatform::Core']]]
 ];

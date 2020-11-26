@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['modify_665',['Modify',['../class_design_platform_1_1_core_1_1_button_manager_modify.html#a37daaa82dd855d9169a66e1b3cd0f5e3',1,'DesignPlatform::Core::ButtonManagerModify']]],
-  ['mousepositioncollidingrooms_666',['MousePositionCollidingRooms',['../class_design_platform_1_1_core_1_1_opening_mode.html#ad3ec5287e29383d2e8c3873d6015bb04',1,'DesignPlatform::Core::OpeningMode']]],
-  ['move_667',['Move',['../class_design_platform_1_1_core_1_1_opening.html#a7513ed7ce8ef931f3a97dc6b0c071516',1,'DesignPlatform.Core.Opening.Move()'],['../class_design_platform_1_1_core_1_1_room.html#a52f40950c20bf4c07b08d2c2f8cd1b1c',1,'DesignPlatform.Core.Room.Move()'],['../class_design_platform_1_1_core_1_1_button_manager_modify.html#ad485e2f3b29aec127418a123a88b65ad',1,'DesignPlatform.Core.ButtonManagerModify.Move()']]]
+  ['modify_615',['Modify',['../class_design_platform_1_1_u_i_1_1_button_manager_modify.html#a03fb9e217c364906117c03499a985d6d',1,'DesignPlatform::UI::ButtonManagerModify']]],
+  ['mousepositioncollidingrooms_616',['MousePositionCollidingRooms',['../class_design_platform_1_1_modes_1_1_opening_mode.html#a9c9a6c1e96b79b827c396e534bdbb7d8',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['move_617',['Move',['../class_design_platform_1_1_core_1_1_opening.html#a7513ed7ce8ef931f3a97dc6b0c071516',1,'DesignPlatform.Core.Opening.Move()'],['../class_design_platform_1_1_core_1_1_room.html#a52f40950c20bf4c07b08d2c2f8cd1b1c',1,'DesignPlatform.Core.Room.Move()'],['../class_design_platform_1_1_u_i_1_1_button_manager_modify.html#a20309595d16854bb1c029ad99373c859',1,'DesignPlatform.UI.ButtonManagerModify.Move()']]]
 ];

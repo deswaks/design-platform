@@ -96,7 +96,6 @@ var menudata={children:[
 {text:"Enumerations",url:"functions_enum.html"},
 {text:"Properties",url:"functions_prop.html",children:[
 {text:"a",url:"functions_prop.html#index_a"},
-{text:"b",url:"functions_prop.html#index_b"},
 {text:"c",url:"functions_prop.html#index_c"},
 {text:"d",url:"functions_prop.html#index_d"},
 {text:"e",url:"functions_prop.html#index_e"},
@@ -114,8 +113,4 @@ var menudata={children:[
 {text:"v",url:"functions_prop.html#index_v"},
 {text:"w",url:"functions_prop.html#index_w"}]}]}]},
 {text:"Files",url:"files.html",children:[
-{text:"File List",url:"files.html"},
-{text:"File Members",url:"globals.html",children:[
-{text:"All",url:"globals.html"},
-{text:"Variables",url:"globals_vars.html"},
-{text:"Typedefs",url:"globals_type.html"}]}]}]}
+{text:"File List",url:"files.html"}]}]}

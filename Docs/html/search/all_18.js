@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['y_433',['Y',['../namespace_design_platform_1_1_core.html#a92db826c3a742e69962a0770e24a0fe8a57cec4137b614c87cb4e24a3d003a3e0',1,'DesignPlatform::Core']]]
+  ['zoom2d_400',['Zoom2D',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html',1,'DesignPlatform::UI']]],
+  ['zoom2d_2ecs_401',['Zoom2D.cs',['../_zoom2_d_8cs.html',1,'']]]
 ];

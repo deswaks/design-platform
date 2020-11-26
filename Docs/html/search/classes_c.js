@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['opening_465',['Opening',['../class_design_platform_1_1_core_1_1_opening.html',1,'DesignPlatform::Core']]],
-  ['openingmode_466',['OpeningMode',['../class_design_platform_1_1_core_1_1_opening_mode.html',1,'DesignPlatform::Core']]],
-  ['openingnode_467',['OpeningNode',['../class_design_platform_1_1_database_1_1_opening_node.html',1,'DesignPlatform::Database']]]
+  ['room_432',['Room',['../class_design_platform_1_1_core_1_1_room.html',1,'DesignPlatform::Core']]],
+  ['roomcollider_433',['RoomCollider',['../class_design_platform_1_1_core_1_1_room_collider.html',1,'DesignPlatform::Core']]],
+  ['roomnode_434',['RoomNode',['../class_design_platform_1_1_database_1_1_room_node.html',1,'DesignPlatform::Database']]],
+  ['roomschedulewidget_435',['RoomScheduleWidget',['../class_design_platform_1_1_u_i_1_1_room_schedule_widget.html',1,'DesignPlatform::UI']]]
 ];
