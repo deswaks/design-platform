@@ -303,7 +303,7 @@ namespace DesignPlatform.Core {
                 tagObject.transform.rotation = Quaternion.identity;
                 tagObject.transform.Rotate(new Vector3(90, 0, 0));
                 // Set text
-                tag.font = AssetUtil.LoadAsset<TMP_FontAsset>("fonts", "OpenSans-Light SDF");
+                tag.font = AssetUtil.LoadAsset<TMP_FontAsset>("fonts", "OpenSans-Light_Asset");
                 tag.color = Color.black;
                 tag.fontSize = 5.0f;
                 tag.alignment = TextAlignmentOptions.Center;

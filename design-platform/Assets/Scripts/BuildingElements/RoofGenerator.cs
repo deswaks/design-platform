@@ -69,6 +69,8 @@ namespace DesignPlatform.Core {
 
             List<Vector2> roofPolygon = RoofUtils.GetBuildingOutline().Select(v => v.ToVector2XZ()).ToList();
             float wallThickness = Faces.Max(f => f.Thickness);
+            if (roofPolygon.Count == 0) return new List<List<Vector3>>();
+
             roofPolygon = RoofUtils.OffsetPolyline2D(roofPolygon, wallThickness / 2);
 
             Config config = new Config();

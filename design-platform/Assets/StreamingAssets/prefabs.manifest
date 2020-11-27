@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3744048484
+CRC: 3114456785
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5b0fda365cb3ebea7e06e477b26a6e30
+    Hash: 65c75a2a7f70f99626f65e0074df56a8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1884c57f037393c82b50192d14729dbe
@@ -78,13 +78,14 @@ ClassTypes:
 - Class: 225
   Script: {instanceID: 0}
 Assets:
+- Assets/Prefabs/Widgets/Widget_WallElementSchedule.prefab
 - Assets/Prefabs/Widgets/Widget_SpaceSchedule.prefab
 - Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab
 - Assets/Prefabs/ExtrudeHandle.prefab
 - Assets/Prefabs/WallPrefab.prefab
 - Assets/Prefabs/OpeningPrefab.prefab
 - Assets/Prefabs/MoveHandle.prefab
-- Assets/Prefabs/Widgets/Widget_WallElementSchedule.prefab
+- Assets/Prefabs/Widgets/Widget_OpeningsSchedule.prefab
 - Assets/Prefabs/SlabPrefab.prefab
 - Assets/Prefabs/notification.prefab
 Dependencies: []

@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 9194323552043121540}
   - component: {fileID: 9194323552043121541}
   m_Layer: 5
-  m_Name: Widget_RoomSchedule 1
+  m_Name: Widget_SpaceSchedule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

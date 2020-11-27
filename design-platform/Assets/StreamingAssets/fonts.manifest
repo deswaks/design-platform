@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1676250052
+CRC: 570977118
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 68b609caf59ac458562674cb56e15932
+    Hash: 3526b319527ca1c6063531935d04c459
   TypeTreeHash:
     serializedVersion: 2
     Hash: 789385c49fb2dcba6c71ec3d3d78d149
@@ -20,6 +20,5 @@ ClassTypes:
 - Class: 115
   Script: {instanceID: 0}
 Assets:
-- Assets/Plugins/Modern UI Pack/Fonts/OpenSans-Light SDF.asset
-- Assets/Plugins/Modern UI Pack/Fonts/OpenSans-LightItalic SDF.asset
+- Assets/Plugins/TextMesh Pro/Fonts/OpenSans-Light_Asset.asset
 Dependencies: []
