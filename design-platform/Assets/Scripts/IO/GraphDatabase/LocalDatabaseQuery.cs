@@ -269,10 +269,10 @@ namespace DesignPlatform.Database {
 
             foreach (Opening opening in openings) {
                 OpeningNode spaceNode = new OpeningNode {
-                    openingShape = opening.Shape,
+                    openingShape = opening.Function,
                     height = opening.Height,
                     width = opening.Width,
-                    position = GraphUtils.Vector3ToString(opening.CenterPoint),
+                    position = GraphUtils.Vector3ToString(opening.LocationPoint),
                     rotation = GraphUtils.Vector3ToString(opening.transform.rotation.eulerAngles),
                 };
                 openingNodes.Add(spaceNode);

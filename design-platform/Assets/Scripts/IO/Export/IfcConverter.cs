@@ -277,9 +277,9 @@ namespace DesignPlatform.Export {
                 Mathf.RoundToInt((opening.SillHeight + opening.Height / 2) * 1000),
                 -depth / 2);
             Vector3 placementOrigin = new Vector3(
-                Mathf.RoundToInt(opening.PlacementPoint.x * 1000),
-                Mathf.RoundToInt(opening.PlacementPoint.z * 1000),
-                Mathf.RoundToInt(opening.PlacementPoint.y * 1000));
+                Mathf.RoundToInt(opening.LocationPoint.x * 1000),
+                Mathf.RoundToInt(opening.LocationPoint.z * 1000),
+                Mathf.RoundToInt(opening.LocationPoint.y * 1000));
             Vector3 placementZVector = new Vector3(
                 opening.Faces[0].Normal.x,
                 opening.Faces[0].Normal.z,

@@ -88,6 +88,8 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Gets the original controlpoints of the face (horizontal and vertical faces)
         /// </summary>
+        /// <param name="localCoordinates">Specify whether the coordinates should be given in the local system.</param>
+        /// <returns></returns>
         public List<Vector3> GetControlPoints(bool localCoordinates = false) {
             List<Vector3> spaceControlPoints = Space.GetControlPoints(localCoordinates: localCoordinates, closed: true);
             List<Vector3> controlPoints = new List<Vector3>();
@@ -109,14 +111,13 @@ namespace DesignPlatform.Core {
                     }
                     break;
             }
-
             return controlPoints;
         }
 
         /// <summary>
         /// Add an interface to the managed list of interfaces
         /// </summary>
-        /// <param name="interFace"></param>
+        /// <param name="interFace">Interface to add.</param>
         public void AddInterface(Interface interFace, float startParameter = 0.0f, float endParameter = 1.0f) {
             if (Orientation == Orientation.VERTICAL) {
                 InterfaceParameters.Add(interFace, new float[] { startParameter, endParameter });
@@ -125,10 +126,11 @@ namespace DesignPlatform.Core {
                 InterfaceParameters.Add(interFace, new float[] { 0.0f, 0.0f });
             }
         }
+
         /// <summary>
         /// Remove an interface from the managed list of interfaces
         /// </summary>
-        /// <param name="interFace"></param>
+        /// <param name="interFace">Interface to remove.</param>
         public void RemoveInterface(Interface interFace) {
             if (Interfaces.Contains(interFace)) InterfaceParameters.Remove(interFace);
         }
@@ -136,27 +138,26 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Add an opening to the managed list of openings
         /// </summary>
-        /// <param name="interFace"></param>
-        /// <param name="opening"></param>
+        /// <param name="opening">Opening to add.</param>
         public void AddOpening(Opening opening) {
             if (Openings.Contains(opening)) return;
-            float parameter = Line.Parameter(opening.CenterPoint);
+            float parameter = Line.Parameter(opening.LocationPoint);
             OpeningParameters.Add(opening, parameter);
         }
 
         /// <summary>
         /// Remove an opening from the managed list of openings
         /// </summary>
-        /// <param name="opening"></param>
+        /// <param name="opening">Opening to remove.</param>
         public void RemoveOpening(Opening opening) {
             if (Openings.Contains(opening)) OpeningParameters.Remove(opening);
         }
 
         /// <summary>
-        /// 
+        /// Find the interface which connects to this face at a specific parameter.
         /// </summary>
-        /// <param name="parameterOnFace"></param>
-        /// <returns></returns>
+        /// <param name="parameterOnFace">Parameter on this face.</param>
+        /// <returns>Interface at the specified parameter.</returns>
         public Interface GetInterfaceAtParameter(float parameterOnFace) {
             foreach (KeyValuePair<Interface, float[]> iface in InterfaceParameters) {
                 if (parameterOnFace > iface.Value[0] && parameterOnFace < iface.Value[1]) {
@@ -165,6 +166,10 @@ namespace DesignPlatform.Core {
             }
             return null;
         }
+
+        /// <summary>
+        /// Delete the face object
+        /// </summary>
         public void Delete() {
             if (Openings != null && Openings.Count > 0) {
                 foreach (Opening opening in Openings) {

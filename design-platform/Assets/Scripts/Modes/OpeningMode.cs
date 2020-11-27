@@ -134,12 +134,12 @@ namespace DesignPlatform.Modes {
         public void UpdatePreviewLocation() {
             hitPoint = HitPointOnPlane();
             if (MousePositionCollidingSpaces(hitPoint) == null) {
-                previewOpening.Move(hitPoint);
+                previewOpening.Move(hitPoint, useSubgrid: false);
             }
             else {
                 Face closestFace = ClosestFace(hitPoint);
                 closestPoint = closestFace.Line.ClosestPoint(hitPoint);
-                previewOpening.SubMove(closestPoint);
+                previewOpening.Move(closestPoint);
                 previewOpening.Rotate(closestFace);
                 previewOpening.UpdateRender2D();
             }

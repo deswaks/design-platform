@@ -50,7 +50,7 @@ namespace DesignPlatform.UI {
 
             //foreach (CLTElement e in wallElements) {
             openings.ForEach(o =>allDataRows.Add( new List<string>{
-                     StringUtils.ToTitleCase(o.Shape.ToString()),    
+                     StringUtils.ToTitleCase(o.Function.ToString()),    
                     (o.Height*1000).ToString()+" mm",
                     (o.Width*1000).ToString()+" mm",
                     "", // For count
