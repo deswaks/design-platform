@@ -1,13 +1,16 @@
 ManifestFileVersion: 0
-CRC: 1794465857
+CRC: 4268865134
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: materials
       Dependencies: {}
     Info_1:
-      Name: structuralanalysis
+      Name: prefabs
       Dependencies: {}
     Info_2:
-      Name: prefabs
+      Name: structuralanalysis
+      Dependencies: {}
+    Info_3:
+      Name: fonts
       Dependencies: {}

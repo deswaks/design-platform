@@ -2,6 +2,7 @@
 using DesignPlatform.Utils;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,16 +21,7 @@ namespace DesignPlatform.UI {
 
         public WallElementScheduleWidget() : base() {
             Size = (width: 2, height: 1);
-            Name = "Wall Element Schedule";
-        }
-
-        public void InsertInDashboard() {
-
-        }
-
-        public GameObject DrawPanel() // Initialize widget
-        {
-            return Host;
+            Name = "CLT Element Schedule";
         }
 
         public override Object CreatePanel() // Initialize widget
@@ -44,8 +36,6 @@ namespace DesignPlatform.UI {
 
             columnCount = contentTemplate.transform.childCount;
 
-            //UpdatePanel();
-
             return Panel;
         }
 
@@ -56,30 +46,42 @@ namespace DesignPlatform.UI {
             int elementIndex = 0;
 
             List<CLTElement> wallElements = CLTElementGenerator.IdentifyWallElementsAndJointTypes();
+            List<List<string>> allDataRows = new List<List<string>>();
 
-            foreach (CLTElement e in wallElements) {
+            //foreach (CLTElement e in wallElements) {
+            wallElements.ForEach(e =>allDataRows.Add( new List<string>{
+                    "", // For count
+                    e.Quality,    
+                    e.Length.ToString()+" m",
+                    e.Height.ToString()+" m",
+                    (e.Thickness*1000).ToString()+" mm",
+                    e.Area.ToString()+" m²"
+            }));
+
+
+            List<List<string>> addedRows = new List<List<string>>();
+
+            foreach (List<string> rowData in allDataRows) {
+                // Checks if an equal row has already been added
+                if (addedRows.Count(row => row.SequenceEqual(rowData)) > 0) continue;
+
+                addedRows.Add(rowData);
+
+                
+
                 GameObject currentRow = GameObject.Instantiate(contentTemplate, contentTemplate.transform.parent);
                 currentRow.name = "Row" + elementIndex.ToString();
                 contentRows.Add(currentRow);
-
-                List<string> rowData = new List<string>
-                {
-                "Wall " + elementIndex.ToString(),
-                e.Length.ToString()+"m",
-                e.Quality,    
-                e.Height.ToString()+"m",
-                (e.Thickness*1000).ToString()+"mm",
-                e.Area.ToString()+"m²"
-                };
+                elementIndex++;
 
                 for (int i = 0; i < columnCount; i++) {
                     currentRow.transform.GetChild(i).GetComponentInChildren<TMPro.TMP_Text>().text = rowData[i];
                 }
-
-                elementIndex++;
+                int count = allDataRows.Count(row => row.SequenceEqual(rowData));
+                currentRow.transform.GetChild(0).GetComponentInChildren<TMPro.TMP_Text>().text = count.ToString();
             }
-            contentTemplate.SetActive(false);
 
+            contentTemplate.SetActive(false);
         }
 
         private void DeleteContentRows() {

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 763118569
+CRC: 1253304056
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0c7709a64bebc684fc52c7d658d0f2f2
+    Hash: 72bbe76d1c40d99accf0b0f67affcdd7
   TypeTreeHash:
     serializedVersion: 2
     Hash: eb2df8f86b2fdff59f8cd5fa808e319e
@@ -46,5 +46,4 @@ ClassTypes:
 Assets:
 - Assets/Scripts/Modules/Structural Analysis/Widget/Structural Widget.prefab
 - Assets/Scripts/Modules/Structural Analysis/Widget/Loads Overview Row.prefab
-Dependencies:
-- E:/github/design-platform/design-platform/Assets/StreamingAssets/fonts
+Dependencies: []

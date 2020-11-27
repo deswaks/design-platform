@@ -21,15 +21,6 @@ namespace DesignPlatform.UI {
             Name = "Space Schedule";
         }
 
-        public void InsertInDashboard() {
-
-        }
-
-        public GameObject DrawPanel() // Initialize widget
-        {
-            return Host;
-        }
-
         public override Object CreatePanel() // Initialize widget
         {
             // Loads prefab object and instantiates Widget
@@ -41,8 +32,6 @@ namespace DesignPlatform.UI {
             contentTemplate = Panel.transform.Find(ContentTemplateName).gameObject;
 
             columnCount = contentTemplate.transform.childCount;
-
-            //UpdatePanel();
 
             return Panel;
         }
@@ -58,15 +47,13 @@ namespace DesignPlatform.UI {
                 currentRow.name = "Row" + spaceIndex.ToString();
                 contentRows.Add(currentRow);
 
-                List<string> rowData = new List<string>
-                {
-                "Space " + spaceIndex.ToString(),                 // Space Name
-                StringUtils.ToTitleCase(space.Type.ToString()),  // Space Type
-                StringUtils.ToTitleCase(space.Shape.ToString()), // Space Shape
-                space.gameObject.GetInstanceID().ToString(),     // Space rumber - SKAL OPDATERES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                space.GetFloorArea().ToString() + " m²"          // Floor area
-
-            };
+                List<string> rowData = new List<string>{
+                    "Space " + spaceIndex.ToString(),                 // Space Name
+                    StringUtils.ToTitleCase(space.Type.ToString()),  // Space Type
+                    StringUtils.ToTitleCase(space.Shape.ToString()), // Space Shape
+                    space.gameObject.GetInstanceID().ToString(),     // Space rumber - SKAL OPDATERES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    space.GetFloorArea().ToString() + " m²"          // Floor area
+                };
 
                 for (int i = 0; i < columnCount; i++) {
                     currentRow.transform.GetChild(i).GetComponentInChildren<TMPro.TMP_Text>().text = rowData[i];
@@ -76,7 +63,6 @@ namespace DesignPlatform.UI {
 
             }
             contentTemplate.SetActive(false);
-
         }
 
         private void DeleteContentRows() {

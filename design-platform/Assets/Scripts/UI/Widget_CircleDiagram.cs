@@ -1,5 +1,7 @@
 ﻿using DesignPlatform.Utils;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace DesignPlatform.UI {
@@ -25,15 +27,6 @@ namespace DesignPlatform.UI {
         {
             Size = (width: 1, height: 1);
             Name = "Circle Diagram";
-        }
-
-        public void InsertInDashboard() {
-
-        }
-
-        public GameObject DrawPanel() // Initialize widget
-        {
-            return Host;
         }
 
         public override Object CreatePanel() // Initialize widget
@@ -102,10 +95,8 @@ namespace DesignPlatform.UI {
                 i++;
             }
 
-
             listObjectTemplate.SetActive(false);
             wedgeTemplate.SetActive(false);
-
         }
 
         private void ClearDiagram() {

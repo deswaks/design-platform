@@ -28,7 +28,9 @@ namespace DesignPlatform.Modes {
             SpaceScheduleWidget widgey = new SpaceScheduleWidget();
             widgey.RequestDraw();
             WallElementScheduleWidget wallElementwidget = new WallElementScheduleWidget();
-            wallElementwidget.RequestDraw();
+            wallElementwidget.RequestDraw();            
+            OpeningsScheduleWidget openingsWidget = new OpeningsScheduleWidget();
+            openingsWidget.RequestDraw();
             StructuralWidget strucWidget = new StructuralWidget();
             strucWidget.RequestDraw();
             Widget_CircleDiagram circle = new Widget_CircleDiagram();
