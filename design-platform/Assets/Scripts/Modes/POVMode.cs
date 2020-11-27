@@ -7,6 +7,7 @@ using Michsky.UI.ModernUIPack;
 using DesignPlatform.UI;
 using DesignPlatform.Core;
 using DesignPlatform.Database;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Modes {
     public class POVMode : Mode {

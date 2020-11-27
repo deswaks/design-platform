@@ -1,9 +1,11 @@
-﻿using DesignPlatform.Utils;
+﻿using DesignPlatform.Geometry;
+using DesignPlatform.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
+using ProceduralToolkit.Buildings;
 
 namespace DesignPlatform.Core {
 
@@ -12,24 +14,23 @@ namespace DesignPlatform.Core {
     /// </summary>
     public class Roof : MonoBehaviour {
 
+        public float Thickness { get; private set; }
+        public float Pitch { get; private set; }
+        public float Overhang { get; private set; }
+        public RoofType Type { get; private set; }
 
-        public float RoofThickness { get; private set; } = 0.2f;
-        public List<Vector3> RoofControlPoints { get; private set; }
-        public float RoofPitch { get {
-                return RoofGenerator.Instance.RoofPitch;
-            } }
-        public float Overhang { get {
-                return RoofGenerator.Instance.overhang;
-            }
-        }
-        public ProceduralToolkit.Buildings.RoofType RoofType { get {
-                return RoofGenerator.Instance.roofType;
-            } }
+        public List<Vector3> ControlPoints { get; private set; }
 
         /// <summary>
         /// Construct roof.
         /// </summary>
         public void InitializeRoof(List<Vector3> roofFaceVertices) {
+            // Save values at instantiation
+            Thickness = Settings.RoofThickness;
+            Pitch = Settings.RoofPitch;
+            Overhang = Settings.RoofOverhang;
+            Type = Settings.RoofType;
+
             Vector3 Normal = Vector3.Cross(roofFaceVertices[2] - roofFaceVertices[1], roofFaceVertices[0] - roofFaceVertices[1]).normalized;
 
             // Moves vertical roof faces (gables) in towards the building, if there is overhang
@@ -40,7 +41,7 @@ namespace DesignPlatform.Core {
             // Transforms points to origin and in XZ plane
             Vector3 location; 
             Vector3 rotationVector; 
-            RoofControlPoints = RoofUtils.TransformPointsToXZ(roofFaceVertices, out location, out rotationVector);
+            ControlPoints = RoofUtils.TransformPointsToXZ(roofFaceVertices, out location, out rotationVector);
             
             gameObject.layer = 13; // Wall layer
             Material roofMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
@@ -49,7 +50,7 @@ namespace DesignPlatform.Core {
             gameObject.AddComponent<MeshCollider>();
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
-            mesh.CreateShapeFromPolygon(RoofControlPoints, -RoofThickness, false);
+            mesh.CreateShapeFromPolygon(ControlPoints, -Thickness, false);
             mesh.GetComponent<MeshRenderer>().material = roofMaterial;
 
             gameObject.transform.position = location + new Vector3(0, 3.0f, 0);

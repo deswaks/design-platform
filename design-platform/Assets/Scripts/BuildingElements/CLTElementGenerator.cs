@@ -1,4 +1,5 @@
-﻿using DesignPlatform.Utils;
+﻿using DesignPlatform.Geometry;
+using DesignPlatform.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,38 @@ using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
 
 namespace DesignPlatform.Core {
-       public static class CLTElementGenerator {
+
+
+    public partial class Building {
+
+        /// <summary>
+        /// Builds CLT elements for all vertical interfaces of the whole building.
+        /// </summary>
+        /// <returns>All walls of the building.</returns>
+        public List<Wall> BuildAllWallsAsCLTElements() {
+            foreach (Opening opening in Openings) {
+                opening.AttachClosestFaces();
+            }
+            Building.IdentifyWallElementsAndJointTypes().ForEach(clt => BuildWall(clt));
+            return Walls;
+        }
+
+        /// <summary>
+        /// Build a 3D wall representation.
+        /// </summary>
+        /// <param name="cltElement">CLT element to base the wall upon</param>
+        /// <returns>The newly built wall.</returns>
+        public Wall BuildWall(CLTElement cltElement) {
+            GameObject newWallGameObject = new GameObject("Wall");
+            Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
+
+            newWall.InitializeWall(cltElement);
+
+            walls.Add(newWall);
+
+            return newWall;
+        }
+
         /// <summary>
         /// Finds all wall elements from interfaces and identifies the joints between them. 
         /// </summary>
@@ -90,49 +122,11 @@ namespace DesignPlatform.Core {
             return newWallElements;
         }
 
-
         /// <summary>
-        /// Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements. 
+        /// Groups all interfaces that are parallel.
         /// </summary>
-        /// <returns>Returns full, un-split, wall elements with no joint information.</returns>
-        private static List<CLTElement> JoinInterfacesToLongestWallElements() {
-            // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = Building.Instance.Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
-
-            List<int> wallIDs = GroupParallelJoinedInterfaces(culledInterfaces);
-            
-            // Each group consists of interfaces making up an entire wall
-            IEnumerable<IGrouping<int, Interface>> wallGroups = culledInterfaces.GroupBy(i => wallIDs[culledInterfaces.IndexOf(i)]);
-
-            // List for resulting wall vertices
-            List<CLTElement> wallElements = new List<CLTElement>();
-
-            // Loops through list of wall interfaces belong to each wall to find out wall end points and wall midpoints.
-            foreach (List<Interface> wallInterfaces in wallGroups.Select(list => list.ToList()).ToList()) {
-                CLTElement wallElement = new CLTElement();
-
-                List<Vector3> currentWallVertices = wallInterfaces.SelectMany(i => new List<Vector3> { i.EndPoint, i.StartPoint }).Distinct().ToList();
-                // X-values
-                List<float> xs = currentWallVertices.Select(p => p.x).ToList();
-                // Z-values
-                List<float> zs = currentWallVertices.Select(p => p.z).ToList();
-                // Endpoints are (Xmin,0,Zmin);(Xmax,0,Zmax) ////////////////// ONLY TRUE FOR WALLS LYING ALONG X-/Z-AXIS
-                wallElement.SetStartPoint(new Vector3(xs.Min(), 0, zs.Min()));
-                wallElement.SetEndPoint(new Vector3(xs.Max(), 0, zs.Max()));
-                // Removes endpoints from vertex-list so that only midpoints remain
-                currentWallVertices.RemoveAll(p => p == wallElement.startPoint.point || p == wallElement.endPoint.point);
-                wallElement.SetMidPoints(currentWallVertices);
-
-                wallElement.SetInterfaces(wallInterfaces);
-
-                wallElements.Add(wallElement);
-
-                if (wallElement.Length > 16.5) Debug.Log("Panel surpasses maximum length of 16.5m");
-            }
-
-            return wallElements;
-        }
-
+        /// <param name="interfaces"></param>
+        /// <returns></returns>
         public static List<int> GroupParallelJoinedInterfaces(List<Interface> interfaces) {
 
             // Identifier ID (Integer) for each wall referring to its wall element
@@ -170,7 +164,55 @@ namespace DesignPlatform.Core {
             return wallIDs;
         }
 
-        public static List<Interface> GetParallelConnectedInterfaces(List<Interface> interfacesList, Interface interFace) {
+        /// <summary>
+        /// Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements. 
+        /// </summary>
+        /// <returns>Returns full, un-split, wall elements with no joint information.</returns>
+        private static List<CLTElement> JoinInterfacesToLongestWallElements() {
+            // Culls interfaces with same start- and endpoint
+            List<Interface> culledInterfaces = Building.Instance.Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
+
+            List<int> wallIDs = GroupParallelJoinedInterfaces(culledInterfaces);
+
+            // Each group consists of interfaces making up an entire wall
+            IEnumerable<IGrouping<int, Interface>> wallGroups = culledInterfaces.GroupBy(i => wallIDs[culledInterfaces.IndexOf(i)]);
+
+            // List for resulting wall vertices
+            List<CLTElement> wallElements = new List<CLTElement>();
+
+            // Loops through list of wall interfaces belong to each wall to find out wall end points and wall midpoints.
+            foreach (List<Interface> wallInterfaces in wallGroups.Select(list => list.ToList()).ToList()) {
+                CLTElement wallElement = new CLTElement();
+
+                List<Vector3> currentWallVertices = wallInterfaces.SelectMany(i => new List<Vector3> { i.EndPoint, i.StartPoint }).Distinct().ToList();
+                // X-values
+                List<float> xs = currentWallVertices.Select(p => p.x).ToList();
+                // Z-values
+                List<float> zs = currentWallVertices.Select(p => p.z).ToList();
+                // Endpoints are (Xmin,0,Zmin);(Xmax,0,Zmax) ////////////////// ONLY TRUE FOR WALLS LYING ALONG X-/Z-AXIS
+                wallElement.SetStartPoint(new Vector3(xs.Min(), 0, zs.Min()));
+                wallElement.SetEndPoint(new Vector3(xs.Max(), 0, zs.Max()));
+                // Removes endpoints from vertex-list so that only midpoints remain
+                currentWallVertices.RemoveAll(p => p == wallElement.startPoint.point || p == wallElement.endPoint.point);
+                wallElement.SetMidPoints(currentWallVertices);
+
+                wallElement.SetInterfaces(wallInterfaces);
+
+                wallElements.Add(wallElement);
+
+                if (wallElement.Length > 16.5) Debug.Log("Panel surpasses maximum length of 16.5m");
+            }
+
+            return wallElements;
+        }
+
+        /// <summary>
+        /// Finds all the interfaces that are parallel
+        /// </summary>
+        /// <param name="interfacesList"></param>
+        /// <param name="interFace"></param>
+        /// <returns></returns>
+        private static List<Interface> GetParallelConnectedInterfaces(List<Interface> interfacesList, Interface interFace) {
             Vector3 interfaceDirection = (interFace.StartPoint - interFace.EndPoint).normalized;
 
             // Finds interfaces that have an endpoint in the given point
@@ -191,4 +233,3 @@ namespace DesignPlatform.Core {
 
     }
 }
-

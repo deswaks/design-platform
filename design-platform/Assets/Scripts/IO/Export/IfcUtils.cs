@@ -18,6 +18,7 @@ using Xbim.Ifc4.PropertyResource;
 using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Export {
     public static class IfcUtils {

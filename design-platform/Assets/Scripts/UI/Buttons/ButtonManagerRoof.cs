@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Core {
     public class ButtonManagerRoof : MonoBehaviour {
@@ -32,13 +33,13 @@ namespace DesignPlatform.Core {
             }
 
 
-            RoofGenerator.Instance.roofType = (ProceduralToolkit.Buildings.RoofType) i;
+            Settings.RoofType = (ProceduralToolkit.Buildings.RoofType) i;
         }
         public void SetRoofPitch() {
-            RoofGenerator.Instance.RoofPitch = pitchSlider.value;
+            Settings.RoofPitch = pitchSlider.value;
         }
         public void SetRoofOverhang() {
-            RoofGenerator.Instance.overhang = overhangSlider.value/1000;
+            Settings.RoofOverhang = overhangSlider.value/1000;
         }
 
     }

@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
+using DesignPlatform.Geometry;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
-namespace Michsky.UI.ModernUIPack
-{
+namespace Michsky.UI.ModernUIPack {
     public class ContextMenu : Editor
     {
         static void CreateObject(string resourcePath)

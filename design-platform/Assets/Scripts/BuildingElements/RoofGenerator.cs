@@ -8,46 +8,88 @@ using static ProceduralToolkit.Buildings.BuildingGenerator;
 using DesignPlatform.Utils;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Core {
-    public class RoofGenerator{
+    public partial class Building{
 
-        private static RoofGenerator instance;
-        public static RoofGenerator Instance{
-            get { return instance ?? (instance = new RoofGenerator()); }
+        
+
+        /// <summary> All roofs of this building </summary>
+        private List<Roof> roofs = new List<Roof>();
+
+        /// <summary>
+        /// All roof objects of this building
+        /// </summary>
+        public List<Roof> Roofs {
+            get {
+                if (roofs == null || roofs.Count == 0) BuildAllRoofElements();
+                return roofs;
+            }
         }
 
-        public float RoofPitch = 15;
-        public float wallThickness = 0.2f;
-        public float overhang = 0.15f;
-        public RoofType roofType = RoofType.Gabled;
+        /// <summary>
+        /// Builds a roof composed of elements that together envelops the top side of the whole building.
+        /// </summary>
+        /// <returns>All roof elements of the building.</returns>
+        public List<Roof> BuildAllRoofElements() {
+            List<List<Vector3>> roofOutlines = Building.Instance.CreateRoofOutlines();
+            foreach (List<Vector3> outline in roofOutlines) {
+                BuildRoofElement(outline);
+            }
+            return roofs;
+        }
 
-        public List<List<Vector3>> CreateRoofOutlines() {
+        /// <summary>
+        /// Build a 3D roof element representation.
+        /// </summary>
+        /// <param name="outline">outline of the roof element.</param>
+        /// <returns>The newly built roof.</returns>
+        public Roof BuildRoofElement(List<Vector3> outline) {
+            GameObject newRoofGameObject = new GameObject("Roof");
+            Roof newRoof = (Roof)newRoofGameObject.AddComponent<Roof>();
+            newRoof.InitializeRoof(outline);
+            roofs.Add(newRoof);
+            return newRoof;
+        }
+
+        /// <summary>
+        /// Removes a roof element from the managed building list.
+        /// </summary>
+        /// <param name="roofElement">Roof element to remove.</param>
+        public void RemoveRoof(Roof roofElement) {
+            if (roofs.Contains(roofElement)) roofs.Remove(roofElement);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private List<List<Vector3>> CreateRoofOutlines() {
 
             List<Vector2> roofPolygon = RoofUtils.GetBuildingOutline().Select(v => v.ToVector2XZ()).ToList();
-
+            float wallThickness = Faces.Max(f => f.Thickness);
             roofPolygon = RoofUtils.OffsetPolyline2D(roofPolygon, wallThickness / 2);
 
             Config config = new Config();
             config.roofConfig.thickness = 0.00f;
-            config.roofConfig.overhang = overhang;
-            config.roofConfig.type = roofType;
+            config.roofConfig.overhang = Settings.RoofOverhang;
+            config.roofConfig.type = Settings.RoofType;
 
             // Creates base roof mesh using ProceduralToolkit
             IConstructible<MeshDraft> constructible = RoofUtils.GenerateRoofPlan(roofPolygon, config);
 
             Mesh roofMesh;
             //Mesh roofMesh = constructible.Construct(Vector2.zero).ToMesh();
-            if(roofType == RoofType.Gabled) {
-                roofMesh = ((ProceduralGabledRoof)constructible).ConstructWithPitch(Vector2.zero, RoofPitch).ToMesh();
+            if(Settings.RoofType == RoofType.Gabled) {
+                roofMesh = ((ProceduralGabledRoof)constructible).ConstructWithPitch(Vector2.zero, Settings.RoofPitch).ToMesh();
             }
-            else if(roofType == RoofType.Hipped) {
-                roofMesh = ((ProceduralHippedRoof)constructible).ConstructWithPitch(Vector2.zero, RoofPitch).ToMesh();
+            else if(Settings.RoofType == RoofType.Hipped) {
+                roofMesh = ((ProceduralHippedRoof)constructible).ConstructWithPitch(Vector2.zero, Settings.RoofPitch).ToMesh();
             }
             else {
                 roofMesh = constructible.Construct(Vector2.zero).ToMesh();
             }
-
 
             roofMesh.RecalculateNormals();
 
@@ -67,7 +109,7 @@ namespace DesignPlatform.Core {
             // Calculates normals of each triangle
             List<Vector3> triangleNormals = triangleVertices.Select(t => Vector3.Cross(t[2] - t[1], t[0] - t[1]).normalized).ToList();
 
-            if (roofType != RoofType.Flat) {
+            if (Settings.RoofType != RoofType.Flat) {
                 // Removes horizontal faces (horizontal triangles are created when choosing an overhang length >0 )
                 triangleVertices = triangleVertices.Where((vs, i) => triangleNormals[i].y >= -0.1f).ToList();
                 triangleNormals = triangleNormals.Where(n => n.y >= -0.1f).ToList();
@@ -128,6 +170,18 @@ namespace DesignPlatform.Core {
             }
 
             return finalPanelOutlines;
+        }
+
+        /// <summary>
+        /// Removes all roof elements of the whole building.
+        /// </summary>
+        public void DeleteAllRoofElements() {
+            int amount = roofs.Count;
+            if (amount > 0) {
+                for (int i = 0; i < amount; i++) {
+                    roofs[0].DeleteRoof();
+                }
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ using Xbim.Ifc4.QuantityResource;
 using Xbim.Ifc4.RepresentationResource;
 using Xbim.Ifc4.SharedBldgElements;
 using DesignPlatform.Core;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Export {
     public static class IfcConverter {
@@ -139,7 +140,7 @@ namespace DesignPlatform.Export {
 
             // Get data from slab
             int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
-            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Spaces[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
+            int isCeiling = interFace.Faces[0].SpaceIndex - (interFace.Spaces[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
             int elevation = Mathf.RoundToInt(isCeiling * interFace.Spaces[0].height * 1000);
             Vector3 extrusionOffset = new Vector3(0, 0, -thickness);
             Vector3 roomOrigin = new Vector3(
@@ -334,7 +335,7 @@ namespace DesignPlatform.Export {
 
             // Get data from wall
             int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
-            int isCeiling = interFace.Faces[0].FaceIndex - (interFace.Spaces[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
+            int isCeiling = interFace.Faces[0].SpaceIndex - (interFace.Spaces[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
             int elevation = Mathf.RoundToInt(isCeiling * interFace.Spaces[0].height * 1000);
             Vector3 extrusionOffset = new Vector3(0, 0, -thickness);
             Vector3 roomOrigin = new Vector3(

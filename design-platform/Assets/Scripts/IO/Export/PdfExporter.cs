@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using DesignPlatform.Core;
 using StructuralAnalysis;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Export {
     public static class PdfExporter {
@@ -95,7 +96,7 @@ namespace DesignPlatform.Export {
 
         private static void WriteSpaceArea(XGraphics gfx, XFont tagFont, Core.Space space, XStringFormat tagFormat) {
             XPoint tagLocation = WorldToPaper(gfx, space.GetTagLocation());
-            string tagText = space.GetFloorArea().ToString() + "m²";
+            string tagText = space.Area.ToString() + "m²";
             gfx.DrawString(tagText, tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y + tagFont.Size / 2 + 2, tagFormat);
         }
 

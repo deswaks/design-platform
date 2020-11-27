@@ -61,10 +61,10 @@ namespace DesignPlatform.UI {
                 List<string> rowData = new List<string>
                 {
                 "Space " + spaceIndex.ToString(),                 // Space Name
-                StringUtils.ToTitleCase(space.Type.ToString()),  // Space Type
+                StringUtils.ToTitleCase(space.Function.ToString()),  // Space Type
                 StringUtils.ToTitleCase(space.Shape.ToString()), // Space Shape
                 space.gameObject.GetInstanceID().ToString(),     // Space rumber - SKAL OPDATERES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                space.GetFloorArea().ToString() + " m²"          // Floor area
+                space.Area.ToString() + " m²"          // Floor area
 
             };
 

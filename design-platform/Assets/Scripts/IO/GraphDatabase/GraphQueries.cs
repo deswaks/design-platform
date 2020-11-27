@@ -195,7 +195,7 @@ namespace DesignPlatform.Database {
                     id = rd.Next(0, 5000),                              /////////////////////////// SKAL OPDATERES
                     name = space.Shape.ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
                     area = 17.5f,                                       /////////////////////////// SKAL OPDATERES
-                    type = space.Type,
+                    type = space.Function,
                     shape = space.Shape,
                     vertices = GraphUtils.Vector3ListToStringList(space.GetControlPoints())
                 };

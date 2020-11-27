@@ -2,6 +2,7 @@
 using gbXMLSerializer;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace DesignPlatform.Export {
     public static class GbxmlConverter {
@@ -15,12 +16,12 @@ namespace DesignPlatform.Export {
 
             // Space area
             Area area = new Area();
-            area.val = string.Format("{0:N2}", space.GetFloorArea());
+            area.val = string.Format("{0:N2}", space.Area);
             xmlSpace.spacearea = area;
 
             // Space volume
             Volume vol = new Volume();
-            vol.val = string.Format("{0:N2}", space.GetVolume());
+            vol.val = string.Format("{0:N2}", space.Volume);
             xmlSpace.spacevol = vol;
 
             // Shell geometry
@@ -33,7 +34,7 @@ namespace DesignPlatform.Export {
             ClosedShell closedShell = new ClosedShell();
             shellGeometry.ClosedShell = closedShell;
 
-            List<List<Vector3>> surfacesVertices = space.GetSurfaceVertices();
+            List<List<Vector3>> surfacesVertices = GetSpaceSurfaceVertices(space);
 
             // Make polyloop arrays
             closedShell.PolyLoops = prod.makePolyLoopArray(surfacesVertices.Count);
@@ -55,6 +56,38 @@ namespace DesignPlatform.Export {
             }
 
             return xmlSpace;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static List<List<Vector3>> GetSpaceSurfaceVertices(Core.Space space) {
+            List<List<Vector3>> surfacesVertices = new List<List<Vector3>>();
+            List<Vector3> vertices;
+
+            // Add Floor surface
+            vertices = space.GetControlPoints().Select(p => new Vector3(p.x, p.y, p.z)).ToList();
+            surfacesVertices.Add(vertices);
+
+            // Add wall surfaces
+            int j = space.ControlPoints.Count - 1;
+            for (int i = 0; i < space.ControlPoints.Count; i++) {
+                vertices = new List<Vector3> {
+                    space.ControlPoints[i],
+                    space.ControlPoints[i] + new Vector3(0, space.height, 0),
+                    space.ControlPoints[j] + new Vector3(0, space.height, 0),
+                    space.ControlPoints[j]
+                };
+                surfacesVertices.Add(vertices);
+                j = i;
+            }
+
+            // Add Ceiling vertices
+            vertices = space.GetControlPoints().Select(p => new Vector3(p.x, p.y + space.height, p.z)).ToList();
+            surfacesVertices.Add(vertices);
+
+            return surfacesVertices;
         }
     }
 }

@@ -6,6 +6,7 @@ using ProceduralToolkit;
 using System.Linq;
 using System;
 using DesignPlatform.Core;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Utils {
 
@@ -42,7 +43,7 @@ namespace DesignPlatform.Utils {
             List<Interface> culledInterfaces = Building.Instance.InterfacesVertical.Where(i => i.EndPoint != i.StartPoint).Where(iface => iface.Faces.Count == 1).ToList();
 
             List<List<Vector3>> segments = new List<List<Vector3>>();
-            List<int> interfaceGroupIDs = CLTElementGenerator.GroupParallelJoinedInterfaces(culledInterfaces);
+            List<int> interfaceGroupIDs = Building.GroupParallelJoinedInterfaces(culledInterfaces);
 
             // Each group consists of interfaces making up an entire wall
             IEnumerable<IGrouping<int, Interface>> interfaceGroups = culledInterfaces.GroupBy(i => interfaceGroupIDs[culledInterfaces.IndexOf(i)]);

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using DesignPlatform.Core;
 using DesignPlatform.UI;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Database {
     public class LocalDatabase {
@@ -168,7 +169,7 @@ namespace DesignPlatform.Database {
         {
             jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath + "WallElements.json";
 
-            List<CLTElement> wallElements = CLTElementGenerator.IdentifyWallElementsAndJointTypes();
+            List<CLTElement> wallElements = Building.IdentifyWallElementsAndJointTypes();
 
             // Collects Unity space as SpaceNodes
             List<WallElementNode> wallElementNodes = new List<WallElementNode>();
@@ -248,7 +249,7 @@ namespace DesignPlatform.Database {
                     id = rd.Next(0, 5000),                              /////////////////////////// SKAL OPDATERES
                     name = space.Shape.ToString().ToLower(),    /////////////////////////// SKAL OPDATERES
                     area = 17.5f,                                       /////////////////////////// SKAL OPDATERES
-                    type = space.Type,
+                    type = space.Function,
                     shape = space.Shape,
                     vertices = GraphUtils.Vector3ListToStringList(space.GetControlPoints())
                 };

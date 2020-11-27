@@ -30,9 +30,9 @@ namespace DesignPlatform.UI {
         public void PublishSpaceNote() {
             //GameObject myInputGO = GameObject.Find("InputField Room Note");
             TMP_InputField myInputIF = GameObject.Find("InputProperty").GetComponent<TMP_InputField>();
-            SelectMode.Instance.selection.SetSpaceNote(myInputIF.text);
+            SelectMode.Instance.selection.CustomNote = myInputIF.text;
             myInputIF.text = "";
-            Debug.Log(SelectMode.Instance.selection.customProperty);
+            Debug.Log(SelectMode.Instance.selection.CustomNote);
         }
 
 

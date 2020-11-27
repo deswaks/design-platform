@@ -10,82 +10,79 @@ namespace DesignPlatform.Core {
     /// </summary>
     public class Face {
 
+        /// <summary> Proposed thickness of the future wall on the face.</summary>
+        public float Thickness = 0.2f;
+        
+
+
+        /// <summary>
+        /// Default constructor to create a new face.
+        /// </summary>
+        /// <param name="parentSpace"></param>
+        /// <param name="index"></param>
         public Face(Space parentSpace, int index) {
             OpeningParameters = new Dictionary<Opening, float>();
             InterfaceParameters = new Dictionary<Interface, float[]>();
             Space = parentSpace;
-            FaceIndex = index;
-            SetOrientation();
+            SpaceIndex = index;
         }
 
-        public Space Space { get; private set; }
-        public int FaceIndex { get; private set; }
 
-        public Dictionary<Interface, float[]> InterfaceParameters { get; private set; }
+
+        /// <summary>The space which this face belongs to.</summary>
+        public Space Space { get; private set; }
+        
+        /// <summary>Index of this face in the parent space's list of faces.</summary>
+        public int SpaceIndex { get; private set; }
+        
+        /// <summary>Interfaces connected to this face.</summary>
         public List<Interface> Interfaces {
             get {
                 return InterfaceParameters.Keys.Select(i => (Interface)i).ToList();
             }
         }
 
-        public Dictionary<Opening, float> OpeningParameters { get; private set; }
+        /// <summary>The parameters on this face at which the start and end point of
+        /// each of the connected interfaces lie.</summary>
+        public Dictionary<Interface, float[]> InterfaceParameters { get; private set; }
+
+        /// <summary>The openings located on this face.</summary>
         public List<Opening> Openings {
             get { return OpeningParameters.Keys.Select(i => (Opening)i).ToList(); }
         }
+        
+        /// <summary>The parameters on this face at which the openings lie.</summary>
+        public Dictionary<Opening, float> OpeningParameters { get; private set; }
 
-
-        public Orientation Orientation { get; private set; }
-
-        public float Thickness = 0.2f;
-
-        public Vector3 Normal {
-            get { return Space.GetWallNormals()[FaceIndex]; }
-            private set {; }
-        }
-        public float Length {
+        /// <summary>THe orientation of this face.</summary>
+        public Orientation Orientation {
             get {
-                return (Space.GetControlPoints()[FaceIndex]
-                  - Space.GetControlPoints(closed: true)[FaceIndex + 1]).magnitude;
+                if (SpaceIndex < Space.GetControlPoints().Count) return Orientation.VERTICAL;
+                else return Orientation.HORIZONTAL;
             }
-            private set {; }
         }
+
+        /// <summary>The normal directions of this face represented as a surface.</summary>
+        public Vector3 Normal {
+            get { return Space.GetWallNormals()[SpaceIndex]; }
+        }
+
+        /// <summary>The height of this face.</summary>
         public float Height {
             get { return Space.height; }
-            private set {; }
         }
 
-        public Vector3 StartPoint {
-            get { return Space.GetControlPoints()[FaceIndex]; }
-            private set {; }
-        }
-
-        public Vector3 EndPoint {
-            get { return Space.GetControlPoints(closed: true)[FaceIndex + 1]; }
-            private set {; }
-        }
-
+        /// <summary>The two dimensional line at the base of this face.</summary>
         public Line Line {
-            get { return new Line(this); }
-            private set {; }
+            get {
+                List<Vector3> cp = Space.GetControlPoints(closed: true);
+                return new Line(cp[SpaceIndex], cp[SpaceIndex+1]); }
         }
 
-        public Vector3 CenterPoint {
-            get { return Space.GetWallMidpoints()[FaceIndex]; }
-            private set {; }
-        }
+
 
         public override string ToString() {
-            return Space.ToString() + " Face#" + FaceIndex.ToString();
-        }
-
-        /// <summary>
-        /// Determs the orientation of the face (horizontal or vertical)
-        /// </summary>
-        private void SetOrientation() {
-            if (FaceIndex < Space.GetControlPoints().Count) {
-                Orientation = Orientation.VERTICAL;
-            }
-            else Orientation = Orientation.HORIZONTAL;
+            return Space.ToString() + " Face#" + SpaceIndex.ToString();
         }
 
         /// <summary>
@@ -98,8 +95,8 @@ namespace DesignPlatform.Core {
             switch (Orientation) {
                 // Vertical face
                 case Orientation.VERTICAL:
-                    controlPoints.Add(spaceControlPoints[FaceIndex]);
-                    controlPoints.Add(spaceControlPoints[FaceIndex + 1]);
+                    controlPoints.Add(spaceControlPoints[SpaceIndex]);
+                    controlPoints.Add(spaceControlPoints[SpaceIndex + 1]);
                     break;
 
                 // Horizontal face
@@ -107,23 +104,13 @@ namespace DesignPlatform.Core {
                     controlPoints = spaceControlPoints.GetRange(0, spaceControlPoints.Count - 1);
 
                     // Top face
-                    if (FaceIndex == spaceControlPoints.Count) {
+                    if (SpaceIndex == spaceControlPoints.Count) {
                         controlPoints = controlPoints.Select(p => p + Vector3.up * Height).ToList();
                     }
                     break;
             }
 
             return controlPoints;
-        }
-
-        public (Vector3, Vector3) Get2DEndPoints(bool localCoordinates = false) {
-            (Vector3, Vector3) endpoints = (new Vector3(), new Vector3());
-            if (Orientation == Orientation.VERTICAL) {
-                List<Vector3> cp = Space.GetControlPoints(localCoordinates: localCoordinates, closed: true);
-                endpoints.Item1 = cp[FaceIndex];
-                endpoints.Item2 = cp[FaceIndex + 1];
-            }
-            return endpoints;
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
+using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Core {
 
@@ -12,20 +13,25 @@ namespace DesignPlatform.Core {
     /// </summary>
     public class Slab : MonoBehaviour {
 
+        public float Thickness = 0.1f;
+
+        /// <summary>The spaces adjacent to this slab.</summary>
         public List<Space> Spaces {
             get { return Faces.Select(f => f.Space).ToList(); }
         }
+
+        /// <summary>The faces coincident with this slab.</summary>
         public List<Face> Faces {
             get { return Interface.Faces; }
         }
+
+        /// <summary>The interface coincident with this slab.</summary>
         public Interface Interface { get; private set; }
 
+        /// <summary>The openings on this slab.</summary>
         public List<Opening> Openings {
             get { return Interface.Openings; }
         }
-
-        public float Thickness = 0.1f;
-
 
         /// <summary>
         /// Construct slabs.

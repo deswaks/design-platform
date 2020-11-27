@@ -1,4 +1,5 @@
 ﻿using DesignPlatform.Core;
+using DesignPlatform.Geometry;
 using DesignPlatform.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,7 +76,7 @@ namespace DesignPlatform.Modes {
         public override void OnModeResume() {
             //List<Interface> interfaces = Building.Instance.Interfaces;
             if (previewOpening == null) {
-                previewOpening = Building.Instance.BuildOpening(shape: SelectedShape,
+                previewOpening = Building.Instance.BuildOpening(function: SelectedShape,
                                                                 preview: true);
             }
         }
@@ -92,7 +93,7 @@ namespace DesignPlatform.Modes {
         /// Build the opening gameObject
         /// </summary>        
         public void Build() {
-            Opening newOpening = Building.Instance.BuildOpening(shape: SelectedShape,
+            Opening newOpening = Building.Instance.BuildOpening(function: SelectedShape,
                                            templateOpening: previewOpening);
         }
 
@@ -101,14 +102,14 @@ namespace DesignPlatform.Modes {
         /// </summary>
         public void RebuildPreview(OpeningFunction buildShape) {
             if (previewOpening != null) previewOpening.Delete();
-            previewOpening = Building.Instance.BuildOpening(shape: buildShape,
+            previewOpening = Building.Instance.BuildOpening(function: buildShape,
                                                             preview: true);
         }
 
         /// <summary>
         /// Returns mouse hit point on plane if no hit zero-vector is returned
         /// </summary>
-        public Vector3 hitPointOnPlane() {
+        public Vector3 HitPointOnPlane() {
             Plane basePlane = new Plane(Vector3.up, Vector3.zero);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float distance;
@@ -131,13 +132,13 @@ namespace DesignPlatform.Modes {
 
         // Moves Preview opening with the mouse
         public void UpdatePreviewLocation() {
-            hitPoint = hitPointOnPlane();
+            hitPoint = HitPointOnPlane();
             if (MousePositionCollidingSpaces(hitPoint) == null) {
                 previewOpening.Move(hitPoint);
             }
             else {
                 Face closestFace = ClosestFace(hitPoint);
-                closestPoint = ClosestPoint(hitPoint, closestFace);
+                closestPoint = closestFace.Line.ClosestPoint(hitPoint);
                 previewOpening.SubMove(closestPoint);
                 previewOpening.Rotate(closestFace);
                 previewOpening.UpdateRender2D();
@@ -168,10 +169,7 @@ namespace DesignPlatform.Modes {
                 List<Face> spaceFaces = relevantRooms[i].Faces.Where(f => f.Orientation == Orientation.VERTICAL).ToList();
 
                 foreach (Face face in spaceFaces) {
-
-                    (Vector3 vA, Vector3 vB) = face.Get2DEndPoints();
-                    Vector3 closestPoint = VectorFunctions.LineClosestPoint(vA, vB, mousePos);
-
+                    Vector3 closestPoint = face.Line.ClosestPoint(mousePos);
                     float distance = (closestPoint - mousePos).magnitude;
                     if (distance < closestDistance) {
                         closestDistance = distance;
@@ -180,19 +178,6 @@ namespace DesignPlatform.Modes {
                 }
             }
             return closestFace;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="mousePos"></param>
-        /// <param name="closestFace"></param>
-        /// <returns></returns>
-        public Vector3 ClosestPoint(Vector3 mousePos, Face closestFace) {
-            (Vector3 vA, Vector3 vB) = closestFace.Get2DEndPoints();
-            Vector3 closestPoint = VectorFunctions.LineClosestPoint(vA, vB, mousePos);
-
-            return closestPoint;
         }
     }
 }

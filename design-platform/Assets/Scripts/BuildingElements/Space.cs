@@ -7,12 +7,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
-using DesignPlatform.Modes;
-using DesignPlatform.Database;
 
 namespace DesignPlatform.Core {
 
-    
+
     /// <summary>
     /// Describes the state of a building space.
     /// </summary>
@@ -66,29 +64,14 @@ namespace DesignPlatform.Core {
     /// It is defined by a polygonal geometry and a function in the house.
     /// </summary>
     public class Space : MonoBehaviour {
-
-        public Building ParentBuilding { get; private set; }
-        public SpaceShape Shape { get; private set; }
-        public SpaceFunction Type { get; private set; }
-        public SpaceState State { get; set; }
-
-        private List<Vector3> controlPoints;
+        
         public float height = 3.0f;
-        public List<Face> Faces { get; private set; }
-        public List<Interface> Interfaces {
-            get { return Faces.SelectMany(f => f.Interfaces).ToList(); }
-            private set {; }
-        }
-        public List<Opening> Openings {
-            get { return Faces.SelectMany(f => f.Openings).ToList(); }
-            private set {; }
-        }
 
         private Vector3 moveModeOffset;
-        private Material currentMaterial;
-        public Material highlightMaterial;
-        public string customProperty;
 
+        private Material currentMaterial;
+
+        private string customNote;
 
         private readonly Dictionary<SpaceFunction, string> SpaceMaterialAsset = new Dictionary<SpaceFunction, string> {
             { SpaceFunction.PREVIEW,  "plan_space_default"},
@@ -111,9 +94,6 @@ namespace DesignPlatform.Core {
             { SpaceFunction.BATHROOM,  "Bathroom"},
             { SpaceFunction.CORRIDOR,  "Corridor"}
         };
-        public string TypeName {
-            get { return SpaceTypeName[Type]; }
-        }
 
         /// <summary>
         /// 
@@ -126,19 +106,19 @@ namespace DesignPlatform.Core {
             gameObject.layer = 8;       // 8 = Rooom layer
             Shape = buildShape;
             State = SpaceState.STATIONARY;
-            currentMaterial = AssetUtil.LoadAsset<Material>("materials", SpaceMaterialAsset[Type]);
+            currentMaterial = AssetUtil.LoadAsset<Material>("materials", SpaceMaterialAsset[Function]);
 
             // Controlpoints
             switch (Shape) {
                 case SpaceShape.RECTANGLE:
-                    controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
+                    ControlPoints = new List<Vector3> {new Vector3(0, 0, 0),
                                                    new Vector3(0, 0, 3),
                                                    new Vector3(3, 0, 3),
                                                    new Vector3(3, 0, 0)};
                     gameObject.name = "Space(Rectangle)";
                     break;
                 case SpaceShape.LSHAPE:
-                    controlPoints = new List<Vector3> {new Vector3(0, 0, 0),
+                    ControlPoints = new List<Vector3> {new Vector3(0, 0, 0),
                                                           new Vector3(0, 0, 5),
                                                           new Vector3(3, 0, 5),
                                                           new Vector3(3, 0, 3),
@@ -147,7 +127,7 @@ namespace DesignPlatform.Core {
                     gameObject.name = "Space(L-Shape)";
                     break;
                 case SpaceShape.USHAPE:
-                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                    ControlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
                                                           new Vector3(0, 0, 5),
                                                           new Vector3(3, 0, 5),
                                                           new Vector3(3, 0, 3),
@@ -155,10 +135,10 @@ namespace DesignPlatform.Core {
                                                           new Vector3(5, 0, 5),
                                                           new Vector3(8, 0, 5),
                                                           new Vector3(8, 0, 0)};
-                    gameObject.name = "Space(U-Shape)"; 
-                    break;       
+                    gameObject.name = "Space(U-Shape)";
+                    break;
                 case SpaceShape.SSHAPE:
-                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                    ControlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
                                                           new Vector3(0, 0, 5),
                                                           new Vector3(3, 0, 5),
                                                           new Vector3(3, 0, 3),
@@ -167,10 +147,10 @@ namespace DesignPlatform.Core {
                                                           new Vector3(3, 0, -2),
                                                           new Vector3(3, 0, 0),
                     };
-                    gameObject.name = "Space(S-Shape)"; 
+                    gameObject.name = "Space(S-Shape)";
                     break;
                 case SpaceShape.TSHAPE:
-                    controlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
+                    ControlPoints = new List<Vector3> {   new Vector3(0, 0, 0),
                                                           new Vector3(-2, 0, 0),
                                                           new Vector3(-2, 0, 3),
                                                           new Vector3(5, 0, 3),
@@ -179,15 +159,63 @@ namespace DesignPlatform.Core {
                                                           new Vector3(3, 0, -3),
                                                           new Vector3(0, 0, -3),
                     };
-                    gameObject.name = "Space(T-Shape)"; 
+                    gameObject.name = "Space(T-Shape)";
                     break;
             }
-            if(Type == SpaceFunction.PREVIEW) gameObject.name = "Preview " + gameObject.name;
+            if (Function == SpaceFunction.PREVIEW) gameObject.name = "Preview " + gameObject.name;
             InitFaces();
             InitRender3D();
             SetSpaceType(type);
             InitRender2D();
         }
+
+        public List<Vector3> ControlPoints { get; private set; }
+
+        public Building ParentBuilding { get; private set; }
+        
+        public SpaceFunction Function { get; private set; }
+
+        public SpaceState State { get; set; }
+
+        public SpaceShape Shape { get; private set; }
+
+        public Polygon2 Polygon {
+            get {
+                return new Polygon2(GetControlPoints(localCoordinates: true)
+                    .Select(p => new Vector2(p.x, p.z)).ToArray());
+            }
+        }
+
+        /// <summary>The (brutto) floor area of the space including half the walls.</summary>
+        public float Area { get {return Polygon.Area;} }
+
+        /// <summary>The volume of the space</summary>
+        public float Volume { get { return Area * height; } }
+
+        public List<Face> Faces { get; private set; }
+        public List<Interface> Interfaces {
+            get { return Faces.SelectMany(f => f.Interfaces).ToList(); }
+            private set {; }
+        }
+        public List<Opening> Openings {
+            get { return Faces.SelectMany(f => f.Openings).ToList(); }
+            private set {; }
+        }
+        
+        public string TypeName {
+            get { return SpaceTypeName[Function]; }
+        }
+
+        public string CustomNote {
+            get { return customNote; }
+            set {
+                if (!string.IsNullOrEmpty(value)) {
+                    customNote = value;
+                }
+            }
+        }
+
+
 
         public override string ToString() {
             return gameObject.name.ToString() +" "+ TypeName;
@@ -195,7 +223,7 @@ namespace DesignPlatform.Core {
 
         private void InitFaces() {
             Faces = new List<Face>();
-            for (int i = 0; i < controlPoints.Count + 2; i++) {
+            for (int i = 0; i < ControlPoints.Count + 2; i++) {
                 Faces.Add(new Face(this, i));
             }
         }
@@ -209,7 +237,7 @@ namespace DesignPlatform.Core {
         public void UpdateRender3D() {
             // Mesh
             PolyShape polyshape = gameObject.GetComponent<PolyShape>();
-            polyshape.SetControlPoints(controlPoints);
+            polyshape.SetControlPoints(ControlPoints);
             polyshape.extrude = height;
             polyshape.CreateShapeFromPolygon();
             gameObject.GetComponent<ProBuilderMesh>().Refresh();
@@ -261,7 +289,7 @@ namespace DesignPlatform.Core {
                     Destroy(text.gameObject);
                 }
             }
-            if (UI.Settings.ShowSpaceTags && Type != SpaceFunction.PREVIEW) {
+            if (UI.Settings.ShowSpaceTags && Function != SpaceFunction.PREVIEW) {
                 // Create tag object
                 GameObject tagObject = new GameObject("Tag");
                 TextMeshPro tag = tagObject.AddComponent<TextMeshPro>();
@@ -290,7 +318,7 @@ namespace DesignPlatform.Core {
         public void Rotate(bool clockwise = true, float degrees = 90) {
             if (!clockwise) { degrees = -degrees; }
 
-            List<float> bounds = Bounds(localCoordinates: true);
+            float[] bounds = Polygon.Bounds;
             float width = bounds[1] - bounds[0];
             float height = bounds[3] - bounds[2];
 
@@ -326,56 +354,6 @@ namespace DesignPlatform.Core {
         }
 
         /// <summary>
-        /// Calculates the (brutto) floor area of the space including half the walls.
-        /// </summary>
-        /// <returns>float area</returns>
-        public float GetFloorArea() {
-            Vector2[] vertices = GetControlPoints(localCoordinates: true).Select(p => new Vector2(p.x, p.z)).ToArray();
-            Polygon2D spacePolygon = new Polygon2D(vertices);
-            return spacePolygon.GetArea();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public List<List<Vector3>> GetSurfaceVertices() {
-            List<List<Vector3>> surfacesVertices = new List<List<Vector3>>();
-            List<Vector3> vertices;
-
-            // Add Floor surface
-            vertices = GetControlPoints().Select(p => new Vector3(p.x, p.y, p.z)).ToList();
-            surfacesVertices.Add(vertices);
-
-            // Add wall surfaces
-            int j = controlPoints.Count - 1;
-            for (int i = 0; i < controlPoints.Count; i++) {
-                vertices = new List<Vector3> {
-                    controlPoints[i],
-                    controlPoints[i] + new Vector3(0, height, 0),
-                    controlPoints[j] + new Vector3(0, height, 0),
-                    controlPoints[j]
-                };
-                surfacesVertices.Add(vertices);
-                j = i;
-            }
-
-            // Add Ceiling vertices
-            vertices = GetControlPoints().Select(p => new Vector3(p.x, p.y + height, p.z)).ToList();
-            surfacesVertices.Add(vertices);
-
-            return surfacesVertices;
-        }
-
-        /// <summary>
-        /// Calculates the (brutto) floor area of the space including half the walls.
-        /// </summary>
-        /// <returns>float area</returns>
-        public float GetVolume() {
-            return GetFloorArea() * height;
-        }
-
-        /// <summary>
         /// Deletes the space
         /// </summary>
         public void Delete() {
@@ -403,9 +381,9 @@ namespace DesignPlatform.Core {
         /// Gets a list of controlpoints - in local coordinates. The controlpoints are the vertices of the underlying polyshape of the building.
         /// </summary>
         public List<Vector3> GetControlPoints(bool localCoordinates = false, bool closed = false) {
-            List<Vector3> returnPoints = controlPoints;
+            List<Vector3> returnPoints = ControlPoints;
             if (closed) {
-                returnPoints = controlPoints.Concat(new List<Vector3> { controlPoints[0] }).ToList();
+                returnPoints = ControlPoints.Concat(new List<Vector3> { ControlPoints[0] }).ToList();
             }
             if (!localCoordinates) {
                 returnPoints = returnPoints.Select(p => gameObject.transform.TransformPoint(p)).ToList();
@@ -413,7 +391,7 @@ namespace DesignPlatform.Core {
             return returnPoints;
         }
         public void SetControlPoints(List<Vector3> newControlPoints) {
-            controlPoints = newControlPoints;
+            ControlPoints = newControlPoints;
             UpdateRender3D();
         }
 
@@ -423,7 +401,7 @@ namespace DesignPlatform.Core {
         public List<Vector3> GetWallMidpoints(bool localCoordinates = false) {
             List<Vector3> midPoints = new List<Vector3>();
             List<Vector3> circularControlpoints = GetControlPoints(localCoordinates: localCoordinates, closed: true);
-            for (int i = 0; i < controlPoints.Count; i++) {
+            for (int i = 0; i < ControlPoints.Count; i++) {
                 midPoints.Add((circularControlpoints[i] + circularControlpoints[i + 1]) / 2);
             }
             return midPoints;
@@ -435,7 +413,7 @@ namespace DesignPlatform.Core {
         public List<Vector3> GetWallNormals(bool localCoordinates = false) {
             List<Vector3> wallNormals = new List<Vector3>();
             List<Vector3> circularControlpoints = GetControlPoints(localCoordinates: localCoordinates, closed: true);
-            for (int i = 0; i < controlPoints.Count; i++) {
+            for (int i = 0; i < ControlPoints.Count; i++) {
                 wallNormals.Add(Vector3.Cross(circularControlpoints[i + 1] - circularControlpoints[i], Vector3.up).normalized);
             }
             return wallNormals;
@@ -454,14 +432,14 @@ namespace DesignPlatform.Core {
                 v => new Vector3(v.x, v.y, v.z)).ToList();
 
             // Extrude the cloned points
-            int point1Index = IndexingUtils.WrapIndex(wallToExtrude, controlPoints.Count);
-            int point2Index = IndexingUtils.WrapIndex(wallToExtrude + 1, controlPoints.Count);
+            int point1Index = IndexingUtils.WrapIndex(wallToExtrude, ControlPoints.Count);
+            int point2Index = IndexingUtils.WrapIndex(wallToExtrude + 1, ControlPoints.Count);
             controlPointsClone[point1Index] += localExtrusion;
             controlPointsClone[point2Index] += localExtrusion;
 
             // Move openings with extrusion                   
             foreach (Opening opening in Faces[wallToExtrude].Openings) {
-                Vector3 openingPoint = opening.ClosestPoint(opening.transform.position, Faces[wallToExtrude]);
+                Vector3 openingPoint = Faces[wallToExtrude].Line.ClosestPoint(opening.transform.position);
                 opening.transform.position = openingPoint;
                 opening.AttachClosestFaces();
             }
@@ -478,7 +456,7 @@ namespace DesignPlatform.Core {
 
             // If normals did not change: Make extruded points the real control points 
             if (normalsAreIdentical) {
-                controlPoints = controlPointsClone;
+                ControlPoints = controlPointsClone;
             }
 
             UpdateRender3D();
@@ -497,8 +475,8 @@ namespace DesignPlatform.Core {
                                                  0,
                                                  originCP.z - originGO.z);
                 gameObject.transform.Translate(difference);
-                for (int i = 0; i < controlPoints.Count; i++) {
-                    controlPoints[i] -= difference;
+                for (int i = 0; i < ControlPoints.Count; i++) {
+                    ControlPoints[i] -= difference;
                 }
                 UpdateRender3D();
                 UpdateRender2D();
@@ -559,6 +537,40 @@ namespace DesignPlatform.Core {
             return uniqueCoordinates;
         }
 
+        
+
+        public void SetIsSpaceCurrentlyColliding() {
+
+            if (Function == SpaceFunction.PREVIEW || State == SpaceState.MOVING) { // Only triggers collision events on moving object
+
+                SpaceCollider[] colliders = gameObject.GetComponentsInChildren<SpaceCollider>();
+                List<bool> collidersColliding = colliders.Select(rc => rc.isCurrentlyColliding).ToList();
+
+                bool isSelected = (Modes.SelectMode.Instance.selection == this);
+                bool isColliding = (collidersColliding.Contains(true));
+                //Debug.Log("Selected:" + isSelected.ToString() + "  Colliding:" + isColliding.ToString());
+                UpdateRender2D(highlighted: isSelected, colliding: isColliding);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        public void SetSpaceType(SpaceFunction type) {
+            try {
+                // Change type
+                Function = type;
+                // Change material
+                currentMaterial = AssetUtil.LoadAsset<Material>("materials", SpaceMaterialAsset[type]);
+                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
+                return;
+            }
+            catch {
+                return;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -581,7 +593,7 @@ namespace DesignPlatform.Core {
                     }
                 }
                 transform.position = Grid.GetNearestGridpoint(curPosition);
-                
+
                 foreach (Opening opening in Openings) {
                     foreach (Face openingsAttachedFace in opening.Faces) {
                         bool faceBelongsToThisSpace = (Faces.Contains(openingsAttachedFace));
@@ -597,64 +609,6 @@ namespace DesignPlatform.Core {
                     }
                 }
             }
-        }
-
-        public void SetIsSpaceCurrentlyColliding() {
-
-            if (Type == SpaceFunction.PREVIEW || State == SpaceState.MOVING) { // Only triggers collision events on moving object
-
-                SpaceCollider[] colliders = gameObject.GetComponentsInChildren<SpaceCollider>();
-                List<bool> collidersColliding = colliders.Select(rc => rc.isCurrentlyColliding).ToList();
-
-                bool isSelected = (Modes.SelectMode.Instance.selection == this);
-                bool isColliding = (collidersColliding.Contains(true));
-                //Debug.Log("Selected:" + isSelected.ToString() + "  Colliding:" + isColliding.ToString());
-                UpdateRender2D(highlighted: isSelected, colliding: isColliding);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        public void SetSpaceType(SpaceFunction type) {
-            try {
-                // Change type
-                Type = type;
-                // Change material
-                currentMaterial = AssetUtil.LoadAsset<Material>("materials", SpaceMaterialAsset[type]);
-                gameObject.GetComponent<MeshRenderer>().material = currentMaterial;
-                return;
-            }
-            catch {
-                return;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetSpaceNote(string value) {
-            if (!string.IsNullOrEmpty(value)) {
-                customProperty = value;
-            }
-        }
-
-        /// <summary>
-        /// Finds the boundaries of the space in the X and Y axis.
-        /// returns:  { minX, maxX, minY, maxY }
-        /// </summary>
-        public List<float> Bounds(bool localCoordinates = false) {
-            float minX = 0; float maxX = 0;
-            float minZ = 0; float maxZ = 0;
-            foreach (Vector3 controlPoint in GetControlPoints(localCoordinates)) {
-                if (controlPoint.x < minX) { minX = controlPoint.x; }
-                if (controlPoint.x > maxX) { maxX = controlPoint.x; }
-                if (controlPoint.z < minZ) { minZ = controlPoint.z; }
-                if (controlPoint.z > maxZ) { maxZ = controlPoint.z; }
-            }
-            return new List<float> { minX, maxX, minZ, maxZ };
         }
 
     }

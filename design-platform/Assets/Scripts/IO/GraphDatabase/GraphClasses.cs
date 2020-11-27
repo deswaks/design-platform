@@ -1,4 +1,5 @@
 ﻿using DesignPlatform.Core;
+using DesignPlatform.Geometry;
 using Neo4jClient.Extension.Cypher;
 using Neo4jClient.Extension.Cypher.Attributes;
 using System;

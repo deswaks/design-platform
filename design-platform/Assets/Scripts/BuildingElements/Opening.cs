@@ -1,4 +1,5 @@
 ﻿using DesignPlatform.Database;
+using DesignPlatform.Geometry;
 using DesignPlatform.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,9 +96,9 @@ namespace DesignPlatform.Core {
         }
 
 
-        public void InitializeOpening(OpeningFunction shape = OpeningFunction.WINDOW,
+        public void InitializeOpening(OpeningFunction function = OpeningFunction.WINDOW,
                                       OpeningState state = OpeningState.PREVIEW) {
-            Shape = shape;
+            Shape = function;
             State = state;
 
             
@@ -216,13 +217,6 @@ namespace DesignPlatform.Core {
             gameObject.transform.rotation = Quaternion.LookRotation(closestFace.Normal, Vector3.up);
         }
 
-        public Vector3 ClosestPoint(Vector3 mousePos, Face closestFace) {
-            (Vector3 vA, Vector3 vB) = closestFace.Get2DEndPoints();
-            Vector3 closestPoint = VectorFunctions.LineClosestPoint(vA, vB, mousePos);
-
-            return closestPoint;
-        }
-
         public Interface GetCoincidentInterface() {
             float parameterOnFace = Faces[0].Line.Parameter(CenterPoint);
             return Faces[0].GetInterfaceAtParameter(parameterOnFace);
@@ -256,7 +250,7 @@ namespace DesignPlatform.Core {
             List<Face> closestFaces = new List<Face>();
             foreach (Space space in Building.Instance.Spaces) {
                 foreach (Face face in space.Faces.Where(f => f.Orientation == Orientation.VERTICAL)) {
-                    if (face.Line.IsOnLine(CenterPoint)) {
+                    if (face.Line.Intersects(CenterPoint)) {
                         closestFaces.Add(face);
                     }
                 }

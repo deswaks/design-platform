@@ -55,7 +55,7 @@ namespace DesignPlatform.UI {
             DeleteContentRows();
             int elementIndex = 0;
 
-            List<CLTElement> wallElements = CLTElementGenerator.IdentifyWallElementsAndJointTypes();
+            List<CLTElement> wallElements = Building.IdentifyWallElementsAndJointTypes();
 
             foreach (CLTElement e in wallElements) {
                 GameObject currentRow = GameObject.Instantiate(contentTemplate, contentTemplate.transform.parent);
