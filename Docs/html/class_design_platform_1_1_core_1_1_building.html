@@ -91,12 +91,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af8f84acde1b9861a71ea9835c31eb0ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#af8f84acde1b9861a71ea9835c31eb0ad">RebuildPOVElements</a> ()</td></tr>
 <tr class="memdesc:af8f84acde1b9861a71ea9835c31eb0ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys and all elements with a 3D representation (visible in POV mode).  <a href="class_design_platform_1_1_core_1_1_building.html#af8f84acde1b9861a71ea9835c31eb0ad">More...</a><br /></td></tr>
 <tr class="separator:af8f84acde1b9861a71ea9835c31eb0ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af537b43b00579d1bed72b2e4826df604"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_wall.html">Wall</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#af537b43b00579d1bed72b2e4826df604">BuildAllWallsAsCLTElements</a> ()</td></tr>
-<tr class="memdesc:af537b43b00579d1bed72b2e4826df604"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds CLT elements for all vertical interfaces of the whole building.  <a href="class_design_platform_1_1_core_1_1_building.html#af537b43b00579d1bed72b2e4826df604">More...</a><br /></td></tr>
-<tr class="separator:af537b43b00579d1bed72b2e4826df604"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae94d22b2dfe7a965dd684f1952bee85c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_wall.html">Wall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#ae94d22b2dfe7a965dd684f1952bee85c">BuildWall</a> (<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> cltElement)</td></tr>
-<tr class="memdesc:ae94d22b2dfe7a965dd684f1952bee85c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a 3D wall representation.  <a href="class_design_platform_1_1_core_1_1_building.html#ae94d22b2dfe7a965dd684f1952bee85c">More...</a><br /></td></tr>
-<tr class="separator:ae94d22b2dfe7a965dd684f1952bee85c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a211c24d315022c8bd9fbf46085594971"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a211c24d315022c8bd9fbf46085594971">DeleteAllCLTElements</a> ()</td></tr>
+<tr class="memdesc:a211c24d315022c8bd9fbf46085594971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all interfaces of the whole building.  <a href="class_design_platform_1_1_core_1_1_building.html#a211c24d315022c8bd9fbf46085594971">More...</a><br /></td></tr>
+<tr class="separator:a211c24d315022c8bd9fbf46085594971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a731b002fe1137c03f0d97aa68ae1fcb1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a731b002fe1137c03f0d97aa68ae1fcb1">DeleteCLTElement</a> (<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> cltElement)</td></tr>
+<tr class="memdesc:a731b002fe1137c03f0d97aa68ae1fcb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a CLT element from the building.  <a href="class_design_platform_1_1_core_1_1_building.html#a731b002fe1137c03f0d97aa68ae1fcb1">More...</a><br /></td></tr>
+<tr class="separator:a731b002fe1137c03f0d97aa68ae1fcb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aada82d593cf86cb0944511f74e55bd96"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#aada82d593cf86cb0944511f74e55bd96">BuildAllInterfaces</a> ()</td></tr>
 <tr class="memdesc:aada82d593cf86cb0944511f74e55bd96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds interfaces for all faces of the whole building.  <a href="class_design_platform_1_1_core_1_1_building.html#aada82d593cf86cb0944511f74e55bd96">More...</a><br /></td></tr>
 <tr class="separator:aada82d593cf86cb0944511f74e55bd96"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,8 +148,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a23e7541b2ccd78482ea905c7c20b65b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_wall.html">Wall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a23e7541b2ccd78482ea905c7c20b65b3">BuildWall</a> (<a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> interFace)</td></tr>
 <tr class="memdesc:a23e7541b2ccd78482ea905c7c20b65b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a 3d wall representation  <a href="class_design_platform_1_1_core_1_1_building.html#a23e7541b2ccd78482ea905c7c20b65b3">More...</a><br /></td></tr>
 <tr class="separator:a23e7541b2ccd78482ea905c7c20b65b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae94d22b2dfe7a965dd684f1952bee85c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_wall.html">Wall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#ae94d22b2dfe7a965dd684f1952bee85c">BuildWall</a> (<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> cltElement)</td></tr>
+<tr class="memdesc:ae94d22b2dfe7a965dd684f1952bee85c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a 3D wall representation.  <a href="class_design_platform_1_1_core_1_1_building.html#ae94d22b2dfe7a965dd684f1952bee85c">More...</a><br /></td></tr>
+<tr class="separator:ae94d22b2dfe7a965dd684f1952bee85c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf9728c738178fa67de394dbf43c8b33"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_wall.html">Wall</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#aaf9728c738178fa67de394dbf43c8b33">BuildAllWalls</a> ()</td></tr>
-<tr class="memdesc:aaf9728c738178fa67de394dbf43c8b33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds walls for all vertical interfaces of the whole building.  <a href="class_design_platform_1_1_core_1_1_building.html#aaf9728c738178fa67de394dbf43c8b33">More...</a><br /></td></tr>
+<tr class="memdesc:aaf9728c738178fa67de394dbf43c8b33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds walls for all CLT elements / vertical interfaces of the whole building as specified in the program settings.  <a href="class_design_platform_1_1_core_1_1_building.html#aaf9728c738178fa67de394dbf43c8b33">More...</a><br /></td></tr>
 <tr class="separator:aaf9728c738178fa67de394dbf43c8b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05554cc2a0e4cff4e274103ebf0ae788"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a05554cc2a0e4cff4e274103ebf0ae788">DeleteAllWalls</a> ()</td></tr>
 <tr class="memdesc:a05554cc2a0e4cff4e274103ebf0ae788"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all walls of the whole building.  <a href="class_design_platform_1_1_core_1_1_building.html#a05554cc2a0e4cff4e274103ebf0ae788">More...</a><br /></td></tr>
@@ -160,12 +163,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ab7c0653cc77f31bffc1e448d4334fad7"><td class="memItemLeft" align="right" valign="top">static List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#ab7c0653cc77f31bffc1e448d4334fad7">IdentifyWallElementsAndJointTypes</a> ()</td></tr>
-<tr class="memdesc:ab7c0653cc77f31bffc1e448d4334fad7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds all wall elements from interfaces and identifies the joints between them.  <a href="class_design_platform_1_1_core_1_1_building.html#ab7c0653cc77f31bffc1e448d4334fad7">More...</a><br /></td></tr>
-<tr class="separator:ab7c0653cc77f31bffc1e448d4334fad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e902b7e3b1570578544dc142fe50062"><td class="memItemLeft" align="right" valign="top">static List&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a2e902b7e3b1570578544dc142fe50062">GroupParallelJoinedInterfaces</a> (List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt; interfaces)</td></tr>
-<tr class="memdesc:a2e902b7e3b1570578544dc142fe50062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Groups all interfaces that are parallel.  <a href="class_design_platform_1_1_core_1_1_building.html#a2e902b7e3b1570578544dc142fe50062">More...</a><br /></td></tr>
-<tr class="separator:a2e902b7e3b1570578544dc142fe50062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7bc4952907d0162608c0154e9b0c01d"><td class="memItemLeft" align="right" valign="top">static List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#af7bc4952907d0162608c0154e9b0c01d">BuildAllCLTElements</a> ()</td></tr>
+<tr class="memdesc:af7bc4952907d0162608c0154e9b0c01d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds all CLT elements of the whole building.  <a href="class_design_platform_1_1_core_1_1_building.html#af7bc4952907d0162608c0154e9b0c01d">More...</a><br /></td></tr>
+<tr class="separator:af7bc4952907d0162608c0154e9b0c01d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae51e7ce33e4baccea0074669c41820f3"><td class="memItemLeft" align="right" valign="top">static List&lt; List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#ae51e7ce33e4baccea0074669c41820f3">GroupAdjoiningInterfaces</a> (List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt; interfaces)</td></tr>
+<tr class="memdesc:ae51e7ce33e4baccea0074669c41820f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Groups all interfaces that are parallel and connected.  <a href="class_design_platform_1_1_core_1_1_building.html#ae51e7ce33e4baccea0074669c41820f3">More...</a><br /></td></tr>
+<tr class="separator:ae51e7ce33e4baccea0074669c41820f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
@@ -178,6 +181,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a089b6365c38b045e0dd485c1ae043b8f"><td class="memItemLeft" align="right" valign="top">List&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a089b6365c38b045e0dd485c1ae043b8f">Bounds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a089b6365c38b045e0dd485c1ae043b8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The boundaries of the building in the X and Y axis on the form { minX, maxX, minY, maxY }  <a href="class_design_platform_1_1_core_1_1_building.html#a089b6365c38b045e0dd485c1ae043b8f">More...</a><br /></td></tr>
 <tr class="separator:a089b6365c38b045e0dd485c1ae043b8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dd1ae4efbe289703e3de8d7dd97eb8f"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a5dd1ae4efbe289703e3de8d7dd97eb8f">CLTElements</a><code> [get]</code></td></tr>
+<tr class="memdesc:a5dd1ae4efbe289703e3de8d7dd97eb8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">All CLT elements of this building.  <a href="class_design_platform_1_1_core_1_1_building.html#a5dd1ae4efbe289703e3de8d7dd97eb8f">More...</a><br /></td></tr>
+<tr class="separator:a5dd1ae4efbe289703e3de8d7dd97eb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d1818b9a19116c6018b3de1c4f0c8c5"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a4d1818b9a19116c6018b3de1c4f0c8c5">Interfaces</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4d1818b9a19116c6018b3de1c4f0c8c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">All the interfaces of this building  <a href="class_design_platform_1_1_core_1_1_building.html#a4d1818b9a19116c6018b3de1c4f0c8c5">More...</a><br /></td></tr>
 <tr class="separator:a4d1818b9a19116c6018b3de1c4f0c8c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -210,15 +216,24 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:ae0c52c61f3f14898fd82651f46e2263e"><td class="memItemLeft" align="right" valign="top">static List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#ae0c52c61f3f14898fd82651f46e2263e">JoinInterfacesToLongestWallElements</a> ()</td></tr>
-<tr class="memdesc:ae0c52c61f3f14898fd82651f46e2263e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements.  <a href="class_design_platform_1_1_core_1_1_building.html#ae0c52c61f3f14898fd82651f46e2263e">More...</a><br /></td></tr>
-<tr class="separator:ae0c52c61f3f14898fd82651f46e2263e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5861f5d812f97d5b6f4f13bfc7e35598"><td class="memItemLeft" align="right" valign="top">static List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a5861f5d812f97d5b6f4f13bfc7e35598">GetParallelConnectedInterfaces</a> (List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt; interfacesList, <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> interFace)</td></tr>
-<tr class="memdesc:a5861f5d812f97d5b6f4f13bfc7e35598"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds all the interfaces that are parallel  <a href="class_design_platform_1_1_core_1_1_building.html#a5861f5d812f97d5b6f4f13bfc7e35598">More...</a><br /></td></tr>
-<tr class="separator:a5861f5d812f97d5b6f4f13bfc7e35598"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd80d9e061f7de52f7493709008fdf18"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#afd80d9e061f7de52f7493709008fdf18">ClassifyAllJoints</a> (List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> &gt; <a class="el" href="class_design_platform_1_1_core_1_1_building.html#a6ef937f25a4207e20f07d660c47b42c7">cltElements</a>)</td></tr>
+<tr class="memdesc:afd80d9e061f7de52f7493709008fdf18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Classifies all the joints for all the given CLT elements.  <a href="class_design_platform_1_1_core_1_1_building.html#afd80d9e061f7de52f7493709008fdf18">More...</a><br /></td></tr>
+<tr class="separator:afd80d9e061f7de52f7493709008fdf18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af230cb846bf3c9c1c57400fe4a6eca9b"><td class="memItemLeft" align="right" valign="top">static List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#af230cb846bf3c9c1c57400fe4a6eca9b">CreateContinuousCLTElements</a> (List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt; interfaces)</td></tr>
+<tr class="memdesc:af230cb846bf3c9c1c57400fe4a6eca9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements.  <a href="class_design_platform_1_1_core_1_1_building.html#af230cb846bf3c9c1c57400fe4a6eca9b">More...</a><br /></td></tr>
+<tr class="separator:af230cb846bf3c9c1c57400fe4a6eca9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf8903c6983e1233bede7d45df8a09a7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#aaf8903c6983e1233bede7d45df8a09a7">CreateCLTElementByJoiningInterfaces</a> (List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt; interfaces)</td></tr>
+<tr class="memdesc:aaf8903c6983e1233bede7d45df8a09a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a CLT element that covers all the given interfaces.  <a href="class_design_platform_1_1_core_1_1_building.html#aaf8903c6983e1233bede7d45df8a09a7">More...</a><br /></td></tr>
+<tr class="separator:aaf8903c6983e1233bede7d45df8a09a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a266eecb28fa7ce9c13d93d83740eafd2"><td class="memItemLeft" align="right" valign="top">static List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a266eecb28fa7ce9c13d93d83740eafd2">FindParallelAndConnectedInterfaces</a> (List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt; interfaces, <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> thisIF)</td></tr>
+<tr class="memdesc:a266eecb28fa7ce9c13d93d83740eafd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds all the interfaces that are parallel and connected to the given interface.  <a href="class_design_platform_1_1_core_1_1_building.html#a266eecb28fa7ce9c13d93d83740eafd2">More...</a><br /></td></tr>
+<tr class="separator:a266eecb28fa7ce9c13d93d83740eafd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a6ef937f25a4207e20f07d660c47b42c7"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a6ef937f25a4207e20f07d660c47b42c7">cltElements</a> = new List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&gt;()</td></tr>
+<tr class="memdesc:a6ef937f25a4207e20f07d660c47b42c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">All CLT elements of this building  <a href="class_design_platform_1_1_core_1_1_building.html#a6ef937f25a4207e20f07d660c47b42c7">More...</a><br /></td></tr>
+<tr class="separator:a6ef937f25a4207e20f07d660c47b42c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ba13c11500240bf273f252abcbcb20d"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_roof.html">Roof</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html#a8ba13c11500240bf273f252abcbcb20d">roofs</a> = new List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_roof.html">Roof</a>&gt;()</td></tr>
 <tr class="memdesc:a8ba13c11500240bf273f252abcbcb20d"><td class="mdescLeft">&#160;</td><td class="mdescRight">All roofs of this building  <a href="class_design_platform_1_1_core_1_1_building.html#a8ba13c11500240bf273f252abcbcb20d">More...</a><br /></td></tr>
 <tr class="separator:a8ba13c11500240bf273f252abcbcb20d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,6 +253,34 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The building class is responsible for creation of new building elements and functions as a general access point for all created elements. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af7bc4952907d0162608c0154e9b0c01d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7bc4952907d0162608c0154e9b0c01d">&#9670;&nbsp;</a></span>BuildAllCLTElements()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&gt; DesignPlatform.Core.Building.BuildAllCLTElements </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Builds all CLT elements of the whole building. </p>
+<dl class="section return"><dt>Returns</dt><dd>All CLT elements of the building.</dd></dl>
+
+</div>
+</div>
 <a id="aada82d593cf86cb0944511f74e55bd96"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aada82d593cf86cb0944511f74e55bd96">&#9670;&nbsp;</a></span>BuildAllInterfaces()</h2>
 
@@ -313,27 +356,7 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Builds walls for all vertical interfaces of the whole building. </p>
-<dl class="section return"><dt>Returns</dt><dd>All walls of the building.</dd></dl>
-
-</div>
-</div>
-<a id="af537b43b00579d1bed72b2e4826df604"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af537b43b00579d1bed72b2e4826df604">&#9670;&nbsp;</a></span>BuildAllWallsAsCLTElements()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_wall.html">Wall</a>&gt; DesignPlatform.Core.Building.BuildAllWallsAsCLTElements </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Builds CLT elements for all vertical interfaces of the whole building. </p>
+<p>Builds walls for all CLT elements / vertical interfaces of the whole building as specified in the program settings. </p>
 <dl class="section return"><dt>Returns</dt><dd>All walls of the building.</dd></dl>
 
 </div>
@@ -652,6 +675,104 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="afd80d9e061f7de52f7493709008fdf18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd80d9e061f7de52f7493709008fdf18">&#9670;&nbsp;</a></span>ClassifyAllJoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void DesignPlatform.Core.Building.ClassifyAllJoints </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> &gt;&#160;</td>
+          <td class="paramname"><em>cltElements</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Classifies all the joints for all the given CLT elements. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cltElements</td><td>CLT elements whose joints shoudl be classified.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaf8903c6983e1233bede7d45df8a09a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf8903c6983e1233bede7d45df8a09a7">&#9670;&nbsp;</a></span>CreateCLTElementByJoiningInterfaces()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a> DesignPlatform.Core.Building.CreateCLTElementByJoiningInterfaces </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt;&#160;</td>
+          <td class="paramname"><em>interfaces</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a CLT element that covers all the given interfaces. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">interfaces</td><td>List of adjoining parallel interfaces.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Continuous CLT element that covers all the given interfaces.</dd></dl>
+
+</div>
+</div>
+<a id="af230cb846bf3c9c1c57400fe4a6eca9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af230cb846bf3c9c1c57400fe4a6eca9b">&#9670;&nbsp;</a></span>CreateContinuousCLTElements()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&gt; DesignPlatform.Core.Building.CreateContinuousCLTElements </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt;&#160;</td>
+          <td class="paramname"><em>interfaces</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns full, un-split, wall elements with no joint information.</dd></dl>
+
+</div>
+</div>
 <a id="a7831ed668f3a8eb3632efbd53ddafc05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7831ed668f3a8eb3632efbd53ddafc05">&#9670;&nbsp;</a></span>CreateRoofOutlines()</h2>
 
@@ -677,6 +798,25 @@ Static Private Attributes</h2></td></tr>
 
 <p></p>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a211c24d315022c8bd9fbf46085594971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a211c24d315022c8bd9fbf46085594971">&#9670;&nbsp;</a></span>DeleteAllCLTElements()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DesignPlatform.Core.Building.DeleteAllCLTElements </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes all interfaces of the whole building. </p>
 
 </div>
 </div>
@@ -756,8 +896,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5861f5d812f97d5b6f4f13bfc7e35598"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5861f5d812f97d5b6f4f13bfc7e35598">&#9670;&nbsp;</a></span>GetParallelConnectedInterfaces()</h2>
+<a id="a731b002fe1137c03f0d97aa68ae1fcb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a731b002fe1137c03f0d97aa68ae1fcb1">&#9670;&nbsp;</a></span>DeleteCLTElement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DesignPlatform.Core.Building.DeleteCLTElement </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&#160;</td>
+          <td class="paramname"><em>cltElement</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a CLT element from the building. </p>
+
+</div>
+</div>
+<a id="a266eecb28fa7ce9c13d93d83740eafd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a266eecb28fa7ce9c13d93d83740eafd2">&#9670;&nbsp;</a></span>FindParallelAndConnectedInterfaces()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -766,16 +926,16 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a>&gt; DesignPlatform.Core.Building.GetParallelConnectedInterfaces </td>
+          <td class="memname">static List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a>&gt; DesignPlatform.Core.Building.FindParallelAndConnectedInterfaces </td>
           <td>(</td>
           <td class="paramtype">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt;&#160;</td>
-          <td class="paramname"><em>interfacesList</em>, </td>
+          <td class="paramname"><em>interfaces</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a>&#160;</td>
-          <td class="paramname"><em>interFace</em>&#160;</td>
+          <td class="paramname"><em>thisIF</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -790,11 +950,11 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Finds all the interfaces that are parallel </p>
+<p>Finds all the interfaces that are parallel and connected to the given interface. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">interfacesList</td><td></td></tr>
-    <tr><td class="paramname">interFace</td><td></td></tr>
+    <tr><td class="paramname">interfaces</td><td>Interfaces to search among.</td></tr>
+    <tr><td class="paramname">thisIF</td><td><a class="el" href="class_design_platform_1_1_core_1_1_interface.html" title="Represents the shared face between two adjacent building spaces or the shared face between a face and...">Interface</a> to compare to.</td></tr>
   </table>
   </dd>
 </dl>
@@ -802,8 +962,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a2e902b7e3b1570578544dc142fe50062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e902b7e3b1570578544dc142fe50062">&#9670;&nbsp;</a></span>GroupParallelJoinedInterfaces()</h2>
+<a id="ae51e7ce33e4baccea0074669c41820f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51e7ce33e4baccea0074669c41820f3">&#9670;&nbsp;</a></span>GroupAdjoiningInterfaces()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -812,7 +972,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static List&lt;int&gt; DesignPlatform.Core.Building.GroupParallelJoinedInterfaces </td>
+          <td class="memname">static List&lt;List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a>&gt; &gt; DesignPlatform.Core.Building.GroupAdjoiningInterfaces </td>
           <td>(</td>
           <td class="paramtype">List&lt; <a class="el" href="class_design_platform_1_1_core_1_1_interface.html">Interface</a> &gt;&#160;</td>
           <td class="paramname"><em>interfaces</em></td><td>)</td>
@@ -826,70 +986,14 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Groups all interfaces that are parallel. </p>
+<p>Groups all interfaces that are parallel and connected. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">interfaces</td><td></td></tr>
+    <tr><td class="paramname">interfaces</td><td>Interfaces to group.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
-<a id="ab7c0653cc77f31bffc1e448d4334fad7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7c0653cc77f31bffc1e448d4334fad7">&#9670;&nbsp;</a></span>IdentifyWallElementsAndJointTypes()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&gt; DesignPlatform.Core.Building.IdentifyWallElementsAndJointTypes </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Finds all wall elements from interfaces and identifies the joints between them. </p>
-<dl class="section return"><dt>Returns</dt><dd>List of WallElements with joints set.</dd></dl>
-
-</div>
-</div>
-<a id="ae0c52c61f3f14898fd82651f46e2263e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0c52c61f3f14898fd82651f46e2263e">&#9670;&nbsp;</a></span>JoinInterfacesToLongestWallElements()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&gt; DesignPlatform.Core.Building.JoinInterfacesToLongestWallElements </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements. </p>
-<dl class="section return"><dt>Returns</dt><dd>Returns full, un-split, wall elements with no joint information.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Grouped interfaces.</dd></dl>
 
 </div>
 </div>
@@ -1017,6 +1121,30 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6ef937f25a4207e20f07d660c47b42c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ef937f25a4207e20f07d660c47b42c7">&#9670;&nbsp;</a></span>cltElements</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&gt; DesignPlatform.Core.Building.cltElements = new List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&gt;()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>All CLT elements of this building </p>
+
+</div>
+</div>
 <a id="a5e5b16f8ca0d2fb1898847e6252edc0c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5e5b16f8ca0d2fb1898847e6252edc0c">&#9670;&nbsp;</a></span>instance</h2>
 
@@ -1135,6 +1263,30 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The boundaries of the building in the X and Y axis on the form { minX, maxX, minY, maxY } </p>
+
+</div>
+</div>
+<a id="a5dd1ae4efbe289703e3de8d7dd97eb8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dd1ae4efbe289703e3de8d7dd97eb8f">&#9670;&nbsp;</a></span>CLTElements</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;<a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a>&gt; DesignPlatform.Core.Building.CLTElements</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>All CLT elements of this building. </p>
 
 </div>
 </div>
@@ -1380,13 +1532,13 @@ Static Private Attributes</h2></td></tr>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="_building_8cs.html">Building.cs</a></li>
+<li><a class="el" href="_c_l_t_element_generator_8cs.html">CLTElementGenerator.cs</a></li>
 <li><a class="el" href="_interface_generator_8cs.html">InterfaceGenerator.cs</a></li>
 <li><a class="el" href="_opening_generator_8cs.html">OpeningGenerator.cs</a></li>
 <li><a class="el" href="_roof_generator_8cs.html">RoofGenerator.cs</a></li>
 <li><a class="el" href="_slab_generator_8cs.html">SlabGenerator.cs</a></li>
 <li><a class="el" href="_space_generator_8cs.html">SpaceGenerator.cs</a></li>
 <li><a class="el" href="_wall_generator_8cs.html">WallGenerator.cs</a></li>
-<li><a class="el" href="_c_l_t_element_generator_8cs.html">CLTElementGenerator.cs</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

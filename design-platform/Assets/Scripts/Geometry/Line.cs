@@ -98,6 +98,12 @@ namespace DesignPlatform.Geometry {
             return vClosestPoint;
         }
 
+        /// <summary>
+        /// Calculates whether this line is connected to the given line.
+        /// Two lines are considered as connected if they share an endpoint.
+        /// </summary>
+        /// <param name="otherLine">Other line to check connectivity with.</param>
+        /// <returns>Ture if the lines are connected and false otherwise.</returns>
         public bool IsConnectedTo(Line otherLine) {
             return Vector3.Distance(StartPoint, otherLine.StartPoint) < Settings.nearThreshold
                 || Vector3.Distance(StartPoint, otherLine.EndPoint) < Settings.nearThreshold
@@ -105,6 +111,11 @@ namespace DesignPlatform.Geometry {
                 || Vector3.Distance(EndPoint, otherLine.EndPoint) < Settings.nearThreshold;
         }
 
+        /// <summary>
+        /// Calculates whether this line is parallel to the given line.
+        /// </summary>
+        /// <param name="otherLine">Other line to check against.</param>
+        /// <returns>Ture if the lines are parallel and false otherwise.</returns>
         public bool IsParallelTo(Line otherLine) {
             float absDot = Mathf.Abs(Vector3.Dot(Direction, otherLine.Direction));
             return (Mathf.Abs(absDot - 1.0f) < Settings.nearThreshold);

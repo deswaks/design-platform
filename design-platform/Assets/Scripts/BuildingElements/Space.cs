@@ -93,9 +93,9 @@ namespace DesignPlatform.Core {
         public Material Material3D { get; private set; }
 
         /// <summary>The underlying polygon extruded to obtain the three dimensional representation</summary>
-        public Polygon2 Polygon {
+        public Polygon2D Polygon {
             get {
-                return new Polygon2(GetControlPoints(localCoordinates: true)
+                return new Polygon2D(GetControlPoints(localCoordinates: true)
                     .Select(p => new Vector2(p.x, p.z)).ToArray());
             }
         }

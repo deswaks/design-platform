@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['magnitude_1077',['magnitude',['../struct_structural_analysis_1_1_load.html#ae952ee73fa3a981f5580ec67ee81a592',1,'StructuralAnalysis::Load']]],
-  ['maxsize_1078',['maxSize',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#ae8beb3614baa18f203dd80c0c7b6d9e9',1,'DesignPlatform::UI::Zoom2D']]],
-  ['minsize_1079',['minSize',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#a82a70e1810a73cea90aa76322fbf6ce3',1,'DesignPlatform::UI::Zoom2D']]],
-  ['modulefolderpath_1080',['ModuleFolderPath',['../class_design_platform_1_1_utils_1_1_module_loader.html#af03f6c54e64b8932625a15ed3d317bc9',1,'DesignPlatform::Utils::ModuleLoader']]],
-  ['mousesensitivity_1081',['mouseSensitivity',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a28cb46d82d758346af5bc42a8b33cd73',1,'DesignPlatform::Modes::POVMode']]],
-  ['movemodeoffset_1082',['moveModeOffset',['../class_design_platform_1_1_core_1_1_space.html#a796b4c008f519b83a6ce6963af6f0f37',1,'DesignPlatform::Core::Space']]],
-  ['movespeed_1083',['moveSpeed',['../class_design_platform_1_1_u_i_1_1_pan2_d.html#a0679c594221fb4404f13ffbe8a6c8f1e',1,'DesignPlatform::UI::Pan2D']]]
+  ['labelname_1092',['LabelName',['../class_design_platform_1_1_database_1_1_adjacent_space_relationship.html#ac20cbadac03009421961455977fca1a6',1,'DesignPlatform.Database.AdjacentSpaceRelationship.LabelName()'],['../class_design_platform_1_1_database_1_1_interface_space_relationship.html#a71888e87f53ece66b2b32cde8e6cc9de',1,'DesignPlatform.Database.InterfaceSpaceRelationship.LabelName()']]],
+  ['listobjects_1093',['listObjects',['../class_design_platform_1_1_u_i_1_1_widget___circle_diagram.html#a7816061af842626d63f71e37c2fec99c',1,'DesignPlatform::UI::Widget_CircleDiagram']]],
+  ['listobjecttemplate_1094',['listObjectTemplate',['../class_design_platform_1_1_u_i_1_1_widget___circle_diagram.html#a478eb9787ec14f5bc3838c2d4bb0e9cf',1,'DesignPlatform::UI::Widget_CircleDiagram']]],
+  ['listobjecttemplatename_1095',['ListObjectTemplateName',['../class_design_platform_1_1_u_i_1_1_widget___circle_diagram.html#a4979e7654825d9c93b4b3e5ef5d54ee6',1,'DesignPlatform::UI::Widget_CircleDiagram']]],
+  ['loadedbundles_1096',['LoadedBundles',['../class_design_platform_1_1_utils_1_1_asset_util.html#ab7b1e4edd90e23411ba04cbceb4bd8f2',1,'DesignPlatform::Utils::AssetUtil']]]
 ];

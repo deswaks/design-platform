@@ -10,8 +10,16 @@ namespace DesignPlatform.Utils {
     /// </summary>
     public static class AssetUtil {
 
+        /// <summary>List of loaded asset bundles to make sure each bundle is only loaded once.</summary>
         private static Dictionary<string, AssetBundle> LoadedBundles = new Dictionary<string, AssetBundle>();
 
+        /// <summary>
+        /// Load an asset of a given type from a specific asset bundle.
+        /// </summary>
+        /// <typeparam name="T">Type of the asset to load, eg. GameObject.</typeparam>
+        /// <param name="bundleName">Name of the asset bundle wherein the asset is located.</param>
+        /// <param name="assetName">Name of the asset to load.</param>
+        /// <returns>The asset that were loaded.</returns>
         public static T LoadAsset<T>(string bundleName, string assetName) {
 
             AssetBundle assetBundle = LoadBundle(bundleName);
@@ -29,6 +37,11 @@ namespace DesignPlatform.Utils {
             catch { return default; }
         }
 
+        /// <summary>
+        /// Load an asset bundle into memory.
+        /// </summary>
+        /// <param name="bundleName">Name of the asset bundle to load.</param>
+        /// <returns>The asset bundle that were loaded.</returns>
         public static AssetBundle LoadBundle(string bundleName) {
 
             // Load asset bundle if it has not already been loaded

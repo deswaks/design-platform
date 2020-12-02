@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['walljointtype_1160',['WallJointType',['../namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4a',1,'DesignPlatform::Core']]],
-  ['walltype_1161',['WallType',['../namespace_structural_analysis.html#a54da52e2f8d447c722e30a94528d81a9',1,'StructuralAnalysis']]]
+  ['spacefunction_1180',['SpaceFunction',['../namespace_design_platform_1_1_core.html#a0ca6a3e97121d23b6c9d6206130fce8b',1,'DesignPlatform::Core']]],
+  ['spaceshape_1181',['SpaceShape',['../namespace_design_platform_1_1_core.html#aedad2d38f2f602ea1565f001fa15f924',1,'DesignPlatform::Core']]]
 ];

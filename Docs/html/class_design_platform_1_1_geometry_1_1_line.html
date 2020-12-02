@@ -90,12 +90,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2dac4e2160919151acf30310125c5341"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#a2dac4e2160919151acf30310125c5341">Intersects</a> (Vector3 point)</td></tr>
 <tr class="memdesc:a2dac4e2160919151acf30310125c5341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a point is located on the line.  <a href="class_design_platform_1_1_geometry_1_1_line.html#a2dac4e2160919151acf30310125c5341">More...</a><br /></td></tr>
 <tr class="separator:a2dac4e2160919151acf30310125c5341"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac10bae6fcc8f092e71ac141f9814d7cd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#ac10bae6fcc8f092e71ac141f9814d7cd">Parameter</a> (Vector3 point)</td></tr>
-<tr class="memdesc:ac10bae6fcc8f092e71ac141f9814d7cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the parameter (from 0.0 to 1.0) for the point on the line  <a href="class_design_platform_1_1_geometry_1_1_line.html#ac10bae6fcc8f092e71ac141f9814d7cd">More...</a><br /></td></tr>
-<tr class="separator:ac10bae6fcc8f092e71ac141f9814d7cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a131bd97140f499650e5f31c86ad62c65"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#a131bd97140f499650e5f31c86ad62c65">ParameterAtPoint</a> (Vector3 point)</td></tr>
+<tr class="memdesc:a131bd97140f499650e5f31c86ad62c65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the parameter (from 0.0 to 1.0) for the point on the line  <a href="class_design_platform_1_1_geometry_1_1_line.html#a131bd97140f499650e5f31c86ad62c65">More...</a><br /></td></tr>
+<tr class="separator:a131bd97140f499650e5f31c86ad62c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac23b768643862731e54df6d3de07d3e"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#aac23b768643862731e54df6d3de07d3e">PointAtParameter</a> (float parameter)</td></tr>
+<tr class="memdesc:aac23b768643862731e54df6d3de07d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the point on the line at the given parameter (from 0.0 to 1.0)  <a href="class_design_platform_1_1_geometry_1_1_line.html#aac23b768643862731e54df6d3de07d3e">More...</a><br /></td></tr>
+<tr class="separator:aac23b768643862731e54df6d3de07d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba3425a11f84936e7e2e32fc20c605d5"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#aba3425a11f84936e7e2e32fc20c605d5">ClosestPoint</a> (Vector3 point)</td></tr>
 <tr class="memdesc:aba3425a11f84936e7e2e32fc20c605d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the point on this line, which lies closest to the given point.  <a href="class_design_platform_1_1_geometry_1_1_line.html#aba3425a11f84936e7e2e32fc20c605d5">More...</a><br /></td></tr>
 <tr class="separator:aba3425a11f84936e7e2e32fc20c605d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab15da1b38666d069f3c6e21382bd9b8d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#ab15da1b38666d069f3c6e21382bd9b8d">IsConnectedTo</a> (<a class="el" href="class_design_platform_1_1_geometry_1_1_line.html">Line</a> otherLine)</td></tr>
+<tr class="memdesc:ab15da1b38666d069f3c6e21382bd9b8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether this line is connected to the given line. Two lines are considered as connected if they share an endpoint.  <a href="class_design_platform_1_1_geometry_1_1_line.html#ab15da1b38666d069f3c6e21382bd9b8d">More...</a><br /></td></tr>
+<tr class="separator:ab15da1b38666d069f3c6e21382bd9b8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e15ec0984d88d2a4869d982c8873637"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#a2e15ec0984d88d2a4869d982c8873637">IsParallelTo</a> (<a class="el" href="class_design_platform_1_1_geometry_1_1_line.html">Line</a> otherLine)</td></tr>
+<tr class="memdesc:a2e15ec0984d88d2a4869d982c8873637"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether this line is parallel to the given line.  <a href="class_design_platform_1_1_geometry_1_1_line.html#a2e15ec0984d88d2a4869d982c8873637">More...</a><br /></td></tr>
+<tr class="separator:a2e15ec0984d88d2a4869d982c8873637"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -114,6 +123,9 @@ Properties</h2></td></tr>
 <tr class="memitem:adc58876dfb5e97742177e7d8a6d1878d"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#adc58876dfb5e97742177e7d8a6d1878d">Midpoint</a><code> [get]</code></td></tr>
 <tr class="memdesc:adc58876dfb5e97742177e7d8a6d1878d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Midpoint of the line and the average of the start point and the end point.  <a href="class_design_platform_1_1_geometry_1_1_line.html#adc58876dfb5e97742177e7d8a6d1878d">More...</a><br /></td></tr>
 <tr class="separator:adc58876dfb5e97742177e7d8a6d1878d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa02aca3a1b767f06330a5c13353a553d"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html#aa02aca3a1b767f06330a5c13353a553d">Direction</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa02aca3a1b767f06330a5c13353a553d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction of this line from the startpoint to the endpoint.  <a href="class_design_platform_1_1_geometry_1_1_line.html#aa02aca3a1b767f06330a5c13353a553d">More...</a><br /></td></tr>
+<tr class="separator:aa02aca3a1b767f06330a5c13353a553d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Three dimensional line segment. </p>
@@ -210,14 +222,68 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="ac10bae6fcc8f092e71ac141f9814d7cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac10bae6fcc8f092e71ac141f9814d7cd">&#9670;&nbsp;</a></span>Parameter()</h2>
+<a id="ab15da1b38666d069f3c6e21382bd9b8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab15da1b38666d069f3c6e21382bd9b8d">&#9670;&nbsp;</a></span>IsConnectedTo()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float DesignPlatform.Geometry.Line.Parameter </td>
+          <td class="memname">bool DesignPlatform.Geometry.Line.IsConnectedTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html">Line</a>&#160;</td>
+          <td class="paramname"><em>otherLine</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates whether this line is connected to the given line. Two lines are considered as connected if they share an endpoint. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">otherLine</td><td>Other line to check connectivity with.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ture if the lines are connected and false otherwise.</dd></dl>
+
+</div>
+</div>
+<a id="a2e15ec0984d88d2a4869d982c8873637"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e15ec0984d88d2a4869d982c8873637">&#9670;&nbsp;</a></span>IsParallelTo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DesignPlatform.Geometry.Line.IsParallelTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html">Line</a>&#160;</td>
+          <td class="paramname"><em>otherLine</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates whether this line is parallel to the given line. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">otherLine</td><td>Other line to check against.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ture if the lines are parallel and false otherwise.</dd></dl>
+
+</div>
+</div>
+<a id="a131bd97140f499650e5f31c86ad62c65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a131bd97140f499650e5f31c86ad62c65">&#9670;&nbsp;</a></span>ParameterAtPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float DesignPlatform.Geometry.Line.ParameterAtPoint </td>
           <td>(</td>
           <td class="paramtype">Vector3&#160;</td>
           <td class="paramname"><em>point</em></td><td>)</td>
@@ -234,6 +300,33 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Parameter of the point on the line.</dd></dl>
+
+</div>
+</div>
+<a id="aac23b768643862731e54df6d3de07d3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac23b768643862731e54df6d3de07d3e">&#9670;&nbsp;</a></span>PointAtParameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 DesignPlatform.Geometry.Line.PointAtParameter </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>parameter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Finds the point on the line at the given parameter (from 0.0 to 1.0) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameter</td><td>The parameter for which to get the point.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The point on the line at the given parameter.</dd></dl>
 
 </div>
 </div>
@@ -271,6 +364,30 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="aa02aca3a1b767f06330a5c13353a553d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa02aca3a1b767f06330a5c13353a553d">&#9670;&nbsp;</a></span>Direction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 DesignPlatform.Geometry.Line.Direction</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The direction of this line from the startpoint to the endpoint. </p>
+
+</div>
+</div>
 <a id="a71f78088981365516834d22945d9334b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a71f78088981365516834d22945d9334b">&#9670;&nbsp;</a></span>Length</h2>
 

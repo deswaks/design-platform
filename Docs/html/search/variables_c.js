@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['offevents_1086',['OffEvents',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#a3f8ff69f5eb15f35992865e86671dca3',1,'DesignPlatform::UI::UISwitch']]],
-  ['onevents_1087',['OnEvents',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#adc6292c73b4892ca353e536d94b78b2c',1,'DesignPlatform::UI::UISwitch']]],
-  ['openingdepth_1088',['OpeningDepth',['../class_design_platform_1_1_core_1_1_settings.html#abdb63043a0c9f88d9bb5d10e6e181544',1,'DesignPlatform::Core::Settings']]],
-  ['overhangslider_1089',['overhangSlider',['../class_design_platform_1_1_core_1_1_button_manager_roof.html#a2bdb4f6a612136ad926fe5ba3aa04831',1,'DesignPlatform::Core::ButtonManagerRoof']]]
+  ['name_1103',['Name',['../class_design_platform_1_1_u_i_1_1_widget.html#ac159df175117b1868a69dd9a74d630a9',1,'DesignPlatform::UI::Widget']]],
+  ['nearthreshold_1104',['nearThreshold',['../class_design_platform_1_1_core_1_1_settings.html#a4a37802e338abfd16285c8a2d005e255',1,'DesignPlatform::Core::Settings']]],
+  ['notificationobject_1105',['notificationObject',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a25ee880da16fee1017c77d5332ea7092',1,'DesignPlatform::Modes::POVMode']]]
 ];

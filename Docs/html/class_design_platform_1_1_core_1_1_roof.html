@@ -90,7 +90,7 @@ Inheritance diagram for DesignPlatform.Core.Roof:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a49f6eff9d697210693d1d67d80d5fe48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_roof.html#a49f6eff9d697210693d1d67d80d5fe48">InitializeRoof</a> (List&lt; Vector3 &gt; roofFaceVertices)</td></tr>
-<tr class="memdesc:a49f6eff9d697210693d1d67d80d5fe48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct roof.  <a href="class_design_platform_1_1_core_1_1_roof.html#a49f6eff9d697210693d1d67d80d5fe48">More...</a><br /></td></tr>
+<tr class="memdesc:a49f6eff9d697210693d1d67d80d5fe48"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default constructor of the roof must come in the form of this initialize function since the roof is a Unity MonoBehavior object (cannot have a constructor). Any roof must be initialized.  <a href="class_design_platform_1_1_core_1_1_roof.html#a49f6eff9d697210693d1d67d80d5fe48">More...</a><br /></td></tr>
 <tr class="separator:a49f6eff9d697210693d1d67d80d5fe48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf9ac0d33b0ca405cd9c34db9e5e6a72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_roof.html#abf9ac0d33b0ca405cd9c34db9e5e6a72">DeleteRoof</a> ()</td></tr>
 <tr class="memdesc:abf9ac0d33b0ca405cd9c34db9e5e6a72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes a <a class="el" href="class_design_platform_1_1_core_1_1_roof.html" title="Represents the roof of the building">Roof</a> and removes it from the <a class="el" href="class_design_platform_1_1_core_1_1_roof.html" title="Represents the roof of the building">Roof</a> list.  <a href="class_design_platform_1_1_core_1_1_roof.html#abf9ac0d33b0ca405cd9c34db9e5e6a72">More...</a><br /></td></tr>
@@ -99,14 +99,19 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a7ac0be24e1cd430e897b757c5a993e8a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_roof.html#a7ac0be24e1cd430e897b757c5a993e8a">Thickness</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:a7ac0be24e1cd430e897b757c5a993e8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thickness perpendicular to the surface of the roof.  <a href="class_design_platform_1_1_core_1_1_roof.html#a7ac0be24e1cd430e897b757c5a993e8a">More...</a><br /></td></tr>
 <tr class="separator:a7ac0be24e1cd430e897b757c5a993e8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2eb9053921c9d04b4e0a475b8f7fab4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_roof.html#aa2eb9053921c9d04b4e0a475b8f7fab4">Pitch</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:aa2eb9053921c9d04b4e0a475b8f7fab4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pitch of the slope of the roof.  <a href="class_design_platform_1_1_core_1_1_roof.html#aa2eb9053921c9d04b4e0a475b8f7fab4">More...</a><br /></td></tr>
 <tr class="separator:aa2eb9053921c9d04b4e0a475b8f7fab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d797b97012d8bb61d8c5f8bde5245da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_roof.html#a5d797b97012d8bb61d8c5f8bde5245da">Overhang</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:a5d797b97012d8bb61d8c5f8bde5245da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the offset of the roof edge from the wall edges.  <a href="class_design_platform_1_1_core_1_1_roof.html#a5d797b97012d8bb61d8c5f8bde5245da">More...</a><br /></td></tr>
 <tr class="separator:a5d797b97012d8bb61d8c5f8bde5245da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a826e20b15b877aa46bd1a57c3b02e8f0"><td class="memItemLeft" align="right" valign="top">RoofType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_roof.html#a826e20b15b877aa46bd1a57c3b02e8f0">Type</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:a826e20b15b877aa46bd1a57c3b02e8f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of roof can be Gabled, Hipped or Flat.  <a href="class_design_platform_1_1_core_1_1_roof.html#a826e20b15b877aa46bd1a57c3b02e8f0">More...</a><br /></td></tr>
 <tr class="separator:a826e20b15b877aa46bd1a57c3b02e8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0be71df1b6f59ee4630c87acfabda53f"><td class="memItemLeft" align="right" valign="top">List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_roof.html#a0be71df1b6f59ee4630c87acfabda53f">ControlPoints</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:a0be71df1b6f59ee4630c87acfabda53f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Underlying controlpoints of the roof element. The vertices of the polygon that gets extruded into the 3d geometry.  <a href="class_design_platform_1_1_core_1_1_roof.html#a0be71df1b6f59ee4630c87acfabda53f">More...</a><br /></td></tr>
 <tr class="separator:a0be71df1b6f59ee4630c87acfabda53f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -147,7 +152,13 @@ Properties</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Construct roof. </p>
+<p>The default constructor of the roof must come in the form of this initialize function since the roof is a Unity MonoBehavior object (cannot have a constructor). Any roof must be initialized. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">roofFaceVertices</td><td>The vertices for the extrusion into 3d object.</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -172,6 +183,8 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Underlying controlpoints of the roof element. The vertices of the polygon that gets extruded into the 3d geometry. </p>
+
 </div>
 </div>
 <a id="a5d797b97012d8bb61d8c5f8bde5245da"></a>
@@ -193,6 +206,8 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Determines the offset of the roof edge from the wall edges. </p>
 
 </div>
 </div>
@@ -216,6 +231,8 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Pitch of the slope of the roof. </p>
+
 </div>
 </div>
 <a id="a7ac0be24e1cd430e897b757c5a993e8a"></a>
@@ -238,6 +255,8 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Thickness perpendicular to the surface of the roof. </p>
+
 </div>
 </div>
 <a id="a826e20b15b877aa46bd1a57c3b02e8f0"></a>
@@ -259,6 +278,8 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Type of roof can be Gabled, Hipped or Flat. </p>
 
 </div>
 </div>

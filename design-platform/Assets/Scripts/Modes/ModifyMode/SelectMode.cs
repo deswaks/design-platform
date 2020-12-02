@@ -5,9 +5,11 @@ using UnityEngine.EventSystems;
 namespace DesignPlatform.Modes {
     public class SelectMode : Mode {
 
+        public Core.Space selection { get; private set; }
+
         private static SelectMode instance;
+
         private Mode currentMode;
-        public Core.Space selection;
 
         public static SelectMode Instance {
             // Use the ?? operator, to return 'instance' if 'instance' does not equal null

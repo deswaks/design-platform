@@ -1,7 +1,22 @@
 var searchData=
 [
-  ['templaterow_1129',['TemplateRow',['../class_design_platform_1_1_u_i_1_1_dashboard.html#a7acb6b2184d8a067712d1da79c77c665',1,'DesignPlatform::UI::Dashboard']]],
-  ['thickness_1130',['Thickness',['../class_design_platform_1_1_core_1_1_face.html#a078618303171b0dc0cfc69aa24cd96aa',1,'DesignPlatform.Core.Face.Thickness()'],['../class_design_platform_1_1_core_1_1_slab.html#ab51cf7ce8de42b5dd815ee0c3303bc5c',1,'DesignPlatform.Core.Slab.Thickness()']]],
-  ['titlename_1131',['TitleName',['../class_design_platform_1_1_u_i_1_1_widget___circle_diagram.html#a615af071c42dfc1d03f17a804893205f',1,'DesignPlatform::UI::Widget_CircleDiagram']]],
-  ['titleobject_1132',['titleObject',['../class_design_platform_1_1_u_i_1_1_widget___circle_diagram.html#a6be65f7791016c11a9b5454ecbd5863a',1,'DesignPlatform::UI::Widget_CircleDiagram']]]
+  ['savefolderpath_1130',['saveFolderPath',['../class_design_platform_1_1_database_1_1_settings.html#ad341e861cb58d24571e1fa692628ffbf',1,'DesignPlatform::Database::Settings']]],
+  ['scale_1131',['scale',['../class_design_platform_1_1_export_1_1_pdf_exporter.html#a4f5befa6705b6f9f33e524db7a5a2ff6',1,'DesignPlatform::Export::PdfExporter']]],
+  ['scales_1132',['Scales',['../class_design_platform_1_1_export_1_1_pdf_exporter.html#a10c1418256522722f40c38ac9c921ad7',1,'DesignPlatform::Export::PdfExporter']]],
+  ['selectedshape_1133',['selectedShape',['../class_design_platform_1_1_modes_1_1_build_mode.html#afe2e13107e1503383db2082e266ca1e9',1,'DesignPlatform.Modes.BuildMode.selectedShape()'],['../class_design_platform_1_1_modes_1_1_opening_mode.html#ad540003fb497ecf562c215a08d177fc1',1,'DesignPlatform.Modes.OpeningMode.selectedShape()']]],
+  ['showopeninglines_1134',['ShowOpeningLines',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a9c306acb60dd19da51c867e20a9c13db',1,'DesignPlatform.Modes.POVMode.ShowOpeningLines()'],['../class_design_platform_1_1_u_i_1_1_settings.html#a22a5c518a8c3c2824229f581f4ab2f50',1,'DesignPlatform.UI.Settings.ShowOpeningLines()']]],
+  ['showspacetags_1135',['ShowSpaceTags',['../class_design_platform_1_1_u_i_1_1_settings.html#a34c508790688742317bd0281659ac48f',1,'DesignPlatform::UI::Settings']]],
+  ['showwalllines_1136',['ShowWallLines',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a743e1a20af1adce3e0a0cc4d0cea33b9',1,'DesignPlatform.Modes.POVMode.ShowWallLines()'],['../class_design_platform_1_1_u_i_1_1_settings.html#a40bd566887281a6b64109a52febd31af',1,'DesignPlatform.UI.Settings.ShowWallLines()']]],
+  ['size_1137',['Size',['../class_design_platform_1_1_u_i_1_1_widget.html#a3f00f1a56246804ab9730221fcb1bd58',1,'DesignPlatform.UI.Widget.Size()'],['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#a62997fa07b58596bba28a7da7fe53291',1,'DesignPlatform.UI.Zoom2D.size()'],['../class_design_platform_1_1_core_1_1_grid.html#adf7385c30281e3f383013795851d24b5',1,'DesignPlatform.Core.Grid.size()']]],
+  ['slabs_1138',['slabs',['../class_design_platform_1_1_core_1_1_building.html#ab95b112e6f677932a0dc9c9814f16de0',1,'DesignPlatform::Core::Building']]],
+  ['spacecontrolpoints_1139',['SpaceControlPoints',['../class_design_platform_1_1_core_1_1_settings.html#a4d29ebc84afb4bf2afbfc5a244341456',1,'DesignPlatform::Core::Settings']]],
+  ['spacegameobjectnames_1140',['SpaceGameObjectNames',['../class_design_platform_1_1_core_1_1_settings.html#a830645794d809895238559660241ae1b',1,'DesignPlatform::Core::Settings']]],
+  ['spacemask_1141',['spaceMask',['../class_design_platform_1_1_u_i_1_1_player_movement.html#a8ab479e25982728ba9b9296ccaa72314',1,'DesignPlatform::UI::PlayerMovement']]],
+  ['spacematerialassets_1142',['SpaceMaterialAssets',['../class_design_platform_1_1_core_1_1_settings.html#aa07996bbb38b7f7bf62600c17788c9bc',1,'DesignPlatform::Core::Settings']]],
+  ['spacetypenames_1143',['SpaceTypeNames',['../class_design_platform_1_1_core_1_1_settings.html#a90cd09fe821cfe0b879483c5ec7eb740',1,'DesignPlatform::Core::Settings']]],
+  ['speed_1144',['speed',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#acd369ac6589dd79a2489a2bf5aecbf28',1,'DesignPlatform.UI.Zoom2D.speed()'],['../class_design_platform_1_1_u_i_1_1_player_movement.html#ae3f0ec27c18ddc47f0ee7e3a960260c2',1,'DesignPlatform.UI.PlayerMovement.speed()']]],
+  ['startpoint_1145',['StartPoint',['../class_design_platform_1_1_geometry_1_1_line.html#afcbb52c615ddbb26d55a9062a2e36a00',1,'DesignPlatform::Geometry::Line']]],
+  ['subsize_1146',['subSize',['../class_design_platform_1_1_core_1_1_grid.html#adce8c1d02d3d940d5ced50c719f642ea',1,'DesignPlatform::Core::Grid']]],
+  ['switchanimator_1147',['switchAnimator',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#acc51c6b1cc0d27da3877fc8186efa3a4',1,'DesignPlatform::UI::UISwitch']]],
+  ['switchbutton_1148',['switchButton',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#a220428e9993ee3046ea3f1b8450f83b9',1,'DesignPlatform::UI::UISwitch']]]
 ];

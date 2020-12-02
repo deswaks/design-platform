@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['menu_1174',['MENU',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a9896a7aab41782886b429368f73429a0a3ed53fbeb1eab0443561b68ca0c0b5cf',1,'DesignPlatform::Modes::POVMode']]],
-  ['moving_1175',['MOVING',['../namespace_design_platform_1_1_core.html#a6516747b4117405b4fdbc3daedd33818aaf5a690fd5ec6f789dbfc51ec6a891ba',1,'DesignPlatform::Core']]]
+  ['livingroom_1198',['LIVINGROOM',['../namespace_design_platform_1_1_core.html#a0ca6a3e97121d23b6c9d6206130fce8ba71d5f7cf636427d44b873af2ccf19a23',1,'DesignPlatform::Core']]],
+  ['loadcarrying_1199',['LOADCARRYING',['../namespace_structural_analysis.html#a54da52e2f8d447c722e30a94528d81a9ac8c164602f431edf7eea88c6cf08ce44',1,'StructuralAnalysis']]],
+  ['lshape_1200',['LSHAPE',['../namespace_design_platform_1_1_core.html#aedad2d38f2f602ea1565f001fa15f924ad973fa62ae56273fe1948492794fb0ed',1,'DesignPlatform::Core']]]
 ];

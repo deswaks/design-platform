@@ -26,18 +26,27 @@ namespace DesignPlatform.Core {
         Parallel
     }
 
+
+    /// <summary>
+    /// The CLT joint represents a joint between two structural panels made of CLT (cross laminated timber)
+    /// </summary>
     public struct CLTJoint {
 
+        /// <summary>The element on which the joint is located.</summary>
         public CLTElement Element { get; set; }
 
+        /// <summary>The point at which the joint is located.</summary>
         public Vector3 Point { get; set; }
 
+        /// <summary>The type of joint in relation to the connecting elements.</summary>
         public WallJointType Type { get; set; }
 
+        /// <summary>The parameter on the CLT element location line where the joint is located.</summary>
         public float Parameter {
             get { return Element.Length; }
         }
 
+        /// <summary>Default constructor for the joint.</summary>
         public CLTJoint (CLTElement parent, Vector3 location, WallJointType type = WallJointType.None) {
             Element = parent;
             Point = location;

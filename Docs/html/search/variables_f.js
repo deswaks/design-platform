@@ -1,22 +1,10 @@
 var searchData=
 [
-  ['savefolderpath_1110',['saveFolderPath',['../class_design_platform_1_1_database_1_1_settings.html#ad341e861cb58d24571e1fa692628ffbf',1,'DesignPlatform::Database::Settings']]],
-  ['scale_1111',['scale',['../class_design_platform_1_1_export_1_1_pdf_exporter.html#a4f5befa6705b6f9f33e524db7a5a2ff6',1,'DesignPlatform::Export::PdfExporter']]],
-  ['scales_1112',['Scales',['../class_design_platform_1_1_export_1_1_pdf_exporter.html#a10c1418256522722f40c38ac9c921ad7',1,'DesignPlatform::Export::PdfExporter']]],
-  ['scroll_1113',['scroll',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#ad951083f13e1bb8261a1a781beee1975',1,'DesignPlatform::UI::Zoom2D']]],
-  ['selectedshape_1114',['selectedShape',['../class_design_platform_1_1_modes_1_1_build_mode.html#afe2e13107e1503383db2082e266ca1e9',1,'DesignPlatform.Modes.BuildMode.selectedShape()'],['../class_design_platform_1_1_modes_1_1_opening_mode.html#ad540003fb497ecf562c215a08d177fc1',1,'DesignPlatform.Modes.OpeningMode.selectedShape()']]],
-  ['selection_1115',['selection',['../class_design_platform_1_1_modes_1_1_select_mode.html#a1d6e0a7be48ef82c8dfd3c4dfd16b15a',1,'DesignPlatform::Modes::SelectMode']]],
-  ['showopeninglines_1116',['ShowOpeningLines',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a9c306acb60dd19da51c867e20a9c13db',1,'DesignPlatform.Modes.POVMode.ShowOpeningLines()'],['../class_design_platform_1_1_u_i_1_1_settings.html#a22a5c518a8c3c2824229f581f4ab2f50',1,'DesignPlatform.UI.Settings.ShowOpeningLines()']]],
-  ['showspacetags_1117',['ShowSpaceTags',['../class_design_platform_1_1_u_i_1_1_settings.html#a34c508790688742317bd0281659ac48f',1,'DesignPlatform::UI::Settings']]],
-  ['showwalllines_1118',['ShowWallLines',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a743e1a20af1adce3e0a0cc4d0cea33b9',1,'DesignPlatform.Modes.POVMode.ShowWallLines()'],['../class_design_platform_1_1_u_i_1_1_settings.html#a40bd566887281a6b64109a52febd31af',1,'DesignPlatform.UI.Settings.ShowWallLines()']]],
-  ['size_1119',['size',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#a62997fa07b58596bba28a7da7fe53291',1,'DesignPlatform.UI.Zoom2D.size()'],['../class_design_platform_1_1_core_1_1_grid.html#adf7385c30281e3f383013795851d24b5',1,'DesignPlatform.Core.Grid.size()'],['../class_design_platform_1_1_u_i_1_1_widget.html#a3f00f1a56246804ab9730221fcb1bd58',1,'DesignPlatform.UI.Widget.Size()']]],
-  ['slabs_1120',['slabs',['../class_design_platform_1_1_core_1_1_building.html#ab95b112e6f677932a0dc9c9814f16de0',1,'DesignPlatform::Core::Building']]],
-  ['spacemask_1121',['spaceMask',['../class_design_platform_1_1_u_i_1_1_player_movement.html#a8ab479e25982728ba9b9296ccaa72314',1,'DesignPlatform::UI::PlayerMovement']]],
-  ['spacematerialasset_1122',['SpaceMaterialAsset',['../class_design_platform_1_1_core_1_1_space.html#ad6e67d7061f0afc6eccfefede8035954',1,'DesignPlatform::Core::Space']]],
-  ['spacetypename_1123',['SpaceTypeName',['../class_design_platform_1_1_core_1_1_space.html#a60687bd9201ce4a63afca81b87a2a64e',1,'DesignPlatform::Core::Space']]],
-  ['speed_1124',['speed',['../class_design_platform_1_1_u_i_1_1_zoom2_d.html#acd369ac6589dd79a2489a2bf5aecbf28',1,'DesignPlatform.UI.Zoom2D.speed()'],['../class_design_platform_1_1_u_i_1_1_player_movement.html#ae3f0ec27c18ddc47f0ee7e3a960260c2',1,'DesignPlatform.UI.PlayerMovement.speed()']]],
-  ['startpoint_1125',['StartPoint',['../class_design_platform_1_1_geometry_1_1_line.html#afcbb52c615ddbb26d55a9062a2e36a00',1,'DesignPlatform::Geometry::Line']]],
-  ['subsize_1126',['subSize',['../class_design_platform_1_1_core_1_1_grid.html#adce8c1d02d3d940d5ced50c719f642ea',1,'DesignPlatform::Core::Grid']]],
-  ['switchanimator_1127',['switchAnimator',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#acc51c6b1cc0d27da3877fc8186efa3a4',1,'DesignPlatform::UI::UISwitch']]],
-  ['switchbutton_1128',['switchButton',['../class_design_platform_1_1_u_i_1_1_u_i_switch.html#a220428e9993ee3046ea3f1b8450f83b9',1,'DesignPlatform::UI::UISwitch']]]
+  ['radius_1123',['radius',['../class_design_platform_1_1_modes_1_1_opening_mode.html#adceafdb228fdadc9a28d146205eb149b',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['roofoverhang_1124',['RoofOverhang',['../class_design_platform_1_1_core_1_1_settings.html#a41c00e4398d584d3d7e0a1ca9c498aaf',1,'DesignPlatform::Core::Settings']]],
+  ['roofpitch_1125',['RoofPitch',['../class_design_platform_1_1_core_1_1_settings.html#a965faec67d16a8dddad6950782c8e42c',1,'DesignPlatform::Core::Settings']]],
+  ['roofs_1126',['roofs',['../class_design_platform_1_1_core_1_1_building.html#a8ba13c11500240bf273f252abcbcb20d',1,'DesignPlatform::Core::Building']]],
+  ['roofthickness_1127',['RoofThickness',['../class_design_platform_1_1_core_1_1_settings.html#ab964e5907f7ab370f7d7e9f74bd78d0e',1,'DesignPlatform::Core::Settings']]],
+  ['rooftype_1128',['RoofType',['../class_design_platform_1_1_core_1_1_settings.html#a3f824d05f001b76cf18edc3461a76363',1,'DesignPlatform::Core::Settings']]],
+  ['rowtemplate_1129',['rowTemplate',['../class_design_platform_1_1_u_i_1_1_select_widgets_window.html#a93052332e683a2c809eaae38331cfc3c',1,'DesignPlatform::UI::SelectWidgetsWindow']]]
 ];

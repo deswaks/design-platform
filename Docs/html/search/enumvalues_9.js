@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['rectangle_1181',['RECTANGLE',['../namespace_design_platform_1_1_core.html#aedad2d38f2f602ea1565f001fa15f924a8e8e58fe94ab307a826e087028a7c01a',1,'DesignPlatform::Core']]]
+  ['parallel_1205',['Parallel',['../namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa98402eecfbcefc336954458a01752131',1,'DesignPlatform::Core']]],
+  ['placed_1206',['PLACED',['../namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3fa0a4373ca716769f93112e16e251bb8a1',1,'DesignPlatform::Core']]],
+  ['pov_1207',['POV',['../class_design_platform_1_1_modes_1_1_p_o_v_mode.html#a9896a7aab41782886b429368f73429a0a3e509759ea0e4709a0b2901c8eaa6a3d',1,'DesignPlatform::Modes::POVMode']]],
+  ['preview_1208',['PREVIEW',['../namespace_design_platform_1_1_core.html#a0ca6a3e97121d23b6c9d6206130fce8ba16146de8c60e5b0d74bf6d2a78d4f576',1,'DesignPlatform.Core.PREVIEW()'],['../namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3fa16146de8c60e5b0d74bf6d2a78d4f576',1,'DesignPlatform.Core.PREVIEW()']]]
 ];

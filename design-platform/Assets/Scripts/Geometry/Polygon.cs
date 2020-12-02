@@ -5,7 +5,7 @@ namespace DesignPlatform.Geometry {
     /// <summary>
     /// Two dimensional polygon represented by a closed polyline.
     /// </summary>
-    public class Polygon2 {
+    public class Polygon2D {
 
         /// <summary>The vertices of the underlying polyline</summary>
         private readonly Vector2[] Vertices;
@@ -16,7 +16,7 @@ namespace DesignPlatform.Geometry {
         /// Create a 2D Polygon
         /// </summary>
         /// <param name="vertices">The vertices of the polygon (X,Y)</param>
-        public Polygon2(Vector2[] vertices) {
+        public Polygon2D(Vector2[] vertices) {
             Vertices = vertices;
         }
 
@@ -61,7 +61,7 @@ namespace DesignPlatform.Geometry {
         /// <summary>
         /// The list of midpoints for all the edges of the polyline of the polygon.
         /// </summary>
-        /// <returns>Mid points</returns>
+        /// <returns>List of edge mid points</returns>
         public Vector2[] EdgeMidpoints {
             get {
                 Vector2[] midPoints = new Vector2[Vertices.Length];
@@ -73,20 +73,6 @@ namespace DesignPlatform.Geometry {
                 }
                 return midPoints;
             }
-        }
-
-        /// <summary>
-        /// Gets a list of normals. They are in same order as controlpoints (clockwise). localCoordinates : true (for local coordinates, Sherlock)
-        /// </summary>
-        public Vector2[] GetEdgeNormals(bool localCoordinates = false) {
-            Vector2[] normals = new Vector2[Vertices.Length];
-
-            int j = Vertices.Length - 1; // j starts as the last vertex
-            for (int i = 0; i < Vertices.Length; i++) {
-                normals[j] = Vector2.Perpendicular(Vertices[j] - Vertices[i]);
-                j = i;  // j is the previous vertex to i
-            }
-            return normals;
         }
 
         

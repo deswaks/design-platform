@@ -1,15 +1,8 @@
 var searchData=
 [
-  ['line_897',['Line',['../class_design_platform_1_1_geometry_1_1_line.html#a4c2769d639bbdc95971d67d8e5df69e9',1,'DesignPlatform::Geometry::Line']]],
-  ['load_898',['Load',['../struct_structural_analysis_1_1_load.html#a5d643aa7fa5c399ad9091847e9af25b1',1,'StructuralAnalysis::Load']]],
-  ['loadandbuildunityspacesfromgraph_899',['LoadAndBuildUnitySpacesFromGraph',['../class_design_platform_1_1_database_1_1_graph_database.html#a694d71edd7285e5f736e1964f3c1e769',1,'DesignPlatform::Database::GraphDatabase']]],
-  ['loadasset_3c_20t_20_3e_900',['LoadAsset&lt; T &gt;',['../class_design_platform_1_1_utils_1_1_asset_util.html#adc33fea6eb1914c4c6b0f4e7f294302a',1,'DesignPlatform::Utils::AssetUtil']]],
-  ['loadbundle_901',['LoadBundle',['../class_design_platform_1_1_utils_1_1_asset_util.html#a900626b156d3cb559abca171049ef4c7',1,'DesignPlatform::Utils::AssetUtil']]],
-  ['loadcarryingwalls_902',['LoadCarryingWalls',['../class_structural_analysis_1_1_load_distribution.html#a9db4cefa0487d2499533da097886cbfe',1,'StructuralAnalysis::LoadDistribution']]],
-  ['loadfromgraph_903',['LoadFromGraph',['../class_design_platform_1_1_u_i_1_1_button_manager_home.html#adac3ae091a373e6e111d2324ce18bc95',1,'DesignPlatform::UI::ButtonManagerHome']]],
-  ['loadlocal_904',['LoadLocal',['../class_design_platform_1_1_u_i_1_1_button_manager_home.html#ab9d0c972125ecb0568c6a40cf0b5a835',1,'DesignPlatform::UI::ButtonManagerHome']]],
-  ['loadmodule_905',['LoadModule',['../class_design_platform_1_1_utils_1_1_module_loader.html#ab4369a1874a6769c2649bfc14b3982ce',1,'DesignPlatform::Utils::ModuleLoader']]],
-  ['loadmodules_906',['LoadModules',['../class_design_platform_1_1_utils_1_1_module_loader.html#abee1c9f8dc4ccdb1ad90c9774bd4e2b1',1,'DesignPlatform::Utils::ModuleLoader']]],
-  ['loadopeningnodesfromjson_907',['LoadOpeningNodesFromJson',['../class_design_platform_1_1_database_1_1_local_database.html#a40deb0e0abb99f449d4bccf96dd92d64',1,'DesignPlatform::Database::LocalDatabase']]],
-  ['loadspacenodesfromjson_908',['LoadSpaceNodesFromJson',['../class_design_platform_1_1_database_1_1_local_database.html#a1c6ad23c15767f63ca387cc48f751b13',1,'DesignPlatform::Database::LocalDatabase']]]
+  ['midpoint_929',['Midpoint',['../class_design_platform_1_1_utils_1_1_roof_utils.html#a09a05f354ef581894d74eba85bc02bac',1,'DesignPlatform::Utils::RoofUtils']]],
+  ['modify_930',['Modify',['../class_design_platform_1_1_u_i_1_1_button_manager_modify.html#a03fb9e217c364906117c03499a985d6d',1,'DesignPlatform::UI::ButtonManagerModify']]],
+  ['mousepositioncollidingspaces_931',['MousePositionCollidingSpaces',['../class_design_platform_1_1_modes_1_1_opening_mode.html#a3577837db79c8353a7bafc747a47ab83',1,'DesignPlatform::Modes::OpeningMode']]],
+  ['move_932',['Move',['../class_design_platform_1_1_core_1_1_opening.html#ace0a87ebad099f05b45bdc66790194d3',1,'DesignPlatform.Core.Opening.Move()'],['../class_design_platform_1_1_core_1_1_space.html#ae58ba3e6c9e0151cc1087b8c97c0db23',1,'DesignPlatform.Core.Space.Move()'],['../class_design_platform_1_1_u_i_1_1_button_manager_modify.html#a20309595d16854bb1c029ad99373c859',1,'DesignPlatform.UI.ButtonManagerModify.Move()']]],
+  ['movemode_933',['MoveMode',['../class_design_platform_1_1_modes_1_1_move_mode.html#aef903dc2c9f415b7b9b871ebfd9578b6',1,'DesignPlatform::Modes::MoveMode']]]
 ];

@@ -88,6 +88,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a202436a036c3c07f91b53ca7f8f4cc04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor to create a new face.  <a href="class_design_platform_1_1_core_1_1_face.html#a202436a036c3c07f91b53ca7f8f4cc04">More...</a><br /></td></tr>
 <tr class="separator:a202436a036c3c07f91b53ca7f8f4cc04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d1aec15601b71efbae392654bded078"><td class="memItemLeft" align="right" valign="top">override string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a5d1aec15601b71efbae392654bded078">ToString</a> ()</td></tr>
+<tr class="memdesc:a5d1aec15601b71efbae392654bded078"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a description of the face.  <a href="class_design_platform_1_1_core_1_1_face.html#a5d1aec15601b71efbae392654bded078">More...</a><br /></td></tr>
 <tr class="separator:a5d1aec15601b71efbae392654bded078"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae780c43edb3cd3bf04c76604a73226b3"><td class="memItemLeft" align="right" valign="top">List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#ae780c43edb3cd3bf04c76604a73226b3">GetControlPoints</a> (bool localCoordinates=false)</td></tr>
 <tr class="memdesc:ae780c43edb3cd3bf04c76604a73226b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the original controlpoints of the face (horizontal and vertical faces)  <a href="class_design_platform_1_1_core_1_1_face.html#ae780c43edb3cd3bf04c76604a73226b3">More...</a><br /></td></tr>
@@ -146,9 +147,9 @@ Properties</h2></td></tr>
 <tr class="memitem:aaaddfaa4023b680de7d97193bd8b2c12"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#aaaddfaa4023b680de7d97193bd8b2c12">Height</a><code> [get]</code></td></tr>
 <tr class="memdesc:aaaddfaa4023b680de7d97193bd8b2c12"><td class="mdescLeft">&#160;</td><td class="mdescRight">The height of this face.  <a href="class_design_platform_1_1_core_1_1_face.html#aaaddfaa4023b680de7d97193bd8b2c12">More...</a><br /></td></tr>
 <tr class="separator:aaaddfaa4023b680de7d97193bd8b2c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2288c6779e7e6b5d793874bc5b528a57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html">Line</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a2288c6779e7e6b5d793874bc5b528a57">Line</a><code> [get]</code></td></tr>
-<tr class="memdesc:a2288c6779e7e6b5d793874bc5b528a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">The two dimensional line at the base of this face.  <a href="class_design_platform_1_1_core_1_1_face.html#a2288c6779e7e6b5d793874bc5b528a57">More...</a><br /></td></tr>
-<tr class="separator:a2288c6779e7e6b5d793874bc5b528a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a493d952cc36dfc13cfcfe37124e76ba5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html">Line</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html#a493d952cc36dfc13cfcfe37124e76ba5">LocationLine</a><code> [get]</code></td></tr>
+<tr class="memdesc:a493d952cc36dfc13cfcfe37124e76ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The two dimensional line at the base of this face.  <a href="class_design_platform_1_1_core_1_1_face.html#a493d952cc36dfc13cfcfe37124e76ba5">More...</a><br /></td></tr>
+<tr class="separator:a493d952cc36dfc13cfcfe37124e76ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a two dimensional face on a three dimensional solid building space polygon. </p>
@@ -399,6 +400,9 @@ Properties</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Writes a description of the face. </p>
+<dl class="section return"><dt>Returns</dt><dd>The description of this face.</dd></dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -491,8 +495,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a2288c6779e7e6b5d793874bc5b528a57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2288c6779e7e6b5d793874bc5b528a57">&#9670;&nbsp;</a></span>Line</h2>
+<a id="a493d952cc36dfc13cfcfe37124e76ba5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a493d952cc36dfc13cfcfe37124e76ba5">&#9670;&nbsp;</a></span>LocationLine</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -501,7 +505,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html">Line</a> DesignPlatform.Core.Face.Line</td>
+          <td class="memname"><a class="el" href="class_design_platform_1_1_geometry_1_1_line.html">Line</a> DesignPlatform.Core.Face.LocationLine</td>
         </tr>
       </table>
   </td>

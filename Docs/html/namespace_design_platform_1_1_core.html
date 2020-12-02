@@ -82,10 +82,11 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_building.html">Building</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The building class is responsible for creation of new building elements and functions as a general access point for all created elements.  <a href="class_design_platform_1_1_core_1_1_building.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_button_manager_roof.html">ButtonManagerRoof</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_c_l_t_element.html">CLTElement</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The CLT element represents a structural panel made of CLT (cross laminated timber)  <a href="class_design_platform_1_1_core_1_1_c_l_t_element.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_design_platform_1_1_core_1_1_c_l_t_joint.html">CLTJoint</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The CLT joint represents a joint between two structural panels made of CLT (cross laminated timber)  <a href="struct_design_platform_1_1_core_1_1_c_l_t_joint.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_core_1_1_face.html">Face</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a two dimensional face on a three dimensional solid building space polygon.  <a href="class_design_platform_1_1_core_1_1_face.html#details">More...</a><br /></td></tr>
@@ -117,6 +118,26 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:af19ad2ded378715793258587c20b2d3d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#af19ad2ded378715793258587c20b2d3d">CLTQuality</a> { <a class="el" href="namespace_design_platform_1_1_core.html#af19ad2ded378715793258587c20b2d3dad1fe952e9619bb00a129b77c679cf221">CLTQuality.DVQ</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#af19ad2ded378715793258587c20b2d3daff7c464cc6a2b7c0538fd55de6caef7c">CLTQuality.IVQ</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#af19ad2ded378715793258587c20b2d3daa695688877d2034b7b867afba77a1711">CLTQuality.NVQ</a>
+ }</td></tr>
+<tr class="memdesc:af19ad2ded378715793258587c20b2d3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Classifies the quality of a CLT element  <a href="namespace_design_platform_1_1_core.html#af19ad2ded378715793258587c20b2d3d">More...</a><br /></td></tr>
+<tr class="separator:af19ad2ded378715793258587c20b2d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bddd418fcf42c0e1623c97bf4b59b4a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4a">WallJointType</a> { <br />
+&#160;&#160;<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa6adf97f83acf6453d4a6a4b1070f3754">WallJointType.None</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aae46b38eac8f5827fda31c22f053e20f4">WallJointType.Corner_Primary</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa802a8b6fb5b462c6cfc1b56dce74ec58">WallJointType.Corner_Secondary</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aad52169aa1fb1c610d68f0fd19791232d">WallJointType.T_Primary</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aacc4fb5b4028a745c4537668b880e8e54">WallJointType.T_Secondary</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa23d6fee2590c4084aa3f2081727f7761">WallJointType.X_Primary</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa1937fa2ec9b2d879f4f912ff8b6e9504">WallJointType.X_Secondary</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa98402eecfbcefc336954458a01752131">WallJointType.Parallel</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a5bddd418fcf42c0e1623c97bf4b59b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the type of a joint between walls.  <a href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4a">More...</a><br /></td></tr>
+<tr class="separator:a5bddd418fcf42c0e1623c97bf4b59b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4592f3926a842a3ba35b95677ed8d2f0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0">OpeningFunction</a> { <a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0a37ce845535b7c13f529505fdfdb04942">OpeningFunction.DOOR</a>, 
 <a class="el" href="namespace_design_platform_1_1_core.html#a4592f3926a842a3ba35b95677ed8d2f0a70e2a9fa5d5ec49dc67453eab551251d">OpeningFunction.WINDOW</a>
  }</td></tr>
@@ -127,11 +148,11 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ac05207c591db0e62bca7ed4fbeffbb3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the state of an opening.  <a href="namespace_design_platform_1_1_core.html#ac05207c591db0e62bca7ed4fbeffbb3f">More...</a><br /></td></tr>
 <tr class="separator:ac05207c591db0e62bca7ed4fbeffbb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6516747b4117405b4fdbc3daedd33818"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#a6516747b4117405b4fdbc3daedd33818">SpaceState</a> { <a class="el" href="namespace_design_platform_1_1_core.html#a6516747b4117405b4fdbc3daedd33818a4120eb7591bd0789af75a8973d5f9146">SpaceState.STATIONARY</a>, 
-<a class="el" href="namespace_design_platform_1_1_core.html#a6516747b4117405b4fdbc3daedd33818aaf5a690fd5ec6f789dbfc51ec6a891ba">SpaceState.MOVING</a>
+<tr class="memitem:a7c38acc526ebf6231f34fa3506f503c8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#a7c38acc526ebf6231f34fa3506f503c8">MoveState</a> { <a class="el" href="namespace_design_platform_1_1_core.html#a7c38acc526ebf6231f34fa3506f503c8a4120eb7591bd0789af75a8973d5f9146">MoveState.STATIONARY</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#a7c38acc526ebf6231f34fa3506f503c8aaf5a690fd5ec6f789dbfc51ec6a891ba">MoveState.MOVING</a>
  }</td></tr>
-<tr class="memdesc:a6516747b4117405b4fdbc3daedd33818"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the state of a building space.  <a href="namespace_design_platform_1_1_core.html#a6516747b4117405b4fdbc3daedd33818">More...</a><br /></td></tr>
-<tr class="separator:a6516747b4117405b4fdbc3daedd33818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:a7c38acc526ebf6231f34fa3506f503c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the state of a building space.  <a href="namespace_design_platform_1_1_core.html#a7c38acc526ebf6231f34fa3506f503c8">More...</a><br /></td></tr>
+<tr class="separator:a7c38acc526ebf6231f34fa3506f503c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ca6a3e97121d23b6c9d6206130fce8b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#a0ca6a3e97121d23b6c9d6206130fce8b">SpaceFunction</a> { <br />
 &#160;&#160;<a class="el" href="namespace_design_platform_1_1_core.html#a0ca6a3e97121d23b6c9d6206130fce8ba16146de8c60e5b0d74bf6d2a78d4f576">SpaceFunction.PREVIEW</a> = 0, 
 <a class="el" href="namespace_design_platform_1_1_core.html#a0ca6a3e97121d23b6c9d6206130fce8ba5b39c8b553c821e7cddc6da64b5bd2ee">SpaceFunction.DEFAULT</a> = 1, 
@@ -157,27 +178,80 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:aedad2d38f2f602ea1565f001fa15f924"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the shape of a building space.  <a href="namespace_design_platform_1_1_core.html#aedad2d38f2f602ea1565f001fa15f924">More...</a><br /></td></tr>
 <tr class="separator:aedad2d38f2f602ea1565f001fa15f924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1db66a9df363c0ee4ba1814c51bdc19"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#ab1db66a9df363c0ee4ba1814c51bdc19">WallSource</a> { <a class="el" href="namespace_design_platform_1_1_core.html#ab1db66a9df363c0ee4ba1814c51bdc19a596acbde60b98295256f8e4073a8e341">WallSource.INTERFACE</a>, 
+<a class="el" href="namespace_design_platform_1_1_core.html#ab1db66a9df363c0ee4ba1814c51bdc19a6f113b30ce3f2b854a8aad06bbfb766a">WallSource.CLT_ELEMENT</a>
+ }</td></tr>
+<tr class="memdesc:ab1db66a9df363c0ee4ba1814c51bdc19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines what geometry the 3d rendered wall will use when they are built.  <a href="namespace_design_platform_1_1_core.html#ab1db66a9df363c0ee4ba1814c51bdc19">More...</a><br /></td></tr>
+<tr class="separator:ab1db66a9df363c0ee4ba1814c51bdc19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5888cab138bec0892d17b579e8ba3daf"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#a5888cab138bec0892d17b579e8ba3daf">Orientation</a> { <a class="el" href="namespace_design_platform_1_1_core.html#a5888cab138bec0892d17b579e8ba3dafa86e5d0d8407ce71f7e2004ef3949894e">Orientation.HORIZONTAL</a>, 
 <a class="el" href="namespace_design_platform_1_1_core.html#a5888cab138bec0892d17b579e8ba3dafa3e1b74251c07310c5f1b968145bf00dc">Orientation.VERTICAL</a>
  }</td></tr>
 <tr class="memdesc:a5888cab138bec0892d17b579e8ba3daf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the orientation, eg. of interfaces and faces.  <a href="namespace_design_platform_1_1_core.html#a5888cab138bec0892d17b579e8ba3daf">More...</a><br /></td></tr>
 <tr class="separator:a5888cab138bec0892d17b579e8ba3daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bddd418fcf42c0e1623c97bf4b59b4a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4a">WallJointType</a> { <br />
-&#160;&#160;<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa6adf97f83acf6453d4a6a4b1070f3754">WallJointType.None</a>, 
-<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aae46b38eac8f5827fda31c22f053e20f4">WallJointType.Corner_Primary</a>, 
-<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa802a8b6fb5b462c6cfc1b56dce74ec58">WallJointType.Corner_Secondary</a>, 
-<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aad52169aa1fb1c610d68f0fd19791232d">WallJointType.T_Primary</a>, 
-<br />
-&#160;&#160;<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aacc4fb5b4028a745c4537668b880e8e54">WallJointType.T_Secondary</a>, 
-<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa23d6fee2590c4084aa3f2081727f7761">WallJointType.X_Primary</a>, 
-<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa1937fa2ec9b2d879f4f912ff8b6e9504">WallJointType.X_Secondary</a>, 
-<a class="el" href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4aa98402eecfbcefc336954458a01752131">WallJointType.Parallel</a>
-<br />
- }</td></tr>
-<tr class="memdesc:a5bddd418fcf42c0e1623c97bf4b59b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the type of a joint between walls.  <a href="namespace_design_platform_1_1_core.html#a5bddd418fcf42c0e1623c97bf4b59b4a">More...</a><br /></td></tr>
-<tr class="separator:a5bddd418fcf42c0e1623c97bf4b59b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="af19ad2ded378715793258587c20b2d3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af19ad2ded378715793258587c20b2d3d">&#9670;&nbsp;</a></span>CLTQuality</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_design_platform_1_1_core.html#af19ad2ded378715793258587c20b2d3d">DesignPlatform.Core.CLTQuality</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Classifies the quality of a CLT element </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af19ad2ded378715793258587c20b2d3dad1fe952e9619bb00a129b77c679cf221"></a>DVQ&#160;</td><td class="fielddoc"><p>Domestic Visual Quality </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af19ad2ded378715793258587c20b2d3daff7c464cc6a2b7c0538fd55de6caef7c"></a>IVQ&#160;</td><td class="fielddoc"><p>Industrial Visual Quality </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af19ad2ded378715793258587c20b2d3daa695688877d2034b7b867afba77a1711"></a>NVQ&#160;</td><td class="fielddoc"><p>Non-visual Quality </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a7c38acc526ebf6231f34fa3506f503c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c38acc526ebf6231f34fa3506f503c8">&#9670;&nbsp;</a></span>MoveState</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_design_platform_1_1_core.html#a7c38acc526ebf6231f34fa3506f503c8">DesignPlatform.Core.MoveState</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Describes the state of a building space. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7c38acc526ebf6231f34fa3506f503c8a4120eb7591bd0789af75a8973d5f9146"></a>STATIONARY&#160;</td><td class="fielddoc"><p>space cannot be moved. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7c38acc526ebf6231f34fa3506f503c8aaf5a690fd5ec6f789dbfc51ec6a891ba"></a>MOVING&#160;</td><td class="fielddoc"><p>space can be moved </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a4592f3926a842a3ba35b95677ed8d2f0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4592f3926a842a3ba35b95677ed8d2f0">&#9670;&nbsp;</a></span>OpeningFunction</h2>
 
@@ -346,36 +420,6 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
-<a id="a6516747b4117405b4fdbc3daedd33818"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6516747b4117405b4fdbc3daedd33818">&#9670;&nbsp;</a></span>SpaceState</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespace_design_platform_1_1_core.html#a6516747b4117405b4fdbc3daedd33818">DesignPlatform.Core.SpaceState</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Describes the state of a building space. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6516747b4117405b4fdbc3daedd33818a4120eb7591bd0789af75a8973d5f9146"></a>STATIONARY&#160;</td><td class="fielddoc"><p>space cannot be moved. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a6516747b4117405b4fdbc3daedd33818aaf5a690fd5ec6f789dbfc51ec6a891ba"></a>MOVING&#160;</td><td class="fielddoc"><p>space can be moved </p>
-</td></tr>
-</table>
-
-</div>
-</div>
 <a id="a5bddd418fcf42c0e1623c97bf4b59b4a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5bddd418fcf42c0e1623c97bf4b59b4a">&#9670;&nbsp;</a></span>WallJointType</h2>
 
@@ -413,6 +457,36 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a5bddd418fcf42c0e1623c97bf4b59b4aa1937fa2ec9b2d879f4f912ff8b6e9504"></a>X_Secondary&#160;</td><td class="fielddoc"><p>Element ends onto primary element (endpoint in X-joint). </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a5bddd418fcf42c0e1623c97bf4b59b4aa98402eecfbcefc336954458a01752131"></a>Parallel&#160;</td><td class="fielddoc"><p>The walls are parallel. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ab1db66a9df363c0ee4ba1814c51bdc19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1db66a9df363c0ee4ba1814c51bdc19">&#9670;&nbsp;</a></span>WallSource</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_design_platform_1_1_core.html#ab1db66a9df363c0ee4ba1814c51bdc19">DesignPlatform.Core.WallSource</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines what geometry the 3d rendered wall will use when they are built. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab1db66a9df363c0ee4ba1814c51bdc19a596acbde60b98295256f8e4073a8e341"></a>INTERFACE&#160;</td><td class="fielddoc"><p>3D walls will be based upon interfaces </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab1db66a9df363c0ee4ba1814c51bdc19a6f113b30ce3f2b854a8aad06bbfb766a"></a>CLT_ELEMENT&#160;</td><td class="fielddoc"><p>3D walls will be based upon CLT elements </p>
 </td></tr>
 </table>
 

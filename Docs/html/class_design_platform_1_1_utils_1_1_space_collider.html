@@ -71,7 +71,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="class_design_platform_1_1_utils_1_1_space_collider-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -93,10 +93,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a45c6a292cffafbca4c8f30c41871bd47"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_utils_1_1_space_collider.html#a45c6a292cffafbca4c8f30c41871bd47">GiveCollider</a> (<a class="el" href="class_design_platform_1_1_core_1_1_space.html">Core.Space</a> space)</td></tr>
 <tr class="separator:a45c6a292cffafbca4c8f30c41871bd47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:aa1faa6e3fe01fd0f78a74d6f09f395dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_utils_1_1_space_collider.html#aa1faa6e3fe01fd0f78a74d6f09f395dc">isCurrentlyColliding</a> = false</td></tr>
-<tr class="separator:aa1faa6e3fe01fd0f78a74d6f09f395dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
+Properties</h2></td></tr>
+<tr class="memitem:a2327bea9ff57a2eb5663810a2830ee14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_design_platform_1_1_core_1_1_space.html">Core.Space</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_utils_1_1_space_collider.html#a2327bea9ff57a2eb5663810a2830ee14">ParentSpace</a><code> [get, private set]</code></td></tr>
+<tr class="separator:a2327bea9ff57a2eb5663810a2830ee14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -106,48 +106,12 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a6024c2796035595e7631dd422b615136"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ec3715e27f62a0a2939f227846d4b38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_utils_1_1_space_collider.html#a6ec3715e27f62a0a2939f227846d4b38">OnCollisionExit</a> (Collision other)</td></tr>
 <tr class="separator:a6ec3715e27f62a0a2939f227846d4b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1ec481438c6c8d887bc0b07b0c31870"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_utils_1_1_space_collider.html#ac1ec481438c6c8d887bc0b07b0c31870">CheckCollisionWithSpaceColliders</a> (Collision other, bool isColliding)</td></tr>
-<tr class="separator:ac1ec481438c6c8d887bc0b07b0c31870"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2679ddad4a1af7afeec237be80fd9207"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_design_platform_1_1_utils_1_1_space_collider.html#a2679ddad4a1af7afeec237be80fd9207">UpdateIsColliding</a> (Collision other, bool isColliding)</td></tr>
+<tr class="separator:a2679ddad4a1af7afeec237be80fd9207"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A collider object consisting of multiple cubic collider objects to represent complex spaces. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac1ec481438c6c8d887bc0b07b0c31870"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1ec481438c6c8d887bc0b07b0c31870">&#9670;&nbsp;</a></span>CheckCollisionWithSpaceColliders()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void DesignPlatform.Utils.SpaceCollider.CheckCollisionWithSpaceColliders </td>
-          <td>(</td>
-          <td class="paramtype">Collision&#160;</td>
-          <td class="paramname"><em>other</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isColliding</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a45c6a292cffafbca4c8f30c41871bd47"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a45c6a292cffafbca4c8f30c41871bd47">&#9670;&nbsp;</a></span>GiveCollider()</h2>
 
@@ -252,17 +216,61 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa1faa6e3fe01fd0f78a74d6f09f395dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1faa6e3fe01fd0f78a74d6f09f395dc">&#9670;&nbsp;</a></span>isCurrentlyColliding</h2>
+<a id="a2679ddad4a1af7afeec237be80fd9207"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2679ddad4a1af7afeec237be80fd9207">&#9670;&nbsp;</a></span>UpdateIsColliding()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool DesignPlatform.Utils.SpaceCollider.isCurrentlyColliding = false</td>
+          <td class="memname">void DesignPlatform.Utils.SpaceCollider.UpdateIsColliding </td>
+          <td>(</td>
+          <td class="paramtype">Collision&#160;</td>
+          <td class="paramname"><em>other</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isColliding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="a2327bea9ff57a2eb5663810a2830ee14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2327bea9ff57a2eb5663810a2830ee14">&#9670;&nbsp;</a></span>ParentSpace</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_design_platform_1_1_core_1_1_space.html">Core.Space</a> DesignPlatform.Utils.SpaceCollider.ParentSpace</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">private set</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
