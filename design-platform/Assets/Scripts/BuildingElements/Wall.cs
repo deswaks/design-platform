@@ -78,7 +78,7 @@ namespace DesignPlatform.Core {
                 controlPoints[3] -= new Vector3(Thickness / 2, 0, 0);
             }
             gameObject.transform.position = cltElement.Line.Midpoint;
-            gameObject.transform.rotation = Quaternion.LookRotation(Vector3.up, -VectorFunctions.Rotate90ClockwiseXZ(cltElement.Line.Direction));
+            gameObject.transform.rotation = Quaternion.LookRotation(Vector3.up, -VectorUtils.Rotate90ClockwiseXZ(cltElement.Line.Direction));
             InitializeWallFinish();
         }
 

@@ -7,113 +7,108 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DesignPlatform.Modes {
+
+    /// <summary>
+    /// The mode wherein new openings may be built.
+    /// </summary>
     public class OpeningMode : Mode {
-        private static OpeningMode instance;
-        private Collider[] collidingSpaces;
-        private float radius = 4f;
-        private OpeningFunction selectedShape = OpeningFunction.DOOR;
 
-        public OpeningFunction SelectedShape {
-            get {
-                return selectedShape;
-            }
-            set {
-                selectedShape = value;
-                RebuildPreview(selectedShape);
-            }
+        /// <summary>The opening object used for preview purposes.</summary>
+        public Opening PreviewOpening { get; private set; }
+
+        /// <summary>Current selected shape to give new openings.</summary>
+        public OpeningFunction SelectedFunction {
+            get { return selectedFunction; }
+            set { selectedFunction = value; RebuildPreview(selectedFunction); }
         }
-        public Opening previewOpening;
-        public Vector3 closestPoint;
-        public Vector3 hitPoint;
 
-
+        /// <summary>The single instance that exists of this singleton class.</summary>
         public static OpeningMode Instance {
-            // Use the ?? operator, to return 'instance' if 'instance' does not equal null
-            // otherwise we assign instance to a new component and return that
             get { return instance ?? (instance = new OpeningMode()); }
         }
 
+        /// <summary>The single instance that exists of this singleton class.</summary>
+        private static OpeningMode instance;
+
+        /// <summary>Current selected shape to give new openings.</summary>
+        private OpeningFunction selectedFunction = OpeningFunction.DOOR;
+
+
+
+        /// <summary>Default constructor.</summary>
         public OpeningMode() {
-            SelectedShape = OpeningFunction.WINDOW;
+            SelectedFunction = OpeningFunction.WINDOW;
         }
 
+
+
+        /// <summary>Defines the actions to take at every frame where this mode is active.</summary>
         public override void Tick() {
             //Debug.Log("Opening Mode");
             if (Input.GetMouseButtonDown(0)) {
                 if (EventSystem.current.IsPointerOverGameObject() == false) {
-                    if (MousePositionCollidingSpaces(hitPoint) != null) {
+                    if (NearbySpaces(MousePositionOnPlane(), Settings.FaceSearchDistance) != null) {
                         Build();
                     }
                 }
             }
             if (Input.GetMouseButtonDown(1)) {
-                if ((int)SelectedShape == 1) {
-                    SelectedShape = 0;
+                if ((int)SelectedFunction == 1) {
+                    SelectedFunction = 0;
                 }
                 else {
-                    SelectedShape = (OpeningFunction)(int)SelectedShape + 1;
+                    SelectedFunction = (OpeningFunction)(int)SelectedFunction + 1;
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.D)) {
-                SelectedShape = OpeningFunction.DOOR;
+                SelectedFunction = OpeningFunction.DOOR;
             }
 
             if (Input.GetKeyDown(KeyCode.W)) {
-                SelectedShape = OpeningFunction.WINDOW;
+                SelectedFunction = OpeningFunction.WINDOW;
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 Main.Instance.SetMode(SelectMode.Instance);
             }
 
-            if (previewOpening) { UpdatePreviewLocation(); }
+            if (PreviewOpening) { UpdatePreviewLocation(); }
         }
 
-        /// <summary>
-        /// Create preview opening 
-        /// </summary> 
+        /// <summary>Defines the actions to take when changing into this mode.</summary>
         public override void OnModeResume() {
             //List<Interface> interfaces = Building.Instance.Interfaces;
-            if (previewOpening == null) {
-                previewOpening = Building.Instance.BuildOpening(function: SelectedShape,
+            if (PreviewOpening == null) {
+                PreviewOpening = Building.Instance.BuildOpening(function: SelectedFunction,
                                                                 preview: true);
             }
         }
 
-        /// <summary>
-        /// Delete the preview opening object
-        /// </summary> 
+        /// <summary>Defines the actions to take when changing out of this mode.</summary>
         public override void OnModePause() {
-            if (previewOpening != null) previewOpening.Delete();
-            previewOpening = null;
+            if (PreviewOpening != null) PreviewOpening.Delete();
+            PreviewOpening = null;
         }
 
-        /// <summary>S
-        /// Build the opening gameObject
-        /// </summary>        
+        /// <summary>Build the preview opening into a real opening with gameObject.</summary>        
         public void Build() {
-            Opening newOpening = Building.Instance.BuildOpening(function: SelectedShape,
-                                           templateOpening: previewOpening);
+            Building.Instance.BuildOpening(function: SelectedFunction, templateOpening: PreviewOpening);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary>Rebuild the preview opening.</summary>
         public void RebuildPreview(OpeningFunction buildShape) {
-            if (previewOpening != null) previewOpening.Delete();
-            previewOpening = Building.Instance.BuildOpening(function: buildShape,
+            if (PreviewOpening != null) PreviewOpening.Delete();
+            PreviewOpening = Building.Instance.BuildOpening(function: buildShape,
                                                             preview: true);
         }
 
-        /// <summary>
-        /// Returns mouse hit point on plane if no hit zero-vector is returned
-        /// </summary>
-        public Vector3 HitPointOnPlane() {
+        /// <summary>Returns mouse position point on the build plane</summary>
+        public Vector3 MousePositionOnPlane() {
             Plane basePlane = new Plane(Vector3.up, Vector3.zero);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float distance;
-            hitPoint = Vector3.zero;
+            Vector3 hitPoint = Vector3.zero;
             if (basePlane.Raycast(ray, out distance)) {
                 hitPoint = ray.GetPoint(distance);
             }
@@ -121,43 +116,47 @@ namespace DesignPlatform.Modes {
         }
 
         /// <summary>
-        /// Returns a collider array of colliding spaces for mouse position
-        /// </summary> 
-        public Collider[] MousePositionCollidingSpaces(Vector3 hitPoint) {
-            collidingSpaces = Physics.OverlapSphere(hitPoint, radius);
-            collidingSpaces = collidingSpaces.ToList().Where(c => c.gameObject.layer == 8).ToArray();
-            if (collidingSpaces.Count() == 0) { return collidingSpaces = null; }
-            return collidingSpaces;
+        /// Finds the spaces that are within a specific distance from a point.
+        /// </summary>
+        /// <param name="location">Point to search from.</param>
+        /// <param name="searchDistance">Distance to search from the point</param>
+        /// <returns>a collider array of colliders at the point lcoation.</returns>
+        public List<Core.Space> NearbySpaces(Vector3 location, float searchDistance) {
+            Collider[] nearbySpaceColliderObjects = Physics.OverlapSphere(location, searchDistance)
+                .Where(c => c.gameObject.layer == 8).ToArray();
+            if (nearbySpaceColliderObjects.Count() == 0) return null;
+            return nearbySpaceColliderObjects.Select(c => c.GetComponentInParent<Core.Space>()).ToList();
         }
 
-        // Moves Preview opening with the mouse
+        /// <summary>
+        /// Moves Preview opening with the mouse
+        /// </summary>
         public void UpdatePreviewLocation() {
-            hitPoint = HitPointOnPlane();
-            if (MousePositionCollidingSpaces(hitPoint) == null) {
-                previewOpening.Move(hitPoint, useSubgrid: false);
+            Vector3 hitPoint = MousePositionOnPlane();
+            if (NearbySpaces(hitPoint, Settings.FaceSearchDistance) == null) {
+                PreviewOpening.Move(hitPoint, useSubgrid: false);
             }
             else {
                 Face closestFace = ClosestFace(hitPoint);
-                closestPoint = closestFace.LocationLine.ClosestPoint(hitPoint);
-                previewOpening.Move(closestPoint);
-                previewOpening.Rotate(closestFace);
-                previewOpening.UpdateRender2D();
+                Vector3 closestPoint = closestFace.LocationLine.ClosestPoint(hitPoint);
+                PreviewOpening.Move(closestPoint);
+                PreviewOpening.Rotate(closestFace);
+                PreviewOpening.UpdateRender2D();
             }
         }
 
         /// <summary>
-        /// 
+        /// Finds the face closest to the given point.
         /// </summary>
-        /// <param name="mousePos"></param>
-        /// <returns></returns>
+        /// <param name="mousePos">Point to search from.</param>
+        /// <returns>Face closest to point.</returns>
         public Face ClosestFace(Vector3 mousePos) {
 
             // Create list of spaces that might have the closest face
             List<Core.Space> relevantRooms = new List<Core.Space>();
-            foreach (Collider c in MousePositionCollidingSpaces(mousePos)) {
-                Core.Space r = c.GetComponentInParent<Core.Space>();
-                if (!relevantRooms.Contains(r)) {
-                    relevantRooms.Add(r);
+            foreach (Core.Space s in NearbySpaces(mousePos, Settings.FaceSearchDistance)) {
+                if (!relevantRooms.Contains(s)) {
+                    relevantRooms.Add(s);
                 }
             }
 

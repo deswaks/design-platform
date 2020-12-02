@@ -34,7 +34,7 @@ namespace DesignPlatform.UI {
             Vector3 diffPosition = Core.Grid.GetNearestGridpoint(mouseGridPosition - handleStartPosition);
 
             Vector3 extrusionVector = Vector3.Scale(Vector3.Project(diffPosition, wallNormal), wallNormal);
-            float extrusion = extrusionVector[VectorFunctions.IndexAbsLargestComponent(extrusionVector)];
+            float extrusion = extrusionVector[VectorUtils.IndexLargestComponent(extrusionVector)];
 
             //transform.position = handleStartPosition + Distance;
             parentSpace.ExtrudeWall(wallIndex, extrusion);

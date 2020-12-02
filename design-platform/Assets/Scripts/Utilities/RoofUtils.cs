@@ -16,11 +16,11 @@ namespace DesignPlatform.Utils {
     public static class RoofUtils {
 
         /// <summary>
-        /// 
+        /// Creates a roof plan of the given type
         /// </summary>
-        /// <param name="foundationPolygon"></param>
-        /// <param name="config"></param>
-        /// <returns></returns>
+        /// <param name="foundationPolygon">Polygon that defines the outer perimeter of the building.</param>
+        /// <param name="config">Roof plan generator config options.</param>
+        /// <returns>The generated roof plan.</returns>
         public static IConstructible<MeshDraft> GenerateRoofPlan(List<Vector2> foundationPolygon, BuildingGenerator.Config config) {
             switch (config.roofConfig.type) {
                 case RoofType.Flat:
@@ -35,9 +35,9 @@ namespace DesignPlatform.Utils {
         }
 
         /// <summary>
-        /// 
+        /// Finds the polygon that defines the outer perimeter of the building.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The building outline.</returns>
         public static List<Vector3> GetBuildingOutline(){
             // Grabs external interfaces (1 attached face) and culls out interfaces with 0 length
             List<Interface> culledInterfaces = Building.Instance.InterfacesVertical.Where(i => i.EndPoint != i.StartPoint).Where(iface => iface.Faces.Count == 1).ToList();
@@ -59,118 +59,61 @@ namespace DesignPlatform.Utils {
                 });
             }
 
-            List<Vector3> outline = SegmentsToPolyline(segments);
+            List<Vector3> outline = JoinLineSegments(segments);
 
             return outline;
         }
 
         /// <summary>
-        /// 
+        /// Finds the naked edges (Edges that only belongs to a single mesh face).
         /// </summary>
-        /// <param name="vertices"></param>
-        /// <param name="name"></param>
-        public static void VisualizePointsAsSpheres(List<Vector3> vertices,string name = "vertex")
-        {
-            foreach (Vector3 v in vertices){
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.position = v;
-                sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                sphere.name = name;
-            }
-        }
+        /// <param name="MeshFaces">A list of mesh faces, each represented as an array of 3 vector3 vertices.</param>
+        /// <returns>The naked edges of the mesh.</returns>
+        public static List<List<Vector3>> GetNakedEdgesOfMesh(List<Vector3[]> MeshFaces) {
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <param name="midpoint"></param>
-        /// <param name="rotationVector"></param>
-        /// <returns></returns>
-        public static List<Vector3> TransformPointsToXZ(List<Vector3> vertices, out Vector3 midpoint, out Vector3 rotationVector) {
-            // Normal is calculated assuming all vertices is in the same plane
-            Vector3 Normal = Vector3.Cross(vertices[2] - vertices[1], vertices[0] - vertices[1]).normalized;
-
-            // Calculates midpoint from vertices
-            Vector3 midpointTemp = RoofUtils.Midpoint(vertices);
-
-            // Finds rotation vector that rotates points from current global position to xz-plane
-            Vector3 rotationAxis = Vector3.Cross(Vector3.up, Normal).normalized;
-            float rotationAngle = Vector3.Angle(Vector3.up, Normal);
-            rotationVector = (-rotationAxis * rotationAngle);
-
-            // Moves vertices to be located around (0,0,0)
-            vertices = vertices.Select(v => v - midpointTemp).ToList();
-
-            // Rotates all points around (0,0,0) according to rotation vector
-            List<Vector3> transformedPoints = new List<Vector3>();
-            foreach (Vector3 v in vertices) {
-                transformedPoints.Add(RoofUtils.RotatePointAroundPivot(v, new Vector3(0, 0, 0), rotationVector));
-            }
-            midpoint = midpointTemp;
-
-            return transformedPoints;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="trianglesInface"></param>
-        /// <returns></returns>
-        public static List<List<Vector3>> GetMeshOutline(List<Vector3[]> trianglesInface) {
             List<List<Vector3>> allSegments = new List<List<Vector3>>();
-            foreach (Vector3[] tri in trianglesInface) {
+            foreach (Vector3[] tri in MeshFaces) {
                 allSegments.Add(new List<Vector3> { tri[0], tri[1] });
                 allSegments.Add(new List<Vector3> { tri[1], tri[2] });
                 allSegments.Add(new List<Vector3> { tri[2], tri[0] });
             }
 
             // Removes segments that share midpoints (internal segments), leaving only outline segments
-            allSegments = allSegments.Where(s1 => allSegments.Count(s2 => Vector3.Distance(Midpoint(s1), Midpoint(s2)) < 0.005) == 1).ToList();
+            allSegments = allSegments.Where(s1 => allSegments.Count(s2 =>
+                Vector3.Distance(Midpoint(s1), Midpoint(s2)) < 0.005) == 1).ToList();
 
             return allSegments;
         }
 
         /// <summary>
-        /// 
+        /// Joins all the given line segments to a single polyline.
         /// </summary>
-        /// <param name="lineSegments"></param>
-        /// <returns></returns>
-        public static List<Vector3> SegmentsToPolyline(List<List<Vector3>> lineSegments) {
-            List<Vector3> outlineVertices = new List<Vector3>();
-            outlineVertices.Add(lineSegments[0][0]);
-            outlineVertices.Add(lineSegments[0][1]);
+        /// <param name="lineSegments">A collection of line segments that must all be connected.</param>
+        /// <returns>The vertices of the single polyline.</returns>
+        public static List<Vector3> JoinLineSegments(List<List<Vector3>> lineSegments) {
+            List<Vector3> polyline = new List<Vector3>();
+            polyline.Add(lineSegments[0][0]);
+            polyline.Add(lineSegments[0][1]);
 
             for (int i = 1; i < lineSegments.Count - 1; i++) {
 
-                Vector3 currentPoint = outlineVertices.Last();
-                //Debug.Log("Current point: " + currentPoint.ToString());
-                //lineSegments.Where(ps => ps.Any(p => Vector3.Distance(p, currentPoint) < 0.1f)).ToList().ForEach(ps => Debug.Log(ps[0].ToString() + " ; " + ps[1].ToString()));
+                Vector3 currentPoint = polyline.Last();
 
                 // Next segment identified as sharing a point with the current point.
-                List<Vector3> segment = lineSegments.Where(ps => ps.Any(p => Vector3.Distance(p, currentPoint) < 0.1f)).Where(ps => !ps.Any(p => Vector3.Distance(p, outlineVertices[i - 1]) < 0.1f)).First();
+                List<Vector3> segment = lineSegments.Where(ps => ps.Any(p => Vector3.Distance(p, currentPoint) < 0.1f)).Where(ps => !ps.Any(p => Vector3.Distance(p, polyline[i - 1]) < 0.1f)).First();
 
                 // Point of current segment that is not the current point is added to polyline vertices
-                if (Vector3.Distance(segment[0], currentPoint) < 0.01) outlineVertices.Add(segment[1]);
-                if (Vector3.Distance(segment[1], currentPoint) < 0.01) outlineVertices.Add(segment[0]);
+                if (Vector3.Distance(segment[0], currentPoint) < 0.01) polyline.Add(segment[1]);
+                if (Vector3.Distance(segment[1], currentPoint) < 0.01) polyline.Add(segment[0]);
             }
-            return outlineVertices;
+            return polyline;
         }
 
         /// <summary>
-        /// 
+        /// The midpoint expressed as the average of all the given vertices.
         /// </summary>
-        /// <param name="triangle1"></param>
-        /// <param name="triangle2"></param>
-        /// <returns></returns>
-        public static int NumberOfSharedVertices(Vector3[] triangle1, Vector3[] triangle2) {
-            return triangle1.ToList().SelectMany(v1 => triangle2.Where(v2 => Vector3.Distance(v1, v2) < 0.01)).Count();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <returns></returns>
+        /// <param name="vertices">Vertices to average</param>
+        /// <returns>The average point of all the vertices.</returns>
         public static Vector3 Midpoint(List<Vector3> vertices){
             Vector3 midpoint = new Vector3();
             vertices.ForEach(v => midpoint += v);
@@ -180,49 +123,25 @@ namespace DesignPlatform.Utils {
         }
 
         /// <summary>
-        /// 
+        /// Splits the list into sublists of the given size.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="me"></param>
-        /// <param name="size"></param>
+        /// <typeparam name="T">Type of objects in the list</typeparam>
+        /// <param name="listOfItems">List to split.</param>
+        /// <param name="size">Size of each sublist.</param>
         /// <returns></returns>
-        public static List<List<T>> SplitList<T>(this List<T> me, int size = 50){
+        public static List<List<T>> SplitList<T>(this List<T> listOfItems, int size = 50){
             var list = new List<List<T>>();
-            for (int i = 0; i < me.Count; i += size)
-                list.Add(me.GetRange(i, Mathf.Min(size, me.Count - i)));
+            for (int i = 0; i < listOfItems.Count; i += size)
+                list.Add(listOfItems.GetRange(i, Mathf.Min(size, listOfItems.Count - i)));
             return list;
         }
 
         /// <summary>
-        /// 
+        /// Rotate a point around a pivot point.
         /// </summary>
-        /// <param name="polyline"></param>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        public static List<Vector2> OffsetPolyline2D(List<Vector2> polyline, float offset) {
-            List<Vector2> extrudedPolygon = new List<Vector2>();
-            extrudedPolygon.Add(polyline[0]);
-            for (int i = 1; i < polyline.Count; i++) {
-                extrudedPolygon.Add(polyline[i]);
-                Vector2 dir = (polyline[i] - polyline[i - 1]).normalized;
-                Vector2 normal = new Vector2(-dir.y, dir.x);
-                extrudedPolygon[i - 1] += normal * offset;
-                extrudedPolygon[i] += normal * offset;
-            }
-            Vector2 last_dir = (polyline.First() - polyline.Last()).normalized;
-            Vector2 last_normal = new Vector2(-last_dir.y, last_dir.x);
-            extrudedPolygon[0] += last_normal * offset;
-            extrudedPolygon[extrudedPolygon.Count - 1] += last_normal * offset;
-
-            return extrudedPolygon;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="point"></param>
-        /// <param name="pivot"></param>
-        /// <param name="angles"></param>
+        /// <param name="point">Point to rotate.</param>
+        /// <param name="pivot">Pivot to rotate around.</param>
+        /// <param name="angles">Angle to rotate in degrees.</param>
         /// <returns></returns>
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
             return Quaternion.Euler(angles) * (point - pivot) + pivot;

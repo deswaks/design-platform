@@ -86,7 +86,7 @@ namespace StructuralAnalysis {
 
                 // Find aksen som væggen spænder
                 Vector3 wallVector = startPoint - endPoint;
-                int wallAxis = VectorFunctions.IndexAbsLargestComponent(wallVector);
+                int wallAxis = VectorUtils.IndexLargestComponent(wallVector);
 
                 // Find unikke værdier på denne akse og reparameteriser disse over væggens længde
                 List<float> lengthParameters = RangeUtils.Reparametrize(uniqueValuesOnWallAxes[wallAxis],

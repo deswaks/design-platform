@@ -4,35 +4,46 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DesignPlatform.Modes {
+
+    /// <summary>
+    /// The mode wherein new spaces may be built.
+    /// </summary>
     public class BuildMode : Mode {
 
-        private static BuildMode instance;
-
-        private SpaceShape selectedShape = SpaceShape.RECTANGLE;
+        /// <summary>The currently selected shape. New rooms will be built in this shape.</summary>
         public SpaceShape SelectedShape {
-            get {
-                return selectedShape;
-            }
-            set {
-                selectedShape = value;
-                RebuildPreview(selectedShape);
-            }
+            get { return selectedShape; }
+            set { selectedShape = value; RebuildPreview(selectedShape);}
         }
 
-        // Set at runtime
+        /// <summary>The space object used for preview purposes.</summary>
         public Core.Space previewSpace;
 
-
+        /// <summary>The single instance that exists of this singleton class.</summary>
         public static BuildMode Instance {
             // Use the ?? operator, to return 'instance' if 'instance' does not equal null
             // otherwise we assign instance to a new component and return that
             get { return instance ?? (instance = new BuildMode()); }
         }
 
+
+
+        /// <summary>Internal variable to save the selected shape.</summary>
+        private SpaceShape selectedShape = SpaceShape.RECTANGLE;
+
+        /// <summary>The single instance that exists of this singleton class.</summary>
+        private static BuildMode instance;
+
+
+
+        /// <summary>Default constructor.</summary>
         public BuildMode() {
             SelectedShape = SpaceShape.RECTANGLE;
         }
 
+
+
+        /// <summary>Defines the actions to take at every frame where this mode is active.</summary>
         public override void Tick() {
             if (Input.GetMouseButtonDown(0)) {
                 if (EventSystem.current.IsPointerOverGameObject()) {
@@ -73,12 +84,12 @@ namespace DesignPlatform.Modes {
             }
 
             if (Input.GetKeyDown(KeyCode.D)) {
-                OpeningMode.Instance.SelectedShape = OpeningFunction.DOOR;
+                OpeningMode.Instance.SelectedFunction = OpeningFunction.DOOR;
                 Main.Instance.SetMode(OpeningMode.Instance);
             }
 
             if (Input.GetKeyDown(KeyCode.W)) {
-                OpeningMode.Instance.SelectedShape = OpeningFunction.WINDOW;
+                OpeningMode.Instance.SelectedFunction = OpeningFunction.WINDOW;
                 Main.Instance.SetMode(OpeningMode.Instance);
             }
 
@@ -89,30 +100,44 @@ namespace DesignPlatform.Modes {
             if (previewSpace) { UpdatePreviewLocation(); }
         }
 
+        /// <summary>
+        /// Defines the actions to take when changing into this mode.
+        /// </summary>
         public override void OnModeResume() {
             if (previewSpace == null) {
                 previewSpace = Building.Instance.BuildSpace(buildShape: SelectedShape, preview: true);
             }
         }
 
+        /// <summary>
+        /// Defines the actions to take when changing out of this mode.
+        /// </summary>
         public override void OnModePause() {
             if (previewSpace != null) previewSpace.Delete();
             previewSpace = null;
         }
-
+        
+        /// <summary>
+        /// Revuild the preview space object using the given space shape.
+        /// </summary>
+        /// <param name="SelectedShape">Shape of new preview object.</param>
         public void RebuildPreview(SpaceShape SelectedShape = SpaceShape.RECTANGLE) {
             if (previewSpace != null) previewSpace.Delete();
             previewSpace = Building.Instance.BuildSpace(buildShape: SelectedShape, preview: true);
         }
 
-        // Actually build the thing
+        /// <summary>
+        /// Build the room and insert it into the model.
+        /// </summary>
         public void Build() {
             Core.Space builtRoom = Building.Instance.BuildSpace(buildShape: SelectedShape, templateSpace: previewSpace);
             builtRoom.MoveState = MoveState.STATIONARY;
 
         }
 
-        // Moves Preview room with the mouse
+        /// <summary>
+        /// Move the preview space to the location of the cursor.
+        /// </summary>
         public void UpdatePreviewLocation() {
             Plane basePlane = new Plane(Vector3.up, Vector3.zero);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);  //simple ray cast from the main camera. Notice there is no range
@@ -122,11 +147,7 @@ namespace DesignPlatform.Modes {
                 Vector3 hitPoint = ray.GetPoint(distance);
                 previewSpace.Move(hitPoint);
             }
-            //Nyttig funktion: ElementSelection.GetPerimeterEdges()
         }
 
-        public void SetSelectedShape(SpaceShape shape = SpaceShape.RECTANGLE) {
-            SelectedShape = shape;
-        }
     }
 }

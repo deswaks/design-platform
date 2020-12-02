@@ -10,7 +10,10 @@ namespace DesignPlatform.Core {
 
         //[SerializeField]
 
+        /// <summary>Size of the grid cells</summary>
         public static float size = 1f;
+
+        /// <summary>Size of the sub-grid cells</summary>
         public static float subSize = size / 10f;
 
         /// <summary>

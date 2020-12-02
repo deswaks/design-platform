@@ -249,7 +249,7 @@ namespace DesignPlatform.Core {
         public void Rotate(bool clockwise = true, float degrees = 90) {
             if (!clockwise) { degrees = -degrees; }
 
-            float[] bounds = Polygon.Bounds;
+            List<float> bounds = Polygon.Bounds;
             float width = bounds[1] - bounds[0];
             float height = bounds[3] - bounds[2];
 
@@ -393,7 +393,7 @@ namespace DesignPlatform.Core {
 
             // Compare normals before and after extrusion element-wise 
             List<Vector3> normals = GetFaceNormals(localCoordinates: true);
-            List<Vector3> extrudedNormals = PolygonUtils.PolygonNormals(controlPointsClone);
+            List<Vector3> extrudedNormals = new Polygon2D(controlPointsClone).Normals.Select(p => new Vector3(p.x, 0, p.y)).ToList();
             bool normalsAreIdentical = true;
             for (int i = 0; i < normals.Count; i++) {
                 if (normals[i] != extrudedNormals[i]) {
@@ -459,7 +459,7 @@ namespace DesignPlatform.Core {
         /// or the termination of a collision (false)</param>
         public void OnCollisionEvent(bool isColliding) {
             if (Function == SpaceFunction.PREVIEW || MoveState == MoveState.MOVING) {
-                UpdateRender2D( highlighted: Modes.SelectMode.Instance.selection == this,
+                UpdateRender2D( highlighted: Modes.SelectMode.Instance.Selection == this,
                                 colliding: isColliding);
             }
         }

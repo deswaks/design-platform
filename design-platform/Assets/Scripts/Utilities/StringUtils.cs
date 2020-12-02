@@ -8,10 +8,10 @@ namespace DesignPlatform.Utils {
     public static class StringUtils {
 
         /// <summary>
-        /// 
+        /// Convert a string to title case (This Is An Example Of Title Case)
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
+        /// <param name="str">string to convert.</param>
+        /// <returns>The string converted to title case.</returns>
         public static string ToTitleCase(string str) {
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 

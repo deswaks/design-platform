@@ -10,48 +10,61 @@ using DesignPlatform.Database;
 using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Modes {
+
+    /// <summary>
+    /// The mode wherein the user can inspect and interact with their design three dimensionally.
+    /// </summary>
     public class POVMode : Mode {
 
-        private static POVMode instance;
-
-        public float mouseSensitivity = 50f;
-
-        public static GameObject player;
-        private GameObject notificationObject = null;
-        public Camera PlanCamera;
-        public Camera POVCamera;
-        private GameObject ui;
-        private bool ShowWallLines;
-        private bool ShowOpeningLines;
-
-        float xRotation = 0f;
-
-        public enum ModeType {
-            POV,
-            MENU
-        }
-
-        private ModeType currentModeType = ModeType.POV;
-
+        /// <summary>The single instance that exists of this singleton class.</summary>
         public static POVMode Instance {
             // Use the ?? operator, to return 'instance' if 'instance' does not equal null
             // otherwise we assign instance to a new component and return that
             get { return instance ?? (instance = new POVMode()); }
         }
 
+
+
+        /// <summary>The single instance that exists of this singleton class.</summary>
+        private static POVMode instance;
+        /// <summary>The player object. Used to carry the camera.</summary>
+        private static GameObject player;
+        /// <summary>The forward vector of the player camera.</summary>
+        private float xRotation = 0f;
+
+        /// <summary>Reference to the plan camera object. These are used to disable them and enable again.</summary>
+        private Camera PlanCamera;
+        /// <summary>Reference to POV camera objects. These are used to disable them and enable again.</summary>
+        private Camera POVCamera;
+        /// <summary>Reference to UI object. These are used to disable them and enable again.</summary>
+        private GameObject ui;
+        /// <summary>Object to display notification on top of the view.</summary>
+        private GameObject notificationObject = null;
+
+
+
+        /// <summary>Default constructor.</summary>
         POVMode() {
             ui = Object.FindObjectsOfType<Canvas>().Where(o => o.gameObject.name == "UI").ToList()[0].gameObject;
         }
 
+
+
+        /// <summary>
+        /// Defines the actions to take at every frame where this mode is active.
+        /// </summary>
         public override void Tick() {
-            TickModeType();
+            UpdatePOVCamera();
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
-                SetModeType(ModeType.MENU);
                 Main.Instance.SetMode(SelectMode.Instance);
             }
 
         }
+
+        /// <summary>
+        /// Defines the actions to take when changing into this mode.
+        /// </summary>
         public override void OnModeResume() {
             ui.SetActive(false);
             player = GameObject.Find("First person player");
@@ -79,11 +92,11 @@ namespace DesignPlatform.Modes {
             string notificationText = "You can exit POV mode at any time by pressing the escape button.";
             string notificationTitle = "POV Mode";
             notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, new Vector3(10, -10, 0), notificationParent);
-
-            currentModeType = ModeType.POV;
-            SetModeType(ModeType.POV);
-            OnModeTypeResume();
         }
+
+        /// <summary>
+        /// Defines the actions to take when changing out of this mode.
+        /// </summary>
         public override void OnModePause() {
             ui.SetActive(true);
             POVCamera.gameObject.SetActive(false);
@@ -104,56 +117,11 @@ namespace DesignPlatform.Modes {
         }
 
         /// <summary>
-        /// Set mode type
-        /// </summary>
-        /// <param name="modeType"></param>
-        public void SetModeType(ModeType modeType) {
-            if (modeType != currentModeType) {
-                OnModeTypePause();
-                currentModeType = modeType;
-                OnModeTypeResume();
-            }
-        }
-        public void TickModeType() {
-            switch (currentModeType) {
-                case ModeType.POV:
-                    UpdatePOVCamera();
-                    break;
-
-                case ModeType.MENU:
-                    break;
-            }
-        }
-        public void OnModeTypeResume() {
-            switch (currentModeType) {
-                case ModeType.POV:
-                    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                    UnityEngine.Cursor.visible = false;
-                    break;
-
-                case ModeType.MENU:
-                    break;
-            }
-        }
-        public void OnModeTypePause() {
-            switch (currentModeType) {
-                case ModeType.POV:
-                    UnityEngine.Cursor.lockState = CursorLockMode.None;
-                    UnityEngine.Cursor.visible = true;
-                    break;
-
-                case ModeType.MENU:
-                    break;
-            }
-        }
-
-
-        /// <summary>
-        /// 
+        /// Set the view of this camera according to mouse position.
         /// </summary>
         public void UpdatePOVCamera() {
-            float mouseX = Input.GetAxis("Mouse X"); //* mouseSensitivity * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y"); //* mouseSensitivity * Time.deltaTime;
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
 
             // Look Up/Down 
             xRotation -= mouseY;

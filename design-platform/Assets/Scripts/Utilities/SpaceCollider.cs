@@ -10,21 +10,25 @@ namespace DesignPlatform.Utils {
     /// </summary>
     public class SpaceCollider : MonoBehaviour {
 
+        /// <summary>Space that this collider belongs to.</summary>
         public Core.Space ParentSpace { get; private set; }
 
-        //Detects collision with other spaces when placing them
+        /// <summary>Updates collision when collision is entered.</summary>
         void OnCollisionEnter(Collision other) {
             UpdateIsColliding(other, isColliding: true);
         }
 
+        /// <summary>Updates collision when collision is had.</summary>
         void OnCollisionStay(Collision other) {
             UpdateIsColliding(other, isColliding: true);
         }
 
+        /// <summary>Updates collision when collision is exited.</summary>
         void OnCollisionExit(Collision other) {
             UpdateIsColliding(other, isColliding: false);
         }
 
+        /// <summary>Update procedure to run on collision events.</summary>
         void UpdateIsColliding(Collision other, bool isColliding) {
             // Abort if the collision is not with another space or they are sibling colliders of the same space.
             if (other.gameObject.GetComponent<SpaceCollider>() == null
@@ -33,7 +37,10 @@ namespace DesignPlatform.Utils {
             ParentSpace.OnCollisionEvent(isColliding);
         }
 
-
+        /// <summary>
+        /// Creates and attaches appropriate colliders to a space.
+        /// </summary>
+        /// <param name="space">space to attach colliders to.</param>
         public static void GiveCollider(Core.Space space) {
 
             // Remove existing colliders
@@ -41,15 +48,23 @@ namespace DesignPlatform.Utils {
                 Destroy(spaceCollider.gameObject);
             }
 
-            // Every collider cube is defined by the controlpoints of the space object. Both the x- and y- position of the collider cube is defined by two indices each.
-            // For instance, the location of the collider cube for a rectangular space is defined as follows: 
-            //      The x coordinate of the location is defined by the average value from the [1] and [2] controlpoints (or [0] and [3]).
-            //      The y coordinate of the location is defined by the average value from the [0] and [1] controlpoints (or [2] and [3]).
+            // Create new collider cubes
+            /// Every collider cube is defined by the controlpoints of the space object.
+            /// Both the x- and y- position of the collider cube is defined by two indices each
+            /// that refer to the controlpoints from which to use the {x1, x2, y1, y2 } values from
+            /// For instance, the location of the collider cube for a rectangular space is defined as follows: 
+            /// 
+            /// {x1, x2, y1, y2 } = {0, 3, 0, 1} but might also be {1, 2, 3, 2} or {0, 3, 3, 2}.
+            ///      
+            ///  y2 1------2
+            ///     |      |  In this case
+            ///     |      |
+            ///  y1 0------3
+            ///     x1     x2
+            ///     
             List<List<int>> colliderIndexPairsList = new List<List<int>>();
-
             switch (space.Shape) {
                 case SpaceShape.RECTANGLE:
-                    //colliderIndexPairsList.Add(new List<int> { x1, x2, y1, y2 });
                     colliderIndexPairsList.Add(new List<int> { 1, 2, 0, 1 });
                     break;
                 case SpaceShape.LSHAPE:
@@ -72,7 +87,6 @@ namespace DesignPlatform.Utils {
                     colliderIndexPairsList.Add(new List<int> { 5, 4, 4, 3 }); // Collider cube 3                    
                     break;
             }
-
             int counter = 0;
             List<Vector3> vertices = space.GetControlPoints(localCoordinates: true);
             foreach (List<int> xyPairs in colliderIndexPairsList) {

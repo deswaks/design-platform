@@ -56,7 +56,7 @@ namespace DesignPlatform.Core {
             // Transforms points to origin and in XZ plane
             Vector3 location; 
             Vector3 rotationVector; 
-            ControlPoints = RoofUtils.TransformPointsToXZ(roofFaceVertices, out location, out rotationVector);
+            ControlPoints = VectorUtils.TransformPointsToXZ(roofFaceVertices, out location, out rotationVector);
             
             gameObject.layer = 13; // Wall layer
             Material roofMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");

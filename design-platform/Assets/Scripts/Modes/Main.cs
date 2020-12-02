@@ -4,17 +4,27 @@ using StructuralAnalysis;
 using UnityEngine;
 
 namespace DesignPlatform.Modes {
+    
+    /// <summary>
+    /// The main gameloop of the design platform that calls every update for the custom
+    /// classes and delegates  user input to the sub-modes.
+    /// </summary>
     public class Main : MonoBehaviour {
 
+        /// <summary>The single instance that exists of this singleton class.</summary>
         private static Main instance;
+
+        /// <summary></summary>
         private Mode currentMode;
 
+        /// <summary>The single instance that exists of this singleton class.</summary>
         public static Main Instance {
             // Use the ?? operator, to return 'instance' if 'instance' does not equal null
             // otherwise we assign instance to a new component and return that
             get { return instance ?? (instance = new GameObject("MainLoop").AddComponent<Main>()); }
         }
 
+        /// <summary>Main initializer to run when the program starts.</summary>
         void Start() {
             instance = this;
             Core.Grid.size = 1.0f;
@@ -40,10 +50,15 @@ namespace DesignPlatform.Modes {
             ModuleLoader.LoadModules();
         }
 
+        /// <summary>Update function calls each of the individual modes when they are active.</summary>
         void Update() {
             currentMode.Tick();
         }
 
+        /// <summary>
+        /// Change the mode that is updates from this mode.
+        /// </summary>
+        /// <param name="mode">Mode to change to.</param>
         public void SetMode(Mode mode) {
             if (currentMode != null) {
                 currentMode.OnModePause();
@@ -53,5 +68,6 @@ namespace DesignPlatform.Modes {
                 currentMode.OnModeResume();
             }
         }
+        
     }
 }

@@ -92,6 +92,8 @@ namespace DesignPlatform.Core {
 
 
         // Opening settings
+        /// <summary>The distance away from the pointer to search for spaces.</summary>
+        public static readonly float FaceSearchDistance = 3.0f;
         /// <summary>The horizontal dimension of the window.</summary>
         public static float WindowWidth = 1.6f;
         /// <summary>The vertical dimension of the window.</summary>

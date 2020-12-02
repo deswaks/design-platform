@@ -15,7 +15,7 @@ namespace DesignPlatform.UI {
             Main.Instance.SetMode(POVMode.Instance);
         }
         public void StartOpeningMode(int openingShape) {
-            OpeningMode.Instance.SelectedShape = (OpeningFunction)openingShape;
+            OpeningMode.Instance.SelectedFunction = (OpeningFunction)openingShape;
             Main.Instance.SetMode(OpeningMode.Instance);
         }
     }

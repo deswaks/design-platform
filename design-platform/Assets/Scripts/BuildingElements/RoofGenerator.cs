@@ -67,11 +67,12 @@ namespace DesignPlatform.Core {
         /// <returns></returns>
         private List<List<Vector3>> CreateRoofOutlines() {
 
-            List<Vector2> roofPolygon = RoofUtils.GetBuildingOutline().Select(v => v.ToVector2XZ()).ToList();
-            float wallThickness = Faces.Max(f => f.Thickness);
-            if (roofPolygon.Count == 0) return new List<List<Vector3>>();
+            Polygon2D roofPolygon = new Polygon2D(RoofUtils.GetBuildingOutline().Select(v => v.ToVector2XZ()).ToArray());
 
-            roofPolygon = RoofUtils.OffsetPolyline2D(roofPolygon, wallThickness / 2);
+            float wallThickness = Faces.Max(f => f.Thickness);
+            if (roofPolygon.Vertices.Count == 0) return new List<List<Vector3>>();
+
+            roofPolygon.Offset(wallThickness / 2);
 
             Config config = new Config();
             config.roofConfig.thickness = 0.00f;
@@ -79,7 +80,7 @@ namespace DesignPlatform.Core {
             config.roofConfig.type = Settings.RoofType;
 
             // Creates base roof mesh using ProceduralToolkit
-            IConstructible<MeshDraft> constructible = RoofUtils.GenerateRoofPlan(roofPolygon, config);
+            IConstructible<MeshDraft> constructible = RoofUtils.GenerateRoofPlan(roofPolygon.Vertices.ToList(), config);
 
             Mesh roofMesh;
             //Mesh roofMesh = constructible.Construct(Vector2.zero).ToMesh();
@@ -103,7 +104,8 @@ namespace DesignPlatform.Core {
             List<Vector3[]> triangleVertices = new List<Vector3[]>();
 
             // Splits index-list into chunks of three (providing the three vertex-indices of each triangle) and adds triangles to list
-            RoofUtils.SplitList(allTriangleIndices.ToList(), 3).ForEach(t => triangleVertices.Add(new Vector3[] { vertices[t[0]], vertices[t[1]], vertices[t[2]] }));
+            RoofUtils.SplitList(allTriangleIndices.ToList(), 3)
+                .ForEach(t => triangleVertices.Add(new Vector3[] { vertices[t[0]], vertices[t[1]], vertices[t[2]] }));
 
             // Removes faulty triangles, where two vertices have the same coordinates
             triangleVertices = triangleVertices.Where(t => !(Vector3.Distance(t[0], t[1]) < 0.01 || Vector3.Distance(t[0], t[2]) < 0.01 || Vector3.Distance(t[2], t[1]) < 0.01)).ToList();
@@ -128,7 +130,9 @@ namespace DesignPlatform.Core {
                     // Finds parallel triangles:
                     if (Vector3.Distance(triangleNormals[j], triangleNormals[k]) < 0.01){
                         // Tests if parallel triangle is connect to current by more than one vertex (thus picking only fully attached neighbouring triangles)
-                        if (RoofUtils.NumberOfSharedVertices(triangleVertices[j], triangleVertices[k]) > 1){
+                        int numberOfSharedVertices = triangleVertices[j].ToList()
+                            .SelectMany(v1 => triangleVertices[k].Where(v2 => Vector3.Distance(v1, v2) < 0.01)).Count();
+                        if (numberOfSharedVertices > 1 ) {
                             parallelAndConnectedTriangles.Add(triangleVertices[k]);
                         }
                     }
@@ -164,9 +168,9 @@ namespace DesignPlatform.Core {
                 // List of triangles in current face. ( Vector3[] is one triangle )
                 List<Vector3[]> trianglesInFace = face.Select(g => g).ToList();
                 // Gets outline (unordered) from group of triangles
-                List<List<Vector3>> segments = RoofUtils.GetMeshOutline(trianglesInFace);
+                List<List<Vector3>> segments = RoofUtils.GetNakedEdgesOfMesh(trianglesInFace);
                 // Find ordered polyline vertices from unordered segments 
-                List<Vector3> outline = RoofUtils.SegmentsToPolyline(segments);
+                List<Vector3> outline = RoofUtils.JoinLineSegments(segments);
 
                 finalPanelOutlines.Add(outline);
             }
