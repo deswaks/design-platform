@@ -9,29 +9,28 @@ namespace DesignPlatform.Utils {
     /// A collider object consisting of multiple cubic collider objects to represent complex spaces.
     /// </summary>
     public class SpaceCollider : MonoBehaviour {
-        public bool isCurrentlyColliding = false;
+
+        public Core.Space ParentSpace { get; private set; }
 
         //Detects collision with other spaces when placing them
         void OnCollisionEnter(Collision other) {
-            CheckCollisionWithSpaceColliders(other, isColliding: true);
+            UpdateIsColliding(other, isColliding: true);
         }
 
         void OnCollisionStay(Collision other) {
-            CheckCollisionWithSpaceColliders(other, isColliding: true);
+            UpdateIsColliding(other, isColliding: true);
         }
 
         void OnCollisionExit(Collision other) {
-            CheckCollisionWithSpaceColliders(other, isColliding: false);
+            UpdateIsColliding(other, isColliding: false);
         }
 
-        void CheckCollisionWithSpaceColliders(Collision other, bool isColliding) {
+        void UpdateIsColliding(Collision other, bool isColliding) {
+            // Abort if the collision is not with another space or they are sibling colliders of the same space.
+            if (other.gameObject.GetComponent<SpaceCollider>() == null
+                || other.gameObject.transform.parent == ParentSpace.gameObject) return;
 
-            GameObject parentObject = gameObject.transform.parent.gameObject;
-            // Only acts if collision object is other space object and not a sibling (other colliders in same space)
-            if (other.gameObject.GetComponent<SpaceCollider>() && other.gameObject.transform.parent != parentObject.transform) {
-                isCurrentlyColliding = isColliding;
-            }
-            parentObject.GetComponent<Core.Space>().SetIsSpaceCurrentlyColliding();
+            ParentSpace.OnCollisionEvent(isColliding);
         }
 
 
@@ -79,18 +78,18 @@ namespace DesignPlatform.Utils {
             foreach (List<int> xyPairs in colliderIndexPairsList) {
                 GameObject colliderObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 colliderObject.layer = 8;
-                colliderObject.name = "SpaceCollider_" + counter++.ToString();
+                colliderObject.name = "Space Collider " + counter++.ToString();
 
                 Vector3 positionVector =
                     new Vector3(
                         vertices[xyPairs[0]].x + System.Math.Abs(vertices[xyPairs[0]].x - vertices[xyPairs[1]].x) / 2, // x - location
-                        space.height / 2,                                                                                    // y - location
+                        space.Height / 2,                                                                                    // y - location
                         vertices[xyPairs[2]].z + System.Math.Abs(vertices[xyPairs[2]].z - vertices[xyPairs[3]].z) / 2  // z - location
                         );
                 Vector3 scaleVector =
                     new Vector3(
                         System.Math.Abs(vertices[xyPairs[0]].x - vertices[xyPairs[1]].x), // x - scale
-                        space.height,                                                       // y - scale
+                        space.Height,                                                       // y - scale
                         System.Math.Abs(vertices[xyPairs[2]].z - vertices[xyPairs[3]].z)  // z - scale
                         );
 
@@ -98,13 +97,15 @@ namespace DesignPlatform.Utils {
                 colliderObject.transform.localScale = scaleVector * 0.99f;
                 colliderObject.transform.localPosition = positionVector;
                 colliderObject.transform.rotation = space.transform.rotation;
+                
 
                 colliderObject.GetComponent<BoxCollider>().isTrigger = false;
                 Rigidbody rigidBody = colliderObject.AddComponent<Rigidbody>();
                 rigidBody.isKinematic = false;
                 rigidBody.constraints = RigidbodyConstraints.FreezeAll;
 
-                colliderObject.AddComponent<SpaceCollider>();
+                SpaceCollider spaceCollider = colliderObject.AddComponent<SpaceCollider>();
+                spaceCollider.ParentSpace = space;
                 Destroy(colliderObject.GetComponent<MeshRenderer>());
             }
         }

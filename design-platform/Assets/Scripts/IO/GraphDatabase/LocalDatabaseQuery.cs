@@ -21,9 +21,7 @@ namespace DesignPlatform.Database {
             
             List<Vector3> controlPoints = GraphUtils.StringListToVector3List(spaceNode.vertices);
             newSpace.SetControlPoints(controlPoints);
-            newSpace.SetSpaceType(spaceNode.type);
-            newSpace.UpdateRender3D(); 
-            newSpace.UpdateRender2D();
+            newSpace.Function = spaceNode.type;
         }
 
         /// <summary>
@@ -169,17 +167,17 @@ namespace DesignPlatform.Database {
         {
             jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath + "WallElements.json";
 
-            List<CLTElement> wallElements = Building.IdentifyWallElementsAndJointTypes();
+            List<CLTElement> wallElements = Building.Instance.CLTElements;
 
             // Collects Unity space as SpaceNodes
             List<WallElementNode> wallElementNodes = new List<WallElementNode>();
 
             foreach (CLTElement element in wallElements) {
                 wallElementNodes.Add(new WallElementNode {
-                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { element.startPoint.point, element.endPoint.point}),
-                    startJointType = element.startPoint.jointType.ToString(),
-                    endJointType = element.endPoint.jointType.ToString(),
-                    midPointJointTypes = element.midpoints.Select(p => p.jointType.ToString()).ToArray()
+                    vertices = GraphUtils.Vector3ListToStringList(new List<Vector3> { element.StartJoint.point, element.EndJoint.point}),
+                    startJointType = element.StartJoint.jointType.ToString(),
+                    endJointType = element.EndJoint.jointType.ToString(),
+                    midPointJointTypes = element.MidJoints.Select(p => p.jointType.ToString()).ToArray()
                 });
             }
 

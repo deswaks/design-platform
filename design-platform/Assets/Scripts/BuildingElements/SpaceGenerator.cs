@@ -25,10 +25,10 @@ namespace DesignPlatform.Core {
             Space newSpace = (Space)newSpaceGameObject.AddComponent(typeof(Space));
 
             if (preview) {
-                newSpace.InitSpace(buildShape: buildShape, building: this, type: SpaceFunction.PREVIEW);
+                newSpace.InitSpace(spaceShape: buildShape, spaceFunction: SpaceFunction.PREVIEW);
             }
             else {
-                newSpace.InitSpace(buildShape: buildShape, building: this, type: SpaceFunction.DEFAULT);
+                newSpace.InitSpace(spaceShape: buildShape, spaceFunction: SpaceFunction.DEFAULT);
                 if (templateSpace != null) {
                     newSpaceGameObject.transform.position = templateSpace.transform.position;
                     newSpaceGameObject.transform.rotation = templateSpace.transform.rotation;

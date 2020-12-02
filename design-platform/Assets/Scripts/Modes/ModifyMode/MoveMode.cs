@@ -27,13 +27,13 @@ namespace DesignPlatform.Modes {
             Core.Space selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
                 CreateHandle(selectedRoom);
-                selectedRoom.State = SpaceState.MOVING;
+                selectedRoom.MoveState = MoveState.MOVING;
             }
         }
         public override void OnModePause() {
             Core.Space selectedRoom = SelectMode.Instance.selection;
             if (selectedRoom != null) {
-                selectedRoom.State = SpaceState.STATIONARY;
+                selectedRoom.MoveState = MoveState.STATIONARY;
             }
             RemoveHandle();
         }

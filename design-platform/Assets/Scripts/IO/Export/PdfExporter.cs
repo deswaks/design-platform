@@ -82,7 +82,7 @@ namespace DesignPlatform.Export {
         private static void WriteSpaceName(XGraphics gfx, XFont tagFont, Core.Space space, XStringFormat tagFormat) {
             XPoint tagLocation = WorldToPaper(gfx, space.GetTagLocation());
             List<string> tagLines = new List<string>();
-            using (System.IO.StringReader reader = new System.IO.StringReader(space.TypeName)) {
+            using (System.IO.StringReader reader = new System.IO.StringReader(Settings.SpaceTypeNames[space.Function])) {
                 string line;
                 while ((line = reader.ReadLine()) != null) {
                     tagLines.Add(line);

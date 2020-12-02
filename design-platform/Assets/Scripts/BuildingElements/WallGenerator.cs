@@ -15,7 +15,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         public List<Wall> Walls {
             get {
-                if (walls == null || walls.Count == 0) BuildAllWallsAsCLTElements();
+                if (walls == null || walls.Count == 0) BuildAllWalls();
                 return walls;
             }
         }
@@ -34,16 +34,39 @@ namespace DesignPlatform.Core {
         }
 
         /// <summary>
-        /// Builds walls for all vertical interfaces of the whole building.
+        /// Build a 3D wall representation.
+        /// </summary>
+        /// <param name="cltElement">CLT element to base the wall upon</param>
+        /// <returns>The newly built wall.</returns>
+        public Wall BuildWall(CLTElement cltElement) {
+
+            // Create and initialize the new wall
+            GameObject newWallGameObject = new GameObject("Wall");
+            Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
+            newWall.InitializeWall(cltElement);
+
+            // Add to managed list
+            walls.Add(newWall);
+
+            return newWall;
+        }
+
+        /// <summary>
+        /// Builds walls for all CLT elements / vertical interfaces of the whole building as specified in the program settings.
         /// </summary>
         /// <returns>All walls of the building.</returns>
         public List<Wall> BuildAllWalls() {
-            foreach (Opening opening in Openings) {
-                opening.AttachClosestFaces();
+            // Make sure that openings are connected correctly
+            Openings.ForEach(o => o.AttachClosestFaces());
+
+            // Build the walls
+            if (Settings.WallSource == WallSource.CLT_ELEMENT) {
+                CLTElements.ForEach(cltElement => BuildWall(cltElement));
             }
-            foreach (Interface interFace in InterfacesVertical) {
-                BuildWall(interFace);
+            if (Settings.WallSource == WallSource.INTERFACE) {
+                InterfacesVertical.ForEach(interFace => BuildWall(interFace));
             }
+            
             return Walls;
         }
 

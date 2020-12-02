@@ -27,10 +27,10 @@ namespace StructuralAnalysis {
         }
 
 
-        public static Dictionary<int, List<Load>> AreaLoad(DesignPlatform.Core.Space room) {
-            Dictionary<int, List<Load>> loadTables = WallLoadTables(room);
-            List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
-            List<Vector3> normals = room.GetWallNormals(localCoordinates: true);
+        public static Dictionary<int, List<Load>> AreaLoad(DesignPlatform.Core.Space space) {
+            Dictionary<int, List<Load>> loadTables = WallLoadTables(space);
+            List<Vector3> points = space.GetControlPoints(localCoordinates: true, closed: true);
+            List<Vector3> normals = space.GetFaceNormals(localCoordinates: true);
 
             for (int iWall = 0; iWall < normals.Count; iWall++) {
                 if (loadTables.Keys.Contains(iWall)) {
@@ -73,7 +73,12 @@ namespace StructuralAnalysis {
             Dictionary<int, List<Load>> WallLoads = new Dictionary<int, List<Load>>();
             List<int> loadCarryingWalls = LoadCarryingWalls(room);
             List<Vector3> points = room.GetControlPoints(localCoordinates: true, closed: true);
-            List<List<float>> uniqueValuesOnWallAxes = room.UniqueCoordinates(localCoordinates: true);
+
+            List<List<float>> uniqueValuesOnWallAxes = new List<List<float>> {
+                room.GetControlPoints(localCoordinates: true).Select(p => p[0]).Distinct().OrderBy(n => n).ToList(),
+                room.GetControlPoints(localCoordinates: true).Select(p => p[1]).Distinct().OrderBy(n => n).ToList(),
+                room.GetControlPoints(localCoordinates: true).Select(p => p[2]).Distinct().OrderBy(n => n).ToList()
+            };
 
             foreach (int wallIndex in loadCarryingWalls) {
                 Vector3 startPoint = points[wallIndex];

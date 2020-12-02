@@ -75,8 +75,8 @@ namespace DesignPlatform.Export {
             for (int i = 0; i < space.ControlPoints.Count; i++) {
                 vertices = new List<Vector3> {
                     space.ControlPoints[i],
-                    space.ControlPoints[i] + new Vector3(0, space.height, 0),
-                    space.ControlPoints[j] + new Vector3(0, space.height, 0),
+                    space.ControlPoints[i] + new Vector3(0, space.Height, 0),
+                    space.ControlPoints[j] + new Vector3(0, space.Height, 0),
                     space.ControlPoints[j]
                 };
                 surfacesVertices.Add(vertices);
@@ -84,7 +84,7 @@ namespace DesignPlatform.Export {
             }
 
             // Add Ceiling vertices
-            vertices = space.GetControlPoints().Select(p => new Vector3(p.x, p.y + space.height, p.z)).ToList();
+            vertices = space.GetControlPoints().Select(p => new Vector3(p.x, p.y + space.Height, p.z)).ToList();
             surfacesVertices.Add(vertices);
 
             return surfacesVertices;

@@ -12,223 +12,208 @@ namespace DesignPlatform.Core {
 
     public partial class Building {
 
+        /// <summary> All CLT elements of this building </summary>
+        private List<CLTElement> cltElements = new List<CLTElement>();
+
         /// <summary>
-        /// Builds CLT elements for all vertical interfaces of the whole building.
+        /// All CLT elements of this building.
         /// </summary>
-        /// <returns>All walls of the building.</returns>
-        public List<Wall> BuildAllWallsAsCLTElements() {
-            foreach (Opening opening in Openings) {
-                opening.AttachClosestFaces();
+        public List<CLTElement> CLTElements {
+            get {
+                if (cltElements == null || cltElements.Count == 0) BuildAllCLTElements();
+                return cltElements;
             }
-            Building.IdentifyWallElementsAndJointTypes().ForEach(clt => BuildWall(clt));
-            return Walls;
         }
 
         /// <summary>
-        /// Build a 3D wall representation.
+        /// Builds all CLT elements of the whole building.
         /// </summary>
-        /// <param name="cltElement">CLT element to base the wall upon</param>
-        /// <returns>The newly built wall.</returns>
-        public Wall BuildWall(CLTElement cltElement) {
-            GameObject newWallGameObject = new GameObject("Wall");
-            Wall newWall = (Wall)newWallGameObject.AddComponent(typeof(Wall));
+        /// <returns>All CLT elements of the building.</returns>
+        public static List<CLTElement> BuildAllCLTElements() {
 
-            newWall.InitializeWall(cltElement);
+            // Find relevant interfaces to base the elements upon
+            List<Interface> interfaces = Instance.InterfacesVertical.Where(i => i.EndPoint != i.StartPoint).ToList();
 
-            walls.Add(newWall);
+            // Create full-length continuous elements (with no joint information yet)
+            List<CLTElement> continuousElements = CreateContinuousCLTElements(interfaces);
 
-            return newWall;
+            // Classify all the joints
+            ClassifyAllJoints(continuousElements);
+
+            // Split elements that are part of an X joint
+            List<CLTElement> splitElements = new List<CLTElement>();
+            foreach (CLTElement element in continuousElements) {
+
+                if (element.MidJoints.Any(j => j.jointType == WallJointType.X_Secondary)) {
+                    Vector3 xJointPoint = element.MidJoints.Find(j => j.jointType == WallJointType.X_Secondary).point;
+                    float xJointParameter = element.Line.ParameterAtPoint(xJointPoint);
+                    List<CLTElement> elementParts = element.SplitAtParameter(xJointParameter);
+                    splitElements.Add(elementParts[0]); splitElements.Add(elementParts[1]);
+                }
+
+                else splitElements.Add(element);
+            }
+
+            // Add to building
+            Instance.cltElements = splitElements;
+            return Instance.cltElements;
         }
 
         /// <summary>
-        /// Finds all wall elements from interfaces and identifies the joints between them. 
+        /// Classifies all the joints for all the given CLT elements.
         /// </summary>
-        /// <returns>List of WallElements with joints set.</returns>
-        public static List<CLTElement> IdentifyWallElementsAndJointTypes() {
-            // Gets full, un-split, wall elements with no joint information
-            List<CLTElement> wallElements = JoinInterfacesToLongestWallElements();
-            List<CLTElement> newWallElements = new List<CLTElement>();
-
-            List<Vector3> distinctJointPoints = wallElements.SelectMany(w => w.AllPoints()).Distinct().ToList();
+        /// <param name="cltElements">CLT elements whose joints shoudl be classified.</param>
+        private static void ClassifyAllJoints(List<CLTElement> cltElements) {
+            List<Vector3> distinctJointPoints = cltElements.SelectMany(element => element.AllJoints.Select(joint => joint.point)).Distinct().ToList();
 
             foreach (Vector3 point in distinctJointPoints) {
 
                 // Finds wall elements that have an endpoint in the given point and elements with midpoint(s) in the given point
                 // In total, only two elements should always be found. 
-                List<CLTElement> endJointWallElements = wallElements.Where(w => w.startPoint.point == point || w.endPoint.point == point).ToList();
-                List<CLTElement> midJointWallElements = wallElements.Where(w => w.midpoints.Select(p => p.point).Contains(point)).ToList();
+                List<CLTElement> endJointWallElements = cltElements.Where(w => w.StartJoint.point == point || w.EndJoint.point == point).ToList();
+                List<CLTElement> midJointWallElements = cltElements.Where(w => w.MidJoints.Select(p => p.point).Contains(point)).ToList();
 
-                // Finds vector of all walls joint in the given point
-
-                // Cross-joint (two wallElement-midpoints) ////////////////// AS OF NOW, PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
+                // X-joint                                         // PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
                 if (midJointWallElements.Count == 2) {
                     CLTElement primaryElement = midJointWallElements.OrderBy(e => e.Length).Last();
                     CLTElement secondaryElement = midJointWallElements.OrderBy(e => e.Length).First();
-                    ////////////////// AS OF NOW, PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
-                    if (primaryElement.midpoints.Select(p => p.point).Contains(point)) primaryElement.SetMidPointJointType(point, WallJointType.X_Primary);
 
-                    // The secondary element is identified now and will be cut into two elements after all joints are identified
-                    if (secondaryElement.midpoints.Select(p => p.point).Contains(point)) secondaryElement.SetMidPointJointType(point, WallJointType.X_Secondary);
+                    if (primaryElement.MidJoints.Select(p => p.point).Contains(point)) primaryElement.SetMidJointType(point, WallJointType.X_Primary);
+                    if (secondaryElement.MidJoints.Select(p => p.point).Contains(point)) secondaryElement.SetMidJointType(point, WallJointType.X_Secondary);
                 }
+
                 // T-joint
                 else if (midJointWallElements.Count == 1) {
-                    midJointWallElements.First().SetMidPointJointType(midJointWallElements.First().midpoints.First(p => p.point == point).point, WallJointType.T_Primary);
-                    if (point == endJointWallElements.First().startPoint.point) endJointWallElements.First().SetStartPointJointType(WallJointType.T_Secondary);
-                    if (point == endJointWallElements.First().endPoint.point) endJointWallElements.First().SetEndPointJointType(WallJointType.T_Secondary);
+                    midJointWallElements.First().SetMidJointType(midJointWallElements.First().MidJoints.First(p => p.point == point).point, WallJointType.T_Primary);
+                    if (point == endJointWallElements.First().StartJoint.point) endJointWallElements.First().SetStartJointType(WallJointType.T_Secondary);
+                    if (point == endJointWallElements.First().EndJoint.point) endJointWallElements.First().SetEndJointType(WallJointType.T_Secondary);
                 }
-                // Corner joint ///////////////////////////////// AS OF NOW, PRIMARY ROLE IS ASSIGNED TO LONGEST ELEMENT
+
+                // L-joint                                         // PRIMARY ROLE IS ASSIGNED TO THE LONGEST ELEMENT
                 else if (endJointWallElements.Count == 2) {
                     CLTElement primaryElement = endJointWallElements.OrderBy(e => e.Length).Last();
                     CLTElement secondaryElement = endJointWallElements.OrderBy(e => e.Length).First();
 
-                    if (point == primaryElement.startPoint.point) primaryElement.SetStartPointJointType(WallJointType.Corner_Primary);
-                    if (point == primaryElement.endPoint.point) primaryElement.SetEndPointJointType(WallJointType.Corner_Primary);                    
-                    
-                    if (point == secondaryElement.startPoint.point) secondaryElement.SetStartPointJointType(WallJointType.Corner_Secondary);
-                    if (point == secondaryElement.endPoint.point) secondaryElement.SetEndPointJointType(WallJointType.Corner_Secondary);
+                    if (point == primaryElement.StartJoint.point) primaryElement.SetStartJointType(WallJointType.Corner_Primary);
+                    if (point == primaryElement.EndJoint.point) primaryElement.SetEndJointType(WallJointType.Corner_Primary);
+
+                    if (point == secondaryElement.StartJoint.point) secondaryElement.SetStartJointType(WallJointType.Corner_Secondary);
+                    if (point == secondaryElement.EndJoint.point) secondaryElement.SetEndJointType(WallJointType.Corner_Secondary);
                 }
 
             }
-
-            foreach (CLTElement wallElement in wallElements) {
-                // If a wall is a secondary part of an X-joint, it will be split into two wall elements
-                if (wallElement.midpoints.Select(p => p.jointType).Contains(WallJointType.X_Secondary)) {
-
-                    CLTElement firstElement = new CLTElement();
-                    CLTElement secondElement = new CLTElement();
-
-                    // Index of midpoint where X-joint is
-                    int index = wallElement.midpoints.Select(p => p.jointType).ToList().IndexOf(WallJointType.X_Secondary);
-
-                    firstElement.SetStartPoint(wallElement.startPoint.point, wallElement.startPoint.jointType);
-                    secondElement.SetStartPoint(wallElement.midpoints[index].point, wallElement.midpoints[index].jointType);
-
-                    if (!(wallElement.midpoints.Count == 1)) {
-                        secondElement.SetMidPoints(wallElement.midpoints.GetRange(index, wallElement.midpoints.Count - index));
-                        firstElement.SetMidPoints(wallElement.midpoints.GetRange(1, index - 1));
-                    };
-
-                    firstElement.SetEndPoint(wallElement.midpoints[index].point, wallElement.midpoints[index].jointType);
-                    secondElement.SetEndPoint(wallElement.endPoint.point, wallElement.endPoint.jointType);
-
-                    // Adds two new elements to resulting list
-                    newWallElements.Add(firstElement);
-                    newWallElements.Add(secondElement);
-                }
-                else {
-                    newWallElements.Add(wallElement);
-                }
-            }
-            return newWallElements;
-        }
-
-        /// <summary>
-        /// Groups all interfaces that are parallel.
-        /// </summary>
-        /// <param name="interfaces"></param>
-        /// <returns></returns>
-        public static List<int> GroupParallelJoinedInterfaces(List<Interface> interfaces) {
-
-            // Identifier ID (Integer) for each wall referring to its wall element
-            List<int> wallIDs = Enumerable.Repeat(-1, interfaces.Count).ToList();
-
-            // Finds all joint points (unique points shared by all interfaces)
-            List<Vector3> jointPoints = new List<Vector3>();
-            interfaces.ForEach(i => {
-                jointPoints.Add(i.EndPoint);
-                jointPoints.Add(i.StartPoint);
-            });
-            jointPoints = jointPoints.Distinct().ToList();
-
-            // Loops through all interfaces
-            for (int j = 0; j < interfaces.Count; j++) {
-                // Finds parallel-joint interfaces of current interface
-                List<Interface> parallelJointInterfaces = GetParallelConnectedInterfaces(interfaces, interfaces[j]);
-
-                // Sees if one of parallel interfaces belongs to a wall and saves its ID
-                int? currentID = parallelJointInterfaces.Select(i => wallIDs[interfaces.IndexOf(i)]).Where(wg => wg != -1)?.FirstOrDefault();
-
-                // If one interface already had an ID attached, all identified parallel walls gets this ID
-                if (currentID != 0) {
-                    parallelJointInterfaces.ForEach(i => wallIDs[interfaces.IndexOf(i)] = currentID.Value);
-                    wallIDs[j] = currentID.Value;
-                }
-                else // A new ID is created for the set of parallel walls
-                {
-                    currentID = wallIDs.Max() + 1;
-                    parallelJointInterfaces.ForEach(i => wallIDs[interfaces.IndexOf(i)] = currentID.Value);
-                    wallIDs[j] = currentID.Value;
-                }
-            }
-
-            return wallIDs;
         }
 
         /// <summary>
         /// Identifies parallel joint walls and combines them (avoiding each wall being split by small, separate interfaces), providing vertex pairs for the resulting full wall elements. 
         /// </summary>
         /// <returns>Returns full, un-split, wall elements with no joint information.</returns>
-        private static List<CLTElement> JoinInterfacesToLongestWallElements() {
-            // Culls interfaces with same start- and endpoint
-            List<Interface> culledInterfaces = Building.Instance.Interfaces.Where(i => i.EndPoint != i.StartPoint).ToList();
+        private static List<CLTElement> CreateContinuousCLTElements(List<Interface> interfaces) {
 
-            List<int> wallIDs = GroupParallelJoinedInterfaces(culledInterfaces);
+            List<CLTElement> output = new List<CLTElement>();
 
-            // Each group consists of interfaces making up an entire wall
-            IEnumerable<IGrouping<int, Interface>> wallGroups = culledInterfaces.GroupBy(i => wallIDs[culledInterfaces.IndexOf(i)]);
+            // Group interfaces making up a single continuous element
+            List<List<Interface>> groupedInterfaces = GroupAdjoiningInterfaces(interfaces);
 
-            // List for resulting wall vertices
-            List<CLTElement> wallElements = new List<CLTElement>();
-
-            // Loops through list of wall interfaces belong to each wall to find out wall end points and wall midpoints.
-            foreach (List<Interface> wallInterfaces in wallGroups.Select(list => list.ToList()).ToList()) {
-                CLTElement wallElement = new CLTElement();
-
-                List<Vector3> currentWallVertices = wallInterfaces.SelectMany(i => new List<Vector3> { i.EndPoint, i.StartPoint }).Distinct().ToList();
-                // X-values
-                List<float> xs = currentWallVertices.Select(p => p.x).ToList();
-                // Z-values
-                List<float> zs = currentWallVertices.Select(p => p.z).ToList();
-                // Endpoints are (Xmin,0,Zmin);(Xmax,0,Zmax) ////////////////// ONLY TRUE FOR WALLS LYING ALONG X-/Z-AXIS
-                wallElement.SetStartPoint(new Vector3(xs.Min(), 0, zs.Min()));
-                wallElement.SetEndPoint(new Vector3(xs.Max(), 0, zs.Max()));
-                // Removes endpoints from vertex-list so that only midpoints remain
-                currentWallVertices.RemoveAll(p => p == wallElement.startPoint.point || p == wallElement.endPoint.point);
-                wallElement.SetMidPoints(currentWallVertices);
-
-                wallElement.SetInterfaces(wallInterfaces);
-
-                wallElements.Add(wallElement);
-
-                if (wallElement.Length > 16.5) Debug.Log("Panel surpasses maximum length of 16.5m");
+            // Join the interfaces in each group
+            foreach (List<Interface> adjoiningInterfaces in groupedInterfaces) {
+                CLTElement cltElement = CreateCLTElementByJoiningInterfaces(adjoiningInterfaces);
+                output.Add(cltElement);
             }
 
-            return wallElements;
+            return output;
         }
 
         /// <summary>
-        /// Finds all the interfaces that are parallel
+        /// Creates a CLT element that covers all the given interfaces.
         /// </summary>
-        /// <param name="interfacesList"></param>
-        /// <param name="interFace"></param>
+        /// <param name="interfaces">List of adjoining parallel interfaces.</param>
+        /// <returns>Continuous CLT element that covers all the given interfaces.</returns>
+        private static CLTElement CreateCLTElementByJoiningInterfaces(List<Interface> interfaces) {
+            CLTElement cltElement = new CLTElement(interfaces);
+
+            List<Vector3> currentWallVertices = interfaces.SelectMany(i => new List<Vector3> { i.EndPoint, i.StartPoint }).Distinct().ToList();
+            
+            List<float> xValues = currentWallVertices.Select(p => p.x).ToList();
+            List<float> zValues = currentWallVertices.Select(p => p.z).ToList();
+
+            // Endpoints are (Xmin,0,Zmin);(Xmax,0,Zmax) ////////////////// ONLY TRUE FOR WALLS LYING ALONG X-/Z-AXIS
+            cltElement.SetStartJoint(new Vector3(xValues.Min(), 0, zValues.Min()));
+            cltElement.SetEndJoint(new Vector3(xValues.Max(), 0, zValues.Max()));
+
+            // Removes endpoints from vertex-list so that only midpoints remain
+            currentWallVertices.RemoveAll(p => p == cltElement.StartJoint.point || p == cltElement.EndJoint.point);
+            cltElement.SetMidJoints(currentWallVertices);
+
+            if (cltElement.Length > 16.5) Debug.Log("Panel surpasses maximum length of 16.5m");
+
+            return cltElement;
+        }
+
+        /// <summary>
+        /// Groups all interfaces that are parallel and connected.
+        /// </summary>
+        /// <param name="interfaces">Interfaces to group.</param>
+        /// <returns>Grouped interfaces.</returns>
+        public static List<List<Interface>> GroupAdjoiningInterfaces(List<Interface> interfaces) {
+
+            // Group number for each interface is initialized as -1
+            List<int> groupNumbers = Enumerable.Repeat(-1, interfaces.Count).ToList();
+
+            // Find group number for each interface
+            for (int j = 0; j < interfaces.Count; j++) {
+                // Find adjoining interfaces of current interface
+                List<Interface> adjoiningInterfaces = FindParallelAndConnectedInterfaces(interfaces, interfaces[j]);
+
+                // Sees if one of parallel interfaces belongs to a wall and saves its ID
+                int? currentGroup = adjoiningInterfaces.Select(i => groupNumbers[interfaces.IndexOf(i)])
+                    .Where(group => group != -1)?.FirstOrDefault();
+
+                // If no one interface already has the ID attached a new one is created, otherwise all identified parallel walls gets this ID.
+                if (currentGroup == 0) currentGroup = groupNumbers.Max() + 1;
+                adjoiningInterfaces.ForEach(i => groupNumbers[interfaces.IndexOf(i)] = currentGroup.Value);
+                groupNumbers[j] = currentGroup.Value;
+            }
+
+            // Group the interfaces
+            IEnumerable<IGrouping<int, Interface>> groupedInterfaces = interfaces.GroupBy(i => groupNumbers[interfaces.IndexOf(i)]);
+
+            return groupedInterfaces.Select(iGroup => iGroup.ToList()).ToList();
+        }
+
+        /// <summary>
+        /// Finds all the interfaces that are parallel and connected to the given interface.
+        /// </summary>
+        /// <param name="interfaces">Interfaces to search among.</param>
+        /// <param name="thisIF">Interface to compare to.</param>
         /// <returns></returns>
-        private static List<Interface> GetParallelConnectedInterfaces(List<Interface> interfacesList, Interface interFace) {
-            Vector3 interfaceDirection = (interFace.StartPoint - interFace.EndPoint).normalized;
+        private static List<Interface> FindParallelAndConnectedInterfaces(List<Interface> interfaces, Interface thisIF) {
 
-            // Finds interfaces that have an endpoint in the given point
-            List<Interface> jointInterfaces = new List<Interface>();
-            jointInterfaces.AddRange(
-                interfacesList
-                .Where(i => i != interFace && (i.EndPoint == interFace.EndPoint || i.StartPoint == interFace.EndPoint))
-                .Where(i => System.Math.Abs(Vector3.Dot((i.StartPoint - i.EndPoint).normalized, interfaceDirection)) == 1)
-                .ToList());
-            jointInterfaces.AddRange(
-                interfacesList
-                .Where(i => i != interFace && (i.EndPoint == interFace.StartPoint || i.StartPoint == interFace.StartPoint))
-                .Where(i => System.Math.Abs(Vector3.Dot((i.StartPoint - i.EndPoint).normalized, interfaceDirection)) == 1)
-                .ToList());
+            List<Interface> output = new List<Interface>();
 
-            return jointInterfaces;
+            output.AddRange(interfaces.Where(otherIF =>
+                   thisIF != otherIF
+                && thisIF.LocationLine.IsParallelTo(otherIF.LocationLine)
+                && thisIF.LocationLine.IsConnectedTo(otherIF.LocationLine)).ToList());
+
+            return output;
+        }
+
+
+        /// <summary>
+        /// Removes all interfaces of the whole building.
+        /// </summary>
+        public void DeleteAllCLTElements() {
+            foreach (CLTElement cltElement in CLTElements) {
+                DeleteCLTElement(cltElement);
+            }
+        }
+
+        /// <summary>
+        /// Removes a CLT element from the building.
+        /// </summary>
+        public void DeleteCLTElement(CLTElement cltElement) {
+            if (cltElements.Contains(cltElement)) cltElements.Remove(cltElement);
         }
 
     }

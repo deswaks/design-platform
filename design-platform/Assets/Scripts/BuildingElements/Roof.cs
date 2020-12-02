@@ -14,16 +14,31 @@ namespace DesignPlatform.Core {
     /// </summary>
     public class Roof : MonoBehaviour {
 
+        /// <summary>Thickness perpendicular to the surface of the roof.</summary>
         public float Thickness { get; private set; }
+
+        /// <summary>Pitch of the slope of the roof.</summary>
         public float Pitch { get; private set; }
+
+        /// <summary>Determines the offset of the roof edge from the wall edges.</summary>
         public float Overhang { get; private set; }
+
+        /// <summary>Type of roof can be Gabled, Hipped or Flat.</summary>
         public RoofType Type { get; private set; }
 
-        public List<Vector3> ControlPoints { get; private set; }
 
         /// <summary>
-        /// Construct roof.
+        /// Underlying controlpoints of the roof element. The vertices of the polygon that gets extruded into the 3d geometry.
         /// </summary>
+        public List<Vector3> ControlPoints { get; private set; }
+
+
+        /// <summary>
+        /// The default constructor of the roof must come in the form of this initialize function
+        /// since the roof is a Unity MonoBehavior object (cannot have a constructor).
+        /// Any roof must be initialized.
+        /// </summary>
+        /// <param name="roofFaceVertices">The vertices for the extrusion into 3d object.</param>
         public void InitializeRoof(List<Vector3> roofFaceVertices) {
             // Save values at instantiation
             Thickness = Settings.RoofThickness;

@@ -57,18 +57,18 @@ namespace DesignPlatform.Core {
             // Wall interface
             if (face.Orientation == Orientation.VERTICAL) {
                 // Find points on face line from the controlpoints of all other spaces
-                List<Vector3> splitPoints = new List<Vector3> { face.Line.StartPoint, face.Line.EndPoint };
+                List<Vector3> splitPoints = new List<Vector3> { face.LocationLine.StartPoint, face.LocationLine.EndPoint };
                 for (int r2 = 0; r2 < Spaces.Count; r2++) {
                     if (face.Space == Spaces[r2]) continue;
                     foreach (Vector3 point in Spaces[r2].GetControlPoints()) {
-                        if (face.Line.Intersects(point)) {
+                        if (face.LocationLine.Intersects(point)) {
                             splitPoints.Add(point);
                         }
                     }
                 }
                 // Sort splitpoints between startpoint and endpoint
-                splitPoints = splitPoints.OrderBy(p => face.Line.Parameter(p)).ToList();
-                List<float> splitParameters = splitPoints.Select(p => face.Line.Parameter(p)).ToList();
+                splitPoints = splitPoints.OrderBy(p => face.LocationLine.ParameterAtPoint(p)).ToList();
+                List<float> splitParameters = splitPoints.Select(p => face.LocationLine.ParameterAtPoint(p)).ToList();
 
                 // Hvert interface-sted
                 for (int i = 0; i < splitParameters.Count - 1; i++) {

@@ -45,13 +45,13 @@ namespace DesignPlatform.UI {
             DeleteContentRows();
             int elementIndex = 0;
 
-            List<CLTElement> wallElements = Building.IdentifyWallElementsAndJointTypes();
+            List<CLTElement> wallElements = Building.Instance.CLTElements;
             List<List<string>> allDataRows = new List<List<string>>();
 
             //foreach (CLTElement e in wallElements) {
             wallElements.ForEach(e =>allDataRows.Add( new List<string>{
                     "", // For count
-                    e.Quality,    
+                    e.Quality.ToString(),    
                     e.Length.ToString()+" m",
                     e.Height.ToString()+" m",
                     (e.Thickness*1000).ToString()+" mm",

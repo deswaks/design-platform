@@ -108,7 +108,7 @@ namespace DesignPlatform.Modes {
         // Actually build the thing
         public void Build() {
             Core.Space builtRoom = Building.Instance.BuildSpace(buildShape: SelectedShape, templateSpace: previewSpace);
-            builtRoom.State = SpaceState.STATIONARY;
+            builtRoom.MoveState = MoveState.STATIONARY;
 
         }
 

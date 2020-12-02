@@ -9,6 +9,16 @@ using UnityEngine.ProBuilder.MeshOperations;
 namespace DesignPlatform.Core {
 
     /// <summary>
+    /// Determines what geometry the 3d rendered wall will use when they are built.
+    /// </summary>
+    public enum WallSource {
+        /// <summary>3D walls will be based upon interfaces</summary>
+        INTERFACE,
+        /// <summary>3D walls will be based upon CLT elements</summary>
+        CLT_ELEMENT
+    }
+
+    /// <summary>
     /// Represents building wall as a vertical space-dividing building elements.
     /// </summary>
     public class Wall : MonoBehaviour {
@@ -26,12 +36,12 @@ namespace DesignPlatform.Core {
             gameObject.name = "Generic Wall";
 
             controlPoints = new List<Vector3> {
-                    new Vector3 (interFace.Length/2,0,0),
-                    new Vector3 (interFace.Length/2,0, Height-0.01f),
-                    new Vector3 (-interFace.Length/2,0, Height-0.01f),
-                    new Vector3 (-interFace.Length/2,0,0) };
+                    new Vector3 (interFace.LocationLine.Length/2,0,0),
+                    new Vector3 (interFace.LocationLine.Length/2,0, Height-0.01f),
+                    new Vector3 (-interFace.LocationLine.Length/2,0, Height-0.01f),
+                    new Vector3 (-interFace.LocationLine.Length/2,0,0) };
 
-            gameObject.transform.position = interFace.CenterPoint;
+            gameObject.transform.position = interFace.LocationLine.Midpoint;
             gameObject.transform.rotation = Quaternion.LookRotation(Vector3.up, Normal);
             InitializeWallFinish();
         }
@@ -39,36 +49,36 @@ namespace DesignPlatform.Core {
         /// <summary>
         /// Construct wall elements based on CLT element information
         /// </summary>
-        public void InitializeWall(CLTElement wallElement) {
-            Interfaces = wallElement.interfaces;
+        public void InitializeWall(CLTElement cltElement) {
+            Interfaces = cltElement.Interfaces;
             gameObject.name = "CLT Wall";
 
             controlPoints = new List<Vector3> {
-                    new Vector3 (wallElement.Length/2, 0, 0),
-                    new Vector3 (wallElement.Length/2, 0, wallElement.Height),//-0.01f),
-                    new Vector3 (-wallElement.Length/2, 0, wallElement.Height),//-0.01f),
-                    new Vector3 (-wallElement.Length/2, 0, 0)
+                    new Vector3 (cltElement.Length/2, 0, 0),
+                    new Vector3 (cltElement.Length/2, 0, cltElement.Height),//-0.01f),
+                    new Vector3 (-cltElement.Length/2, 0, cltElement.Height),//-0.01f),
+                    new Vector3 (-cltElement.Length/2, 0, 0)
             };
 
             // Adjust end points according to joint types
-            if (wallElement.startPoint.jointType.ToString().Contains("Secondary")) {
+            if (cltElement.StartJoint.jointType.ToString().Contains("Secondary")) {
                 controlPoints[0] -= new Vector3(Thickness / 2, 0, 0);
                 controlPoints[1] -= new Vector3(Thickness / 2, 0, 0);
             }
-            if (wallElement.startPoint.jointType.ToString().Contains("Primary")) {
+            if (cltElement.StartJoint.jointType.ToString().Contains("Primary")) {
                 controlPoints[0] += new Vector3(Thickness / 2, 0, 0);
                 controlPoints[1] += new Vector3(Thickness / 2, 0, 0);
             }
-            if (wallElement.endPoint.jointType.ToString().Contains("Secondary")) {
+            if (cltElement.EndJoint.jointType.ToString().Contains("Secondary")) {
                 controlPoints[2] += new Vector3(Thickness / 2, 0, 0);
                 controlPoints[3] += new Vector3(Thickness / 2, 0, 0);
             }
-            if (wallElement.endPoint.jointType.ToString().Contains("Primary")) {
+            if (cltElement.EndJoint.jointType.ToString().Contains("Primary")) {
                 controlPoints[2] -= new Vector3(Thickness / 2, 0, 0);
                 controlPoints[3] -= new Vector3(Thickness / 2, 0, 0);
             }
-            gameObject.transform.position = wallElement.CenterPoint;
-            gameObject.transform.rotation = Quaternion.LookRotation(Vector3.up, -VectorFunctions.Rotate90ClockwiseXZ(wallElement.GetDirection()));
+            gameObject.transform.position = cltElement.Line.Midpoint;
+            gameObject.transform.rotation = Quaternion.LookRotation(Vector3.up, -VectorFunctions.Rotate90ClockwiseXZ(cltElement.Line.Direction));
             InitializeWallFinish();
         }
 
@@ -114,13 +124,15 @@ namespace DesignPlatform.Core {
         /// <summary>The maximum preferred thickness of all the connected faces</summary>
         public float Thickness {
             get {
-                return Interfaces.Where(f => f != null).Max(i => i.Thickness);
+                float t = Interfaces.Max(i => i.Thickness);
+                List<Interface> ifen = Interfaces;
+                return Interfaces.Max(i => i.Thickness);
             }
         }
 
         /// <summary>Normal vector of the wall.</summary>
         public Vector3 Normal {
-            get { return Spaces[0].GetWallNormals()[Faces[0].SpaceIndex]; }
+            get { return Spaces[0].GetFaceNormals()[Faces[0].SpaceIndex]; }
         }
 
         /// <summary>Total length of the wall.</summary>
@@ -130,7 +142,7 @@ namespace DesignPlatform.Core {
 
         /// <summary>The height of the heighest adjacent space along the wall.</summary>
         public float Height {
-            get { return Spaces.Max(s => s.height); }
+            get { return Spaces.Max(s => s.Height); }
         }
 
         

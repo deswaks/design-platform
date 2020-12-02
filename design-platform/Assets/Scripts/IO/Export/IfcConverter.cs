@@ -78,30 +78,30 @@ namespace DesignPlatform.Export {
         /// Create an IfcSpace and insert it into the given model.
         /// </summary>
         /// <param name="model">Model to insert the space into.</param>
-        /// <param name="room">Room to create the space geometry from.</param>
+        /// <param name="buildingSpace">Room to create the space geometry from.</param>
         /// <returns></returns>
-        public static void CreateIfcSpace(Core.Space room) {
+        public static void CreateIfcSpace(Core.Space buildingSpace) {
 
-            // Get data from room
-            int height = Mathf.RoundToInt(room.height * 1000);
+            // Get data from space
+            int height = Mathf.RoundToInt(buildingSpace.Height * 1000);
             Vector3 roomOrigin = new Vector3(
-                Mathf.RoundToInt(room.transform.position.x * 1000),
-                Mathf.RoundToInt(room.transform.position.z * 1000),
-                Mathf.RoundToInt(room.transform.position.y * 1000));
+                Mathf.RoundToInt(buildingSpace.transform.position.x * 1000),
+                Mathf.RoundToInt(buildingSpace.transform.position.z * 1000),
+                Mathf.RoundToInt(buildingSpace.transform.position.y * 1000));
             Vector3 placementDirection = new Vector3(
-                Mathf.RoundToInt(room.transform.right.normalized.x),
-                Mathf.RoundToInt(room.transform.right.normalized.z),
-                Mathf.RoundToInt(room.transform.right.normalized.y));
-            List<Vector2> controlPoints = room.GetControlPoints(localCoordinates: true, closed: true)
+                Mathf.RoundToInt(buildingSpace.transform.right.normalized.x),
+                Mathf.RoundToInt(buildingSpace.transform.right.normalized.z),
+                Mathf.RoundToInt(buildingSpace.transform.right.normalized.y));
+            List<Vector2> controlPoints = buildingSpace.GetControlPoints(localCoordinates: true, closed: true)
                 .Select(p => new Vector2(Mathf.RoundToInt(p.x * 1000),
                                           Mathf.RoundToInt(p.z * 1000))).ToList();
-            string description = room.TypeName;
+            string description = Settings.SpaceTypeNames[buildingSpace.Function];
 
             // Create space
             var space = ifcModel.Instances.New<IfcSpace>();
 
             // Properties
-            int roomIndex = Building.Instance.Spaces.FindIndex(r => r == room);
+            int spaceIndex = Building.Instance.Spaces.FindIndex(s => s == buildingSpace);
             space.Name = "Space " + ifcSpaces.Keys.Count();
             space.CompositionType = IfcElementCompositionEnum.ELEMENT;
             space.PredefinedType = IfcSpaceTypeEnum.INTERNAL;
@@ -124,7 +124,7 @@ namespace DesignPlatform.Export {
             rel.RelatingObject = ifcBuildingStoreys[0];
             rel.RelatedObjects.Add(space);
 
-            ifcSpaces.Add(room, space);
+            ifcSpaces.Add(buildingSpace, space);
             return;
         }
 
@@ -141,7 +141,7 @@ namespace DesignPlatform.Export {
             // Get data from slab
             int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
             int isCeiling = interFace.Faces[0].SpaceIndex - (interFace.Spaces[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
-            int elevation = Mathf.RoundToInt(isCeiling * interFace.Spaces[0].height * 1000);
+            int elevation = Mathf.RoundToInt(isCeiling * interFace.Spaces[0].Height * 1000);
             Vector3 extrusionOffset = new Vector3(0, 0, -thickness);
             Vector3 roomOrigin = new Vector3(
                 Mathf.RoundToInt(interFace.Spaces[0].transform.position.x * 1000),
@@ -214,11 +214,11 @@ namespace DesignPlatform.Export {
                                          wallDirection.y);
             Vector3 localZ = new Vector3(0, 0, 1);
             Vector3 centerPoint = new Vector3(
-                (int)(interFace.CenterPoint.x * 1000),
-                (int)(interFace.CenterPoint.z * 1000),
-                (int)(interFace.CenterPoint.y * 1000));
+                (int)(interFace.LocationLine.Midpoint.x * 1000),
+                (int)(interFace.LocationLine.Midpoint.z * 1000),
+                (int)(interFace.LocationLine.Midpoint.y * 1000));
             int length = (int)(endPoint - startPoint).magnitude;
-            int height = (int)(interFace.Spaces[0].height * 1000);
+            int height = (int)(interFace.Spaces[0].Height * 1000);
             int thickness = (int)(interFace.Thickness * 1000);
             string description = interFace.ToString();
 
@@ -336,7 +336,7 @@ namespace DesignPlatform.Export {
             // Get data from wall
             int thickness = Mathf.RoundToInt(interFace.Thickness * 1000);
             int isCeiling = interFace.Faces[0].SpaceIndex - (interFace.Spaces[0].GetControlPoints().Count); //0 for floor, 1 for ceiling
-            int elevation = Mathf.RoundToInt(isCeiling * interFace.Spaces[0].height * 1000);
+            int elevation = Mathf.RoundToInt(isCeiling * interFace.Spaces[0].Height * 1000);
             Vector3 extrusionOffset = new Vector3(0, 0, -thickness);
             Vector3 roomOrigin = new Vector3(
                 Mathf.RoundToInt(interFace.Spaces[0].transform.position.x * 1000),

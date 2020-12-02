@@ -64,25 +64,28 @@ namespace DesignPlatform.Core {
 
         /// <summary>The normal directions of this face represented as a surface.</summary>
         public Vector3 Normal {
-            get { return Space.GetWallNormals()[SpaceIndex]; }
+            get { return Space.GetFaceNormals()[SpaceIndex]; }
         }
 
         /// <summary>The height of this face.</summary>
         public float Height {
-            get { return Space.height; }
+            get { return Space.Height; }
         }
 
         /// <summary>The two dimensional line at the base of this face.</summary>
-        public Line Line {
+        public Line LocationLine {
             get {
                 List<Vector3> cp = Space.GetControlPoints(closed: true);
                 return new Line(cp[SpaceIndex], cp[SpaceIndex+1]); }
         }
 
 
-
+        /// <summary>
+        /// Writes a description of the face.
+        /// </summary>
+        /// <returns>The description of this face.</returns>
         public override string ToString() {
-            return Space.ToString() + " Face#" + SpaceIndex.ToString();
+            return Space.ToString() + " Face #" + SpaceIndex.ToString();
         }
 
         /// <summary>
@@ -141,7 +144,7 @@ namespace DesignPlatform.Core {
         /// <param name="opening">Opening to add.</param>
         public void AddOpening(Opening opening) {
             if (Openings.Contains(opening)) return;
-            float parameter = Line.Parameter(opening.LocationPoint);
+            float parameter = LocationLine.ParameterAtPoint(opening.LocationPoint);
             OpeningParameters.Add(opening, parameter);
         }
 

@@ -43,22 +43,19 @@ namespace DesignPlatform.Utils {
             List<Interface> culledInterfaces = Building.Instance.InterfacesVertical.Where(i => i.EndPoint != i.StartPoint).Where(iface => iface.Faces.Count == 1).ToList();
 
             List<List<Vector3>> segments = new List<List<Vector3>>();
-            List<int> interfaceGroupIDs = Building.GroupParallelJoinedInterfaces(culledInterfaces);
 
             // Each group consists of interfaces making up an entire wall
-            IEnumerable<IGrouping<int, Interface>> interfaceGroups = culledInterfaces.GroupBy(i => interfaceGroupIDs[culledInterfaces.IndexOf(i)]);
+            List<List<Interface>> groupedInterfaces = Building.GroupAdjoiningInterfaces(culledInterfaces);
 
             // Loops through list of wall interfaces belong to each wall to find out wall end points and wall midpoints.
-            foreach (List<Interface> wallInterfaces in interfaceGroups.Select(list => list.ToList()).ToList()) {
+            foreach (List<Interface> wallInterfaces in groupedInterfaces) {
                 List<Vector3> currentInterfaceVertices = wallInterfaces.SelectMany(i => new List<Vector3> { i.EndPoint, i.StartPoint }).Distinct().ToList();
-                // X-values
-                List<float> xs = currentInterfaceVertices.Select(p => p.x).ToList();
-                // Z-values
-                List<float> zs = currentInterfaceVertices.Select(p => p.z).ToList();
+                List<float> xValues = currentInterfaceVertices.Select(p => p.x).ToList();
+                List<float> zValues = currentInterfaceVertices.Select(p => p.z).ToList();
                 // Endpoints are (Xmin,0,Zmin);(Xmax,0,Zmax) ////////////////// ONLY TRUE FOR WALLS LYING ALONG X-/Z-AXIS
                 segments.Add(new List<Vector3>{ 
-                    new Vector3(xs.Min(), 0, zs.Min()),
-                    new Vector3(xs.Max(), 0, zs.Max())
+                    new Vector3(xValues.Min(), 0, zValues.Min()),
+                    new Vector3(xValues.Max(), 0, zValues.Max())
                 });
             }
 

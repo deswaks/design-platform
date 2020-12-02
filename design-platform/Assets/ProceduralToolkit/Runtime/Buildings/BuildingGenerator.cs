@@ -95,10 +95,16 @@ namespace ProceduralToolkit.Buildings
         public Color roofColor = (ColorE.gray/4).WithA(1);
     }
 
+    /// <summary>
+    /// Type of roof
+    /// </summary>
     public enum RoofType
     {
+        /// <summary>Flat roof</summary>
         Flat,
+        /// <summary>Hipped roof</summary>
         Hipped,
+        /// <summary>Gabled roof</summary>
         Gabled,
     }
 }

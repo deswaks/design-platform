@@ -56,11 +56,13 @@ namespace DesignPlatform.Core {
             DeleteAllWalls();
             DeleteAllSlabs();
             DeleteAllInterfaces();
+            DeleteAllCLTElements();
             DeleteAllRoofElements();
 
             // Build new
             BuildAllInterfaces();
-            BuildAllWallsAsCLTElements();
+            BuildAllCLTElements();
+            BuildAllWalls();
             BuildAllRoofElements();
             BuildAllSlabs();
         }

@@ -39,6 +39,11 @@ namespace DesignPlatform.Geometry {
             get { return (EndPoint + StartPoint) / 2; }
         }
 
+        /// <summary>The direction of this line from the startpoint to the endpoint.</summary>
+        public Vector3 Direction {
+            get { return (StartPoint - EndPoint).normalized; }
+        }
+
 
 
         /// <summary>
@@ -47,11 +52,11 @@ namespace DesignPlatform.Geometry {
         /// <param name="point">The point to check whether lies on the line.</param>
         /// <returns>True if the point is on the line and false of the point does not.</returns>
         public bool Intersects(Vector3 point) {
-            if (Vector3.Distance(StartPoint, point) < 0.01) return false;
-            if (Vector3.Distance(EndPoint, point) < 0.01) return false;
+            if (Vector3.Distance(StartPoint, point) < Settings.nearThreshold) return false;
+            if (Vector3.Distance(EndPoint, point) < Settings.nearThreshold) return false;
             return (Vector3.Distance(StartPoint, point)
                 + Vector3.Distance(EndPoint, point)
-                - Vector3.Distance(StartPoint, EndPoint) < 0.001);
+                - Vector3.Distance(StartPoint, EndPoint) < Settings.nearThreshold);
         }
 
         /// <summary>
@@ -59,8 +64,17 @@ namespace DesignPlatform.Geometry {
         /// </summary>
         /// <param name="point">The point to find the parameter for.</param>
         /// <returns>Parameter of the point on the line.</returns>
-        public float Parameter(Vector3 point) {
+        public float ParameterAtPoint(Vector3 point) {
             return (point - StartPoint).magnitude / Length;
+        }
+
+        /// <summary>
+        /// Finds the point on the line at the given parameter (from 0.0 to 1.0)
+        /// </summary>
+        /// <param name="parameter">The parameter for which to get the point.</param>
+        /// <returns>The point on the line at the given parameter.</returns>
+        public Vector3 PointAtParameter(float parameter) {
+            return StartPoint + Direction * Length * parameter;
         }
 
         /// <summary>
@@ -82,6 +96,18 @@ namespace DesignPlatform.Geometry {
             var vClosestPoint = StartPoint + vVector3;
 
             return vClosestPoint;
+        }
+
+        public bool IsConnectedTo(Line otherLine) {
+            return Vector3.Distance(StartPoint, otherLine.StartPoint) < Settings.nearThreshold
+                || Vector3.Distance(StartPoint, otherLine.EndPoint) < Settings.nearThreshold
+                || Vector3.Distance(EndPoint, otherLine.StartPoint) < Settings.nearThreshold
+                || Vector3.Distance(EndPoint, otherLine.EndPoint) < Settings.nearThreshold;
+        }
+
+        public bool IsParallelTo(Line otherLine) {
+            float absDot = Mathf.Abs(Vector3.Dot(Direction, otherLine.Direction));
+            return (Mathf.Abs(absDot - 1.0f) < Settings.nearThreshold);
         }
 
     }

@@ -24,8 +24,8 @@ namespace DesignPlatform.UI {
                 SelectMode.Instance.selection.Delete();
             }
         }
-        public void PublishSpaceType(int buildType) {
-            SelectMode.Instance.selection.SetSpaceType((SpaceFunction)buildType);
+        public void PublishSpaceType(int spaceType) {
+            SelectMode.Instance.selection.Function = (SpaceFunction)spaceType;
         }
         public void PublishSpaceNote() {
             //GameObject myInputGO = GameObject.Find("InputField Room Note");

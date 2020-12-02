@@ -47,13 +47,13 @@ namespace DesignPlatform.Modes {
 
             // Check if any number key was pressed
             if (Input.GetKeyDown(KeyCode.Alpha0)) {
-                if (selection != null) selection.SetSpaceType(SpaceFunction.DEFAULT);
+                if (selection != null) selection.Function = SpaceFunction.DEFAULT;
                 selection.UpdateRender2D();
             }
             for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha9; i++) {
                 if (Input.GetKeyDown((KeyCode)i)) {
                     if (selection != null) {
-                        selection.SetSpaceType((SpaceFunction)i - (int)KeyCode.Alpha1 + 10);
+                        selection.Function = (SpaceFunction) i - (int)KeyCode.Alpha1 + 10;
                         selection.UpdateRender2D();
                     }
                 }
@@ -110,8 +110,8 @@ namespace DesignPlatform.Modes {
         private void Deselect() {
 
             if (selection != null) {
-                selection.UpdateRender2D(highlighted: false);
-                selection.State = SpaceState.STATIONARY;
+                selection.UpdateRender2D( highlighted: false);
+                selection.MoveState = MoveState.STATIONARY;
             }
             selection = null;
 

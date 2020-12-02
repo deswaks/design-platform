@@ -12,6 +12,7 @@ namespace DesignPlatform.Core {
     /// </summary>
     public class Interface {
 
+        /// <summary>Spaces adjacent to this interface.</summary>
         public List<Space> Spaces {
             get {
                 if (Faces != null && Faces.Count() > 0) {
@@ -20,51 +21,57 @@ namespace DesignPlatform.Core {
                 else return new List<Space>();
             }
         }
+
+        /// <summary>Faces connected to this interface.</summary>
         public List<Face> Faces { get; private set; }
 
+        /// <summary>The location of this interface given as parameters on the lines of its connected faces.</summary>
+        public List<float[]> Parameters {
+            get { return Faces.Select(f => f.InterfaceParameters[this]).ToList(); }
+        }
+
+        /// <summary>Openings on this interface.</summary>
         public List<Opening> Openings {
             get {
-                return Faces.SelectMany(f => f.Openings
-                    .Where(o => f.GetInterfaceAtParameter(f.Line.Parameter(o.LocationPoint)) == this))
+                return Faces.SelectMany(face => face.Openings
+                    .Where(o => face.GetInterfaceAtParameter(face.LocationLine.ParameterAtPoint(o.LocationPoint)) == this))
                     .Distinct().ToList();
             }
         }
 
-        public List<Opening> OpeningsVertical {
-            get { return Openings.Where(o => o.Interface.Orientation == Orientation.VERTICAL).ToList(); }
+        /// <summary>Two dimensional line at the base of this interface.</summary>
+        public Line LocationLine {
+            get { return new Line(StartPoint, EndPoint); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary>The orientation of this interface. It can be either horizontal or vertical.</summary>
         public Orientation Orientation {
             get { return Faces[0].Orientation; }
         }
 
-        public float Length { get {return (StartPoint - EndPoint).magnitude;  } }
 
 
+        /// <summary>
+        /// Default constructor uses a single face and attaches this
+        /// </summary>
+        /// <param name="face">Connected face (a second can be added after construction)</param>
+        /// <param name="startParameter">Start location of this interface given as a parameter on the line of the connected face</param>
+        /// <param name="endParameter">End location of this interface given as a parameter on the line of the connected face</param>
         public Interface(Face face, float startParameter = 0.0f, float endParameter = 1.0f) {
             Faces = new List<Face> { face };
             face.AddInterface(this, startParameter, endParameter);
         }
 
-        public void AttachFace(Face face, float startParameter, float endParameter) {
-            Faces.Add(face);
-            face.AddInterface(this, startParameter, endParameter);
-        }
-
-        public List<float[]> Parameters {
-            get { return Faces.Select(f => f.InterfaceParameters[this]).ToList(); }
-        }
 
 
-
+        /// <summary>
+        /// The start point of the location line of this interface
+        /// </summary>
         public Vector3 StartPoint {
             get {
                 if (Faces[0].Orientation == Orientation.VERTICAL) {
-                    Vector3 faceStartPoint = Faces[0].Line.StartPoint;
-                    Vector3 faceEndPoint = Faces[0].Line.EndPoint;
+                    Vector3 faceStartPoint = Faces[0].LocationLine.StartPoint;
+                    Vector3 faceEndPoint = Faces[0].LocationLine.EndPoint;
                     return faceStartPoint + (faceEndPoint - faceStartPoint) * Parameters[0][0];
                 }
                 else {
@@ -73,11 +80,14 @@ namespace DesignPlatform.Core {
             }
         }
 
+        /// <summary>
+        /// The end point of the location line of this interface
+        /// </summary>
         public Vector3 EndPoint {
             get {
                 if (Faces[0].Orientation == Orientation.VERTICAL) {
-                    Vector3 faceStartPoint = Faces[0].Line.StartPoint;
-                    Vector3 faceEndPoint = Faces[0].Line.EndPoint;
+                    Vector3 faceStartPoint = Faces[0].LocationLine.StartPoint;
+                    Vector3 faceEndPoint = Faces[0].LocationLine.EndPoint;
                     return faceStartPoint + (faceEndPoint - faceStartPoint) * Parameters[0][1];
                 }
                 else {
@@ -86,38 +96,36 @@ namespace DesignPlatform.Core {
             }
         }
 
-        public Vector3 CenterPoint {
+        /// <summary>The maximum preferred thickness of all the connected faces</summary>
+        public float Thickness {
             get {
-                if (Faces[0].Orientation == Orientation.VERTICAL) {
-                    Vector3 faceStartPoint = Faces[0].Line.StartPoint;
-                    Vector3 faceEndPoint = Faces[0].Line.EndPoint;
-                    return faceStartPoint + (faceEndPoint - faceStartPoint) * (Parameters[0][0]+ Parameters[0][1])/2;
-                }
-                else {
-                    return Spaces[0].GetControlPoints()[0];
-                }
+                float[] thicknesses = Faces.Where(f => f != null).Select(f => f.Thickness).ToArray();
+                return thicknesses.Max();
             }
         }
 
 
 
         /// <summary>
-        /// 
+        /// Writes a description of the interface.
         /// </summary>
-        public float Thickness {
-            get {
-                float[] thicknesses = Faces.Where(f => f != null).Select(f => f.Thickness).ToArray();
-                return thicknesses.Max();
-            }
-            private set {; }
-        }
-
-
+        /// <returns>The description of this interface.</returns>
         public override string ToString() {
             string textString = "Interface attached to:";
-            if (Faces != null && Faces.Count > 0) textString += Faces[0].ToString();
-            if (Faces != null && Faces.Count > 1) textString += Faces[1].ToString();
+            if (Faces != null && Faces.Count > 0) textString += " " + Faces[0].ToString();
+            if (Faces != null && Faces.Count > 1) textString += " " + Faces[1].ToString();
             return textString;
+        }
+
+        /// <summary>
+        /// Attaches a second face as connected to this interface.
+        /// </summary>
+        /// <param name="face">Second connected face</param>
+        /// <param name="startParameter">Start location of this interface given as a parameter on the line of the connected face</param>
+        /// <param name="endParameter">End location of this interface given as a parameter on the line of the connected face</param>
+        public void AttachFace(Face face, float startParameter, float endParameter) {
+            Faces.Add(face);
+            face.AddInterface(this, startParameter, endParameter);
         }
 
         /// <summary>

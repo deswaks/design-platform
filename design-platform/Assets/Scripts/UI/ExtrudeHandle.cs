@@ -16,7 +16,7 @@ namespace DesignPlatform.UI {
         public void InitHandle(int wall) {
             parentSpace = gameObject.transform.parent.gameObject.GetComponent<Core.Space>();
             wallIndex = wall;
-            wallNormal = parentSpace.GetWallNormals()[wallIndex];
+            wallNormal = parentSpace.GetFaceNormals()[wallIndex];
             gameObject.name = "Extrude handle";
             UpdateTransform(updateRotation: true);
             gameObject.AddComponent<BoxCollider>();
@@ -46,13 +46,13 @@ namespace DesignPlatform.UI {
 
         public void UpdateTransform(bool updatePosition = true, bool updateRotation = false) {
             if (updatePosition) {
-                transform.position = parentSpace.GetWallMidpoints()[wallIndex] + Vector3.up * (parentSpace.height + 0.05f);
+                transform.position = parentSpace.GetPolygonMidpoints()[wallIndex] + Vector3.up * (parentSpace.Height + 0.05f);
             }
             if (updateRotation) {
                 transform.RotateAround(
-                point: parentSpace.GetWallMidpoints()[wallIndex],
+                point: parentSpace.GetPolygonMidpoints()[wallIndex],
                 axis: new Vector3(0, 1, 0),
-                angle: Vector3.SignedAngle(new Vector3(1, 0, 0), parentSpace.GetWallNormals()[wallIndex], new Vector3(0, 1, 0))
+                angle: Vector3.SignedAngle(new Vector3(1, 0, 0), parentSpace.GetFaceNormals()[wallIndex], new Vector3(0, 1, 0))
             );
             }
         }

@@ -79,7 +79,7 @@ namespace DesignPlatform.Core {
         /// <summary>The maximum height of the space(s) adjacent to this opening.</summary>
         public float SpaceHeight {
             get {
-                if (Faces != null && Faces.Count > 0) return Spaces.Max(s => s.height);
+                if (Faces != null && Faces.Count > 0) return Spaces.Max(s => s.Height);
                 else return 3.0f;
             }
         }
@@ -244,7 +244,7 @@ namespace DesignPlatform.Core {
             List<Face> closestFaces = new List<Face>();
             foreach (Space space in Building.Instance.Spaces) {
                 foreach (Face face in space.Faces.Where(f => f.Orientation == Orientation.VERTICAL)) {
-                    if (face.Line.Intersects(LocationPoint)) {
+                    if (face.LocationLine.Intersects(LocationPoint)) {
                         closestFaces.Add(face);
                     }
                 }

@@ -138,7 +138,7 @@ namespace DesignPlatform.Modes {
             }
             else {
                 Face closestFace = ClosestFace(hitPoint);
-                closestPoint = closestFace.Line.ClosestPoint(hitPoint);
+                closestPoint = closestFace.LocationLine.ClosestPoint(hitPoint);
                 previewOpening.Move(closestPoint);
                 previewOpening.Rotate(closestFace);
                 previewOpening.UpdateRender2D();
@@ -169,7 +169,7 @@ namespace DesignPlatform.Modes {
                 List<Face> spaceFaces = relevantRooms[i].Faces.Where(f => f.Orientation == Orientation.VERTICAL).ToList();
 
                 foreach (Face face in spaceFaces) {
-                    Vector3 closestPoint = face.Line.ClosestPoint(mousePos);
+                    Vector3 closestPoint = face.LocationLine.ClosestPoint(mousePos);
                     float distance = (closestPoint - mousePos).magnitude;
                     if (distance < closestDistance) {
                         closestDistance = distance;
