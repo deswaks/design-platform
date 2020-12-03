@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class SelectWidgetsWindow : MonoBehaviour {
 
         GameObject rowTemplate = null;

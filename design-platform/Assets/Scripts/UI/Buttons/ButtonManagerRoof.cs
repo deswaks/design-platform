@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class ButtonManagerRoof : MonoBehaviour {
 
         Slider pitchSlider;

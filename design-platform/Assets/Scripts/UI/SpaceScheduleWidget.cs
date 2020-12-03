@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class SpaceScheduleWidget : Widget {
         // Names of used GameObjects in prefab
         private static readonly string HeaderRowName = "Row_Headers";
@@ -21,6 +25,10 @@ namespace DesignPlatform.UI {
             Name = "Space Schedule";
         }
 
+        /// <summary>
+        /// Returns a gameobject that visually represents this widget
+        /// </summary>
+        /// <returns>The panel that visually represents this widget.</returns>
         public override Object CreatePanel() // Initialize widget
         {
             // Loads prefab object and instantiates Widget
@@ -36,6 +44,9 @@ namespace DesignPlatform.UI {
             return Panel;
         }
 
+        /// <summary>
+        /// Updates the gameobject that visually represents this widget
+        /// </summary>
         public override void UpdatePanel() {
             contentTemplate.SetActive(true);
 

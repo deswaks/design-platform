@@ -3,6 +3,10 @@ using DesignPlatform.Export;
 using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class ButtonManagerHome : MonoBehaviour {
         public void SaveLocal() {
             LocalDatabase.SaveAllUnitySpacesAndOpeningsToJson();

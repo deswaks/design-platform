@@ -21,6 +21,10 @@ using Xbim.Ifc4.SharedBldgElements;
 using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Export {
+
+    /// <summary>
+    /// Contains helper functions for use in export to the IFC format.
+    /// </summary>
     public static class IfcUtils {
 
         public static IfcStore ifcModel;
@@ -49,10 +53,10 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// 
+        /// Creates a profile defined by a polygon.
         /// </summary>
-        /// <param name="controlPoints"></param>
-        /// <returns></returns>
+        /// <param name="controlPoints">Vertices of the polygon defining the profile.</param>
+        /// <returns>Polygon profile.</returns>
         public static IfcProfileDef CreateProfile(List<Vector2> controlPoints) {
             var profileCurve = ifcModel.Instances.New<IfcPolyline>();
             foreach (Vector3 point in controlPoints) {
@@ -67,11 +71,11 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// 
+        /// Creates a profile defined by a rectangle.
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
+        /// <param name="width">width of the rectangle.</param>
+        /// <param name="height">Height of the rectangle.</param>
+        /// <returns>Rectangle profile.</returns>
         public static IfcProfileDef CreateProfile(int width, int height) {
             var profile = ifcModel.Instances.New<IfcRectangleProfileDef>();
             profile.ProfileType = IfcProfileTypeEnum.AREA;
@@ -84,24 +88,23 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// Sets up a full product definition with 3D and 2D body.
+        /// Sets up 3D product shape representation defined as a swept profile.
+        /// The 3d body is created by extruding the profile a given depth
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="depth"></param>
-        /// <param name="extrusionOffset"></param>
-        /// <param name="presentationLayer"></param>
-        /// <param name="add2D"></param>
+        /// <param name="profile">Profile to extrude into a 3d body.</param>
+        /// <param name="extrusionDepth">Depth of the profile extrusion.</param>
+        /// <param name="extrusionOffset">Offset of the profile origin before extrusion.</param>
+        /// <param name="presentationLayer">Layer to put the representation into for 3d IFC viewers.</param>
         /// <returns></returns>
         public static IfcShapeRepresentation ShapeAsSweptProfile(
                                     IfcProfileDef profile,
-                                    int depth,
+                                    int extrusionDepth,
                                     Vector3 extrusionOffset = new Vector3(),
                                     string presentationLayer = null) {
 
             // Solid body as extrusion
             var body = ifcModel.Instances.New<IfcExtrudedAreaSolid>();
-            body.Depth = depth;
+            body.Depth = extrusionDepth;
             body.SweptArea = profile;
             body.ExtrudedDirection = ifcModel.Instances.New<IfcDirection>();
             body.ExtrudedDirection.SetXYZ(0, 0, 1);
@@ -127,10 +130,10 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// 
+        /// Creates a 2D product shape representation defined by a location line.
         /// </summary>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="length">Length of the 2D line.</param>
+        /// <returns>2D line representation.</returns>
         public static IfcShapeRepresentation ShapeAsLinearCurve(int length) {
             // Linear Axis as Poly line
             var curve2D = ifcModel.Instances.New<IfcPolyline>();

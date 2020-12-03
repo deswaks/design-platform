@@ -4,6 +4,10 @@ using TMPro;
 using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class ButtonManagerModify : MonoBehaviour {
         public void Move() {
             SelectMode.Instance.SetMode(MoveMode.Instance);

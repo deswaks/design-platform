@@ -13,12 +13,19 @@ using StructuralAnalysis;
 using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Export {
+
+    /// <summary>
+    /// Contains functions to export drawings of the building to PDF format.
+    /// </summary>
     public static class PdfExporter {
 
+        /// <summary>Contains the decimal scale from model to paper space for different drawings scales.</summary>
         public static Dictionary<string, float> Scales = new Dictionary<string, float>() {
-        {"1:50", 56.692f},
-        {"1:100", 28.346f}
-    };
+            {"1:50", 56.692f},
+            {"1:100", 28.346f}
+        };
+
+        /// <summary>Describes the chosen scale.</summary>
         public static float scale = Scales["1:100"];
 
         /// <summary>
@@ -46,8 +53,9 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// Draws each space of the building using the given XGraphics object
+        /// Draws each space of the building.
         /// </summary>
+        /// <param name="gfx">Drawing to draw spaces on.</param>
         private static void DrawSpaces(XGraphics gfx) {
             // Definition of Pens and brushes
             XSolidBrush spaceBrush = new XSolidBrush(XColors.BlanchedAlmond);
@@ -56,13 +64,17 @@ namespace DesignPlatform.Export {
             wallPen2.LineCap = XLineCap.Square;
 
             foreach (Core.Space space in Building.Instance.Spaces) {
-                drawSpacePolygon(gfx, spaceBrush, space);
+                DrawSpacePolygon(gfx, spaceBrush, space);
             }
             foreach (Core.Space space in Building.Instance.Spaces) {
-                drawWallLines(gfx, wallPen1, wallPen2, space);
+                DrawWallLines(gfx, wallPen1, wallPen2, space);
             }
         }
 
+        /// <summary>
+        /// Draw a room tag for each space of the building
+        /// </summary>
+        /// <param name="gfx">Drawing to draw spaces on.</param>
         private static void TagSpaces(XGraphics gfx) {
             // Font definitions
             const string facename = "Times New Roman";
@@ -70,17 +82,22 @@ namespace DesignPlatform.Export {
             XFont nameFont = new XFont(facename, 12, XFontStyle.Bold, options);
             XFont areaFont = new XFont(facename, 10, XFontStyle.Regular, options);
 
-            XStringFormat tagFormat = new XStringFormat();
-            tagFormat.Alignment = XStringAlignment.Center;
-
             foreach (Core.Space space in Building.Instance.Spaces) {
-                WriteSpaceName(gfx, nameFont, space, tagFormat);
-                WriteSpaceArea(gfx, areaFont, space, tagFormat);
+                WriteSpaceName(gfx, nameFont, space);
+                WriteSpaceArea(gfx, areaFont, space);
             }
         }
-
-        private static void WriteSpaceName(XGraphics gfx, XFont tagFont, Core.Space space, XStringFormat tagFormat) {
-            XPoint tagLocation = WorldToPaper(gfx, space.GetTagLocation());
+        
+        /// <summary>
+        /// Write the room name of a space.
+        /// </summary>
+        /// <param name="gfx">Drawing to write space names on.</param>
+        /// <param name="tagFont">Font to write room name in.</param>
+        /// <param name="space">Space to write room name for.</param>
+        private static void WriteSpaceName(XGraphics gfx, XFont tagFont, Core.Space space) {
+            XStringFormat tagFormat = new XStringFormat();
+            tagFormat.Alignment = XStringAlignment.Center;
+            XPoint tagLocation = ConvertUnitsModelToPaper(gfx, space.GetTagLocation());
             List<string> tagLines = new List<string>();
             using (System.IO.StringReader reader = new System.IO.StringReader(Settings.SpaceTypeNames[space.Function])) {
                 string line;
@@ -94,25 +111,44 @@ namespace DesignPlatform.Export {
             }
         }
 
-        private static void WriteSpaceArea(XGraphics gfx, XFont tagFont, Core.Space space, XStringFormat tagFormat) {
-            XPoint tagLocation = WorldToPaper(gfx, space.GetTagLocation());
+        /// <summary>
+        /// Write the area of a space.
+        /// </summary>
+        /// <param name="gfx">Drawing to write space area on.</param>
+        /// <param name="tagFont">Font to write area in.</param>
+        /// <param name="space">Space to write area for.</param>
+        private static void WriteSpaceArea(XGraphics gfx, XFont tagFont, Core.Space space) {
+            XStringFormat tagFormat = new XStringFormat();
+            tagFormat.Alignment = XStringAlignment.Center;
+            XPoint tagLocation = ConvertUnitsModelToPaper(gfx, space.GetTagLocation());
             string tagText = space.Area.ToString() + "m²";
             gfx.DrawString(tagText, tagFont, XBrushes.Black, tagLocation.X, tagLocation.Y + tagFont.Size / 2 + 2, tagFormat);
         }
 
-        private static void drawSpacePolygon(XGraphics gfx, XSolidBrush spaceBrush, Core.Space space) {
+        /// <summary>
+        /// Draw a space as a polygon.
+        /// </summary>
+        /// <param name="gfx">Drawing to draw the polygon on.</param>
+        /// <param name="spaceBrush">Style to draw the polygon in.</param>
+        /// <param name="space">Space to draw polygon shape for.</param>
+        private static void DrawSpacePolygon(XGraphics gfx, XSolidBrush spaceBrush, Core.Space space) {
             double centerX = gfx.PageSize.Width / 2;
             double centerY = gfx.PageSize.Height / 2;
             List<XPoint> polylinePoints = space.GetControlPoints(closed: true).Select(p => new XPoint(p.x * scale + centerX, -p.z * scale + centerY)).ToList();
             gfx.DrawPolygon(spaceBrush, polylinePoints.ToArray(), XFillMode.Alternate);
         }
 
-        private static void drawWallLines(XGraphics gfx, XPen penArchitectural, XPen penStructural, Core.Space space) {
-
-
-            Dictionary<int, List<Load>> loadTable = LoadDistribution.AreaLoad(space);
+        /// <summary>
+        /// Draws the lines of the walls of a space object.
+        /// </summary>
+        /// <param name="gfx">Drawing to draw the lines on.</param>
+        /// <param name="penArchitectural">Style to use for non-structural walls when drawing.</param>
+        /// <param name="penStructural">Style to use for structural walls when drawing.</param>
+        /// <param name="space">Space to draw walls for.</param>
+        private static void DrawWallLines(XGraphics gfx, XPen penArchitectural, XPen penStructural, Core.Space space) {
+            Dictionary<int, List<DistributedLoad>> loadTable = LoadDistributor.DistributeAreaLoads(space);
             List<int> structuralWalls = loadTable.Keys.ToList();
-            List<XPoint> drawPoints = space.GetControlPoints(closed: true).Select(p => WorldToPaper(gfx, p)).ToList();
+            List<XPoint> drawPoints = space.GetControlPoints(closed: true).Select(p => ConvertUnitsModelToPaper(gfx, p)).ToList();
 
             // Draw each wall using architectural or structural brush according to whether the wall is in load list
             for (int iWall = 0; iWall < drawPoints.Count - 1; iWall++) {
@@ -125,7 +161,13 @@ namespace DesignPlatform.Export {
             }
         }
 
-        private static XPoint WorldToPaper(XGraphics gfx, Vector3 point) {
+        /// <summary>
+        /// Converts point coordinates from model units to paper units.
+        /// </summary>
+        /// <param name="gfx">Drawing to convert units for.</param>
+        /// <param name="point">Point coordinates to convert into paper units.</param>
+        /// <returns>The point with coordinates in paper units.</returns>
+        private static XPoint ConvertUnitsModelToPaper(XGraphics gfx, Vector3 point) {
             double centerX = gfx.PageSize.Width / 2;
             double centerY = gfx.PageSize.Height / 2;
             return new XPoint(point.x * scale + centerX, -point.z * scale + centerY);

@@ -3,6 +3,10 @@ using DesignPlatform.Modes;
 using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class ButtonManagerMode : MonoBehaviour {
         public void StartSelectMode() {
             Main.Instance.SetMode(SelectMode.Instance);

@@ -6,13 +6,18 @@ using UnityEngine;
 using DesignPlatform.Core;
 
 namespace DesignPlatform.Export {
+
+    /// <summary>
+    /// Contains functions to export the buildings to the gbXML format.
+    /// </summary>
     public static class GbxmlExporter {
-        public static gbXMLSerializer.gbXML gbx = new gbXMLSerializer.gbXML();
 
-        public static void ClearXML() {
-            gbx = new gbXMLSerializer.gbXML();
-        }
+        /// <summary>The gbXML model</summary>
+        public static gbXMLSerializer.gbXML gbx { get; private set; } = new gbXMLSerializer.gbXML();
 
+        /// <summary>
+        /// Exports all the buildings spaces from the entire building to bgXML for analysis.
+        /// </summary>
         public static void Export() {
 
             // Create campus
@@ -42,6 +47,12 @@ namespace DesignPlatform.Export {
             UnityEngine.Debug.Log("Successfully exported gbxml to: ~Exports/building.gbxml");
         }
 
+        /// <summary>
+        /// Clears the gbXML model.
+        /// </summary>
+        public static void ClearXML() {
+            gbx = new gbXMLSerializer.gbXML();
+        }
 
     }
 }

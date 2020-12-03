@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class ButtonManagerDashboard : MonoBehaviour {
 
         public void PopulateDashboard() {

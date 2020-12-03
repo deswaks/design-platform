@@ -6,30 +6,52 @@ using TMPro;
 using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class Widget_CircleDiagram : Widget {
-        // Names of used GameObjects in prefab
+
+        /// <summary>Names of used GameObjects in prefab</summary>
         private static readonly string TitleName = "txt_Title";
+        /// <summary></summary>
         private static readonly string WedgeTemplateName = "wedge";
+        /// <summary></summary>
         private static readonly string ListObjectTemplateName = "ListObject";
+        /// <summary></summary>
         private GameObject PrefabPanel;
-
-        GameObject titleObject;   // 
-        GameObject wedgeTemplate; // Content row template from prefab
-        GameObject listObjectTemplate; // Content row template from prefab
-        List<GameObject> wedges = new List<GameObject>();
-        List<GameObject> listObjects = new List<GameObject>();
-
-        Dictionary<string, float> diagramData = new Dictionary<string, float>();
-
-
+        /// <summary></summary>
+        private GameObject titleObject;
+        /// <summary>Content row template from prefab</summary>
+        private GameObject wedgeTemplate;
+        /// <summary>Content row template from prefab</summary>
+        private GameObject listObjectTemplate;
+        /// <summary></summary>
+        private List<GameObject> wedges = new List<GameObject>();
+        /// <summary></summary>
+        private List<GameObject> listObjects = new List<GameObject>();
+        /// <summary></summary>
+        private Dictionary<string, float> diagramData = new Dictionary<string, float>();
+        /// <summary></summary>
         private int elementsCount = 0;
 
+
+
+        /// <summary>
+        /// Constructor for this widget specifies its size and name.
+        /// </summary>
         public Widget_CircleDiagram() : base() // Host skal ses som parent Dashboard-row(?)
         {
             Size = (width: 1, height: 1);
             Name = "Circle Diagram";
         }
 
+
+
+        /// <summary>
+        /// Returns a gameobject that visually represents this widget
+        /// </summary>
+        /// <returns>The panel that visually represents this widget.</returns>
         public override Object CreatePanel() // Initialize widget
         {
             // Loads prefab object and instantiates Widget
@@ -48,6 +70,9 @@ namespace DesignPlatform.UI {
             return Panel;
         }
 
+        /// <summary>
+        /// Updates the gameobject that visually represents this widget
+        /// </summary>
         public override void UpdatePanel() {
             listObjectTemplate.SetActive(true);
             wedgeTemplate.SetActive(true);
@@ -100,6 +125,9 @@ namespace DesignPlatform.UI {
             wedgeTemplate.SetActive(false);
         }
 
+        /// <summary>
+        /// Clears the data currently displayed in the diagram.
+        /// </summary>
         private void ClearDiagram() {
             foreach (GameObject wedge in wedges) {
                 Object.Destroy(wedge);

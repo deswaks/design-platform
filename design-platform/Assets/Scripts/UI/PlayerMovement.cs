@@ -2,6 +2,10 @@
 using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class PlayerMovement : MonoBehaviour {
 
         public CharacterController controller;

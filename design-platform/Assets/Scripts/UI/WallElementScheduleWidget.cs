@@ -7,23 +7,44 @@ using UnityEditor;
 using UnityEngine;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class WallElementScheduleWidget : Widget {
-        // Names of used GameObjects in prefab
+        
+        /// <summary>Names of used GameObjects in prefab</summary>
         private static readonly string HeaderRowName = "Row_Headers";
+        
         private static readonly string ContentTemplateName = "Row_ContentTemplate";
+        
         private GameObject PrefabPanel;
 
-        GameObject headerRow;   // 
-        GameObject contentTemplate; // Content row template from prefab
-        List<GameObject> contentRows = new List<GameObject>();
+        private GameObject headerRow;
+        /// <summary>Content row template from prefab</summary>
+        private GameObject contentTemplate;
+        
+        private List<GameObject> contentRows = new List<GameObject>();
 
         private int columnCount = 0;
 
+
+
+        /// <summary>
+        /// Constructor for this widget specifies its size and name.
+        /// </summary>
         public WallElementScheduleWidget() : base() {
             Size = (width: 2, height: 1);
             Name = "CLT Element Schedule";
         }
 
+
+
+
+        /// <summary>
+        /// Returns a gameobject that visually represents this widget
+        /// </summary>
+        /// <returns>The panel that visually represents this widget.</returns>
         public override Object CreatePanel() // Initialize widget
         {
             // Loads prefab object and instantiates Widget
@@ -39,6 +60,9 @@ namespace DesignPlatform.UI {
             return Panel;
         }
 
+        /// <summary>
+        /// Updates the gameobject that visually represents this widget
+        /// </summary>
         public override void UpdatePanel() {
             contentTemplate.SetActive(true);
 
@@ -84,6 +108,9 @@ namespace DesignPlatform.UI {
             contentTemplate.SetActive(false);
         }
 
+        /// <summary>
+        /// Deletes the rows of information that wxists in the visual panel of this widget.
+        /// </summary>
         private void DeleteContentRows() {
             foreach (GameObject row in contentRows) {
                 GameObject.Destroy(row);

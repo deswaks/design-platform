@@ -3,13 +3,29 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// Base class for the dashboard widgets.
+    /// Contains methods to create and update the visual dahboard panel for the widget.
+    /// </summary>
     public abstract class Widget {
+
+        /// <summary></summary>
         public (int width, int height) Size;
+
+        /// <summary>The visual panel game object of this widget.</summary>
         public GameObject Panel;
+
+        /// <summary>The host panel wherein the panel of this widget is inserted.</summary>
         public GameObject Host;
+
+        /// <summary>The name of this widget.</summary>
         public string Name;
 
-
+        /// <summary>
+        /// Main constructor can be called from all derived constructors
+        /// if default settings are needed in terms of size and name.
+        /// </summary>
         public Widget() {
             Size = (1, 1);
             Name = "Widget";
@@ -18,7 +34,7 @@ namespace DesignPlatform.UI {
         /// <summary>
         /// Returns a gameobject that visually represents this widget
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The panel that visually represents this widget.</returns>
         public abstract Object CreatePanel();
 
         /// <summary>
@@ -61,6 +77,9 @@ namespace DesignPlatform.UI {
             Object.Destroy(Panel);
         }
 
+        /// <summary>
+        /// All a layout component to the widget such that it can be placed correctly into the dahboard.
+        /// </summary>
         public void AddLayoutElementComponent() {
             if (Panel.GetComponent<LayoutElement>() == null) {
                 LayoutElement layoutElement = Panel.AddComponent<LayoutElement>();

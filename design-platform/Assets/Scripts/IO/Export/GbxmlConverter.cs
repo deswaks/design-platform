@@ -5,8 +5,18 @@ using UnityEngine;
 using System.Linq;
 
 namespace DesignPlatform.Export {
+
+    /// <summary>
+    /// A converter to create gbXML objects from the internal objects of the design platform.
+    /// </summary>
     public static class GbxmlConverter {
 
+        
+        /// <summary>
+        /// Create a space object in gbXML.
+        /// </summary>
+        /// <param name="space">Building space to create the space geometry from.<</param>
+        /// <returns>gbXML space object created from building space.</returns>
         public static gbXMLSerializer.Space XmlSpaceFromSpace(Core.Space space) {
 
             // Create space
@@ -59,10 +69,11 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// 
+        /// Creates a list of face vertex geometries for each of the faces in a building space object.
         /// </summary>
-        /// <returns></returns>
-        public static List<List<Vector3>> GetSpaceSurfaceVertices(Core.Space space) {
+        /// <param name="space">Building space to create the face geometry from.<</param>
+        /// <returns>List of space faces, each represented as a list of its vertices.</returns>
+        private static List<List<Vector3>> GetSpaceSurfaceVertices(Core.Space space) {
             List<List<Vector3>> surfacesVertices = new List<List<Vector3>>();
             List<Vector3> vertices;
 

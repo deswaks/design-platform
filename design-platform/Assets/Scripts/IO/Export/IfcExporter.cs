@@ -20,12 +20,16 @@ using Xbim.Ifc4.SharedBldgElements;
 using DesignPlatform.Core;
 
 namespace DesignPlatform.Export {
+
+    /// <summary>
+    /// Contains functions to export the buildings to the gbXML format.
+    /// </summary>
     public static class IfcExporter {
 
         public static IfcStore ifcModel;
 
         /// <summary>
-        /// 
+        /// Exports everything available for export from the entire building.
         /// </summary>
         public static void Export() {
 
@@ -51,7 +55,7 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// 
+        /// Builds the IFC model from everything available for export from the entire building.
         /// </summary>
         private static void BuildModel() {
             // Create model an building
@@ -67,7 +71,7 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// Sets up the basic parameters any model must provide, units, ownership etc
+        /// Sets up the basic parameters any model must provide, units, ownership etc.
         /// </summary>
         /// <param name="projectName">Name of the project</param>
         /// <returns></returns>
@@ -94,6 +98,10 @@ namespace DesignPlatform.Export {
             }
         }
 
+        /// <summary>
+        /// Creates an IfcBuilding object with a single building storey.
+        /// </summary>
+        /// <param name="buildingName">Name of the building.</param>
         private static void CreateBuilding(string buildingName) {
             using (var transaction = ifcModel.BeginTransaction("Create Building")) {
                 IfcConverter.CreateIfcBuilding(buildingName);
@@ -102,6 +110,9 @@ namespace DesignPlatform.Export {
             }
         }
 
+        /// <summary>
+        /// Creates an IfcSpace for each of the building spaces.
+        /// </summary>
         private static void CreateSpaces() {
             Building.Instance.RebuildPOVElements();
             foreach (Core.Space room in Building.Instance.Spaces) {
@@ -112,6 +123,9 @@ namespace DesignPlatform.Export {
             }
         }
 
+        /// <summary>
+        /// Creates an IfcWall for each of the building walls.
+        /// </summary>
         private static void CreateWalls() {
             foreach (Interface interFace in Building.Instance.InterfacesVertical) {
                 using (var transaction = ifcModel.BeginTransaction("Create Wall")) {
@@ -121,6 +135,9 @@ namespace DesignPlatform.Export {
             }
         }
 
+        /// <summary>
+        /// Creates an IfcOpening for each of the building openings.
+        /// </summary>
         private static void CreateOpenings() {
             foreach (Opening opening in Building.Instance.Openings) {
                 using (var transaction = ifcModel.BeginTransaction("Create Opening")) {
@@ -130,6 +147,9 @@ namespace DesignPlatform.Export {
             }
         }
 
+        /// <summary>
+        /// Creates an IfcSlab for each of the building slabs.
+        /// </summary>
         private static void CreateSlabs() {
             foreach (Interface interFace in Building.Instance.InterfacesHorizontal) {
                 using (var transaction = ifcModel.BeginTransaction("Create Slab")) {
@@ -139,6 +159,9 @@ namespace DesignPlatform.Export {
             }
         }
 
+        /// <summary>
+        /// Creates an IfcRoof from the building roof.
+        /// </summary>
         private static void CreateRoof() {
             foreach (Interface interFace in Building.Instance.InterfacesHorizontal) {
                 using (var transaction = ifcModel.BeginTransaction("Create Roof")) {

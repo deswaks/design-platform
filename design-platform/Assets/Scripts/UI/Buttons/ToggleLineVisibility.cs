@@ -6,6 +6,9 @@ using DesignPlatform.Database;
 
 namespace DesignPlatform.UI {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ToggleLineVisibility : MonoBehaviour {
         public void ToggleVisibility(bool showLines) {
 

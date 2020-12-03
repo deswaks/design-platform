@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 
 namespace DesignPlatform.UI {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class UISwitch : MonoBehaviour {
         // Events
         public UnityEvent OnEvents;

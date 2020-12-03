@@ -28,16 +28,37 @@ using DesignPlatform.Core;
 using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Export {
+
+    /// <summary>
+    /// A converter to create IFC objects from the internal objects of the design platform.
+    /// </summary>
     public static class IfcConverter {
 
-        public static IfcStore ifcModel;
-        public static IfcBuilding ifcBuilding;
-        public static List<IfcBuildingStorey> ifcBuildingStoreys = new List<IfcBuildingStorey>();
-        public static Dictionary<Core.Space, IfcSpace> ifcSpaces = new Dictionary<Core.Space, IfcSpace>();
-        public static Dictionary<Interface, IfcWall> ifcWalls = new Dictionary<Interface, IfcWall>();
-        public static Dictionary<Interface, IfcSlab> ifcSlabs = new Dictionary<Interface, IfcSlab>();
-        public static Dictionary<Opening, IfcOpeningElement> ifcOpenings = new Dictionary<Opening, IfcOpeningElement>();
+        /// <summary>The Ifc building model.</summary>
+        public static IfcStore ifcModel { get; set; }
+        
+        /// <summary>The IfcBuilding object.</summary>
+        public static IfcBuilding ifcBuilding { get; private set; }
+        
+        /// <summary>Collection of the IfcBuilding storeys.</summary>
+        public static List<IfcBuildingStorey> ifcBuildingStoreys { get; private set; } = new List<IfcBuildingStorey>();
+        
+        /// <summary>Collection of the IfcSpaces of the building, linked to the model objects.</summary>
+        public static Dictionary<Core.Space, IfcSpace> ifcSpaces { get; private set; } = new Dictionary<Core.Space, IfcSpace>();
+        
+        /// <summary>Collection of the IfcWalls of the building, linked to the model interface objects.</summary>
+        public static Dictionary<Interface, IfcWall> ifcWalls { get; private set; } = new Dictionary<Interface, IfcWall>();
+        
+        /// <summary>Collection of the IfcSlabs of the building, linked to the model interface objects.</summary>
+        public static Dictionary<Interface, IfcSlab> ifcSlabs { get; private set; } = new Dictionary<Interface, IfcSlab>();
+        
+        /// <summary>Collection of the IfcOpenings of the building, linked to the model opening objects.</summary>
+        public static Dictionary<Opening, IfcOpeningElement> ifcOpenings { get; private set; } = new Dictionary<Opening, IfcOpeningElement>();
 
+        /// <summary>
+        /// Create an IfcBuilding and insert it into the model.
+        /// </summary>
+        /// <param name="name">Name of the building.</param>
         public static void CreateIfcBuilding(string name) {
 
             // Create building
@@ -57,6 +78,10 @@ namespace DesignPlatform.Export {
             return;
         }
 
+        /// <summary>
+        /// Create an ifc building storey with its relations and insert it into the model.
+        /// </summary>
+        /// <param name="index">Index of the storey (eg. 1 for 1st floor).</param>
         public static void CreateIfcBuildingStorey(int index) {
             var storey = ifcModel.Instances.New<IfcBuildingStorey>();
             storey.Elevation = new IfcLengthMeasure(0.0f * index);
@@ -75,11 +100,9 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// Create an IfcSpace and insert it into the given model.
+        /// Create an ifcSpace with its relations and insert it into the model.
         /// </summary>
-        /// <param name="model">Model to insert the space into.</param>
         /// <param name="buildingSpace">Room to create the space geometry from.</param>
-        /// <returns></returns>
         public static void CreateIfcSpace(Core.Space buildingSpace) {
 
             // Get data from space
@@ -110,7 +133,7 @@ namespace DesignPlatform.Export {
             // Create representation
             var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
             var profile = IfcUtils.CreateProfile(controlPoints: controlPoints);
-            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: height,
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, extrusionDepth: height,
                                               presentationLayer: "Conceptual Elements");
             productDefinition.Representations.Add(shape3D);
             space.Representation = productDefinition;
@@ -129,11 +152,9 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// Create an IfcSlab and insert it into the given model.
+        /// Create an IfcSlab with its relations and insert it into the model.
         /// </summary>
-        /// <param name="model">Model to insert the space into.</param>
-        /// <param name="room">Room to create the space geometry from.</param>
-        /// <returns></returns>
+        /// <param name="interFace">Interface to create the slab geometry from.</param>
         public static void CreateIfcSlab(Interface interFace) {
 
             if (interFace.Orientation != Orientation.HORIZONTAL) return;
@@ -168,7 +189,7 @@ namespace DesignPlatform.Export {
             // Create representation
             var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
             var profile = IfcUtils.CreateProfile(controlPoints: controlPoints);
-            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: thickness,
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, extrusionDepth: thickness,
                                               extrusionOffset: extrusionOffset,
                                               presentationLayer: "Building Elements");
             productDefinition.Representations.Add(shape3D);
@@ -195,11 +216,9 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// Create an IfcWall and insert it into the given model.
+        /// Create an IfcWall with its relations and insert it into the model.
         /// </summary>
-        /// <param name="model">Model to insert the wall into.</param>
-        /// <param name="interFace">Vertical interface to create wall from.</param>
-        /// <returns></returns>
+        /// <param name="interFace">Interface to create the wall geometry from.</param>
         public static void CreateIfcWall(Interface interFace) {
 
             if (interFace.Orientation != Orientation.VERTICAL) return;
@@ -233,7 +252,7 @@ namespace DesignPlatform.Export {
             // Create representation
             var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
             var profile = IfcUtils.CreateProfile(width: length, height: thickness);
-            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: height,
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, extrusionDepth: height,
                                               presentationLayer: "Building Elements");
             var shape2D = IfcUtils.ShapeAsLinearCurve(length: length);
             productDefinition.Representations.Add(shape3D);
@@ -261,11 +280,10 @@ namespace DesignPlatform.Export {
         }
 
         /// <summary>
-        /// Create an IfcWall and inset it into the given model.
+        /// Create an IfcOpening with its relations and insert it into the model
+        /// (create it as a hole in its related walls).
         /// </summary>
-        /// <param name="model">Model to insert the wall into.</param>
-        /// <param name="interFace">Vertical interface to create wall from.</param>
-        /// <returns></returns>
+        /// <param name="opening">Opening to create the opening geometry from.</param>
         public static void CreateIfcOpening(Opening opening) {
 
             // Get properties from opening
@@ -302,7 +320,7 @@ namespace DesignPlatform.Export {
             // Create representation
             var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
             var profile = IfcUtils.CreateProfile(width: width, height: height);
-            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: depth,
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, extrusionDepth: depth,
                                               extrusionOffset: ExtrusionOffset);
             productDefinition.Representations.Add(shape3D);
             openingElement.Representation = productDefinition;
@@ -324,11 +342,9 @@ namespace DesignPlatform.Export {
 
 
         /// <summary>
-        /// Create an IfcRoof? and insert it into the given model.
+        /// Create an IfcSlab for a roof element with its relations and insert it into the model.
         /// </summary>
-        /// <param name="model">Model to insert the space into.</param>
-        /// <param name="room">Room to create the space geometry from.</param>
-        /// <returns></returns>
+        /// <param name="interFace">Interface to create the roof slab geometry from.</param>
         public static void CreateIfcRoofslab(Interface interFace) {
 
             if (interFace.Orientation != Orientation.HORIZONTAL) return;
@@ -363,7 +379,7 @@ namespace DesignPlatform.Export {
             // Create representation
             var productDefinition = ifcModel.Instances.New<IfcProductDefinitionShape>();
             var profile = IfcUtils.CreateProfile(controlPoints: controlPoints);
-            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, depth: thickness,
+            var shape3D = IfcUtils.ShapeAsSweptProfile(profile: profile, extrusionDepth: thickness,
                                               extrusionOffset: extrusionOffset,
                                               presentationLayer: "Building Elements");
             productDefinition.Representations.Add(shape3D);
