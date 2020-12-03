@@ -4,7 +4,7 @@ A design platform for single family houses in CLT developed in Unity.
 The program has been created as part of a thesis at the Technical University of Denmark, 2020. It is a proof of concept and still contains errors and room for improvement.
 
 # Documentation
-Documentation of the design platform can be found <a href="https://raw.githack.com/deswaks/design-platform/master/Docs/html/index.html">here</a>
+Documentation of the design platform can be found <a href="https://raw.githack.com/deswaks/design-platform/master/Docs/html/index.html">here</a>.
 
 # Installation
 Instructions will be given here when available.
