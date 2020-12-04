@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DesignPlatform.Core;
 
 namespace DesignPlatform.UI {
 
@@ -29,6 +30,7 @@ namespace DesignPlatform.UI {
 
         public void InsertWidgets() {
             ClearAllWidgets();
+            Building.Instance.RebuildPOVElements();
             GameObject dualRow = null;
             TemplateRow.SetActive(true);
 

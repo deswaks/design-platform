@@ -19,16 +19,8 @@ namespace StructuralAnalysis {
         /// which is inserted into the widget afterwards.</summary>
         private readonly GameObject PrefabRow;
 
-        /// <summary>Names of used GameObjects in prefab</summary>
-        private static readonly string HeaderRowName = "Row_Headers";
-
-        /// <summary></summary>
-        private static readonly string ContentTemplateName = "Row_ContentTemplate";
-
         /// <summary></summary>
         private List<GameObject> addedRows = new List<GameObject>();
-
-        GameObject Table;
 
         /// <summary>
         /// Constructor for this widget class
@@ -46,8 +38,6 @@ namespace StructuralAnalysis {
         public override Object CreatePanel() {
             // Loads prefab object and instantiates Widget
             Panel = Object.Instantiate(PrefabPanel);
-
-            Table = Panel.transform.GetChild(2).gameObject;
 
             return Panel;
         }
@@ -84,13 +74,13 @@ namespace StructuralAnalysis {
 
             for (int i = 0; i < dataRows.Count; i++) {
                 // Create and add row to table
-                GameObject dataRow = GameObject.Instantiate(PrefabRow, Table.transform);
+                GameObject dataRow = GameObject.Instantiate(PrefabRow, Panel.transform);
                 dataRow.name = "DataRow" + elementIndex.ToString();
                 addedRows.Add(dataRow);
 
                 // Fill row with values
                 for (int j = 0; j < dataRow.transform.childCount; j++) {
-                    dataRow.transform.GetChild(j).GetComponent<TMPro.TMP_Text>().text = dataRows[i][j];
+                    dataRow.transform.GetChild(j).GetChild(0).GetComponent<TMPro.TMP_Text>().text = dataRows[i][j];
                 }
             }
         }

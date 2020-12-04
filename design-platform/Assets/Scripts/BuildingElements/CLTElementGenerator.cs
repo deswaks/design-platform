@@ -204,15 +204,18 @@ namespace DesignPlatform.Core {
         /// Removes all interfaces of the whole building.
         /// </summary>
         public void DeleteAllCLTElements() {
-            foreach (CLTElement cltElement in CLTElements) {
-                DeleteCLTElement(cltElement);
+            int amount = cltElements.Count;
+            if (amount > 0) {
+                for (int i = 0; i < amount; i++) {
+                    cltElements[0].Delete();
+                }
             }
         }
 
         /// <summary>
         /// Removes a CLT element from the building.
         /// </summary>
-        public void DeleteCLTElement(CLTElement cltElement) {
+        public void RemoveCLTElement(CLTElement cltElement) {
             if (cltElements.Contains(cltElement)) cltElements.Remove(cltElement);
         }
 

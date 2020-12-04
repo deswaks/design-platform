@@ -59,11 +59,12 @@ namespace DesignPlatform.UI {
                 contentRows.Add(currentRow);
 
                 List<string> rowData = new List<string>{
-                    "Space " + spaceIndex.ToString(),                 // Space Name
-                    StringUtils.ToTitleCase(space.Function.ToString()),  // Space Type
-                    StringUtils.ToTitleCase(space.Shape.ToString()), // Space Shape
-                    space.gameObject.GetInstanceID().ToString(),     // Space rumber - SKAL OPDATERES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    space.Area.ToString() + " m²"          // Floor area
+                    $"{spaceIndex+1}",
+                    $"{Core.Settings.SpaceTypeNames[space.Function].Replace("\n"," ")}",
+                    $"{Core.Settings.SpaceShapeNames[space.Shape].Replace("\n"," ")}",
+                    $"{space.Area} m²",
+                    $"{space.CustomNote}",
+                    
                 };
 
                 for (int i = 0; i < columnCount; i++) {

@@ -52,6 +52,8 @@ namespace DesignPlatform.Core {
         /// Destroys and all elements with a 3D representation (visible in POV mode).
         /// </summary>
         public void RebuildPOVElements() {
+            if (Spaces == null || Spaces.Count == 0) return;
+
             // Delete preexisting	
             DeleteAllWalls();
             DeleteAllSlabs();

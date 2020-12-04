@@ -195,6 +195,15 @@ namespace DesignPlatform.Core {
 
             return new List<CLTElement> { element1, element2 };
         }
+
+        /// <summary>
+        /// Deletes a wall and removes it from the wall list.
+        /// </summary>
+        public void Delete() {
+            if (Building.Instance.CLTElements.Contains(this)) {
+                Building.Instance.RemoveCLTElement(this);
+            }
+        }
     }
 }
 

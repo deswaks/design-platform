@@ -123,13 +123,14 @@ namespace DesignPlatform.Core {
 
         /// <summary>The custom note is a simple text string that can be assigned to the space.</summary>
         public string CustomNote {
-            get { return CustomNote; }
-            set { if (!string.IsNullOrEmpty(value)) CustomNote = value;}
+            get { return customNote; }
+            set { if (!string.IsNullOrEmpty(value)) customNote = value;}
         }
 
         /// <summary>The offset of the pointer, used to place the space correctly when moved.</summary>
         private Vector3 MoveModeOffset { get; set; }
 
+        private string customNote;
 
 
         /// <summary>
@@ -146,7 +147,7 @@ namespace DesignPlatform.Core {
             Material3D = AssetUtil.LoadAsset<Material>("materials", Settings.SpaceMaterialAssets[Function]);
             ControlPoints = Settings.SpaceControlPoints[Shape];
 
-            gameObject.name = Settings.SpaceGameObjectNames[Shape] + " #" + Building.Instance.Spaces.Count().ToString();
+            gameObject.name = $"Space #{Building.Instance.Spaces.Count()} ({Settings.SpaceShapeNames[Shape]})";
             if (Function == SpaceFunction.PREVIEW) gameObject.name = "Preview " + gameObject.name;
 
             CreateFaces();

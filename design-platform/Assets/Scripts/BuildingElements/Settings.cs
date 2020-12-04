@@ -39,12 +39,12 @@ namespace DesignPlatform.Core {
             { SpaceFunction.CORRIDOR,  "plan_space_corridor"}
         };
         /// <summary>The name given to each space game object.</summary>
-        public static readonly Dictionary<SpaceShape, string> SpaceGameObjectNames = new Dictionary<SpaceShape, string> {
-            { SpaceShape.RECTANGLE, "Space(Rectangle)"},
-            { SpaceShape.LSHAPE,    "Space(L-Shape)"},
-            { SpaceShape.USHAPE,    "Space(U-Shape)"},
-            { SpaceShape.SSHAPE,    "Space(S-Shape)"},
-            { SpaceShape.TSHAPE,    "Space(T-Shape)"}
+        public static readonly Dictionary<SpaceShape, string> SpaceShapeNames = new Dictionary<SpaceShape, string> {
+            { SpaceShape.RECTANGLE, "Rectangle"},
+            { SpaceShape.LSHAPE,    "L-Shape"},
+            { SpaceShape.USHAPE,    "U-Shape"},
+            { SpaceShape.SSHAPE,    "S-Shape"},
+            { SpaceShape.TSHAPE,    "T-Shape"}
         };
         /// <summary>The Controlpoints of each default shape</summary>
         public static readonly Dictionary<SpaceShape, List<Vector3>> SpaceControlPoints = new Dictionary<SpaceShape, List<Vector3>> {
