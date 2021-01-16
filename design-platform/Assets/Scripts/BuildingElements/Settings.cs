@@ -95,11 +95,11 @@ namespace DesignPlatform.Core {
         /// <summary>The distance away from the pointer to search for spaces.</summary>
         public static readonly float FaceSearchDistance = 3.0f;
         /// <summary>The horizontal dimension of the window.</summary>
-        public static float WindowWidth = 1.6f;
+        public static float WindowWidth = 1.2f;
         /// <summary>The vertical dimension of the window.</summary>
-        public static float WindowHeight = 1.05f;
+        public static float WindowHeight = 2.0f;
         /// <summary>The height of the wall below the window.</summary>
-        public static float WindowSillHeight = 1.1f;
+        public static float WindowSillHeight = 0.15f;
         /// <summary>The thickness of the window.</summary>
         public static float WindowThickness = 0.051f;
 

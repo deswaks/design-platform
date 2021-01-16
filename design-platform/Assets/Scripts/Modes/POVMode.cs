@@ -89,8 +89,11 @@ namespace DesignPlatform.Modes {
 
             // Generates notification in corner of screen
             GameObject notificationParent = POVCamera.gameObject.GetComponentsInChildren<RectTransform>().Where(t => t.gameObject.name == "UIPanel3D").First().gameObject;
-            string notificationText = "You can exit POV mode at any time by pressing the escape button.";
-            string notificationTitle = "POV Mode";
+            string notificationText = "Use the following input to navigate your way around your house:\n" +
+                "       Mouse   Look around\n" +
+                "       WASD    Walk around\n" +
+                "       ESC        Exit";
+            string notificationTitle = "Welcome to 3D Mode!";
             notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, new Vector3(10, -10, 0), notificationParent);
         }
 

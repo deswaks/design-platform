@@ -11,5 +11,6 @@ public class ButtonChangeGradientOnSelected : MonoBehaviour, ISelectHandler// re
         UnityEngine.UI.Michsky.UI.ModernUIPack.UIGradient gradient = (UnityEngine.UI.Michsky.UI.ModernUIPack.UIGradient)gameObject.GetComponentInChildren(typeof(UnityEngine.UI.Michsky.UI.ModernUIPack.UIGradient));
         gradient.EffectGradient.colorKeys = selectionGradient.colorKeys;
 
-    }
+    }    
+
 }
