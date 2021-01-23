@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['faces_1187',['Faces',['../class_design_platform_1_1_core_1_1_building.html#aa76e161bde9a0064ac9576e708255662',1,'DesignPlatform.Core.Building.Faces()'],['../class_design_platform_1_1_core_1_1_interface.html#a8b3550b39dd7d5524fcff1e934e7fe65',1,'DesignPlatform.Core.Interface.Faces()'],['../class_design_platform_1_1_core_1_1_opening.html#aa0f7b7ac8cacbd58c3761b16f7fb6dd0',1,'DesignPlatform.Core.Opening.Faces()'],['../class_design_platform_1_1_core_1_1_slab.html#a098ec3164f3c49ca7ca2c68498cb099e',1,'DesignPlatform.Core.Slab.Faces()'],['../class_design_platform_1_1_core_1_1_space.html#aeb437ec11a308fd31b8a5c3bd2208d90',1,'DesignPlatform.Core.Space.Faces()'],['../class_design_platform_1_1_core_1_1_wall.html#a98017349e2c0c7a4aa53d1bcfe586766',1,'DesignPlatform.Core.Wall.Faces()']]],
+  ['function_1188',['Function',['../class_design_platform_1_1_core_1_1_opening.html#a3cd3d9d38ca549e7c987d50845b3d0b6',1,'DesignPlatform.Core.Opening.Function()'],['../class_design_platform_1_1_core_1_1_space.html#a451428c4a87eae012baf3da815971561',1,'DesignPlatform.Core.Space.Function()']]]
+];

@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['generatenotification_853',['GenerateNotification',['../class_design_platform_1_1_u_i_1_1_notification_handler.html#a796fbfcad738e3078f5c60320f2ca90e',1,'DesignPlatform::UI::NotificationHandler']]],
+  ['generateroofplan_854',['GenerateRoofPlan',['../class_design_platform_1_1_utils_1_1_roof_utils.html#a64ce30664ba09f04411303ed50811790',1,'DesignPlatform::Utils::RoofUtils']]],
+  ['getallspaceidsingraph_855',['GetAllSpaceIdsInGraph',['../class_design_platform_1_1_database_1_1_graph_database.html#a170738865672fd6ce8aea69f6162723a',1,'DesignPlatform::Database::GraphDatabase']]],
+  ['getallspacenodes_856',['GetAllSpaceNodes',['../class_design_platform_1_1_database_1_1_graph_database.html#a4b84fe7545bd69665b737d2010c95cb3',1,'DesignPlatform::Database::GraphDatabase']]],
+  ['getbuildingoutline_857',['GetBuildingOutline',['../class_design_platform_1_1_utils_1_1_roof_utils.html#a774ad1212e07be899134abfd67d9f2c2',1,'DesignPlatform::Utils::RoofUtils']]],
+  ['getclickedspace_858',['GetClickedSpace',['../class_design_platform_1_1_modes_1_1_select_mode.html#a08a3c17b8471d96503518968a593a237',1,'DesignPlatform::Modes::SelectMode']]],
+  ['getcontrolpoints_859',['GetControlPoints',['../class_design_platform_1_1_core_1_1_face.html#ae780c43edb3cd3bf04c76604a73226b3',1,'DesignPlatform.Core.Face.GetControlPoints()'],['../class_design_platform_1_1_core_1_1_opening.html#ac01758ae224086487872eba919dbd925',1,'DesignPlatform.Core.Opening.GetControlPoints()'],['../class_design_platform_1_1_core_1_1_space.html#adabd58dec4e92e7792ae2cc5c0fe6c8d',1,'DesignPlatform.Core.Space.GetControlPoints()']]],
+  ['getfacenormals_860',['GetFaceNormals',['../class_design_platform_1_1_core_1_1_space.html#a775e44234d5528e7a61d4df4c1ebe7c1',1,'DesignPlatform::Core::Space']]],
+  ['getholevertices_861',['GetHoleVertices',['../class_design_platform_1_1_core_1_1_wall.html#a4b655c0c9201d1bf23a87920bafab87a',1,'DesignPlatform::Core::Wall']]],
+  ['getinterfaceatparameter_862',['GetInterfaceAtParameter',['../class_design_platform_1_1_core_1_1_face.html#afc4047ad8e61c12ac81526520a068111',1,'DesignPlatform::Core::Face']]],
+  ['getmoduleinitalizer_863',['GetModuleInitalizer',['../class_design_platform_1_1_utils_1_1_module_loader.html#a30544c06fc8f29b966f2ce44e8b0d919',1,'DesignPlatform::Utils::ModuleLoader']]],
+  ['getnakededgesofmesh_864',['GetNakedEdgesOfMesh',['../class_design_platform_1_1_utils_1_1_roof_utils.html#a1fb3440d593582b13328f49c4f8230ad',1,'DesignPlatform::Utils::RoofUtils']]],
+  ['getnearestgridpoint_865',['GetNearestGridpoint',['../class_design_platform_1_1_core_1_1_grid.html#a31d4942fb1a6b11bf9980a0cd73e8090',1,'DesignPlatform::Core::Grid']]],
+  ['getnearestsubgridpoint_866',['GetNearestSubGridpoint',['../class_design_platform_1_1_core_1_1_grid.html#a8cab3ed639da77b11632e2af648b2b46',1,'DesignPlatform::Core::Grid']]],
+  ['getpolygonmidpoints_867',['GetPolygonMidpoints',['../class_design_platform_1_1_core_1_1_space.html#af8d0bc4042dc495cef9f56c1f85bc034',1,'DesignPlatform::Core::Space']]],
+  ['getspacenodebyid_868',['GetSpaceNodeById',['../class_design_platform_1_1_database_1_1_graph_database.html#a111052bda0a45e5189505f63565422d5',1,'DesignPlatform::Database::GraphDatabase']]],
+  ['getspacesurfacevertices_869',['GetSpaceSurfaceVertices',['../class_design_platform_1_1_export_1_1_gbxml_converter.html#aae2f109889add9a018bb09b30929e07a',1,'DesignPlatform::Export::GbxmlConverter']]],
+  ['getspans_870',['GetSpans',['../class_structural_analysis_1_1_load_distributor.html#a1b85440d6d2bb3fb09c087419edf837b',1,'StructuralAnalysis::LoadDistributor']]],
+  ['gettaglocation_871',['GetTagLocation',['../class_design_platform_1_1_core_1_1_space.html#a006a4c81b380ed74664f03d5da7d60ed',1,'DesignPlatform::Core::Space']]],
+  ['getverticesasvector3_872',['GetVerticesAsVector3',['../class_design_platform_1_1_database_1_1_space_node.html#ac217798d88e1ae015a703e60e46102d2',1,'DesignPlatform::Database::SpaceNode']]],
+  ['givecollider_873',['GiveCollider',['../class_design_platform_1_1_utils_1_1_space_collider.html#a45c6a292cffafbca4c8f30c41871bd47',1,'DesignPlatform::Utils::SpaceCollider']]],
+  ['graphdatabase_874',['GraphDatabase',['../class_design_platform_1_1_database_1_1_graph_database.html#a767d71899a09a3711a58bc41b55381ef',1,'DesignPlatform::Database::GraphDatabase']]],
+  ['groupadjoininginterfaces_875',['GroupAdjoiningInterfaces',['../class_design_platform_1_1_core_1_1_building.html#ae51e7ce33e4baccea0074669c41820f3',1,'DesignPlatform::Core::Building']]]
+];
