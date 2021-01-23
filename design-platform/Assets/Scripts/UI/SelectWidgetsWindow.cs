@@ -6,21 +6,26 @@ using UnityEngine.UI;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// Contains functions for controlling the 'Select Widgets' window
     /// </summary>
     public class SelectWidgetsWindow : MonoBehaviour {
 
         GameObject rowTemplate = null;
         Dictionary<Widget, bool> widgets = new Dictionary<Widget, bool>();
         List<GameObject> widgetToggles = new List<GameObject>();
-
+        /// <summary>
+        /// 
+        /// </summary>
         void Start() {
             rowTemplate = gameObject.transform.Find("rowTemplate").gameObject;
             gameObject.SetActive(false);
 
         }
 
-        // Sets up list of widgets and toggles them all
+        
+        /// <summary>
+        /// Sets up list of widgets and toggles them all
+        /// </summary>
         void OnEnable() {
             if (rowTemplate == null) {
                 rowTemplate = gameObject.transform.Find("rowTemplate").gameObject;
@@ -50,6 +55,10 @@ namespace DesignPlatform.UI {
 
         }
 
+        /// <summary>
+        /// Function that enables the toggling Widgets (switching them on/off)
+        /// </summary>
+        /// <param name="toggle"></param>
         public void ToggleWidget(Toggle toggle) {
 
             Widget widget = widgets.First(w => w.Key.Name == toggle.gameObject.name).Key;

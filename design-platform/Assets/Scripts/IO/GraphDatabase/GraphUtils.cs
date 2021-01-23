@@ -7,6 +7,9 @@ using UnityEngine;
 
 
 namespace DesignPlatform.Database {
+    /// <summary>
+    /// Contains helper functions for preparing data for neo4j/JSON format.
+    /// </summary>
     public static class GraphUtils {
 
         /// <summary>

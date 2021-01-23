@@ -6,7 +6,7 @@ using UnityEngine;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// Schedule widget for showing quantities of spaces
     /// </summary>
     public class SpaceScheduleWidget : Widget {
         // Names of used GameObjects in prefab
@@ -77,6 +77,9 @@ namespace DesignPlatform.UI {
             contentTemplate.SetActive(false);
         }
 
+        /// <summary>
+        /// Deletes all rows in widget
+        /// </summary>
         private void DeleteContentRows() {
             foreach (GameObject row in contentRows) {
                 GameObject.Destroy(row);

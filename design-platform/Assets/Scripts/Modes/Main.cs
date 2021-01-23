@@ -14,7 +14,7 @@ namespace DesignPlatform.Modes {
         /// <summary>The single instance that exists of this singleton class.</summary>
         private static Main instance;
 
-        /// <summary></summary>
+        /// <summary>The mode currently running.</summary>
         private Mode currentMode;
 
         /// <summary>The single instance that exists of this singleton class.</summary>

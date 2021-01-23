@@ -7,9 +7,13 @@ using DesignPlatform.Database;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// Class for handling line (wall) visibility on 2D Canvas
     /// </summary>
     public class ToggleLineVisibility : MonoBehaviour {
+        /// <summary>
+        /// Toggles line (wall) visibility on 2D Canvas
+        /// </summary>
+        /// <param name="showLines"></param>
         public void ToggleVisibility(bool showLines) {
 
 

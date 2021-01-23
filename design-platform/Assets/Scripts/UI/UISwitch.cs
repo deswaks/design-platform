@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// A UI Switch that can be toggled in the user interface.
     /// </summary>
     public class UISwitch : MonoBehaviour {
         // Events

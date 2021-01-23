@@ -8,7 +8,7 @@ using UnityEngine;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// A circle diagram widget
     /// </summary>
     public class Widget_CircleDiagram : Widget {
 

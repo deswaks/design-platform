@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// Class containing functions for handling player movement in 3D Mode
     /// </summary>
     public class PlayerMovement : MonoBehaviour {
 
@@ -29,7 +29,10 @@ namespace DesignPlatform.UI {
             Physics.IgnoreLayerCollision(12, 15);
             Physics.IgnoreLayerCollision(12, 8);
         }
-        // Update is called once per frame
+
+        /// <summary>
+        /// Update is called once per frame
+        /// </summary>
         void Update() {
             //Physics.IgnoreLayerCollision(controller.gameObject.layer,);
 

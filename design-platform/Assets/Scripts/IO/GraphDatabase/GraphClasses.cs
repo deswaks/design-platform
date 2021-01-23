@@ -12,7 +12,7 @@ using UnityEngine;
 namespace DesignPlatform.Database {
 
     /// <summary>
-    /// 
+    /// A representation of the Space class made for data storage.
     /// </summary>
     public class SpaceNode {
         public int id { get; set; }
@@ -35,7 +35,7 @@ namespace DesignPlatform.Database {
     }
 
     /// <summary>
-    /// 
+    /// A representation of the Opening class made for data storage.
     /// </summary>
     public class OpeningNode {
         public OpeningFunction openingShape { get; set; } // Door or window
@@ -46,7 +46,7 @@ namespace DesignPlatform.Database {
     }
 
     /// <summary>
-    /// 
+    /// A representation of the WallElement class made for data storage.
     /// </summary>
     public class WallElementNode {
         public string[] vertices { get; set; }
@@ -57,7 +57,7 @@ namespace DesignPlatform.Database {
 
 
     /// <summary>
-    /// 
+    /// Relationship describing adjacency between two spaces
     /// </summary>
     [CypherLabel(Name = LabelName)]
     public class AdjacentSpaceRelationship : BaseRelationship {
@@ -68,7 +68,7 @@ namespace DesignPlatform.Database {
     }
 
     /// <summary>
-    /// 
+    /// Relationship describing a space having an interface
     /// </summary>
     [CypherLabel(Name = LabelName)]
     public class InterfaceSpaceRelationship : BaseRelationship {

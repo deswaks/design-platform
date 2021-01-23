@@ -20,38 +20,17 @@ using DesignPlatform.Core;
 
 
 namespace DesignPlatform.Database {
-    public class GraphProgram {
-
-        public static void WorkIt() {
-            var db = new GraphDatabase();
-            // Sets up the data model, defining how the C# classes should be handled as Nodes in the graph
-            NeoConfig.ConfigureDataModel();
-
-            //db.DeleteAllNodesWithLabel("Space");
-
-            //db.PushAllUnitySpacesToGraph();
-
-
-            //db.GetAllGraphEntities();
-
-            LocalDatabase.CreateAllUnitySpacesFromJson(@"C:\Users\Administrator\Desktop\SpaceNodes.json");
-            // LOAD AND BUILD ALL ROOMS FROM GRAPH
-            //foreach(int id in db.GetAllSpaceIdsInGraph()) {
-            //    SpaceNode SpaceNode = db.GetSpaceById(id);
-            //GraphUtils.CreateSpaceFromGraph(SpaceNode);
-            //}
-
-
-            Debug.Log("Graph stuff done!");
-
-        }
-    }
-
+    /// <summary>
+    /// Contains functions for reading/writing from/to graph database.
+    /// </summary>
     public class GraphDatabase {
 
         private static GraphDatabase instance;
         private readonly BoltGraphClient _graphClient;
 
+        /// <summary>
+        /// Main GraphDatabase instance. All access to the database should use this single instance.
+        /// </summary>
         public static GraphDatabase Instance {
             // Use the ?? operator, to return 'instance' if 'instance' does not equal null
             // otherwise we assign instance to a new component and return that
@@ -73,7 +52,9 @@ namespace DesignPlatform.Database {
 
         }
 
-
+        /// <summary>
+        /// Finds Spaces in graph and creates corresponding spaces in Unity
+        /// </summary>
         public void LoadAndBuildUnitySpacesFromGraph() {
             // LOAD AND BUILD ALL ROOMS FROM GRAPH
             foreach (int id in GetAllSpaceIdsInGraph()) {
@@ -94,28 +75,12 @@ namespace DesignPlatform.Database {
             foreach (SpaceNode spaceNode in spaceNodes) {
                 CreateOrMergeSpaceNode(spaceNode);
             }
-
-            #region oldCode
-            // TANKEN MÅ VÆRE FØRST AT LOADE FRA JSON TIL ROOMNODES OG SÅ DEREFTER SKRIVE ROOMNODES TIL GRAF
-
-            //CALL apoc.load.json('complete-db.json') YIELD value
-            //UNWIND value.items AS item
-            //CREATE(i: Item(name: item.name, id: item.id)
-            //_graphClient.Cypher
-            //    .Call("apoc.load.json(\"file:///C:/Users/Administrator/Desktop/FromUnity.json \")")
-            //    .Yield("value AS space")
-            //    .Merge("(p:Space {name: value.name, id: value.id, vertices: value.vertices, shape: value.shape, type: value.type})")
-            //    .ExecuteWithoutResults();
-
-            ////CALL apoc.load.json("file:///C:/Users/Administrator/Desktop/FromUnity.json")
-            ////YIELD value
-            ////MERGE (p:Space {name: value.name, id: value.id, vertices: value.vertices, shape: value.shape, type: value.type})
-
-            //_graphClient.Cypher
-            //    .MergeEntity(space, "space")
-            //    .ExecuteWithoutResults();
-            #endregion
         }
+
+        /// <summary>
+        /// Retrieves a list of all Space nodes in graph.
+        /// </summary>
+        /// <returns>A list of all Space nodes in graph.</returns>
         public List<SpaceNode> GetAllSpaceNodes() {
 
             List<SpaceNode> SpaceNodes = _graphClient.Cypher
@@ -126,44 +91,6 @@ namespace DesignPlatform.Database {
 
             return SpaceNodes;
 
-            #region old_code
-            ////////////////// VIRKER SEMI //////////////////////////////////////
-
-            // DENNE METODE VIRKER
-            //var query = _graphClient.Cypher
-            //        .Match("(p:Space)")
-            //        .Return(p => new { 
-            //            ID = p.As<Space>().id,
-            //            V = p.As<Space>().vertices 
-            //        });
-
-            //var results = query.Results.ToList();
-
-            // DENNE METODE VIRKER OG RETURNERER NYE RUM MED EGENSKABER FRA GRAF
-            //var query2 = _graphClient.Cypher
-            //    .Match("(p:Space)")
-            //    .Return(p => 
-            //    new Space { 
-            //        id = p.As<Space>().id,
-            //        name = p.As<Space>().name,
-            //        type = p.As<Space>().type,
-            //        area = p.As<Space>().area,
-            //        vertices = p.As<Space>().vertices,
-
-            //});
-            //var results2 = query2.Results.ToList();
-
-            //foreach (var result in results)
-            //{
-            //    result.N.Properties.Keys.ToList().ForEach(k => Console.WriteLine(k));
-            //    //nNodes.Add(JsonConvert.DeserializeObject(result.N.Properties) );
-            //}
-
-            //.Match("( space:Space)")
-            //.Return(space => space.As<Space>())
-            //.Results
-            //.ToList();
-            #endregion
         }
 
         /// <summary>
@@ -255,32 +182,5 @@ namespace DesignPlatform.Database {
                 .DetachDelete("r")
                 .ExecuteWithoutResultsAsync();
         }
-
-        //public void QueryPersonStuff() {
-        //    //var agent = SampleDataFactory.GetWellKnownPerson(7);
-
-        //    var niklas = new Person {
-        //        Id = 25,
-        //        Name = "Anders Bomannowich",
-        //        Sex = Gender.Male,
-        //        HomeAddress = new Address { Street = "Rådsmandsgade 15", Suburb = "Nørrebro" },
-        //        WorkAddress = new Address { Street = "Bredgade 25X", Suburb = "Lyngby" },
-        //        IsOperative = true,
-        //        SerialNumber = 123456,
-        //        SpendingAuthorisation = 100.23m,
-        //        DateCreated = DateTimeOffset.Parse("2015-07-11T08:00:00+10:00")
-        //    };
-
-        //    _graphClient.Cypher
-        //        .CreateEntity(niklas, "niggus")
-        //        .CreateEntity(niklas.HomeAddress, "homeAddress")
-        //        .CreateEntity(niklas.WorkAddress, "workAddress")
-        //        .CreateRelationship(new HomeAddressRelationship("niggus", "homeAddress"))
-        //        .CreateRelationship(new WorkAddressRelationship("niggus", "workAddress"))
-        //        .ExecuteWithoutResults();
-
-        //    Console.WriteLine("Done query stuff!");
-        //}
-
     }
 }

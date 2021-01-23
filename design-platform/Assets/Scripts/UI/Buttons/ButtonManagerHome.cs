@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// Contains functions that are called when pressing buttons in the Home menu tab
     /// </summary>
     public class ButtonManagerHome : MonoBehaviour {
         public void SaveLocal() {

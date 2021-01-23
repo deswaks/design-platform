@@ -9,7 +9,7 @@ using UnityEngine;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// Schedule widget for showing quantities of WallElements
     /// </summary>
     public class WallElementScheduleWidget : Widget {
         

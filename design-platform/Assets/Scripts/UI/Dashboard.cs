@@ -19,6 +19,9 @@ namespace DesignPlatform.UI {
 
         private List<GameObject> widgetRows = new List<GameObject>();
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Dashboard() {
             DashboardGameObject = GameObject.Find("DashboardWindow");
             WidgetArea = DashboardGameObject.transform.Find("ScrollArea").Find("WidgetArea").gameObject;
@@ -28,6 +31,9 @@ namespace DesignPlatform.UI {
             get { return instance ?? (instance = new Dashboard()); }
         }
 
+        /// <summary>
+        /// Inserts all widgets from internal list onto the Dashboard
+        /// </summary>
         public void InsertWidgets() {
             ClearAllWidgets();
             Building.Instance.RebuildPOVElements();
@@ -72,10 +78,17 @@ namespace DesignPlatform.UI {
             TemplateRow.SetActive(false);
         }
 
+        /// <summary>
+        /// Adds widget to internal list of available widgets
+        /// </summary>
+        /// <param name="widget">Widget to add</param>
         public void AddWidgetToList(Widget widget) {
             widgets.Add(widget, true);
         }
 
+        /// <summary>
+        /// Updates content of all widgets on the dashboard
+        /// </summary>
         public void UpdateCurrentWidgets() {
             foreach (var widget in widgets) {
                 if (!widget.Value) {
@@ -85,6 +98,9 @@ namespace DesignPlatform.UI {
             }
         }
 
+        /// <summary>
+        /// Clears all widgets from dashbord
+        /// </summary>
         private void ClearAllWidgets() {
             foreach (GameObject row in widgetRows) {
                 Object.Destroy(row);
@@ -92,6 +108,10 @@ namespace DesignPlatform.UI {
             widgetRows = new List<GameObject>();
         }
 
+        /// <summary>
+        /// Refreshes all widgets
+        /// </summary>
+        /// <param name="widgets"></param>
         internal void SetAllWidgetsAndToggles(Dictionary<Widget, bool> widgets) {
             this.widgets = widgets;
 

@@ -8,6 +8,9 @@ using DesignPlatform.UI;
 using DesignPlatform.Geometry;
 
 namespace DesignPlatform.Database {
+    /// <summary>
+    /// Contains functions for reading/writing from/to local database (JSON).
+    /// </summary>
     public class LocalDatabase {
 
         /// <summary>
@@ -125,42 +128,11 @@ namespace DesignPlatform.Database {
             GameObject notificationObject = NotificationHandler.GenerateNotification(notificationText, notificationTitle, newLocation, notificationParent, 5);
 
 
-            #region old_codie
-            ////// Save the JSON to a file.
-            //string path = @"C:\Users\Administrator\Desktop\Neo4JExport.json";
-            //if (File.Exists(path)) File.Delete(path);
-            ////File.WriteAllText(path, sJsonData);
-
-            //string query = "CALL apoc.export.json.all(file::STRING ?, config = { } ::MAP ?) :: (file::STRING ?, " +
-            //    "source::STRING ?, format::STRING ?, nodes::INTEGER ?, relationships::INTEGER ?, " +
-            //    "properties::INTEGER ?, time::INTEGER ?, rows::INTEGER ?, batchSize::INTEGER ?, batches::INTEGER ?, " +
-            //    "done::BOOLEAN ?, data::STRING ?)";
-
-            //string query2 = "apoc.export.json.all(null,{stream:true,useTypes:true}) " +
-            //"YIELD file, nodes, relationships, properties, data " +
-            //"RETURN file, nodes, relationships, properties, data";
-
-            //var query3 = _graphClient.Cypher
-            //    .Call("apoc.export.json.all( \"Neo4JExport.json\" ,{ stream: true,useTypes: true})")
-            //    .Yield("file, nodes, relationships, properties, data")
-            //    //.Return( (file, nodes, relationships, properties, data) => new {F = file.As<string>(), N = nodes.As<string>(), R = relationships.As<string>(), P = properties.As<string>(), D = data.As<string>() })
-            //    .Return(data => data.As<string>() )
-            //    .Results;
-            ////var SpaceNodes = _graphClient.Cypher
-            //// file = null      nodes = antal nodes som int     relationships = antal som int       properties = antal som int
-
-            ////    .Match("(space:Space)")
-            ////    .Return(space => space.As<SpaceNode>())
-            ////    .Results;
-            //foreach(string s in query3) {
-            //    Debug.Log(s);
-            //}
-            #endregion
         }
 
 
         /// <summary>
-        /// 
+        /// Saves all wall elements as JSON file.
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
         public static void SaveAllWallElementsToJson(string jsonPath = null)
@@ -203,7 +175,7 @@ namespace DesignPlatform.Database {
         /// Loads SpaceNodes specified in the given json file.
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
-        /// <returns></returns>
+        /// <returns>List of SpaceNodes in json file.</returns>
         public static IEnumerable<SpaceNode> LoadSpaceNodesFromJson(string jsonPath = null) {
             jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath + "SpaceNodes.json";
 
@@ -218,7 +190,7 @@ namespace DesignPlatform.Database {
         /// Loads SpaceNodes specified in the given json file.
         /// </summary>
         /// <param name="savePath">Full path of json file, with backslashes.</param>
-        /// <returns></returns>
+        /// <returns>SpaceNodes specified in the given json file.</returns>
         public static IEnumerable<OpeningNode> LoadOpeningNodesFromJson(string jsonPath = null) {
             jsonPath = jsonPath != null ? jsonPath : Settings.SaveFolderPath;
 

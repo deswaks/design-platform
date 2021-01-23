@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 namespace DesignPlatform.UI {
 
     /// <summary>
-    /// 
+    /// Contains functions for manipulating the roof in the Roof UI menu
     /// </summary>
     public class ButtonManagerRoof : MonoBehaviour {
 
@@ -22,7 +22,10 @@ namespace DesignPlatform.UI {
             pitchSlider = sliders.First(s => s.gameObject.name.ToLower().Contains("pitch"));
             overhangSlider = sliders.First(s => s.gameObject.name.ToLower().Contains("overhang"));
         }
-
+        /// <summary>
+        /// Changes current roof type (flat/hipped/gabled)
+        /// </summary>
+        /// <param name="i"></param>
         public void ChangeRoofType(int i) {
             GameObject current = EventSystem.current.currentSelectedGameObject;
 
@@ -37,9 +40,16 @@ namespace DesignPlatform.UI {
 
             Core.Settings.RoofType = (ProceduralToolkit.Buildings.RoofType)i;
         }
+        /// <summary>
+        /// Sets roof pitch according to current slider value.
+        /// </summary>
         public void SetRoofPitch() {
             Core.Settings.RoofPitch = pitchSlider.value;
         }
+
+        /// <summary>
+        /// Sets roof overhang according to current slider value.
+        /// </summary>
         public void SetRoofOverhang() {
             Core.Settings.RoofOverhang = overhangSlider.value / 1000;
         }
