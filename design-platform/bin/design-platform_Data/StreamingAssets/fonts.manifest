@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 570977118
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 703099f684b2b4cc95b00967b236b0d1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 789385c49fb2dcba6c71ec3d3d78d149
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Plugins/TextMesh Pro/Fonts/OpenSans-Light_Asset.asset
+Dependencies: []

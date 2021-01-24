@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 292779467
+CRC: 732127313
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ef4b4b8ded9ba4e13218e7d4a7861055
+    Hash: a8aae25faf399e4150c2e8c46f898d3f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 21c99c86a43ad817b2cb7f65458ae090
@@ -16,12 +16,20 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 Assets:
-- Assets/Materials/wall2D.mat
-- Assets/Materials/RoomDoubleroom.mat
-- Assets/Materials/RoomKitchen.mat
-- Assets/Materials/RoomLivingroom.mat
-- Assets/Materials/RoomBathroom.mat
-- Assets/Materials/RoomHighlight.mat
-- Assets/Materials/RoomSingleRoom.mat
-- Assets/Materials/RoomDefault.mat
+- Assets/Materials/plan_space_wall.mat
+- Assets/Materials/plan_space_doubleroom.mat
+- Assets/Materials/slabMaterial.mat
+- Assets/Materials/OpeningWindow.mat
+- Assets/Materials/CLT/CLT.mat
+- Assets/Materials/plan_space_kitchen.mat
+- Assets/Materials/plan_space_livingroom.mat
+- Assets/Materials/wallMaterial.mat
+- Assets/Materials/openingMaterial.mat
+- Assets/Materials/plan_space_corridor.mat
+- Assets/Materials/plan_opening.mat
+- Assets/Materials/plan_space_bathroom.mat
+- Assets/Materials/plan_space_highlight.mat
+- Assets/Materials/plan_space_singleRoom.mat
+- Assets/Materials/plan_space_default.mat
+- Assets/Materials/OpeningDoor.mat
 Dependencies: []

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 563778685
+CRC: 3704526086
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4d6e06912fde542fc9fd27c97aefea65
+    Hash: 2a86c8a0653e8b7bbc21d83d1b9db1ef
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0186eb77975f482e8da5abb43a221c8e
+    Hash: 15c47687a5ec8ecde98c803ba1a5c3c9
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -27,10 +27,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
-- Class: 82
-  Script: {instanceID: 0}
-- Class: 83
-  Script: {instanceID: 0}
 - Class: 91
   Script: {instanceID: 0}
 - Class: 95
@@ -40,13 +36,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: c3e35db065e902e4aa0a14297e3da29a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: bb977b126bc1b4f15813dcf9da9bb600, type: 3}
 - Class: 114
@@ -57,6 +51,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 46016d1409e28c443a1dfd5a962572f7, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 24a437d4abd5d624d85806794441c265, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 041111a7850457c409255485a769029a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
@@ -82,13 +78,14 @@ ClassTypes:
 - Class: 225
   Script: {instanceID: 0}
 Assets:
-- Assets/Prefabs/RoomPrefab.prefab
+- Assets/Prefabs/Widgets/Widget_WallElementSchedule.prefab
+- Assets/Prefabs/Widgets/Widget_SpaceSchedule.prefab
 - Assets/Prefabs/Widgets/Widget_CircleDiagram.prefab
-- Assets/Prefabs/Widgets/Widget_RoomSchedule.prefab
-- Assets/Prefabs/edit_handle.prefab
+- Assets/Prefabs/ExtrudeHandle.prefab
 - Assets/Prefabs/WallPrefab.prefab
-- Assets/Prefabs/move_handle.prefab
+- Assets/Prefabs/OpeningPrefab.prefab
+- Assets/Prefabs/MoveHandle.prefab
+- Assets/Prefabs/Widgets/Widget_OpeningsSchedule.prefab
 - Assets/Prefabs/SlabPrefab.prefab
 - Assets/Prefabs/notification.prefab
-Dependencies:
-- C:/Users/Sebastian/git/design-platform/design-platform/Assets/StreamingAssets/materials
+Dependencies: []
