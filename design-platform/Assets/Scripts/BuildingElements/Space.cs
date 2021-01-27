@@ -227,7 +227,7 @@ namespace DesignPlatform.Core {
                 // Set text
                 tag.font = AssetUtil.LoadAsset<TMP_FontAsset>("fonts", "OpenSans-Light_Asset");
                 tag.color = Color.black;
-                tag.fontSize = 5.0f;
+                tag.fontSize = 3.0f;
                 tag.alignment = TextAlignmentOptions.Center;
                 tag.text = Settings.SpaceTypeNames[Function];
                 tag.sortingOrder = 300;

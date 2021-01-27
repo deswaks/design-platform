@@ -25,6 +25,7 @@ namespace DesignPlatform.Database {
             List<Vector3> controlPoints = GraphUtils.StringListToVector3List(spaceNode.vertices);
             newSpace.SetControlPoints(controlPoints);
             newSpace.Function = spaceNode.type;
+            newSpace.UpdateRender2D();
         }
 
         /// <summary>
