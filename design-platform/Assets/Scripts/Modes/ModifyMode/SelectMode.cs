@@ -44,31 +44,34 @@ namespace DesignPlatform.Modes {
                 if (Selection != null) { Selection.Delete(); Deselect(); }
             }
 
-            if (Input.GetKeyDown(KeyCode.E)) {
-                if (Selection != null) SetMode(ExtrudeMode.Instance);
-            }
+            if (Settings.allowHotkeys) {
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    if (Selection != null) SetMode(ExtrudeMode.Instance);
+                }
 
-            if (Input.GetKeyDown(KeyCode.M)) {
-                if (Selection != null) SetMode(MoveMode.Instance);
-            }
+                if (Input.GetKeyDown(KeyCode.M)) {
+                    if (Selection != null) SetMode(MoveMode.Instance);
+                }
 
-            if (Input.GetKeyDown(KeyCode.R)) {
-                if (Selection != null) Selection.Rotate();
-            }
+                if (Input.GetKeyDown(KeyCode.R)) {
+                    if (Selection != null) Selection.Rotate();
+                }
 
-            // Check if any number key was pressed
-            if (Input.GetKeyDown(KeyCode.Alpha0)) {
-                if (Selection != null) Selection.Function = SpaceFunction.DEFAULT;
-                Selection.UpdateRender2D();
-            }
-            for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha9; i++) {
-                if (Input.GetKeyDown((KeyCode)i)) {
-                    if (Selection != null) {
-                        Selection.Function = (SpaceFunction) i - (int)KeyCode.Alpha1 + 10;
-                        Selection.UpdateRender2D();
+                // Check if any number key was pressed
+                if (Input.GetKeyDown(KeyCode.Alpha0)) {
+                    if (Selection != null) Selection.Function = SpaceFunction.DEFAULT;
+                    Selection.UpdateRender2D();
+                }
+                for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha9; i++) {
+                    if (Input.GetKeyDown((KeyCode)i)) {
+                        if (Selection != null) {
+                            Selection.Function = (SpaceFunction)i - (int)KeyCode.Alpha1 + 10;
+                            Selection.UpdateRender2D();
+                        }
                     }
                 }
             }
+            
 
             if (currentMode != null) {
                 currentMode.Tick();
@@ -77,11 +80,13 @@ namespace DesignPlatform.Modes {
 
         /// <summary>Defines the actions to take when changing into this mode.</summary>
         public override void OnModeResume() {
+            Settings.allowHotkeys = true;
             SetMode(null);
         }
 
         /// <summary>Defines the actions to take when changing out of this mode.</summary>
         public override void OnModePause() {
+            Settings.allowHotkeys = false;
             Deselect();
             SetMode(null);
         }

@@ -13,6 +13,9 @@ namespace DesignPlatform.Modes {
         // POV mode settings
         public static readonly float mouseSensitivity = 50f;
 
+        // Setting to allow or lock the use of hotkeys
+        public static bool allowHotkeys = false;
+
     }
 
 }

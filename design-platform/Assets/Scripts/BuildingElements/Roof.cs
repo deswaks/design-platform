@@ -57,7 +57,7 @@ namespace DesignPlatform.Core {
             Vector3 location; 
             Vector3 rotationVector; 
             ControlPoints = VectorUtils.TransformPointsToXZ(roofFaceVertices, out location, out rotationVector);
-            
+
             gameObject.layer = 13; // Wall layer
             Material roofMaterial = AssetUtil.LoadAsset<Material>("materials", "CLT");
 
@@ -65,6 +65,8 @@ namespace DesignPlatform.Core {
             gameObject.AddComponent<MeshCollider>();
             ProBuilderMesh mesh = gameObject.AddComponent<ProBuilderMesh>();
 
+            //Debug.Log(Normal.ToString());
+            if (Normal.y < 0.0f) Thickness = -Thickness;
             mesh.CreateShapeFromPolygon(ControlPoints, -Thickness, false);
             mesh.GetComponent<MeshRenderer>().material = roofMaterial;
 
