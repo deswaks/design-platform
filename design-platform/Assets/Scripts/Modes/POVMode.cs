@@ -70,7 +70,8 @@ namespace DesignPlatform.Modes {
             player = GameObject.Find("First person player");
             PlanCamera = GameObject.Find("Plan Camera").GetComponent<Camera>();
             POVCamera = player.GetComponentInChildren<Camera>(true);
-
+            UnityEngine.Cursor.visible = false;
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             UI.Settings.ShowWallLines = false;
             UI.Settings.ShowOpeningLines = false;
 
@@ -80,7 +81,7 @@ namespace DesignPlatform.Modes {
             foreach (Opening opening in Building.Instance.Openings) {
                 opening.UpdateRender2D();
             }
-
+            
             POVCamera.gameObject.SetActive(true);
             PlanCamera.gameObject.SetActive(false);
 
@@ -107,6 +108,9 @@ namespace DesignPlatform.Modes {
 
             UI.Settings.ShowWallLines = true;
             UI.Settings.ShowOpeningLines = true;
+            UnityEngine.Cursor.visible = true;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+
 
             foreach (Core.Space room in Building.Instance.Spaces) {
                 room.UpdateRender2D();
