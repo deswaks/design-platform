@@ -51,6 +51,11 @@ namespace DesignPlatform.Core {
             // Moves vertical roof faces (gables) in towards the building, if there is overhang
             if (Mathf.Abs(Vector3.Dot(Vector3.up, Normal)) < 0.01) {
                 roofFaceVertices = roofFaceVertices.Select(v => v + -Overhang * Normal).ToList();
+                List<Vector3> orderedVertices = roofFaceVertices.OrderBy(v => v.y).ToList();
+                orderedVertices[0] += (orderedVertices[1] - orderedVertices[0]).normalized * Thickness / Mathf.Sin(Pitch * Mathf.PI / 180);
+                orderedVertices[1] += (orderedVertices[0] - orderedVertices[1]).normalized * Thickness / Mathf.Sin(Pitch*Mathf.PI/180);
+                orderedVertices[2] -= Vector3.up * Thickness / Mathf.Sin(90-Pitch * Mathf.PI / 180);
+                roofFaceVertices = orderedVertices;
             }
 
             // Transforms points to origin and in XZ plane
