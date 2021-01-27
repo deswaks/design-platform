@@ -48,15 +48,23 @@ namespace DesignPlatform.Database {
         /// </summary>
         /// <param name="points"></param>
         /// <returns>A single string signifying the point</returns>
-        public static string Vector3ToString(Vector3 v) {
+        public static string Vector3ToString(Vector3 v, int roundDigits=0) {
 
+            //string point =
+            //   "(" +
+            //   ((int)Math.Round(v.x, roundDigits)).ToString().Replace(",", ".") +
+            //   ";" +
+            //   ((int)Math.Round(v.y, roundDigits)).ToString().Replace(",", ".") +
+            //   ";" +
+            //   ((int)Math.Round(v.z, roundDigits)).ToString().Replace(",", ".") +
+            //   ")";
             string point =
                "(" +
-               ((int)Math.Round(v.x)).ToString().Replace(",", ".") +
+               (Math.Round(v.x, roundDigits)).ToString().Replace(",", ".") +
                ";" +
-               ((int)Math.Round(v.y)).ToString().Replace(",", ".") +
+               (Math.Round(v.y, roundDigits)).ToString().Replace(",", ".") +
                ";" +
-               ((int)Math.Round(v.z)).ToString().Replace(",", ".") +
+               (Math.Round(v.z, roundDigits)).ToString().Replace(",", ".") +
                ")";
 
             return point;

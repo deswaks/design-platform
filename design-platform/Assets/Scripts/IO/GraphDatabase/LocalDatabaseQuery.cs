@@ -238,14 +238,17 @@ namespace DesignPlatform.Database {
             List<OpeningNode> openingNodes = new List<OpeningNode>();
 
             foreach (Opening opening in openings) {
-                OpeningNode spaceNode = new OpeningNode {
+                Debug.Log("Loc:" + opening.LocationPoint);
+                OpeningNode openingNode = new OpeningNode {
                     openingShape = opening.Function,
                     height = opening.Height,
                     width = opening.Width,
-                    position = GraphUtils.Vector3ToString(opening.LocationPoint),
+                    position = GraphUtils.Vector3ToString(opening.LocationPoint,2),
                     rotation = GraphUtils.Vector3ToString(opening.transform.rotation.eulerAngles),
                 };
-                openingNodes.Add(spaceNode);
+                Debug.Log("saved Loc:" + openingNode.position);
+
+                openingNodes.Add(openingNode);
             }
             return openingNodes;
         }
