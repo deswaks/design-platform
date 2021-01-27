@@ -97,7 +97,7 @@ namespace DesignPlatform.Core {
         }
 
         /// <summary>
-        /// Removes all interfaces of the whole building.
+        /// Removes all interface objects of the whole building.
         /// </summary>
         public void DeleteAllInterfaces() {
             foreach (Interface interFace in Interfaces) {

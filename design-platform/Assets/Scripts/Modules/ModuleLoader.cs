@@ -10,7 +10,8 @@ namespace DesignPlatform.Utils {
     /// Contains static functions for finding and loading external extensions to the design platform.
     /// </summary>
     public static class ModuleLoader {
-        public static string ModuleFolderPath = "../modules";
+        public static string ModuleFolderPath = "./modules";
+
 
         /// <summary>
         /// Load an external module in the form of a .dll file
@@ -19,6 +20,7 @@ namespace DesignPlatform.Utils {
         public static void LoadModules(string moduleFolderPath = null) {
             // Use default path if none is supplied
             if (moduleFolderPath == null) moduleFolderPath = ModuleFolderPath;
+            Directory.CreateDirectory(moduleFolderPath);
 
             // Go through all modules and load them
             foreach (string modulePath in FindModules(moduleFolderPath)) {

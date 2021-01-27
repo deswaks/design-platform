@@ -63,34 +63,36 @@ namespace DesignPlatform.Modes {
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.R)) {
-                previewSpace.Rotate(); //remember to tell this to the user when implementing tooltips
-            }
+            if (Settings.allowHotkeys) {
+                if (Input.GetKeyDown(KeyCode.R)) {
+                    previewSpace.Rotate(); //remember to tell this to the user when implementing tooltips
+                }
 
-            if (Input.GetKeyDown(KeyCode.L)) {
-                SelectedShape = SpaceShape.LSHAPE;
-            }
+                if (Input.GetKeyDown(KeyCode.L)) {
+                    SelectedShape = SpaceShape.LSHAPE;
+                }
 
-            if (Input.GetKeyDown(KeyCode.U)) {
-                SelectedShape = SpaceShape.USHAPE;
-            }
+                if (Input.GetKeyDown(KeyCode.U)) {
+                    SelectedShape = SpaceShape.USHAPE;
+                }
 
-            if (Input.GetKeyDown(KeyCode.S)) {
-                SelectedShape = SpaceShape.SSHAPE;
-            }
+                if (Input.GetKeyDown(KeyCode.S)) {
+                    SelectedShape = SpaceShape.SSHAPE;
+                }
 
-            if (Input.GetKeyDown(KeyCode.T)) {
-                SelectedShape = SpaceShape.TSHAPE;
-            }
+                if (Input.GetKeyDown(KeyCode.T)) {
+                    SelectedShape = SpaceShape.TSHAPE;
+                }
 
-            if (Input.GetKeyDown(KeyCode.D)) {
-                OpeningMode.Instance.SelectedFunction = OpeningFunction.DOOR;
-                Main.Instance.SetMode(OpeningMode.Instance);
-            }
+                if (Input.GetKeyDown(KeyCode.D)) {
+                    OpeningMode.Instance.SelectedFunction = OpeningFunction.DOOR;
+                    Main.Instance.SetMode(OpeningMode.Instance);
+                }
 
-            if (Input.GetKeyDown(KeyCode.W)) {
-                OpeningMode.Instance.SelectedFunction = OpeningFunction.WINDOW;
-                Main.Instance.SetMode(OpeningMode.Instance);
+                if (Input.GetKeyDown(KeyCode.W)) {
+                    OpeningMode.Instance.SelectedFunction = OpeningFunction.WINDOW;
+                    Main.Instance.SetMode(OpeningMode.Instance);
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -104,6 +106,7 @@ namespace DesignPlatform.Modes {
         /// Defines the actions to take when changing into this mode.
         /// </summary>
         public override void OnModeResume() {
+            Settings.allowHotkeys = true;
             if (previewSpace == null) {
                 previewSpace = Building.Instance.BuildSpace(buildShape: SelectedShape, preview: true);
             }
@@ -113,6 +116,7 @@ namespace DesignPlatform.Modes {
         /// Defines the actions to take when changing out of this mode.
         /// </summary>
         public override void OnModePause() {
+            Settings.allowHotkeys = false;
             if (previewSpace != null) previewSpace.Delete();
             previewSpace = null;
         }
