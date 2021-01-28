@@ -69,5 +69,18 @@ namespace DesignPlatform.Core {
             BuildAllSlabs();
         }
 
+        /// <summary>
+        /// Destroys and all elements with a 3D representation (visible in POV mode).
+        /// </summary>
+        public void DeleteEverything() {
+            // Delete preexisting	
+            DeleteAllWalls();
+            DeleteAllSlabs();
+            DeleteAllInterfaces();
+            DeleteAllCLTElements();
+            DeleteAllRoofElements();
+            DeleteAllSpaces();
+        }
+
     }
 }

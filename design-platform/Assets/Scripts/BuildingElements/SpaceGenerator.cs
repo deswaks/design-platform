@@ -46,6 +46,18 @@ namespace DesignPlatform.Core {
             if (Spaces.Contains(space)) { Spaces.Remove(space); }
         }
 
+        /// <summary>
+        /// Removes all space objects of the whole building.
+        /// </summary>
+        public void DeleteAllSpaces() {
+            int amount = Spaces.Count;
+            if (amount > 0) {
+                for (int i = 0; i < amount; i++) {
+                    Spaces[0].Delete();
+                }
+            }
+        }
+
 
     }
 }

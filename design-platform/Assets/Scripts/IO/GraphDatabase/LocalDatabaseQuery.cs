@@ -25,6 +25,7 @@ namespace DesignPlatform.Database {
             List<Vector3> controlPoints = GraphUtils.StringListToVector3List(spaceNode.vertices);
             newSpace.SetControlPoints(controlPoints);
             newSpace.Function = spaceNode.type;
+            newSpace.UpdateRender2D();
         }
 
         /// <summary>
@@ -238,7 +239,7 @@ namespace DesignPlatform.Database {
             List<OpeningNode> openingNodes = new List<OpeningNode>();
 
             foreach (Opening opening in openings) {
-                Debug.Log("Loc:" + opening.LocationPoint);
+                //Debug.Log("Loc:" + opening.LocationPoint);
                 OpeningNode openingNode = new OpeningNode {
                     openingShape = opening.Function,
                     height = opening.Height,
@@ -246,7 +247,7 @@ namespace DesignPlatform.Database {
                     position = GraphUtils.Vector3ToString(opening.LocationPoint,2),
                     rotation = GraphUtils.Vector3ToString(opening.transform.rotation.eulerAngles),
                 };
-                Debug.Log("saved Loc:" + openingNode.position);
+                //Debug.Log("saved Loc:" + openingNode.position);
 
                 openingNodes.Add(openingNode);
             }
