@@ -3859,7 +3859,7 @@ GameObject:
   - component: {fileID: 280912088}
   - component: {fileID: 280912089}
   m_Layer: 5
-  m_Name: AdjustmentsWindow
+  m_Name: ManageWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3929,7 +3929,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 280912081}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -8072,7 +8072,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 545064822}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 770987434}
@@ -17131,6 +17131,17 @@ MonoBehaviour:
           m_StringArgument: Build
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2051823770}
+        m_MethodName: ChangeButtonColorByIndex
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &911010987
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -25456,7 +25467,18 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Adjust
+          m_StringArgument: Manage
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2051823770}
+        m_MethodName: ChangeButtonColorByIndex
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1247420374
@@ -33447,7 +33469,7 @@ MonoBehaviour:
   - windowName: Home
     windowObject: {fileID: 929583766}
     buttonObject: {fileID: 545064822}
-  - windowName: Adjust
+  - windowName: Manage
     windowObject: {fileID: 280912081}
     buttonObject: {fileID: 471177537}
   - windowName: Build
@@ -41324,6 +41346,7 @@ GameObject:
   - component: {fileID: 2051823767}
   - component: {fileID: 2051823766}
   - component: {fileID: 2051823769}
+  - component: {fileID: 2051823770}
   m_Layer: 5
   m_Name: SideMenuButtons
   m_TagString: Untagged
@@ -41430,6 +41453,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 1
+--- !u!114 &2051823770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051823764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9e276e2911c270489c7dcedd8ba0d78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2079880034
 GameObject:
   m_ObjectHideFlags: 0
