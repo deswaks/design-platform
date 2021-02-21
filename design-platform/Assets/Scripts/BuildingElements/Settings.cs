@@ -20,8 +20,8 @@ namespace DesignPlatform.Core {
         public static readonly Dictionary<SpaceFunction, string> SpaceTypeNames = new Dictionary<SpaceFunction, string> {
             { SpaceFunction.PREVIEW,  "Preview"},
             { SpaceFunction.DEFAULT,  ""},
-            { SpaceFunction.SINGLEROOM,  "Single Bed\nRoom"},
-            { SpaceFunction.DOUBLEROOM,  "Double Bed\nRoom"},
+            { SpaceFunction.SINGLEROOM,  "Single Bedroom"},
+            { SpaceFunction.DOUBLEROOM,  "Double Bedroom"},
             { SpaceFunction.LIVINGROOM,  "Living\nRoom"},
             { SpaceFunction.KITCHEN,  "Kitchen"},
             { SpaceFunction.BATHROOM,  "Bathroom"},

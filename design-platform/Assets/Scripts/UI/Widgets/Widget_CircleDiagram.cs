@@ -43,7 +43,7 @@ namespace DesignPlatform.UI {
         public Widget_CircleDiagram() : base() // Host skal ses som parent Dashboard-row(?)
         {
             Size = (width: 1, height: 1);
-            Name = "Circle Diagram";
+            Name = "Room Type Distribution";
         }
 
 
@@ -80,14 +80,30 @@ namespace DesignPlatform.UI {
             ClearDiagram();
 
             // SAMPLE DATA
-            diagramData.Add("Element 1", 0.21f);
-            diagramData.Add("Element 2", 0.10f);
-            diagramData.Add("Element 3", 0.05f);
-            diagramData.Add("Element 4", 0.13f);
-            diagramData.Add("Element 5", 0.08f);
-            diagramData.Add("Element 6", 0.13f);
-            diagramData.Add("Element 7", 0.17f);
-            diagramData.Add("Element 8", 0.13f);
+            //diagramData.Add("Element 1", 0.21f);
+            //diagramData.Add("Element 2", 0.10f);
+            //diagramData.Add("Element 3", 0.05f);
+            //diagramData.Add("Element 4", 0.13f);
+            //diagramData.Add("Element 5", 0.08f);
+            //diagramData.Add("Element 6", 0.13f);
+            //diagramData.Add("Element 7", 0.17f);
+            //diagramData.Add("Element 8", 0.13f);
+
+
+            ////////////////////////
+            List<Core.SpaceFunction> spaceTypes = Core.Building.Instance.Spaces.Select(sp => sp.Function).ToList();
+            
+            foreach(Core.SpaceFunction spaceFunc in spaceTypes.Distinct()) {
+
+                float percentage = Mathf.Round( (float)spaceTypes.Count(sf => sf == spaceFunc) / (float)spaceTypes.Count * 1000)/1000;
+                diagramData.Add(
+                    Core.Settings.SpaceTypeNames[spaceFunc].Replace("\n", " "),
+                    //spaceFunc.ToString(),
+                    percentage
+                    );
+            }
+
+            //////////////////////
 
             elementsCount = diagramData.Count;
 
