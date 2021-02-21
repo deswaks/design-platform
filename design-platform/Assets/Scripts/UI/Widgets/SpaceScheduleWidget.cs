@@ -13,6 +13,7 @@ namespace DesignPlatform.UI {
         private static readonly string HeaderRowName = "Row_Headers";
         private static readonly string ContentTemplateName = "Row_ContentTemplate";
         private GameObject PrefabPanel;
+        private GameObject areaObject;
 
         GameObject headerRow;   // 
         GameObject contentTemplate; // Content row template from prefab
@@ -38,6 +39,7 @@ namespace DesignPlatform.UI {
             // Locates primary components of widget
             headerRow = Panel.transform.Find(HeaderRowName).gameObject;
             contentTemplate = Panel.transform.Find(ContentTemplateName).gameObject;
+            areaObject = Panel.transform.Find("textgroup_Area").gameObject.transform.Find("txt_Area").gameObject;
 
             columnCount = contentTemplate.transform.childCount;
 
@@ -74,6 +76,9 @@ namespace DesignPlatform.UI {
                 spaceIndex++;
 
             }
+
+            areaObject.GetComponentInChildren<TMPro.TMP_Text>().text = Building.Instance.Area.ToString();
+
             contentTemplate.SetActive(false);
         }
 

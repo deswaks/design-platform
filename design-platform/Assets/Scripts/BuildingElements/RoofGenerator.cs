@@ -33,6 +33,7 @@ namespace DesignPlatform.Core {
         /// </summary>
         /// <returns>All roof elements of the building.</returns>
         public List<Roof> BuildAllRoofElements() {
+
             List<List<Vector3>> roofOutlines = Building.Instance.CreateRoofOutlines();
             foreach (List<Vector3> outline in roofOutlines) {
                 BuildRoofElement(outline);
@@ -173,6 +174,7 @@ namespace DesignPlatform.Core {
                 List<Vector3> outline = RoofUtils.JoinLineSegments(segments);
 
                 finalPanelOutlines.Add(outline);
+
             }
 
             return finalPanelOutlines;

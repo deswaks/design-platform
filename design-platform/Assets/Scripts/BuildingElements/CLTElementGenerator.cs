@@ -66,12 +66,15 @@ namespace DesignPlatform.Core {
         private static void ClassifyAllJoints(List<CLTElement> cltElements) {
             List<Vector3> distinctJointPoints = cltElements.SelectMany(element => element.AllJoints.Select(joint => joint.point)).Distinct().ToList();
 
+            //List<CLTElement> twoLongest = cltElements.OrderBy(clt => clt.Length).Reverse().Take(2).ToList();
+
             foreach (Vector3 point in distinctJointPoints) {
 
                 // Finds wall elements that have an endpoint in the given point and elements with midpoint(s) in the given point
                 // In total, only two elements should always be found. 
                 List<CLTElement> endJointWallElements = cltElements.Where(w => w.StartJoint.point == point || w.EndJoint.point == point).ToList();
-                List<CLTElement> midJointWallElements = cltElements.Where(w => w.MidJoints.Select(p => p.point).Contains(point)).ToList();
+                // To find out if the given point corresponds to any midpoint of the CLT elements, the distance between all midpoints and the given point is assessed
+                List<CLTElement> midJointWallElements = cltElements.Where(w => w.MidJoints.Select(j => j.point).Any(p => Vector3.Distance(p,point)<0.01) ).ToList();
 
                 // X-joint                                         // PRIMARY ELEMENT IS CHOSEN AS THE LONGEST ELEMENT
                 if (midJointWallElements.Count == 2) {

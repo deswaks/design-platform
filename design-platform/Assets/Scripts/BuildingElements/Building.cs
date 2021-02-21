@@ -30,6 +30,13 @@ namespace DesignPlatform.Core {
         }
         
         /// <summary>
+        /// Returns the sum area of all spaces in the building
+        /// </summary>
+        public float Area {
+            get { return Spaces.Select(r => r.Area).Sum(); }
+        }
+
+        /// <summary>
         /// The boundaries of the building in the X and Y axis on the form { minX, maxX, minY, maxY }
         /// </summary>
         public List<float> Bounds {

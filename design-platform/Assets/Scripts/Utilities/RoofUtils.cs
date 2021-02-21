@@ -59,9 +59,11 @@ namespace DesignPlatform.Utils {
                 });
             }
 
-            List<Vector3> outline = JoinLineSegments(segments);
+            //List<Vector3> outline = JoinLineSegments(segments);
 
-            return outline;
+            List<List<Vector3>> allPolylines = JoinLineSegmentsToMultiplePolylines(segments);
+
+            return allPolylines[0];
         }
 
         /// <summary>
@@ -86,6 +88,42 @@ namespace DesignPlatform.Utils {
         }
 
         /// <summary>
+        /// Joins all the given line segments to multiple polylines.
+        /// </summary>
+        /// <param name="lineSegments">A collection of line segments.</param>
+        /// <returns>Lists of vertices of the polylines.</returns>
+        public static List<List<Vector3>> JoinLineSegmentsToMultiplePolylines(List<List<Vector3>> lineSegments){//, ref List<List<Vector3>> allPolylines) {
+            List<Vector3> polyline = new List<Vector3>();
+            List<List<Vector3>> allPolylines = new List<List<Vector3>>();
+            polyline.Add(lineSegments[0][0]);
+            polyline.Add(lineSegments[0][1]);
+
+            List<List<Vector3>> restLineSegments = lineSegments.ToArray().ToList();
+            VisualizeLineSegments(lineSegments);
+
+            for (int i = 1; i < lineSegments.Count - 1; i++) {
+
+                Vector3 currentPoint = polyline.Last();
+
+                // Next segment identified as sharing a point with the current point.
+                List<Vector3> segment = lineSegments.Where(ps => ps.Any(p => Vector3.Distance(p, currentPoint) < 0.1f)).Where(ps => !ps.Any(p => Vector3.Distance(p, polyline[i - 1]) < 0.1f)).First();
+
+                restLineSegments.Remove(segment);
+
+                // Point of current segment that is not the current point is added to polyline vertices
+                if (Vector3.Distance(segment[0], currentPoint) < 0.01) polyline.Add(segment[1]);
+                if (Vector3.Distance(segment[1], currentPoint) < 0.01) polyline.Add(segment[0]);
+
+            }
+            allPolylines.Add(polyline);
+            
+            if (restLineSegments.Count > 2) {
+                allPolylines.AddRange(JoinLineSegmentsToMultiplePolylines(restLineSegments));
+            }
+            return allPolylines;
+        }
+
+        /// <summary>
         /// Joins all the given line segments to a single polyline.
         /// </summary>
         /// <param name="lineSegments">A collection of line segments that must all be connected.</param>
@@ -101,11 +139,12 @@ namespace DesignPlatform.Utils {
 
                 // Next segment identified as sharing a point with the current point.
                 List<Vector3> segment = lineSegments.Where(ps => ps.Any(p => Vector3.Distance(p, currentPoint) < 0.1f)).Where(ps => !ps.Any(p => Vector3.Distance(p, polyline[i - 1]) < 0.1f)).First();
-
                 // Point of current segment that is not the current point is added to polyline vertices
                 if (Vector3.Distance(segment[0], currentPoint) < 0.01) polyline.Add(segment[1]);
                 if (Vector3.Distance(segment[1], currentPoint) < 0.01) polyline.Add(segment[0]);
+
             }
+
             return polyline;
         }
 
@@ -145,6 +184,21 @@ namespace DesignPlatform.Utils {
         /// <returns></returns>
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
             return Quaternion.Euler(angles) * (point - pivot) + pivot;
+        }
+
+        public static void VisualizeLineSegments(List<List<Vector3>> segments) {
+
+            segments.ForEach(s => Debug.DrawLine(s[0], s[1], Color.red, 10000f, false));
+
+        }
+
+        public static void VisualizePointsAsSpheres(List<Vector3> vertices, string name = "vertex") {
+            foreach (Vector3 v in vertices) {
+                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sphere.transform.position = v;
+                sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                sphere.name = name;
+            }
         }
     }
 
